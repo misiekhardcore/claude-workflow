@@ -1,0 +1,30 @@
+{
+  "name": "claude-workflow",
+  "owner": {
+    "name": "Michal Konopski",
+    "url": "https://github.com/misiekhardcore"
+  },
+  "metadata": {
+    "description": "claude-workflow: standardized /discovery → /define → /implement lifecycle for Claude Code",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "claude-workflow",
+      "source": {
+        "source": "github",
+        "repo": "misiekhardcore/claude-workflow",
+        "ref": "main"
+      },
+      "description": "Workflow skills for Claude Code — standardized feature lifecycle: /discovery → /define → /implement. 17 skills, shared protocols, authoring standard, /new-skill scaffolder.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Michal Konopski",
+        "url": "https://github.com/misiekhardcore"
+      },
+      "homepage": "https://github.com/misiekhardcore/claude-workflow",
+      "repository": "https://github.com/misiekhardcore/claude-workflow",
+      "license": "MIT"
+    }
+  ]
+}
