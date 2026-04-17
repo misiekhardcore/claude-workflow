@@ -14,7 +14,7 @@ You are performing an end-of-session audit. Review what happened in this session
    - **Scope changes** — anything you did beyond or short of what was originally asked
    - **Follow-ups** — work that remains, was deferred, or needs human verification
 
-   Resolve the worktree root with `git rev-parse --show-toplevel` and check for `<root>/.claude/NOTES.md`. If it exists, read it first — it is the authoritative worklog for this phase. Merge its **Decisions made this session** and **Open questions** into the audit so nothing is lost on reset.
+   Resolve the worktree root with `git rev-parse --show-toplevel` and check for `<root>/.claude/NOTES.md`. If it exists, read it first — it is the authoritative worklog for this phase. Merge its **Decisions made this session** and **Open questions** into the audit so nothing is lost on reset. See `${CLAUDE_PLUGIN_ROOT}/_shared/notes-md-protocol.md` for the file's section shape and lifecycle rules.
 
 2. For each item, note:
    - What the assumption/decision was

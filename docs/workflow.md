@@ -1,6 +1,6 @@
 # Development Workflow
 
-A step-by-step walkthrough of the feature lifecycle in this repo: which skill runs when, what it expects as input, and what it leaves behind. The rules themselves live in `CLAUDE.md` and in each `skills/<name>/SKILL.md`; this doc stitches them into a single narrative so a newcomer doesn't have to grep 15 files.
+A step-by-step walkthrough of the feature lifecycle in this repo: which skill runs when, what it expects as input, and what it leaves behind. The rules themselves live in `CLAUDE.md` and in each `skills/<name>/SKILL.md`; this doc stitches them into a single narrative so a newcomer doesn't have to read every `SKILL.md` to understand the flow.
 
 ## Workflow paths
 
@@ -30,7 +30,7 @@ Handoff between phases uses the **GitHub issue body** as the durable artifact �
                                                                                        │
                                                                               [human reviews PR]
                                                                                        │
-                                                                              /address-review
+                                                                              /resolve-pr-feedback
 ```
 
 ---
@@ -72,7 +72,7 @@ AC are the contract `/implement` verifies against, so silent changes have blast 
 
 | Situation | Action |
 |-----------|--------|
-| A PR is already open | Post on the PR: "Acceptance criteria updated in #\<issue\>. Current AC: \<n/n\> still met, \<n\> changed, \<n\> new. Re-run /address-review or /implement to reconcile." Does **not** close the PR. |
+| A PR is already open | Post on the PR: "Acceptance criteria updated in #\<issue\>. Current AC: \<n/n\> still met, \<n\> changed, \<n\> new. Re-run /resolve-pr-feedback or /implement to reconcile." Does **not** close the PR. |
 | Sub-issues exist (from a prior `/define`) | Re-derive each sub-issue's AC slice from the new parent AC. Slices that no longer map get a superseded comment + close. |
 | Neither applies | Pure overwrite, nothing to reconcile. |
 
@@ -131,7 +131,7 @@ When `/define` re-runs and the sub-issue breakdown changes, old sub-issues are r
   3. **`/verify`** (`skills/verify/SKILL.md`, Haiku) — a QA team runs the full verification chain (type-check, lint, unit tests, build, e2e) and checks every acceptance criterion with evidence. Reports pass/fail only — it does not fix.
   - If review or verify finds issues, a fix-brief (failing AC + file:line findings) is fed back to `/build`, then re-reviewed and re-verified.
 - **Outcome:** A draft PR linking the issue. All acceptance criteria met, review clean, verify clean. `/compound` runs automatically before the PR is opened.
-- **Follow-up:** After human review, use `/address-review`.
+- **Follow-up:** After human review, use `/resolve-pr-feedback`.
 
 ### Preamble (read before doing anything)
 
@@ -168,9 +168,9 @@ Not posted: per-commit updates, per-fix-cycle-iteration noise, internal reviewer
 
 ---
 
-## Step 5 — `/address-review` (Sonnet)
+## Step 5 — `/resolve-pr-feedback` (Sonnet)
 
-- **File:** `skills/address-review/SKILL.md`
+- **File:** `skills/resolve-pr-feedback/SKILL.md`
 - **When:** After a PR receives human review comments.
 - **What it does:** Fetches all review threads, triages them, spawns a fix team (one agent per disjoint file group), runs up to 2 fix-verify cycles per review round, then posts a verdict reply on every thread and resolves threads where appropriate.
 - **Outcome:** PR feedback processed in bulk with verdict replies posted, and resolved threads marked resolved. Safe to re-run for subsequent review rounds.
@@ -196,7 +196,7 @@ Fixed in abc1234 — replaced the N+1 loop with a single JOIN (benchmarks in com
 
 ### Idempotency and re-opened threads
 
-`/address-review` fetches the current state of each thread before acting. If it sees its own previous verdict tag and no new comments since, it skips that thread. If a reviewer unresolves a thread `/address-review` previously resolved, the next run treats it as a fresh triage entry (up to the 2-cycle cap per round).
+`/resolve-pr-feedback` fetches the current state of each thread before acting. If it sees its own previous verdict tag and no new comments since, it skips that thread. If a reviewer unresolves a thread `/resolve-pr-feedback` previously resolved, the next run treats it as a fresh triage entry (up to the 2-cycle cap per round).
 
 ---
 

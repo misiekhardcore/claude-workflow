@@ -19,15 +19,37 @@ Either:
 1. Determine the current PR:
    - If a URL was provided, extract owner/repo and PR number from it
    - Otherwise, use `gh pr view --json number,url` to get the current branch's PR
-2. Fetch all review comments: `gh api repos/{owner}/{repo}/pulls/{number}/comments`
-3. Fetch review threads: `gh api repos/{owner}/{repo}/pulls/{number}/reviews`
-4. Fetch top-level PR conversation comments: `gh api repos/{owner}/{repo}/issues/{number}/comments`
-5. Filter out noise:
-   - Bot-generated comments (dependabot, CI bots, linters)
+2. Fetch **review threads with resolution state** via GraphQL (REST's `pulls/{n}/reviews` returns top-level reviews, not threads, and never exposes `isResolved`):
+
+   ```bash
+   gh api graphql -F owner={owner} -F repo={repo} -F number={number} -f query='
+     query($owner:String!, $repo:String!, $number:Int!) {
+       repository(owner:$owner, name:$repo) {
+         pullRequest(number:$number) {
+           reviewThreads(first:100) {
+             nodes {
+               id
+               isResolved
+               isOutdated
+               path
+               line
+               comments(first:50) {
+                 nodes { id databaseId body author { login } createdAt url }
+               }
+             }
+           }
+         }
+       }
+     }'
+   ```
+
+3. Fetch top-level PR conversation comments (not attached to a thread): `gh api repos/{owner}/{repo}/issues/{number}/comments`
+4. Filter out noise:
+   - Threads where `isResolved: true` (skip unless the user explicitly asked to re-open)
+   - Bot-generated comments (dependabot, CI bots, linters) — match by `author.login`
    - Pure approval comments with no actionable content
    - CI status summaries
-   - **Note:** The REST API does not expose thread resolution status — treat all fetched threads as potentially unresolved.
-6. If a specific thread URL was given, filter to just that thread
+5. If a specific thread URL was given, filter to just that thread by matching its `databaseId` against the URL's anchor.
 
 ### Phase 2 — Triage
 
