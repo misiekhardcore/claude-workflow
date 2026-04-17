@@ -17,9 +17,14 @@ A GitHub issue with problem statement and acceptance criteria (from /discovery).
 
 2. **Dispatch parallel research agents** using TeamCreate before the architecture team begins:
    - **Codebase research agent** — systematic scan of relevant code: technology stack, module structure, related implementations, naming conventions, existing patterns. Outputs a structured context brief.
-   - **Patterns/learnings agent** — searches `memory/wiki/` (start with `memory/wiki/hot.md` and `memory/wiki/index.md`, then concepts/entities/sources), project documentation, past decision records, and — when local patterns are thin — external documentation via Context7 or web search for relevant prior art and lessons learned.
+   - **Patterns/learnings agent** — gathers prior art from, in order:
+     1. **The claude-obsidian vault, if available.** If `claude-obsidian:wiki-query` is usable, ask it for concepts/entities/sources/meta relevant to the feature (prior decisions, patterns, bug-fix history). Use whatever vocabulary the plugin expects — the agent does not know or need a filesystem path.
+     2. **Project documentation** under the repo (READMEs, ADRs, `docs/**`).
+     3. **External documentation** via Context7 or web search, when local patterns are thin.
 
-   **Gate rule**: skip external/web research when codebase research finds 3+ direct pattern examples. Always run full research for security, payments, privacy topics, or when local patterns are thin (fewer than 3 examples).
+     If `claude-obsidian` is not installed, skip step 1 and record a one-line note in the research brief: `Vault query skipped — claude-obsidian not installed.`
+
+   **Gate rule**: skip external/web research when internal sources (vault + project docs) yield 3+ direct pattern examples. Always run full research for security, payments, privacy topics, or when local patterns are thin (fewer than 3 examples).
 
    Research results feed into the architecture team's context before they begin proposing approaches.
 

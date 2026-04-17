@@ -1,12 +1,12 @@
 ---
 name: compound
-description: Capture learnings from completed work into durable, searchable wiki notes. Invoke when the user says "it's fixed", "that worked", "working now", or explicitly via /compound — also after a non-trivial debugging session or implementation concludes successfully. Turns ephemeral knowledge into reusable artifacts in the Obsidian vault at memory/wiki/.
+description: Capture learnings from completed work into durable, searchable wiki notes. Invoke when the user says "it's fixed", "that worked", "working now", or explicitly via /compound — also after a non-trivial debugging session or implementation concludes successfully. When the claude-obsidian plugin is installed, filing is delegated to its /save flow; otherwise the structured note is emitted inline for the user to capture.
 model: sonnet
 ---
 
-You are leading the knowledge compounding phase. Your job is to capture what was just learned — the fix, the insight, the pattern — into a durable artifact that future agents and developers can discover and reuse.
+You are leading the knowledge compounding phase. Your job is to capture what was just learned — the fix, the insight, the pattern — into a structured, reusable artifact that future agents and developers can discover and reuse.
 
-The target is the Obsidian vault at `memory/wiki/`, powered by the `claude-obsidian` plugin (Karpathy's LLM Wiki pattern). The vault's schema is in `memory/WIKI.md` and vault-scoped instructions are in `memory/CLAUDE.md`. If the `claude-obsidian` plugin is enabled, prefer its `/save` flow — it handles frontmatter, cross-links, and the operation log automatically. This skill describes the same workflow for the direct-file case and adds dedupe/discoverability checks on top.
+This skill extracts the learning and drafts it. **Filing is delegated** to the `claude-obsidian` plugin when available: its `/save` command handles vault placement, frontmatter, cross-links, hot-cache updates, and the operation log automatically. If `claude-obsidian` is not installed, the drafted note is emitted inline for the user to copy into whatever knowledge store they prefer.
 
 ## Input
 
@@ -31,44 +31,40 @@ Decision tree:
 
 Single-pass extraction. Work through these steps yourself:
 
-1. Ensure `memory/wiki/concepts/` exists — create it if missing. (The `/wiki` command scaffolds the full vault if anything else is missing.)
-2. Identify the problem and solution from the conversation history.
-3. Search `memory/wiki/` for existing notes with overlapping content (same module, component, or symptoms). Start with `memory/wiki/index.md` and `memory/wiki/hot.md`; grep `memory/wiki/concepts/`, `memory/wiki/entities/`, and `memory/wiki/sources/` for related material.
-   - **High overlap** (same root cause or very similar symptoms) → update the existing note instead of creating a new one. Bump `updated:` in the frontmatter.
-   - **Partial overlap** (related but distinct) → create a new note, add the related note to the `related:` list and a wikilink in "See Also".
-   - **No overlap** → create a new note.
-4. Write the wiki note (see Knowledge Tracks and Output Format below).
-5. Append a one-line entry to `memory/wiki/log.md` describing what was filed.
-6. Verify discoverability: check whether `CLAUDE.md` or project-level instructions point at `memory/wiki/`. If not, suggest adding a line like: `Check memory/wiki/ (start with hot.md, then index.md) for known issues and patterns before debugging.` Do not modify CLAUDE.md automatically — present the suggestion to the user.
-7. **Staleness check** — scan `memory/wiki/` for notes the new learning contradicts or supersedes. If conflict exists, flag it for consolidation (do not auto-delete — present the conflict to the user). `wiki-lint` can help.
+1. Identify the problem and solution from the conversation history.
+2. Check for overlap with existing knowledge:
+   - If the `claude-obsidian:wiki-query` command is available, ask it for notes overlapping on module, symptoms, or root cause. Use its verdict.
+   - Otherwise, skip the overlap check and note in the output that it was skipped.
+3. Draft the note using the appropriate Knowledge Track (see below).
+4. File the note:
+   - If `claude-obsidian:save` is available → invoke `/save` with the drafted content as input. Let `claude-obsidian` place it, add frontmatter, cross-link, and update its hot cache + log.
+   - Otherwise → emit the drafted note inline in the response as a fenced Markdown block the user can copy, and add a one-line suggestion: `Install claude-obsidian (claude plugin marketplace add AgriciDaniel/claude-obsidian) and run /wiki to bootstrap a vault; future /compound invocations will file automatically.`
+5. **Staleness check** — if the overlap check found an existing note that the new learning contradicts or supersedes, flag it to the user for consolidation. Do not auto-edit other notes. The `wiki-lint` command (from `claude-obsidian`) is the complementary audit.
 
 ### Full
 
-1. Ensure `memory/wiki/concepts/` exists — create it if missing.
-
-2. **Spawn a compounding team** using TeamCreate with three specialists:
+1. **Spawn a compounding team** using TeamCreate with three specialists:
    - **Context analyst** — reviews the full conversation history and git diff to extract: what broke, what was tried, what worked, and why.
    - **Solution extractor** — distills the fix into a reusable pattern: root cause, solution steps, prevention guidance.
-   - **Overlap scanner** — searches `memory/wiki/` (concepts/entities/sources + index + hot cache) and project docs for existing coverage. Reports whether to create new or update existing:
-     - **High overlap** (same root cause or very similar symptoms) → update the existing note with new findings.
-     - **Partial overlap** (related but distinct) → create new note, add a wikilink to the related note in `related:` and "See Also".
-     - **No overlap** → create new note.
+   - **Overlap scanner** — if `claude-obsidian:wiki-query` is available, asks it for existing coverage of the module, symptoms, or root cause. Reports:
+     - **High overlap** (same root cause or very similar symptoms) → recommend updating the existing note. Include the target note's identifier in the report.
+     - **Partial overlap** (related but distinct) → recommend creating new; include the related note's identifier for cross-linking.
+     - **No overlap** → recommend creating new.
+     - If `wiki-query` is not available, report `"skipped: no vault query tool available"`.
 
-3. Teammates share findings via messages. The overlap scanner's verdict determines whether we create or update.
+2. Teammates share findings via messages. Synthesize into a single drafted note.
 
-4. Synthesize team findings into a wiki note.
+3. File the note:
+   - If `claude-obsidian:save` is available → invoke `/save` with the drafted content and, if the overlap scanner recommended an update, pass the target note identifier so `/save` updates in place rather than creating a new note.
+   - Otherwise → emit the drafted note inline, plus the overlap scanner's verdict so the user knows whether to file as new or merge into an existing note.
 
-5. Append an entry to `memory/wiki/log.md`.
-
-6. Verify discoverability: check whether `CLAUDE.md` or project-level instructions point at `memory/wiki/`. If not, suggest adding a line like: `Check memory/wiki/ (start with hot.md, then index.md) for known issues and patterns before debugging.` Do not modify CLAUDE.md automatically — present the suggestion to the user.
-
-7. **Staleness check** — scan `memory/wiki/` for notes the new learning contradicts or supersedes. If the new note contradicts or replaces an existing one, flag it for consolidation (do not auto-delete — present the conflict to the user). `wiki-lint` is the plugin's complementary audit.
+4. **Staleness check** — if the overlap scanner flagged a contradicting or superseded note, present the conflict to the user. Do not auto-delete. Recommend running `wiki-lint` (from `claude-obsidian`) for a broader audit if conflicts are recurrent.
 
 ## Output
 
 ### Knowledge Tracks
 
-Choose the track that fits what was learned. Both end up under `memory/wiki/concepts/` — they differ in frontmatter tags and body shape.
+Choose the track that fits what was learned. Both produce a structured Markdown note — `claude-obsidian`'s `/save` will slot it into the correct vault location (concept/entity/source) and attach frontmatter based on content.
 
 #### Bug Track
 Use when the learning came from fixing a bug or unexpected behavior. Tag with `bug-fix`.
@@ -113,50 +109,29 @@ Use when the learning is a pattern, technique, or architectural insight. Tag wit
 <!-- Concrete code examples or references -->
 ```
 
-### Output Format
+### Note shape (inline fallback)
 
-Create (or update) a Markdown file under `memory/wiki/concepts/` with this frontmatter shape (matches the vault schema in `memory/WIKI.md`):
+When `claude-obsidian` is not available and the note is emitted inline, include a minimal frontmatter block so the user can drop it straight into any vault:
 
 ```markdown
 ---
-type: concept
 title: "<Descriptive Title>"
-complexity: basic | intermediate | advanced
-domain: <module or area — e.g. workflow, auth, payments>
-aliases:
-  - "<alternate phrasing>"
+tags: [<track tag>, <domain tag>, <specific tag>]
 created: <YYYY-MM-DD>
-updated: <YYYY-MM-DD>
-tags:
-  - <track tag — bug-fix | pattern | technique | architecture>
-  - <domain tag>
-  - <specific tag>
-status: draft | mature | deprecated
-related:
-  - "[[<related wiki note title>]]"
-  - "[[concepts/_index]]"
-sources:
-  - "<url or internal ref>"
 ---
 
 # <Descriptive Title>
 
-<!-- Knowledge track content here (Bug Track or Knowledge Track) -->
-
-## See Also
-
-- `[[<related note>]]`
-- `<path/to/skill>` when relevant
+<!-- Bug Track or Knowledge Track body -->
 ```
 
-File naming: `memory/wiki/concepts/<Descriptive Title>.md` (Title Case with spaces, matching the existing vault convention — e.g. `Compounding Knowledge.md`). Do not kebab-case; Obsidian wikilinks match the file title.
+When `claude-obsidian` is active, pass only the body + a suggested title to `/save`; the plugin owns the frontmatter schema.
 
 ## Rules
 
 - Capture knowledge while it's fresh — don't defer.
-- Prefer updating existing notes over creating duplicates.
-- Keep notes concise — future readers want answers, not narratives.
 - Include actual error messages and stack traces in symptoms — these are what people search for.
-- Never include secrets, tokens, or credentials in wiki notes.
-- Always add at least one wikilink in `related:` and one in "See Also" so the graph stays connected — orphans are surfaced by `wiki-lint`.
-- If the `claude-obsidian` plugin is active and a `/save` invocation would produce the same artifact, prefer `/save` — the plugin's schema, index, and log updates stay in sync automatically.
+- Never include secrets, tokens, or credentials in notes.
+- Prefer updating an existing note over creating a duplicate (the overlap scanner's job).
+- Do not file directly to any filesystem path. Delegation to `/save` is the only vault-write path; the inline fallback hands responsibility to the user.
+- If `claude-obsidian` is installed but `/save` invocation fails, report the error inline with the drafted note — never silently drop the capture.
