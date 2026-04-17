@@ -31,6 +31,8 @@ A brief statement from the author of what the skill should do — or nothing, in
 
    e. **allowed-tools** — "Should the skill be restricted to a subset of tools, or have access to everything? (restricted/all)" Most skills want `all` (omit the field). Only restrict when the skill is narrow and should not e.g. write files.
 
+      If the author picks **restricted**, ask one follow-up: "Which tools should it be allowed to use? (comma-separated — e.g. `Read, Grep, Glob, Bash`)". Validate that each entry is a real Claude Code tool name (reject unknown names and re-ask). Use the answer verbatim as the value of `allowed-tools:` in the generated frontmatter. On `all`, omit the field entirely.
+
    f. **Shared protocols** — "Does this skill do any of the following? (yes/no to each)". Walk through the AUTHORING.md decision table:
       - Write or read a GitHub issue handoff block → include `handoff-artifact.md`
       - Interview the user, ask questions, seek approval → include `interviewing-rules.md`

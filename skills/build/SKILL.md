@@ -56,7 +56,7 @@ A feature branch in a worktree with all acceptance criteria implemented, tests p
 ## Rules
 
 - Use superpowers:test-driven-development for the TDD workflow
-- Use worktrunk (`wt`) for worktree management
+- Use `git worktree add` / `git worktree remove` for worktree management. [worktrunk](https://github.com/max-sixty/worktrunk)'s `wt` wrapper is an optional convenience when installed; the skill assumes only the stock `git worktree` commands.
 - Use TeamCreate for team coordination
 - Do not ask the user whether to use teams — just use them
 - Do not open a PR — that happens after /implement completes the full cycle
