@@ -17,7 +17,7 @@ A GitHub issue number from /discovery (or provided by the user).
 
 2. **Dispatch a research team** (TeamCreate) before the definition team:
    - **Codebase research agent** — scans tech stack, modules, related implementations, naming, existing patterns. Outputs a structured brief.
-   - **Patterns/learnings agent** — searches `memory/wiki/` (start with `hot.md` and `index.md`, then concepts/entities/sources), project docs, past decisions, and (when local patterns are thin) external sources via Context7. Skip external research when 3+ direct pattern examples exist; always run full research for security/payments/privacy.
+   - **Patterns/learnings agent** — gathers prior art from, in order: (1) the claude-obsidian vault via `claude-obsidian:wiki-query` if available (concepts/entities/sources/meta); (2) project docs (READMEs, ADRs, `docs/**`); (3) external sources via Context7 when local patterns are thin. If `claude-obsidian` is not installed, step 1 is skipped with a note. Skip external research when internal sources yield 3+ direct pattern examples; always run full research for security/payments/privacy.
 
    The brief feeds both the architecture and design specialists as seed context.
 

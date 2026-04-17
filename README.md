@@ -41,12 +41,22 @@ Then enable it in your project or globally in Claude Code settings.
 | `/architecture` | Decide on technical architecture — components, data flow, trade-offs |
 | `/design` | Visual and UX design decisions — layouts, interaction flows |
 | `/grill-me` | Relentless interviewing to stress-test a plan or design |
-| `/compound` | Capture learnings into the Obsidian wiki vault |
+| `/compound` | Capture learnings as structured wiki notes; files via `claude-obsidian` when installed, otherwise reports inline |
 | `/wrap-up` | End-of-session audit; harvests NOTES.md into the issue body |
-| `/prune` | Audit CLAUDE.md and wiki notes for staleness |
+| `/prune` | Audit CLAUDE.md for staleness; delegates vault audit to `wiki-lint` when `claude-obsidian` is installed |
 | `/find-skills` | Discover and install skills from the ecosystem |
 | `/resolve-pr-feedback` | Process PR review feedback in bulk |
 | `/new-skill` | Scaffold a new skill conforming to this authoring standard |
+
+## Optional: claude-obsidian integration
+
+claude-workflow doesn't ship its own knowledge store. When the [claude-obsidian](https://github.com/AgriciDaniel/claude-obsidian) plugin is installed and a vault has been bootstrapped (`/wiki`), several skills light up vault-aware paths automatically:
+
+- `/compound` files captures via `/save` instead of reporting the note inline.
+- `/prune` delegates vault audit to `wiki-lint` and folds its findings into the report.
+- `/architecture` and `/define` query the vault for prior patterns/decisions via `wiki-query`.
+
+Without `claude-obsidian` every skill still runs; vault operations are skipped with a one-line note, and `/compound` emits a structured Markdown block the user can capture wherever they like. No hard dependency — install it if it's useful, skip it otherwise.
 
 ## Workflow paths
 

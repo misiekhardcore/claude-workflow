@@ -83,7 +83,7 @@ AC are the contract `/implement` verifies against, so silent changes have blast 
 - **File:** `skills/define/SKILL.md`
 - **When:** After `/discovery`, for epics or architecturally significant work.
 - **Prerequisites:** An approved issue from `/discovery` with acceptance criteria.
-- **What it does:** Spawns research agents (codebase research + patterns/learnings scan against `memory/wiki/`, starting with `memory/wiki/hot.md` and `memory/wiki/index.md`), then dispatches:
+- **What it does:** Spawns research agents (codebase research + patterns/learnings scan against the claude-obsidian vault via `wiki-query` when available, else skipped with a note), then dispatches:
   - `/architecture` (`skills/architecture/SKILL.md`) — codebase analyst + solution architect + devil's advocate converge on a technical approach, producing component diagrams, trade-off tables, and a sub-task dependency graph. Uses `/grill-me` (`skills/grill-me/SKILL.md`) to pin down open decisions with the user.
   - `/design` (`skills/design/SKILL.md`) — UX researcher + design proposer + a11y reviewer, only when the task has visual aspects. Produces prototypes, wireframes, and interaction flows.
 - **Outcome:** The issue body is updated in place with a `## Define Outcome` section (see below), plus any sub-issues created and linked. **User approval is required** before `/implement`.
@@ -146,7 +146,7 @@ One comment per meaningful state change. Never more.
 | **Start** | `🤖 Starting implementation. Working from ## Define Outcome (last updated <date>). Branch: <branch>. Will post again when a draft PR is open or if the fix-cycle escalates to needs-human.` |
 | **Escalation** (only if max fix-cycle iterations hit or an AC cannot be met) | `🤖 Fix-cycle escalated after N iterations. Blocking issue: <one-line>. Details: <fold with reviewer findings and failing AC>. Need guidance before continuing.` |
 | **PR open** | `🤖 Draft PR opened: #<n>. AC status: <n/n met>. Review + verify clean. Ready for human review.` |
-| **Consolidation** (only if `/compound` wrote new memory notes) | `🤖 Captured learnings: memory/wiki/concepts/<Title Case Name>.md.` |
+| **Consolidation** (only if `/compound` filed new wiki notes) | `🤖 Captured learnings: <note title>` (or `inline` when claude-obsidian is not installed). |
 
 Not posted: per-commit updates, per-fix-cycle-iteration noise, internal reviewer findings (those belong in the fix-brief, not the issue thread).
 
@@ -163,8 +163,8 @@ Not posted: per-commit updates, per-fix-cycle-iteration noise, internal reviewer
 
 - **File:** `skills/compound/SKILL.md`
 - **When:** Automatically after a successful `/implement`. Not a separate user invocation — it is part of `/implement`'s postamble.
-- **What it does:** Files the learning into the Obsidian vault at `memory/wiki/` (Karpathy LLM Wiki pattern, via the `claude-obsidian` plugin). Ensures `memory/wiki/concepts/` exists, searches the vault for overlap (starting at `index.md` and `hot.md`, then drilling into `concepts/`, `entities/`, `sources/`), and either updates an existing note or writes a new one using **Bug Track** (Problem / Symptoms / What Didn't Work / Solution / Why It Works / Prevention) or **Knowledge Track** (Context / Guidance / Why / When / Examples) format. Appends an entry to `memory/wiki/log.md`. When the `claude-obsidian` plugin is active, prefers the plugin's `/save` flow — the plugin keeps frontmatter, cross-links, and the index in sync automatically.
-- **Outcome:** A durable wiki note at `memory/wiki/concepts/<Title Case Name>.md` with frontmatter matching `memory/WIKI.md` (type, domain, tags, related wikilinks, sources). Never auto-deletes or overwrites without flagging.
+- **What it does:** Extracts the learning and drafts it using **Bug Track** (Problem / Symptoms / What Didn't Work / Solution / Why It Works / Prevention) or **Knowledge Track** (Context / Guidance / Why / When / Examples) format, then checks for overlap with existing knowledge via `claude-obsidian:wiki-query` when available. Filing is delegated: if `claude-obsidian:save` is available, `/save` places the note in the vault, attaches frontmatter, cross-links, updates the hot cache, and appends a log entry. If `claude-obsidian` is not installed, the drafted note is emitted inline for the user to capture into whatever knowledge store they prefer.
+- **Outcome:** Either a durable vault note (when `claude-obsidian` is active) or a structured Markdown block in the response. Never auto-deletes or overwrites without flagging.
 
 ---
 
@@ -229,7 +229,7 @@ No phase contract tries to be its own audit log. The canonical audit sources are
 
 1. **GitHub edit history** — every prior version of issue/PR bodies.
 2. **Issue comments from `/implement` checkpoints** — a permanent timeline (comments are not edited, only added).
-3. **`memory/wiki/`** (Obsidian vault) — when a re-run captures a new note via `/compound` or `/save`, that note (plus its entry in `memory/wiki/log.md`) is the permanent record of "the second attempt shipped this way".
+3. **The claude-obsidian vault** (optional) — when installed, any note filed via `/compound` → `/save` plus the corresponding entry in the vault log is the permanent record of "the second attempt shipped this way". Without `claude-obsidian`, this tier is absent; the `/compound` inline output serves the same purpose but relies on the user to persist it.
 
 All three are read-only from the perspective of downstream phases.
 
@@ -244,7 +244,7 @@ Four tiers, no overlap:
 | `TodoWrite` | In-context | This session only | Throwaway working scratchpad |
 | `./.claude/NOTES.md` | Worktree-local | This phase, across sessions | In-flight decisions, current task, open questions |
 | GitHub issue body | Remote | Cross-phase | Acceptance criteria, prior-phase decisions, handoff state |
-| Obsidian vault | `memory/wiki/` (git-tracked) | Durable, cross-feature | Compounded knowledge — bug-fix history, patterns, architectural insights (written by `/compound` or the plugin's `/save`) |
+| Durable vault (optional) | The claude-obsidian vault (git-tracked) | Durable, cross-feature | Compounded knowledge — bug-fix history, patterns, architectural insights (written by `/compound` via `/save` when the plugin is installed) |
 
 ---
 
@@ -252,4 +252,4 @@ Four tiers, no overlap:
 
 - **File:** `skills/prune/SKILL.md`
 - **When:** Monthly, or after major refactors.
-- **What it does:** Audits `CLAUDE.md`, memory files, and `memory/wiki/**/*.md` for stale / superseded / unclear entries (semantic staleness; `wiki-lint` complements this for vault-structural health — orphans, broken wikilinks, missing frontmatter). Never auto-deletes — produces recommendations for user approval.
+- **What it does:** Audits `CLAUDE.md` and auto-memory files for stale / superseded / unclear entries (semantic staleness). When `claude-obsidian` is installed, delegates the vault audit to `wiki-lint` (structural health — orphans, broken wikilinks, missing frontmatter) and folds the findings in. Without `claude-obsidian`, the vault lane is skipped with a one-line note. Never auto-deletes — produces recommendations for user approval.

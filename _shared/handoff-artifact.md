@@ -63,4 +63,4 @@ When a phase ends, intra-phase state from `.claude/NOTES.md` that the next phase
 
 ## Why this shape
 
-The five fields map to Anthropic's "structured handoff artifact" and OpenAI's `input_type` handoff metadata pattern. Summarization in place loses detail that the next phase needs; a body-update-in-place with this exact shape preserves the surviving content exactly and keeps the handoff scan-readable in a single fetch. See `memory/wiki/concepts/Context Hygiene Between Workflow Phases.md` for the full rationale.
+The five fields map to Anthropic's "structured handoff artifact" and OpenAI's `input_type` handoff metadata pattern. Summarization in place loses detail that the next phase needs; a body-update-in-place with this exact shape preserves the surviving content exactly and keeps the handoff scan-readable in a single fetch. See `${CLAUDE_PLUGIN_ROOT}/docs/context-hygiene.md` for the full rationale.

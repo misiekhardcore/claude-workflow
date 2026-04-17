@@ -13,9 +13,9 @@ Four tiers, no overlap:
 | `TodoWrite` | In-context | This session only | Throwaway working scratchpad |
 | `.claude/NOTES.md` | Worktree-local file (gitignored) | This phase, across sessions | In-flight decisions, current task, open questions |
 | GitHub issue | Remote | Cross-phase | Acceptance criteria, prior-phase decisions, handoff state |
-| Obsidian vault | `memory/wiki/` (git-tracked) | Durable, cross-feature | Compounded knowledge — patterns, bug-fix history, architectural insights |
+| Durable vault (optional) | The claude-obsidian vault (git-tracked) | Durable, cross-feature | Compounded knowledge — patterns, bug-fix history, architectural insights |
 
-`TodoWrite` and `.claude/NOTES.md` are not mirrored — they serve different roles, and manual sync invites drift.
+`TodoWrite` and `.claude/NOTES.md` are not mirrored — they serve different roles, and manual sync invites drift. The durable vault tier only materializes when the `claude-obsidian` plugin is installed and a vault has been bootstrapped (`/wiki`); without it, the tier is absent and skills that would write to it degrade gracefully.
 
 ## NOTES.md vs the vault's recency channels
 
@@ -24,15 +24,15 @@ The `claude-obsidian` plugin ships its own running-memory mechanisms inside the 
 | Artifact | Scope | Lifetime | Written by | Committed? |
 |---|---|---|---|---|
 | `.claude/NOTES.md` | One worktree, one feature | Ends when the worktree is removed | `/build` (scratch while coding) | No (gitignored) |
-| `memory/wiki/hot.md` | Whole repo, all work | Cross-session, curated recent context | `/save`, `/compound`, or manual edits | Yes |
-| `memory/wiki/meta/<session>.md` | One session's archive | Permanent | `/save` at session end (Karpathy-style session capture) | Yes |
-| `memory/wiki/log.md` | Whole repo | Permanent, append-only | Every `/save` or `/compound` emits a line | Yes |
+| Vault hot cache | Whole repo, all work | Cross-session, curated recent context | `/save`, `/compound`, or manual vault edits | Yes |
+| Session archive | One session's archive | Permanent | `/save` at session end (Karpathy-style session capture) | Yes |
+| Vault log | Whole repo | Permanent, append-only | Every `/save` or `/compound` emits a line | Yes |
 
 Rule of thumb:
 - **While working** — log to `.claude/NOTES.md`. It's phase-local scratch; nothing leaves the worktree.
 - **Between sessions on the same feature** — resume from `.claude/NOTES.md` (it's the authoritative in-flight state).
-- **Between features** — promote durable learnings to `memory/wiki/concepts/` via `/compound` (or the plugin's `/save`). That's what crosses the worktree boundary.
-- **Want a quick "what have I been working on lately" cache across the repo** — that's `memory/wiki/hot.md`, not NOTES.md. Hot cache is curated and committed; NOTES.md is raw and ephemeral.
+- **Between features** — promote durable learnings to the vault's concept notes via `/compound` (which delegates to `claude-obsidian`'s `/save` when available). That's what crosses the worktree boundary.
+- **Want a quick "what have I been working on lately" cache across the repo** — that's the vault's hot cache, not NOTES.md. Hot cache is curated and committed; NOTES.md is raw and ephemeral.
 
 `/wrap-up` is the bridge: it harvests NOTES.md at clean exit and drafts a GitHub-issue comment, and it's the natural trigger point to ask whether anything in NOTES.md deserves promotion to the vault.
 
@@ -100,4 +100,4 @@ On a fresh session in an existing worktree, `.claude/NOTES.md` exists ⇒ this i
 
 ## Why
 
-Context rot makes in-context recall unreliable for long sessions, even when the window is nowhere near full. The fix is to externalize the state that the model needs to trust — onto disk, in a file the model re-reads on demand. A gitignored worktree-local worklog is the cheapest durable answer. See `memory/wiki/concepts/Context Hygiene Between Workflow Phases.md` for the full rationale.
+Context rot makes in-context recall unreliable for long sessions, even when the window is nowhere near full. The fix is to externalize the state that the model needs to trust — onto disk, in a file the model re-reads on demand. A gitignored worktree-local worklog is the cheapest durable answer. See `${CLAUDE_PLUGIN_ROOT}/docs/context-hygiene.md` for the full rationale.

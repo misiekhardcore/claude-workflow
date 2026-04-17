@@ -39,7 +39,7 @@ When /review and /verify both pass with no issues:
 
 ### Compound (after PR is open)
 
-6. **Run /compound** — capture learnings from the implementation cycle. If the build involved non-trivial debugging, unexpected edge cases, or architectural surprises, /compound writes them into the Obsidian vault at `memory/wiki/` (concepts/, entities/, or sources/ depending on the shape) so future `/architecture` research can find them.
+6. **Run /compound** — capture learnings from the implementation cycle. If the build involved non-trivial debugging, unexpected edge cases, or architectural surprises, `/compound` drafts a structured note and files it via `claude-obsidian:save` when that plugin is installed (otherwise it returns the note inline for the user to capture). Filed notes become available to future `/architecture` and `/define` research via `claude-obsidian:wiki-query`.
 
 ## Rules
 
