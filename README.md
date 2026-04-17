@@ -17,8 +17,11 @@ Workflow skills plugin for Claude Code — a standardized lifecycle for feature 
 
 ## Install
 
+This repo is its own marketplace — the plugin and marketplace manifests both live in `.claude-plugin/`, so a single `marketplace add` points Claude Code at both.
+
 ```bash
-claude marketplace add misiekhardcore/claude-workflow
+claude plugin marketplace add misiekhardcore/claude-workflow
+claude plugin install claude-workflow@claude-workflow
 ```
 
 Then enable it in your project or globally in Claude Code settings.
