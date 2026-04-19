@@ -25,7 +25,7 @@ The building blocks: `/describe`, `/specify`, `/architecture`, `/design`, `/buil
 
 ## Prerequisites
 
-Skills that spawn parallel sub-agents require `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` set in the environment. Without it, `TeamCreate` is unavailable and skills fall back to sequential execution.
+Skills that spawn parallel sub-agents require `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` set in the environment. Without it, `TeamCreate` is unavailable and skills fall back to sequential execution, noting the degraded mode explicitly.
 
 ## Implementation Rules
 

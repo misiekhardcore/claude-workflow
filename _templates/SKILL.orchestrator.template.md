@@ -7,11 +7,7 @@ model: "<opus for research-leading orchestrators; sonnet for coordinator orchest
 
 You are leading the <phase name> phase. Your goal is to <objective>.
 
-<!--
-Research-leading vs coordinator orchestrator:
-- Research-leading (e.g. /discovery, /define): keep step 2 (Dispatch a research team) — the orchestrator is where deep reasoning happens.
-- Coordinator (e.g. /implement): omit step 2. Upstream phases or the sub-skills being sequenced own research; adding a research team here is redundant.
--->
+<!-- Coordinator variants (e.g. /implement): drop step 2 — upstream phases or sub-skills own research. -->
 
 ## Input
 
@@ -49,4 +45,3 @@ Classify before dispatching. See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` 
 - Spawn research team before the main team in Standard/Deep — never skip the seed-brief gate.
 - Lightweight runs inline — never pay coordination overhead for under-a-minute work.
 - See `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-rules.md` and `${CLAUDE_PLUGIN_ROOT}/_shared/handoff-artifact.md`.
-- See `${CLAUDE_PLUGIN_ROOT}/_shared/handoff-artifact.md` for the five-field handoff shape.
