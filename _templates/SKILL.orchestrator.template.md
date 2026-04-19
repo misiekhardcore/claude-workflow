@@ -7,7 +7,11 @@ model: "<opus for research-leading orchestrators; sonnet for coordinator orchest
 
 You are leading the <phase name> phase. Your goal is to <objective>.
 
-<!-- Coordinator variants (e.g. /implement): drop step 2 — upstream phases or sub-skills own research. -->
+<!--
+Research-leading vs coordinator orchestrator:
+- Research-leading (e.g. /discovery, /define): keep step 2 (Dispatch a research team) — the orchestrator is where deep reasoning happens.
+- Coordinator (e.g. /implement): omit step 2. Upstream phases or the sub-skills being sequenced own research; adding a research team here is redundant.
+-->
 
 ## Input
 
