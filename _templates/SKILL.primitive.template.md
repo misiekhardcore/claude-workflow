@@ -2,8 +2,8 @@
 name: "<skill-name>"
 description: "<Does X. Invoked inline by specialists when Y.>"
 model: "<haiku | sonnet>"
-# Uncomment only if the skill should be restricted to a subset of tools:
-# allowed-tools: Read, Grep, Glob, Bash
+# Uncomment only to pre-approve a narrow tool surface (skips permission prompts; does not restrict access):
+# allowed-tools: Read Grep Glob Bash
 ---
 
 <!-- Primitives are reusable inline behaviors — no team, no handoff artifact. Keep under 50 lines. -->

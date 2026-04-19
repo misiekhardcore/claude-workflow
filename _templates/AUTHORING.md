@@ -36,7 +36,7 @@ Use the role-specific templates for new skills: orchestrator, specialist, or pri
 | `description`   | yes      | 1–2 sentences                 | Primary trigger mechanism — include both what it does and when to use it                |
 | `model`         | yes      | `haiku` \| `sonnet` \| `opus` | See model guide below                                                                   |
 | `effortLevel`   | no       | `high`                        | Only for long-form research/decision-making (discovery, define, architecture, describe) |
-| `allowed-tools` | no       | comma-separated tool names    | Restrict the skill to a subset of tools. Omit to allow all tools.                       |
+| `allowed-tools` | no       | space-separated tool names    | Pre-approves listed tools so they run without per-use permission prompts. Does **not** restrict access — every tool remains callable. Omit by default; to actually block tools, use deny rules in `.claude/settings.json` or a subagent with its own `tools:` field. |
 
 ### Model guide
 
