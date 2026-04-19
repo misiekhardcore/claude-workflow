@@ -37,6 +37,7 @@ Before starting, classify the review scope:
    - All specialist reviewers active. Veto power for security/performance.
 
 Decision tree:
+
 1. Is the diff under ~50 lines and touches one module? → Lightweight
 2. Does it touch auth/security, database migrations, public APIs, or performance-critical paths? → Deep
 3. Otherwise → Standard
@@ -112,6 +113,7 @@ Decision tree:
 ## Output
 
 A structured review report with:
+
 - Pass/fail per acceptance criterion
 - Issues found (with file:line references, severity, and confidence score)
 - Which conditional reviewers were activated and why (Standard) or note that all were active (Deep)

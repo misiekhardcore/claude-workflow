@@ -6,13 +6,13 @@ This document defines the authoring conventions for workflow skills in this plug
 
 Every skill fills one of five roles. Choose the correct template before authoring.
 
-| Role                                | Definition                                                                                                                                                     | Examples                                                      | Typical model       |
-| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- | ------------------- |
-| **Research-leading orchestrator**   | Leads a phase; spawns a research team, then a main team of specialists; writes the handoff artifact. Used when deep reasoning happens at the orchestrator tier | `/discovery`, `/define`                                       | `opus` + `effortLevel: high` |
-| **Coordinator orchestrator**        | Sequences already-designed sub-skills in a loop (e.g. build → review → verify). Deep reasoning lives in the sub-skills, not the orchestrator — no research team | `/implement`                                                  | `sonnet`            |
-| **Specialist**                      | Executes a bounded task; receives a seed brief; reports findings to the orchestrator                                                                           | `/build`, `/review`, `/architecture`, `/specify`              | `sonnet`            |
-| **Interactive primitive**           | Reusable inline behavior; invoked by specialists; no team, no handoff                                                                                          | `/grill-me`                                                   | `sonnet`            |
-| **Utility**                         | User-invocable maintenance or post-work skill. No seed-brief contract, no phase handoff artifact, no team gating                                               | `/compound`, `/prune`, `/resolve-pr-feedback`, `/find-skills` | `sonnet` or `haiku` |
+| Role                              | Definition                                                                                                                                                      | Examples                                                      | Typical model                |
+| --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- | ---------------------------- |
+| **Research-leading orchestrator** | Leads a phase; spawns a research team, then a main team of specialists; writes the handoff artifact. Used when deep reasoning happens at the orchestrator tier  | `/discovery`, `/define`                                       | `opus` + `effortLevel: high` |
+| **Coordinator orchestrator**      | Sequences already-designed sub-skills in a loop (e.g. build → review → verify). Deep reasoning lives in the sub-skills, not the orchestrator — no research team | `/implement`                                                  | `sonnet`                     |
+| **Specialist**                    | Executes a bounded task; receives a seed brief; reports findings to the orchestrator                                                                            | `/build`, `/review`, `/architecture`, `/specify`              | `sonnet`                     |
+| **Interactive primitive**         | Reusable inline behavior; invoked by specialists; no team, no handoff                                                                                           | `/grill-me`                                                   | `sonnet`                     |
+| **Utility**                       | User-invocable maintenance or post-work skill. No seed-brief contract, no phase handoff artifact, no team gating                                                | `/compound`, `/prune`, `/resolve-pr-feedback`, `/find-skills` | `sonnet` or `haiku`          |
 
 Use the role-specific template:
 
@@ -32,12 +32,12 @@ Use the role-specific templates for new skills: orchestrator, specialist, or pri
 
 ### Frontmatter fields
 
-| Field           | Required | Values                        | Notes                                                                                   |
-| --------------- | -------- | ----------------------------- | --------------------------------------------------------------------------------------- |
-| `name`          | yes      | lowercase kebab-case          | Matches the directory name under `skills/`                                              |
-| `description`   | yes      | 1–2 sentences                 | Primary trigger mechanism — include both what it does and when to use it                |
-| `model`         | yes      | `haiku` \| `sonnet` \| `opus` | See model guide below                                                                   |
-| `effortLevel`   | no       | `high`                        | Only for long-form research/decision-making (discovery, define, architecture, describe) |
+| Field           | Required | Values                        | Notes                                                                                                                                                                                                                                                                |
+| --------------- | -------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `name`          | yes      | lowercase kebab-case          | Matches the directory name under `skills/`                                                                                                                                                                                                                           |
+| `description`   | yes      | 1–2 sentences                 | Primary trigger mechanism — include both what it does and when to use it                                                                                                                                                                                             |
+| `model`         | yes      | `haiku` \| `sonnet` \| `opus` | See model guide below                                                                                                                                                                                                                                                |
+| `effortLevel`   | no       | `high`                        | Only for long-form research/decision-making (discovery, define, architecture, describe)                                                                                                                                                                              |
 | `allowed-tools` | no       | space-separated tool names    | Pre-approves listed tools so they run without per-use permission prompts. Does **not** restrict access — every tool remains callable. Omit by default; to actually block tools, use deny rules in `.claude/settings.json` or a subagent with its own `tools:` field. |
 
 ### Model guide

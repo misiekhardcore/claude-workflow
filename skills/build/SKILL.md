@@ -35,7 +35,7 @@ Decision tree:
 
    Before creating `./.claude/NOTES.md`, verify `/.claude/NOTES.md` is listed in the repo root `.gitignore`; add it there if missing. Then create `./.claude/NOTES.md` with the initial task list harvested from the issue. This is the living worklog for the phase — it survives unexpected session close and is the resume point if this session dies before `/wrap-up`. See `${CLAUDE_PLUGIN_ROOT}/_shared/notes-md-protocol.md`.
 
-   **On resume in an existing worktree**, read `./.claude/NOTES.md` *before* re-reading the issue — it has the latest in-flight state. Resume from its **Next action on resume** field.
+   **On resume in an existing worktree**, read `./.claude/NOTES.md` _before_ re-reading the issue — it has the latest in-flight state. Resume from its **Next action on resume** field.
 
 3. **Implementation** — shape depends on Phase 0:
    - **Lightweight**: lead codes inline. No TeamCreate. Skip to step 4.

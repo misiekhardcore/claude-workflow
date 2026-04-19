@@ -29,11 +29,11 @@ Use the cheapest pattern that fits. Parallel adds coordination overhead — pref
 
 Width (how many specialists) is a separate decision from shape (linear vs parallel). Spawn the fewest specialists the task needs. Every orchestrator starts with a **Phase 0 — Scope Assessment** block that classifies the task before dispatching:
 
-| Scope           | Heuristic                                                            | Team shape                                                 |
-| --------------- | -------------------------------------------------------------------- | ---------------------------------------------------------- |
-| **Lightweight** | Single file / tightly scoped / no unknowns                           | No team — lead runs inline, or spawns a single agent       |
-| **Standard**    | Multi-file / typical feature / some unknowns                         | Core specialists only (2–3); optional roles stay dormant   |
-| **Deep**        | Cross-module / security / breaking change / architecture-changing    | All specialists + critique or adversarial pass             |
+| Scope           | Heuristic                                                         | Team shape                                               |
+| --------------- | ----------------------------------------------------------------- | -------------------------------------------------------- |
+| **Lightweight** | Single file / tightly scoped / no unknowns                        | No team — lead runs inline, or spawns a single agent     |
+| **Standard**    | Multi-file / typical feature / some unknowns                      | Core specialists only (2–3); optional roles stay dormant |
+| **Deep**        | Cross-module / security / breaking change / architecture-changing | All specialists + critique or adversarial pass           |
 
 Rules:
 

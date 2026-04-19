@@ -4,7 +4,7 @@ Used by discovery and definition phase skills when interviewing the user to buil
 
 ## Rules
 
-- **Ask one question at a time.** Never bundle multiple questions — wait for a response before moving on. (Exception: the `AskUserQuestion` tool permits up to 4 *independent* questions in a single call — use this only when the questions do not depend on each other's answers.)
+- **Ask one question at a time.** Never bundle multiple questions — wait for a response before moving on. (Exception: the `AskUserQuestion` tool permits up to 4 _independent_ questions in a single call — use this only when the questions do not depend on each other's answers.)
 - **Grill until fully clear.** Do not accept vague or partial answers; ask follow-up questions until the understanding is concrete and unambiguous.
 - **Prefer multi-choice forms.** When exploring tradeoffs or surfacing constraints, present options as mutually-exclusive choices rather than open-ended prompts.
 - **Use `AskUserQuestion` for structured choices when available.** It renders 2-4 labeled options with descriptions in a picker UI, auto-includes an "Other" escape hatch, and supports `multiSelect` when answers are not mutually exclusive. Prefer it over plain numbered lists whenever the choice set is bounded. Fall back to numbered/lettered text prompts only when the tool is unavailable or the question is genuinely open-ended (e.g. free-text name, description).
