@@ -11,7 +11,7 @@ You are leading the definition phase. Your goal is to take an approved GitHub is
 
 A GitHub issue number from /discovery (or provided by the user).
 
-## Phase 0 — Scope Assessment
+## Scope Assessment
 
 Classify the definition work before dispatching. See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for the right-sizing rationale.
 
@@ -38,7 +38,7 @@ Decision tree:
 
    The brief feeds both the architecture and design specialists as seed context.
 
-3. **Spawn a definition team** — shape depends on Phase 0:
+3. **Spawn a definition team** — shape depends on scope:
    - **Lightweight**: lead writes the architecture summary inline against the research already in the issue. No team.
    - **Standard**: TeamCreate with the **Architecture specialist** (runs /architecture seeded with the research brief; skips its own research phase). Add the **Design specialist** (runs /design seeded with the research brief) when the feature has visual aspects.
    - **Deep**: same specialists as Standard, then spawn a second TeamCreate to critique the plan before finalizing (adversarial review, migration safety, rollout risks).

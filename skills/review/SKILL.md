@@ -24,7 +24,7 @@ Reviewers must operate with fresh context, independent of the implementing sessi
 1. **Prepare the review package** — run `git diff main...HEAD` and capture the output. If a GitHub issue exists, run `gh issue view <number>` and capture its acceptance criteria. This package is the sole input to reviewers.
 2. **Reviewer preamble** — include this in every reviewer's dispatch: "You are reviewing code you did not write. Base your review ONLY on the diff and acceptance criteria provided below. Do not reference or assume any implementation context beyond what is explicitly given to you."
 
-## Phase 0 — Scope Assessment
+## Scope Assessment
 
 Before starting, classify the review scope:
 

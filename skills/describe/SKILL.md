@@ -11,7 +11,7 @@ You are leading a product discovery team. Your job is to explore the problem spa
 
 Optional: when invoked as a specialist from `/discovery`, may receive a **prior-art brief** as seed context (from the Prior-Art Scout). When a brief is provided, skip any internal prior-art search and incorporate the brief into the Product Pressure Test and problem statement synthesis. Without a brief, proceed as described below.
 
-## Phase 0 — Scope Assessment
+## Scope Assessment
 
 Before starting, classify the task scope:
 

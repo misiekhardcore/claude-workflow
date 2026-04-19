@@ -14,6 +14,8 @@ Generic theory behind the applied phase shape in `docs/workflow.md`. Read when a
 
 An interactive primitive is distinct from a specialist because it has no internal team and produces no handoff artifact. Collapsing it into "specialist" loses the boundary that it is a pure behavior library.
 
+This table uses the three-role abstraction for composition theory. The authoring standard at `${CLAUDE_PLUGIN_ROOT}/_templates/AUTHORING.md` further splits **Orchestrator** into _research-leading_ (owns deep reasoning; spawns a research team) and _coordinator_ (sequences pre-designed sub-skills; no research team), and adds a fifth **Utility** role for user-invocable maintenance skills (`/compound`, `/prune`, `/resolve-pr-feedback`, `/find-skills`) that have no seed-brief contract and no handoff artifact.
+
 ## Composition patterns
 
 | Pattern      | Shape               | When to use                                                                   |
@@ -27,7 +29,7 @@ Use the cheapest pattern that fits. Parallel adds coordination overhead — pref
 
 ## Right-sizing the team
 
-Width (how many specialists) is a separate decision from shape (linear vs parallel). Spawn the fewest specialists the task needs. Every orchestrator starts with a **Phase 0 — Scope Assessment** block that classifies the task before dispatching:
+Width (how many specialists) is a separate decision from shape (linear vs parallel). Spawn the fewest specialists the task needs. Every orchestrator starts with a **Scope Assessment** block that classifies the task before dispatching:
 
 | Scope           | Heuristic                                                         | Team shape                                               |
 | --------------- | ----------------------------------------------------------------- | -------------------------------------------------------- |
@@ -41,7 +43,7 @@ Rules:
 - Gate optional specialists on concrete signals (diff patterns, scope class, file paths) — not on orchestrator discretion.
 - Never pay coordination overhead for work a single agent completes in under a minute.
 
-See `skills/discovery/SKILL.md` and `skills/review/SKILL.md` for canonical Phase 0 blocks. The orchestrator template at `_templates/SKILL.orchestrator.template.md` includes a Phase 0 stub.
+See `skills/discovery/SKILL.md` and `skills/review/SKILL.md` for canonical Scope Assessment blocks. The orchestrator template at `_templates/SKILL.orchestrator.template.md` includes a Scope Assessment stub.
 
 ## Structured briefs
 

@@ -10,7 +10,7 @@ You are leading the build phase. Your goal is to take a fully specified GitHub i
 
 A GitHub issue number (with architecture/design decisions from /define) and any additional resources.
 
-## Phase 0 — Scope Assessment
+## Scope Assessment
 
 Classify the build before dispatching. See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for the right-sizing rationale.
 
@@ -37,7 +37,7 @@ Decision tree:
 
    **On resume in an existing worktree**, read `./.claude/NOTES.md` _before_ re-reading the issue — it has the latest in-flight state. Resume from its **Next action on resume** field.
 
-3. **Implementation** — shape depends on Phase 0:
+3. **Implementation** — shape depends on scope:
    - **Lightweight**: lead codes inline. No TeamCreate. Skip to step 4.
    - **Standard / Deep**: spawn an implementation team using TeamCreate.
      - Assign each teammate a separate sub-issue or file group to avoid conflicts

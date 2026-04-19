@@ -23,7 +23,7 @@ QA teammates must operate with fresh context, independent of the implementing se
 
 2. **Teammate preamble** — include this in every teammate's dispatch: "You are verifying code you did not write. Base pass/fail ONLY on the acceptance criteria, diff, and test commands provided below. Do not reference or assume any build context beyond what is explicitly given to you."
 
-## Phase 0 — Scope Assessment
+## Scope Assessment
 
 Classify the verification scope before dispatching. See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for the right-sizing rationale.
 

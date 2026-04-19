@@ -10,7 +10,7 @@ You are orchestrating the full implementation cycle. Your goal is to take a full
 
 A GitHub issue number (with architecture/design decisions from /define) and any additional resources (docs, API specs, etc.).
 
-## Phase 0 — Scope Assessment
+## Scope Assessment
 
 Classify the work before dispatching. See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for the right-sizing rationale.
 
@@ -39,7 +39,7 @@ Decision tree:
 
 ### Standard / Deep — autonomous cycle: build → review → verify
 
-1. Auto-run `/build` — spawns implementation team (or runs inline per `/build`'s own Phase 0), codes against the issue.
+1. Auto-run `/build` — spawns implementation team (or runs inline per `/build`'s own Scope Assessment), codes against the issue.
 2. Auto-run `/review` — spawns review team; Deep scope triggers `/review`'s Deep mode (all specialists, `opus`).
 3. Auto-run `/verify` — spawns QA team, verifies every acceptance criterion.
 4. **Evaluate findings** (no user prompt):

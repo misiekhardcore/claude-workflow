@@ -11,13 +11,19 @@ You are leading the discovery phase. Your goal is to take a vague idea and produ
 
 A user-provided problem statement (free text), or an existing GitHub issue number to re-run discovery against.
 
-## Phase 0 — Scope Assessment
+## Scope Assessment
 
 Classify the task before dispatching:
 
 - **Lightweight** — clear repro + single area. Single agent runs /describe (Lightweight) → minimal /specify → issue. No team.
 - **Standard** — typical feature with some unknowns. Team with /describe + /specify specialists + Prior-Art Scout.
 - **Deep** — cross-module, auth/security/payments, architecture-changing, or multi-team. Full team + flow analyst + Prior-Art Scout + adversarial questioner.
+
+Decision tree:
+
+1. Is the problem statement a single-sentence fix with clear repro in one area? → Lightweight
+2. Does it touch auth/security/payments, cross modules, change architecture, or span multiple teams? → Deep
+3. Otherwise → Standard
 
 ## Process
 
