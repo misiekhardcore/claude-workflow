@@ -62,11 +62,11 @@ flowchart TB
     Define -. prior decisions .-> WikiQuery
     Prune -. vault audit .-> WikiLint
 
-    classDef orch fill:#fef3c7,stroke:#d97706
-    classDef spec fill:#dbeafe,stroke:#2563eb
-    classDef prim fill:#e0e7ff,stroke:#6366f1
-    classDef meta fill:#f3f4f6,stroke:#6b7280
-    classDef ext  fill:#fce7f3,stroke:#be185d,stroke-dasharray: 4 2
+    classDef orch fill:#fbbf24,stroke:#78350f,stroke-width:2px,color:#1f2937
+    classDef spec fill:#60a5fa,stroke:#1e3a8a,stroke-width:2px,color:#0b1020
+    classDef prim fill:#a5b4fc,stroke:#312e81,stroke-width:2px,color:#0b1020
+    classDef meta fill:#d1d5db,stroke:#111827,stroke-width:2px,color:#111827
+    classDef ext  fill:#f9a8d4,stroke:#831843,stroke-width:2px,stroke-dasharray:4 2,color:#1f2937
     class Discovery,Define,Implement orch
     class D_Describe,D_Specify,D_Scout,Df_Arch,Df_Design,I_Build,I_Review,I_Verify spec
     class GrillMe prim
