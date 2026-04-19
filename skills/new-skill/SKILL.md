@@ -16,39 +16,49 @@ A brief statement from the author of what the skill should do — or nothing, in
 
 2. **Interview the author** — ask ONE question at a time. Do not bundle. See `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-rules.md`.
 
-   a. **Name** — "What's the skill called?" Must be lowercase kebab-case (e.g. `deploy-to-vercel`). Matches the directory name under `skills/`.
+   Use `AskUserQuestion` for every question with a bounded option set (steps c, d, e, f, g, h). For free-text questions (a, b), use a plain prompt. In each `AskUserQuestion` call, place the recommended option first and append ` (Recommended)` to its label — derive the recommendation from the description collected in step (b).
 
-   b. **Description** — "In one or two sentences: what does this skill do, and when should it trigger?" Frame as "Does X. Use when Y." This is the primary trigger mechanism — specificity matters more than elegance. If the author's draft is vague, grill for concrete trigger phrases (what would the user type?).
+   a. **Name** — plain prompt: "What's the skill called?" Must be lowercase kebab-case (e.g. `deploy-to-vercel`). Matches the directory name under `skills/`.
 
-   c. **Role** — "Which role does this skill fill?" Offer a multi-choice, and recommend one based on the description just collected:
-   1. **Orchestrator** — leads a phase; spawns and coordinates specialists; writes a handoff artifact (e.g. `/discovery`, `/define`, `/implement`)
-   2. **Specialist** — executes a bounded task; receives a seed brief from an orchestrator (e.g. `/build`, `/review`, `/architecture`)
-   3. **Interactive primitive** — reusable inline behavior; invoked by specialists; no team, no handoff (e.g. `/grill-me`)
-      This determines which template to use.
+   b. **Description** — plain prompt: "In one or two sentences: what does this skill do, and when should it trigger?" Frame as "Does X. Use when Y." This is the primary trigger mechanism — specificity matters more than elegance. If the author's draft is vague, grill for concrete trigger phrases (what would the user type?).
 
-   d. **Model** — "Which model fits?" Offer a multi-choice:
-   1. `haiku` — fast lookup, formatting, retrieval, light verification
-   2. `sonnet` — standard multi-step workflows, implementation, review (default)
-   3. `opus` — deep research, architecture, high-stakes decisions
-      Recommend one based on the description. Confirm before moving on.
+   c. **Role** — `AskUserQuestion` with `header: "Role"`, question: "Which role does this skill fill?". Options:
+   - **Orchestrator** — leads a phase; spawns specialists; writes a handoff artifact (e.g. `/discovery`, `/define`, `/implement`)
+   - **Specialist** — executes a bounded task; receives a seed brief from an orchestrator (e.g. `/build`, `/review`, `/architecture`)
+   - **Interactive primitive** — reusable inline behavior; invoked by specialists; no team, no handoff (e.g. `/grill-me`)
 
-   e. **effortLevel** — "Does this skill run long-form multi-turn research or decision-making? (y/n)" If yes, add `effortLevel: high`. Otherwise omit the field entirely. Default: no.
+     This answer determines which template to use in step 3.
 
-   f. **allowed-tools** — "Should the skill be restricted to a subset of tools, or have access to everything? (restricted/all)" Most skills want `all` (omit the field). Only restrict when the skill is narrow and should not e.g. write files.
+   d. **Model** — `AskUserQuestion` with `header: "Model"`, question: "Which model fits?". Options:
+   - **sonnet** — standard multi-step workflows, implementation, review
+   - **haiku** — fast lookup, formatting, retrieval, light verification
+   - **opus** — deep research, architecture, high-stakes decisions
 
-   If the author picks **restricted**, ask one follow-up: "Which tools should it be allowed to use? (comma-separated — e.g. `Read, Grep, Glob, Bash`)". Validate that each entry is a real Claude Code tool name (reject unknown names and re-ask). Use the answer verbatim as the value of `allowed-tools:` in the generated frontmatter. On `all`, omit the field entirely.
+   e. **effortLevel** — `AskUserQuestion` with `header: "Effort"`, question: "Does this skill run long-form multi-turn research or decision-making?". Options:
+   - **Standard** — omit `effortLevel` (default)
+   - **High** — add `effortLevel: high` to frontmatter
 
-   g. **Shared protocols** — "Does this skill do any of the following? (yes/no to each)". Walk through the AUTHORING.md decision table:
-   - Write or read a GitHub issue handoff block → include `handoff-artifact.md`
-   - Interview the user, ask questions, seek approval → include `interviewing-rules.md`
-   - Create or read `.claude/NOTES.md` → include `notes-md-protocol.md`
-   - Manage in-phase context (clearing stale results, delegating, `/compact`) → include `compaction-protocol.md`
-   - Author an orchestrator or design a multi-skill workflow → include `composition.md`
+   f. **allowed-tools** — `AskUserQuestion` with `header: "Tools"`, question: "Should the skill have access to all tools, or a restricted subset?". Options:
+   - **All tools** — omit the field (default; what most skills want)
+   - **Restricted subset** — set `allowed-tools:` explicitly
 
-   h. **Target location** — "Where should the skill be written?" Offer:
-   1. **Personal** — `~/.claude/skills/<name>/SKILL.md` (default, recommended for individual use)
-   2. **Project** — `<cwd>/.claude/skills/<name>/SKILL.md` (committed to the current repo)
-   3. **Plugin** — `${CLAUDE_PLUGIN_ROOT}/skills/<name>/SKILL.md` (contributing to this plugin; dogfooding)
+     If the author picks **Restricted subset**, ask one free-text follow-up: "Which tools should it be allowed to use? (comma-separated — e.g. `Read, Grep, Glob, Bash`)". Validate that each entry is a real Claude Code tool name (reject unknown names and re-ask). Use the answer verbatim as the value of `allowed-tools:`.
+
+   g. **Shared protocols** — `AskUserQuestion` with `header: "Protocols"`, `multiSelect: true`, question: "Which shared protocols does this skill need?". Walk through the AUTHORING.md decision table. Options (4-option limit):
+   - **Handoff artifact** — writes or reads a GitHub issue handoff block → include `handoff-artifact.md`
+   - **Interviewing rules** — interviews the user, asks questions, seeks approval → include `interviewing-rules.md`
+   - **NOTES.md protocol** — creates or reads `.claude/NOTES.md` → include `notes-md-protocol.md`
+   - **Compaction protocol** — manages in-phase context (clearing stale results, delegating, `/compact`) → include `compaction-protocol.md`
+
+     Then a second `AskUserQuestion` call: `header: "Composition"`, question: "Does this skill author an orchestrator or design a multi-skill workflow?". Options:
+
+   - **No** — skip `composition.md`
+   - **Yes** — include `composition.md`
+
+   h. **Target location** — `AskUserQuestion` with `header: "Target"`, question: "Where should the skill be written?". Options:
+   - **Personal (Recommended)** — `~/.claude/skills/<name>/SKILL.md` (individual use)
+   - **Project** — `<cwd>/.claude/skills/<name>/SKILL.md` (committed to the current repo)
+   - **Plugin** — `${CLAUDE_PLUGIN_ROOT}/skills/<name>/SKILL.md` (contributing to this plugin; dogfooding)
 
 3. **Select the template** based on the author's role answer (step 2b):
    - Orchestrator → `${CLAUDE_PLUGIN_ROOT}/_templates/SKILL.orchestrator.template.md`
