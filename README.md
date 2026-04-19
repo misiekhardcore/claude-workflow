@@ -2,18 +2,79 @@
 
 Workflow skills plugin for Claude Code — a standardized lifecycle for feature development.
 
+```mermaid
+flowchart TB
+    Start([feature request]) --> Discovery
+
+    subgraph Discovery["/discovery — explore & scope"]
+        direction LR
+        D_Describe["/describe<br/>problem space"]
+        D_Specify["/specify<br/>acceptance criteria"]
+        D_Scout["Prior-Art Scout<br/>(inline)"]
+        D_Scout -.seed brief.-> D_Describe
+    end
+
+    subgraph Define["/define — plan"]
+        direction LR
+        Df_Arch["/architecture<br/>tech decisions"]
+        Df_Design["/design<br/>UX / visual"]
+    end
+
+    subgraph Implement["/implement — build loop"]
+        direction LR
+        I_Build["/build<br/>TDD"]
+        I_Review["/review<br/>correctness + standards"]
+        I_Verify["/verify<br/>AC QA"]
+        I_Build --> I_Review --> I_Verify
+        I_Verify -.fix brief.-> I_Build
+        I_Review -.fix brief.-> I_Build
+    end
+
+    Discovery -->|issue body| Define
+    Define -->|issue body| Implement
+    Implement --> PR([draft PR])
+    PR --> WrapUp["/wrap-up<br/>harvest NOTES.md"]
+    PR --> Compound["/compound<br/>capture learnings"]
+    PR --> ResolvePR["/resolve-pr-feedback<br/>batch review responses"]
+
+    GrillMe(["/grill-me<br/>(primitive)"])
+    GrillMe -.-> D_Describe
+    GrillMe -.-> D_Specify
+    GrillMe -.-> Df_Arch
+    GrillMe -.-> Df_Design
+
+    subgraph Meta["Plugin-level tools"]
+        direction LR
+        NewSkill["/new-skill"]
+        FindSkills["/find-skills"]
+        Prune["/prune<br/>audit memory"]
+    end
+    GrillMe -.-> NewSkill
+
+    subgraph Obsidian["claude-obsidian (optional)"]
+        direction LR
+        Save["/save"]
+        WikiQuery["wiki-query"]
+        WikiLint["wiki-lint"]
+    end
+    Compound -. filing .-> Save
+    Df_Arch -. prior patterns .-> WikiQuery
+    Define -. prior decisions .-> WikiQuery
+    Prune -. vault audit .-> WikiLint
+
+    classDef orch fill:#fef3c7,stroke:#d97706
+    classDef spec fill:#dbeafe,stroke:#2563eb
+    classDef prim fill:#e0e7ff,stroke:#6366f1
+    classDef meta fill:#f3f4f6,stroke:#6b7280
+    classDef ext  fill:#fce7f3,stroke:#be185d,stroke-dasharray: 4 2
+    class Discovery,Define,Implement orch
+    class D_Describe,D_Specify,D_Scout,Df_Arch,Df_Design,I_Build,I_Review,I_Verify spec
+    class GrillMe prim
+    class NewSkill,FindSkills,Prune,WrapUp,Compound,ResolvePR meta
+    class Save,WikiQuery,WikiLint ext
 ```
-/discovery → /define → /implement
-                           │
-              ┌────────────┼────────────┐
-              ▼            ▼            ▼
-           /build  →   /review   →  /verify
-              ▲            │            │
-              └─ fix-brief ◄┴────────────┘
-                            │ (both clean)
-                            ▼
-                   draft PR + /compound
-```
+
+**Legend**: orchestrators (amber) spawn specialists (blue); `/grill-me` (indigo) is a reusable primitive; plugin-level tools (gray) run outside the phase lifecycle; claude-obsidian integrations (dashed pink) activate when that plugin is installed.
 
 ## Install
 
