@@ -3,75 +3,80 @@
 Workflow skills plugin for Claude Code — a standardized lifecycle for feature development.
 
 ```mermaid
+%%{init: {'theme':'base', 'themeVariables': {'background':'#000','primaryColor':'#ffffff','primaryTextColor':'#000000','primaryBorderColor':'#000000','lineColor':'#000000','textColor':'#000000','titleColor':'#000000','clusterBkg':'#f3f4f6','clusterBorder':'#000000','edgeLabelBackground':'#ffffff','edgeLabelBackground':'#ffffff'}}}%%
 flowchart TB
-    Start([feature request]) --> Discovery
+    subgraph Canvas["Skills flowchart"]
+        direction TB
+        Start([feature request]) --> Discovery
 
-    subgraph Discovery["/discovery — explore & scope"]
-        direction LR
-        D_Describe["/describe<br/>problem space"]
-        D_Specify["/specify<br/>acceptance criteria"]
-        D_Scout["Prior-Art Scout<br/>(inline)"]
-        D_Scout -.seed brief.-> D_Describe
+        subgraph Discovery["/discovery — explore & scope"]
+            direction LR
+            D_Describe["/describe — problem space"]
+            D_Specify["/specify — acceptance criteria"]
+            D_Scout["Prior-Art Scout"]
+            D_Scout -.seed brief.-> D_Describe
+        end
+
+        subgraph Define["/define — solution architecture"]
+            direction LR
+            Df_Arch["/architecture — tech decisions"]
+            Df_Design["/design — UX/UI"]
+        end
+
+        subgraph Implement["/implement — build loop"]
+            direction LR
+            I_Build["/build — TDD"]
+            I_Review["/review — correctness + standards"]
+            I_Verify["/verify — AC QA"]
+            I_Build --> I_Review --> I_Verify
+            I_Verify -.fix brief.-> I_Build
+            I_Review -.fix brief.-> I_Build
+        end
+
+        Discovery -->|create issue body| Define
+        Define -->|issue body| Implement
+        Implement --> PR([draft PR])
+        PR --> WrapUp["/wrap-up — harvest NOTES.md"]
+        PR --> Compound["/compound — capture learnings"]
+        PR --> ResolvePR["/resolve-pr-feedback — batch review responses"]
+
+        subgraph Meta["Other tools"]
+            direction LR
+            NewSkill["/new-skill"]
+            FindSkills["/find-skills"]
+            Prune["/prune — audit memory"]
+            GrillMe["/grill-me"]
+        end
+
+        GrillMe -.-> D_Describe
+        GrillMe -.-> D_Specify
+        GrillMe -.-> Df_Arch
+        GrillMe -.-> Df_Design
+        GrillMe -.-> NewSkill
+
+        subgraph Obsidian["claude-obsidian (optional)"]
+            direction LR
+            Save["/save"]
+            WikiQuery["wiki-query"]
+            WikiLint["wiki-lint"]
+        end
+        Compound -. filing .-> Save
+        Df_Arch -. prior patterns .-> WikiQuery
+        Define -. prior decisions .-> WikiQuery
+        Prune -. vault audit .-> WikiLint
     end
 
-    subgraph Define["/define — plan"]
-        direction LR
-        Df_Arch["/architecture<br/>tech decisions"]
-        Df_Design["/design<br/>UX / visual"]
-    end
-
-    subgraph Implement["/implement — build loop"]
-        direction LR
-        I_Build["/build<br/>TDD"]
-        I_Review["/review<br/>correctness + standards"]
-        I_Verify["/verify<br/>AC QA"]
-        I_Build --> I_Review --> I_Verify
-        I_Verify -.fix brief.-> I_Build
-        I_Review -.fix brief.-> I_Build
-    end
-
-    Discovery -->|issue body| Define
-    Define -->|issue body| Implement
-    Implement --> PR([draft PR])
-    PR --> WrapUp["/wrap-up<br/>harvest NOTES.md"]
-    PR --> Compound["/compound<br/>capture learnings"]
-    PR --> ResolvePR["/resolve-pr-feedback<br/>batch review responses"]
-
-    GrillMe(["/grill-me<br/>(primitive)"])
-    GrillMe -.-> D_Describe
-    GrillMe -.-> D_Specify
-    GrillMe -.-> Df_Arch
-    GrillMe -.-> Df_Design
-
-    subgraph Meta["Plugin-level tools"]
-        direction LR
-        NewSkill["/new-skill"]
-        FindSkills["/find-skills"]
-        Prune["/prune<br/>audit memory"]
-    end
-    GrillMe -.-> NewSkill
-
-    subgraph Obsidian["claude-obsidian (optional)"]
-        direction LR
-        Save["/save"]
-        WikiQuery["wiki-query"]
-        WikiLint["wiki-lint"]
-    end
-    Compound -. filing .-> Save
-    Df_Arch -. prior patterns .-> WikiQuery
-    Define -. prior decisions .-> WikiQuery
-    Prune -. vault audit .-> WikiLint
-
-    classDef orch fill:#fbbf24,stroke:#78350f,stroke-width:2px,color:#1f2937
-    classDef spec fill:#60a5fa,stroke:#1e3a8a,stroke-width:2px,color:#0b1020
-    classDef prim fill:#a5b4fc,stroke:#312e81,stroke-width:2px,color:#0b1020
-    classDef meta fill:#d1d5db,stroke:#111827,stroke-width:2px,color:#111827
-    classDef ext  fill:#f9a8d4,stroke:#831843,stroke-width:2px,stroke-dasharray:4 2,color:#1f2937
+    classDef canvas fill:#ffffff,stroke:#ffffff,color:#000000
+    classDef orch fill:#dddddd,stroke:#000000,stroke-width:2px,color:#000000
+    classDef spec fill:#eeeeee,stroke:#000000,stroke-width:2px,color:#000000
+    classDef prim fill:#a5b4fc,stroke:#000000,stroke-width:2px,color:#000000
+    classDef meta fill:#d1d5db,stroke:#000000,stroke-width:2px,color:#000000
+    classDef ext  fill:#f9a8d4,stroke:#000000,stroke-width:2px,stroke-dasharray:4 2,color:#000000
+    class Canvas canvas
     class Discovery,Define,Implement orch
     class D_Describe,D_Specify,D_Scout,Df_Arch,Df_Design,I_Build,I_Review,I_Verify spec
-    class GrillMe prim
-    class NewSkill,FindSkills,Prune,WrapUp,Compound,ResolvePR meta
-    class Save,WikiQuery,WikiLint ext
+    class GrillMe,NewSkill,FindSkills,Prune,WrapUp,Compound,ResolvePR,Save,WikiQuery,WikiLint meta
+    class Obsidian ext
 ```
 
 **Legend**: orchestrators (amber) spawn specialists (blue); `/grill-me` (indigo) is a reusable primitive; plugin-level tools (gray) run outside the phase lifecycle; claude-obsidian integrations (dashed pink) activate when that plugin is installed.
