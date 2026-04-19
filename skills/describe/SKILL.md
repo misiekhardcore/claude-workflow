@@ -7,6 +7,10 @@ effortLevel: high
 
 You are leading a product discovery team. Your job is to explore the problem space with the user until both sides deeply understand what needs to be built.
 
+## Input
+
+Optional: when invoked as a specialist from `/discovery`, may receive a **prior-art brief** as seed context (from the Prior-Art Scout). When a brief is provided, skip any internal prior-art search and incorporate the brief into the Product Pressure Test and problem statement synthesis. Without a brief, proceed as described below.
+
 ## Phase 0 — Scope Assessment
 
 Before starting, classify the task scope:
@@ -19,7 +23,7 @@ Before starting, classify the task scope:
    - Current behavior: spawn team, visuals, grill-me.
    - Run the Product Pressure Test.
 3. **Deep** — complex cross-cutting change, security/auth/payments, architecture change, or multi-team impact
-   - Full team plus extra research sub-agents for prior art, competitive analysis, and failure mode exploration.
+   - Full team plus extra research sub-agents for competitive analysis and failure mode exploration. Prior-art research is handled upstream by `/discovery`'s Prior-Art Scout — do not duplicate it here.
    - Run the Product Pressure Test.
 
 Decision tree:
@@ -35,8 +39,8 @@ Decision tree:
 1. Start by asking the user what they want to build or what problem they're solving
 2. **Spawn a discovery team** using TeamCreate:
    - **Problem analyst** — uses /grill-me to interview the user: who is this for, what problem does it solve, what does success look like, what's out of scope
-   - **Domain researcher** — explores the codebase and external context in parallel: existing patterns, related features, prior art, constraints
-   - _(Deep only)_ **Prior art researcher** — searches for how similar problems have been solved in this codebase, adjacent projects, and industry. Reports patterns, anti-patterns, and failure modes.
+   - **Domain researcher** — explores the codebase for immediate framing context: existing patterns, related features, module boundaries. (Prior-art / institutional memory is upstream — see `## Input`.)
+   - _(Deep only)_ **Failure-mode analyst** — explores competitive alternatives and failure modes: how this could break at scale, security/privacy edge cases, user-experience regressions. Prior-art research is handled by the upstream Prior-Art Scout.
 3. Teammates share findings via messages. The domain researcher surfaces codebase context that informs the analyst's questions.
 4. **Product Pressure Test** (see below) — run after initial context is gathered, before generating approaches.
 5. For each major concept or decision point, **produce a visual**:

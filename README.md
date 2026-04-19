@@ -26,6 +26,16 @@ claude plugin install claude-workflow@claude-workflow
 
 Then enable it in your project or globally in Claude Code settings.
 
+## Prerequisites
+
+Skills that spawn parallel sub-agents (`/discovery`, `/define`, `/implement`, and others that use `TeamCreate`) require:
+
+```bash
+export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
+```
+
+Without this flag, `TeamCreate` is unavailable. Skills detect its absence and fall back to sequential execution, noting the degraded mode explicitly.
+
 ## Skills
 
 | Skill | Description |
@@ -84,6 +94,7 @@ Shared protocols live at `_shared/`:
 | `interviewing-rules.md` | One-question-at-a-time interview protocol |
 | `notes-md-protocol.md` | In-phase NOTES.md memory tier |
 | `compaction-protocol.md` | Context editing → delegation → /compact order |
+| `composition.md` | Multi-skill composition patterns, skill roles, and brief contracts |
 
 ## License
 

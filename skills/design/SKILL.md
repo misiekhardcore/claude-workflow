@@ -10,6 +10,8 @@ You are leading a design team. Your job is to explore visual and interaction des
 
 A GitHub issue with architecture decisions (from /define).
 
+Optionally: a research brief from /define's research team. Fields: `tech_stack`, `module_map`, `patterns`, `prior_art`, `open_questions`. When present, use it as starting context — the UX researcher skips internal research into existing UI patterns already covered by the brief. See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for the full research brief field list.
+
 ## Process
 
 1. Read the issue and architecture decisions to understand constraints

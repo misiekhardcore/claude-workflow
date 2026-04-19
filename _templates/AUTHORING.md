@@ -2,9 +2,30 @@
 
 This document defines the authoring conventions for workflow skills in this plugin. Read it when creating or editing a skill, or when `/new-skill` asks which `_shared/` files apply.
 
+## Skill types
+
+Every skill fills one of three roles. Choose the correct template before authoring.
+
+| Role | Definition | Examples | Typical model |
+|------|-----------|---------|---------------|
+| **Orchestrator** | Leads a phase; spawns and coordinates specialists; writes the handoff artifact | `/discovery`, `/define`, `/implement` | `opus` |
+| **Specialist** | Executes a bounded task; receives a seed brief; reports findings to the orchestrator | `/build`, `/review`, `/architecture`, `/specify` | `sonnet` |
+| **Interactive primitive** | Reusable inline behavior; invoked by specialists; no team, no handoff | `/grill-me` | `sonnet` |
+
+Use the role-specific template:
+- Orchestrator → `${CLAUDE_PLUGIN_ROOT}/_templates/SKILL.orchestrator.template.md`
+- Specialist → `${CLAUDE_PLUGIN_ROOT}/_templates/SKILL.specialist.template.md`
+- Primitive → `${CLAUDE_PLUGIN_ROOT}/_templates/SKILL.primitive.template.md`
+
+For generic composition theory (patterns, briefs, decomposition rules), see `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
+
+## Composition patterns
+
+Multi-skill workflows follow four patterns: linear, branch, loop, and parallel. See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for definitions, when to use each, and the seed-brief contract that governs how orchestrators seed specialists with context. The three standard brief types (research, prior-art, fix) are defined there.
+
 ## Skill structure
 
-See `${CLAUDE_PLUGIN_ROOT}/_templates/SKILL.template.md` for the canonical shape. The template is a loose skeleton — not every section is required for every skill. Use what fits.
+Use the role-specific templates for new skills: orchestrator, specialist, or primitive. Each template is a loose skeleton — not every section is required. Use what fits.
 
 ### Frontmatter fields
 
@@ -36,6 +57,7 @@ Shared protocols live at `${CLAUDE_PLUGIN_ROOT}/_shared/`. Reference them on-dem
 | `interviewing-rules.md` | Interviews the user — asks questions, seeks approval, uses multi-choice forms (`/discovery`, `/define`, `/describe`, `/specify`, `/architecture`, `/design`, `/grill-me`, `/new-skill`) |
 | `notes-md-protocol.md` | Creates, updates, or resumes from `.claude/NOTES.md` (`/build`, `/wrap-up`) |
 | `compaction-protocol.md` | Manages in-phase context — clearing stale tool results, delegating bulk reads, using `/compact` (`/build`) |
+| `composition.md` | Authors an orchestrator skill or designs a multi-skill workflow — patterns, briefs, decomposition rules |
 
 ### Reference pattern
 

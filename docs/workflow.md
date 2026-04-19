@@ -1,5 +1,7 @@
 # Development Workflow
 
+> For the generic theory behind multi-skill composition — composition patterns, skill roles, and brief contracts — see `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`. This doc covers the applied phase shape; that doc covers the underlying model.
+
 A step-by-step walkthrough of the feature lifecycle in this repo: which skill runs when, what it expects as input, and what it leaves behind. The rules themselves live in `CLAUDE.md` and in each `skills/<name>/SKILL.md`; this doc stitches them into a single narrative so a newcomer doesn't have to read every `SKILL.md` to understand the flow.
 
 ## Workflow paths

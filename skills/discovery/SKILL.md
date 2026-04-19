@@ -12,30 +12,41 @@ You are leading the discovery phase. Your goal is to take a vague idea and produ
 Classify the task before dispatching:
 
 - **Lightweight** — clear repro + single area. Single agent runs /describe (Lightweight) → minimal /specify → issue. No team.
-- **Standard** — typical feature with some unknowns. Team with /describe + /specify specialists.
-- **Deep** — cross-module, auth/security/payments, architecture-changing, or multi-team. Full team + flow analyst + adversarial questioner.
+- **Standard** — typical feature with some unknowns. Team with /describe + /specify specialists + Prior-Art Scout.
+- **Deep** — cross-module, auth/security/payments, architecture-changing, or multi-team. Full team + flow analyst + Prior-Art Scout + adversarial questioner.
 
 ## Process
 
 ### Standard
 
-1. **Spawn a discovery team** using TeamCreate with two specialists:
+1. **Spawn a discovery team** using TeamCreate with three specialists:
    - **Describe specialist** — runs /describe to explore the problem space with the user. Produces visualizations, explores user stories, maps boundaries.
    - **Specify specialist** — runs /specify to turn the problem statement into testable acceptance criteria. Produces concrete GIVEN/WHEN/THEN scenarios.
+   - **Prior-Art Scout** — gathers institutional memory in parallel with the describe specialist. Sources, in order:
+     1. **The claude-obsidian vault, if available.** If `claude-obsidian:wiki-query` is usable, ask it for concepts/entities/sources/meta relevant to the topic (prior decisions, patterns, bug-fix history). If not installed, record `Vault query skipped — claude-obsidian not installed.` in the brief.
+     2. **Past GitHub issues and PRs** via `gh issue list --search "<topic>" --state all` and `gh pr list --search "<topic>" --state all`.
+     3. **Project documentation** — ADRs and design notes under `docs/**` and relevant READMEs.
 
-2. The describe specialist goes first. Once the problem statement is clear and the user has explicitly approved it, hand findings to the specify specialist.
+     Output: a structured brief with **Prior decisions**, **Prior attempts and outcomes**, **Related open/closed issues**, **Relevant patterns**. Feeds both describe and specify.
 
-3. The specify specialist drills into requirements. Once acceptance criteria are approved by the user, combine outputs.
+2. The Prior-Art Scout runs in parallel with the describe specialist — no blocking. Its brief is passed to `/describe` as seed context; the describe specialist skips its own prior-art exploration when a brief is provided (mirrors the `/define` → `/architecture` seed-brief contract).
+
+3. The describe specialist goes first with the user. Once the problem statement is clear and the user has explicitly approved it, hand findings (plus the scout brief) to the specify specialist.
+
+4. The specify specialist drills into requirements, with the scout brief available as supplementary context. Once acceptance criteria are approved by the user, combine outputs.
 
 ### Deep
 
-1. **Spawn an extended discovery team** using TeamCreate with four specialists:
+1. **Spawn an extended discovery team** using TeamCreate with five specialists:
    - **Describe specialist** — runs /describe (Deep mode) to explore the problem space
    - **Specify specialist** — runs /specify to produce acceptance criteria
    - **Flow analyst** — maps the end-to-end flow of the change: what systems are touched, what data moves where, what can break. Produces sequence diagrams and dependency maps.
+   - **Prior-Art Scout** — same sources and brief format as Standard mode (vault → issues/PRs → docs). For Deep-scope work (security, payments, cross-module), always run all three source layers. Findings feed describe, specify, and the adversarial questioner.
    - **Adversarial questioner** — actively challenges assumptions: what if this fails, what's the migration path, what are the security implications, what happens at scale
 
-2. Describe and flow analyst work in parallel. Adversarial questioner waits for both describe and flow analyst to complete, then reviews their combined findings and challenges conclusions. Specify specialist works last, incorporating all concerns.
+2. Describe specialist, flow analyst, and Prior-Art Scout work in parallel. Adversarial questioner waits for all three to complete, then reviews their combined findings and challenges conclusions. Specify specialist works last, incorporating all concerns.
+
+3. The scout brief is passed to `/describe` as seed context — the describe specialist skips its own prior-art exploration when a brief is provided.
 
 ### Lightweight
 
@@ -66,4 +77,5 @@ Classify the task before dispatching:
 - Every feature has at least one issue and at least one PR closing it
 - Epics get sub-issues linked with GitHub issue relationships (parent/child)
 - The user must approve the issue
+- **Prior-Art Scout findings belong in the issue's Prior decisions and Evidence fields during issue creation — never drop them.**
 - See `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-rules.md` for the questioning protocol — apply it throughout all user interactions.
