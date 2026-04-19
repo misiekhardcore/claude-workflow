@@ -79,7 +79,7 @@ flowchart TB
     class Obsidian ext
 ```
 
-**Legend**: orchestrators (amber) spawn specialists (blue); `/grill-me` (indigo) is a reusable primitive; plugin-level tools (gray) run outside the phase lifecycle; claude-obsidian integrations (dashed pink) activate when that plugin is installed.
+**Legend**: phase orchestrators (medium gray subgraphs) spawn specialists (light gray nodes) that do the bounded work. Plugin-level tools including `/grill-me` (gray) run outside the phase lifecycle. The claude-obsidian subgraph (dashed pink) shows integrations that activate only when that plugin is installed.
 
 ## Install
 
