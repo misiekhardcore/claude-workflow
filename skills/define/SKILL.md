@@ -11,21 +11,39 @@ You are leading the definition phase. Your goal is to take an approved GitHub is
 
 A GitHub issue number from /discovery (or provided by the user).
 
+## Phase 0 — Scope Assessment
+
+Classify the definition work before dispatching. See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for the right-sizing rationale.
+
+1. **Lightweight** — single-module technical decision with a clear pattern match already in the codebase; no visual surface; no architectural unknowns.
+   - Lead writes an inline architecture summary (3–5 bullets) directly to the issue body. Skip research team and skip `/architecture` as a separate specialist.
+2. **Standard** — typical feature with some technical unknowns; may have a visual surface.
+   - Research team (both agents) + `/architecture` specialist. Add `/design` when the feature has visual aspects.
+3. **Deep** — cross-module, security/payments/privacy, architecture-changing, or migration-bearing.
+   - Research team + `/architecture` + `/design` (when applicable) + a second team to critique the plan before finalizing.
+
+Decision tree:
+
+1. Single module, pattern already exists in the codebase, no visual surface, no unknowns? → Lightweight
+2. Touches auth/security/payments/privacy, crosses modules, or changes architecture? → Deep
+3. Otherwise → Standard
+
 ## Process
 
 1. Read the issue to understand the problem statement and acceptance criteria.
 
-2. **Dispatch a research team** (TeamCreate) before the definition team:
+2. **Dispatch a research team** (TeamCreate; Standard/Deep only — skip in Lightweight):
    - **Codebase research agent** — scans tech stack, modules, related implementations, naming, existing patterns. Outputs a structured brief.
    - **Patterns/learnings agent** — gathers prior art from, in order: (1) the claude-obsidian vault via `claude-obsidian:wiki-query` if available (concepts/entities/sources/meta); (2) project docs (READMEs, ADRs, `docs/**`); (3) external sources via Context7 when local patterns are thin. If `claude-obsidian` is not installed, step 1 is skipped with a note. Skip external research when internal sources yield 3+ direct pattern examples; always run full research for security/payments/privacy.
 
    The brief feeds both the architecture and design specialists as seed context.
 
-3. **Spawn a definition team** using TeamCreate with specialists:
-   - **Architecture specialist** — runs /architecture to explore technical approaches, seeded with research output. Pass the research brief as input — the Architecture specialist skips its own research phase when a research brief is provided. Produces component diagrams, data flow, API design, dependency graphs.
-   - **Design specialist** (if the feature has visual aspects) — runs /design to explore UI/UX approaches, seeded with research output. Produces mockups, interaction flows, component hierarchies.
+3. **Spawn a definition team** — shape depends on Phase 0:
+   - **Lightweight**: lead writes the architecture summary inline against the research already in the issue. No team.
+   - **Standard**: TeamCreate with the **Architecture specialist** (runs /architecture seeded with the research brief; skips its own research phase). Add the **Design specialist** (runs /design seeded with the research brief) when the feature has visual aspects.
+   - **Deep**: same specialists as Standard, then spawn a second TeamCreate to critique the plan before finalizing (adversarial review, migration safety, rollout risks).
 
-4. The architecture specialist goes first. Once technical decisions are approved by the user, the design specialist (if applicable) works within those constraints.
+4. The architecture specialist goes first. Once technical decisions are approved by the user, the design specialist (if applicable) works within those constraints. In Deep scope, the critique team runs after both and before user sign-off.
 
 5. **Update the GitHub issue body** with decisions. The body is the handoff artifact, single source of truth — always update it in place, never post handoff state as a comment:
    - If the body already has a `## /define` section, edit it. If not, append one.
@@ -41,6 +59,6 @@ A GitHub issue number from /discovery (or provided by the user).
 ## Rules
 
 - **Require explicit full approval** before finalizing. Partial feedback is NOT approval.
-- For complex tasks, spawn a second team to critique the plan before finalizing
+- Deep scope always spawns a second team to critique the plan before finalizing; Standard may skip it; Lightweight never needs one.
 - Respect existing codebase patterns unless there's a strong reason to deviate
 - See `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-rules.md` for the questioning protocol — apply it throughout all user interactions.

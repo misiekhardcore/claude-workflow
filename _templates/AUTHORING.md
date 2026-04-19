@@ -4,18 +4,20 @@ This document defines the authoring conventions for workflow skills in this plug
 
 ## Skill types
 
-Every skill fills one of three roles. Choose the correct template before authoring.
+Every skill fills one of five roles. Choose the correct template before authoring.
 
-| Role                      | Definition                                                                           | Examples                                         | Typical model |
-| ------------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------ | ------------- |
-| **Orchestrator**          | Leads a phase; spawns and coordinates specialists; writes the handoff artifact       | `/discovery`, `/define`, `/implement`            | `opus`        |
-| **Specialist**            | Executes a bounded task; receives a seed brief; reports findings to the orchestrator | `/build`, `/review`, `/architecture`, `/specify` | `sonnet`      |
-| **Interactive primitive** | Reusable inline behavior; invoked by specialists; no team, no handoff                | `/grill-me`                                      | `sonnet`      |
+| Role                                | Definition                                                                                                                                                     | Examples                                                      | Typical model       |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- | ------------------- |
+| **Research-leading orchestrator**   | Leads a phase; spawns a research team, then a main team of specialists; writes the handoff artifact. Used when deep reasoning happens at the orchestrator tier | `/discovery`, `/define`                                       | `opus` + `effortLevel: high` |
+| **Coordinator orchestrator**        | Sequences already-designed sub-skills in a loop (e.g. build → review → verify). Deep reasoning lives in the sub-skills, not the orchestrator — no research team | `/implement`                                                  | `sonnet`            |
+| **Specialist**                      | Executes a bounded task; receives a seed brief; reports findings to the orchestrator                                                                           | `/build`, `/review`, `/architecture`, `/specify`              | `sonnet`            |
+| **Interactive primitive**           | Reusable inline behavior; invoked by specialists; no team, no handoff                                                                                          | `/grill-me`                                                   | `sonnet`            |
+| **Utility**                         | User-invocable maintenance or post-work skill. No seed-brief contract, no phase handoff artifact, no team gating                                               | `/compound`, `/prune`, `/resolve-pr-feedback`, `/find-skills` | `sonnet` or `haiku` |
 
 Use the role-specific template:
 
-- Orchestrator → `${CLAUDE_PLUGIN_ROOT}/_templates/SKILL.orchestrator.template.md`
-- Specialist → `${CLAUDE_PLUGIN_ROOT}/_templates/SKILL.specialist.template.md`
+- Research-leading or coordinator orchestrator → `${CLAUDE_PLUGIN_ROOT}/_templates/SKILL.orchestrator.template.md` (coordinator variants omit the research-team step — see the template header note)
+- Specialist or utility → `${CLAUDE_PLUGIN_ROOT}/_templates/SKILL.specialist.template.md` (utility skills simply have no seed-brief input and no handoff output)
 - Primitive → `${CLAUDE_PLUGIN_ROOT}/_templates/SKILL.primitive.template.md`
 
 For generic composition theory (patterns, briefs, decomposition rules), see `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.

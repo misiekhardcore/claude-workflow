@@ -22,12 +22,17 @@ A brief statement from the author of what the skill should do — or nothing, in
 
    b. **Description** — plain prompt: "In one or two sentences: what does this skill do, and when should it trigger?" Frame as "Does X. Use when Y." This is the primary trigger mechanism — specificity matters more than elegance. If the author's draft is vague, grill for concrete trigger phrases (what would the user type?).
 
-   c. **Role** — `AskUserQuestion` with `header: "Role"`, question: "Which role does this skill fill?". Options:
-   - **Orchestrator** — leads a phase; spawns specialists; writes a handoff artifact (e.g. `/discovery`, `/define`, `/implement`)
+   c. **Role** — `AskUserQuestion` with `header: "Role"`, question: "Which role does this skill fill?". Options (4-option limit — if the author is unsure between the two orchestrator variants, pick **Orchestrator** here and clarify in the follow-up):
+   - **Orchestrator** — leads a phase; spawns sub-skills or specialists; may write a handoff artifact (e.g. `/discovery`, `/define`, `/implement`)
    - **Specialist** — executes a bounded task; receives a seed brief from an orchestrator (e.g. `/build`, `/review`, `/architecture`)
    - **Interactive primitive** — reusable inline behavior; invoked by specialists; no team, no handoff (e.g. `/grill-me`)
+   - **Utility** — user-invocable maintenance/post-work skill; no seed brief, no handoff artifact (e.g. `/compound`, `/prune`, `/resolve-pr-feedback`)
 
-     This answer determines which template to use in step 3.
+     If the author picks **Orchestrator**, ask one follow-up `AskUserQuestion` with `header: "Orchestrator type"`, question: "Does this orchestrator do its own deep reasoning, or sequence already-designed sub-skills?". Options:
+   - **Research-leading** — spawns a research team before the main team; deep reasoning at the orchestrator tier (e.g. `/discovery`, `/define`). Defaults model to `opus` and `effortLevel: high`.
+   - **Coordinator** — sequences sub-skills in a loop; research happens upstream or in the sub-skills (e.g. `/implement`). Defaults model to `sonnet`, no `effortLevel`.
+
+     This answer determines which template to use in step 3 and pre-fills the model/effort defaults (which the author can still override in steps d/e).
 
    d. **Model** — `AskUserQuestion` with `header: "Model"`, question: "Which model fits?". Options:
    - **sonnet** — standard multi-step workflows, implementation, review
@@ -60,9 +65,9 @@ A brief statement from the author of what the skill should do — or nothing, in
    - **Project** — `<cwd>/.claude/skills/<name>/SKILL.md` (committed to the current repo)
    - **Plugin** — `${CLAUDE_PLUGIN_ROOT}/skills/<name>/SKILL.md` (contributing to this plugin; dogfooding)
 
-3. **Select the template** based on the author's role answer (step 2b):
-   - Orchestrator → `${CLAUDE_PLUGIN_ROOT}/_templates/SKILL.orchestrator.template.md`
-   - Specialist → `${CLAUDE_PLUGIN_ROOT}/_templates/SKILL.specialist.template.md`
+3. **Select the template** based on the author's role answer (step 2c):
+   - Orchestrator (either variant) → `${CLAUDE_PLUGIN_ROOT}/_templates/SKILL.orchestrator.template.md`. For Coordinator, drop the "Dispatch a research team" step from the template body per its header note.
+   - Specialist or Utility → `${CLAUDE_PLUGIN_ROOT}/_templates/SKILL.specialist.template.md`. For Utility, remove the "Optionally: a seed brief" paragraph from Input — utility skills are user-invocable and don't receive briefs.
    - Primitive → `${CLAUDE_PLUGIN_ROOT}/_templates/SKILL.primitive.template.md`
 
    Read the selected template — that is the skeleton you will fill in.

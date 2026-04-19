@@ -7,6 +7,10 @@ effortLevel: high
 
 You are leading the discovery phase. Your goal is to take a vague idea and produce a well-specified GitHub issue ready for architecture and implementation.
 
+## Input
+
+A user-provided problem statement (free text), or an existing GitHub issue number to re-run discovery against.
+
 ## Phase 0 — Scope Assessment
 
 Classify the task before dispatching:
@@ -19,7 +23,7 @@ Classify the task before dispatching:
 
 ### Standard
 
-1. **Spawn a discovery team** using TeamCreate with three specialists:
+1. **Spawn a discovery team** using TeamCreate with up to three specialists, depending on the complexity of the problem:
    - **Describe specialist** — runs /describe to explore the problem space with the user. Produces visualizations, explores user stories, maps boundaries.
    - **Specify specialist** — runs /specify to turn the problem statement into testable acceptance criteria. Produces concrete GIVEN/WHEN/THEN scenarios.
    - **Prior-Art Scout** — gathers institutional memory in parallel with the describe specialist. Sources, in order:
@@ -37,7 +41,7 @@ Classify the task before dispatching:
 
 ### Deep
 
-1. **Spawn an extended discovery team** using TeamCreate with five specialists:
+1. **Spawn an extended discovery team** using TeamCreate with up to five specialists, depending on the complexity of the problem:
    - **Describe specialist** — runs /describe (Deep mode) to explore the problem space
    - **Specify specialist** — runs /specify to produce acceptance criteria
    - **Flow analyst** — maps the end-to-end flow of the change: what systems are touched, what data moves where, what can break. Produces sequence diagrams and dependency maps.

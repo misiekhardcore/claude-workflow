@@ -10,20 +10,39 @@ You are leading the build phase. Your goal is to take a fully specified GitHub i
 
 A GitHub issue number (with architecture/design decisions from /define) and any additional resources.
 
+## Phase 0 — Scope Assessment
+
+Classify the build before dispatching. See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for the right-sizing rationale.
+
+1. **Lightweight** — single-file or tightly scoped change; AC fits in one module; no sub-issues.
+   - Lead codes inline in the worktree. No team. TDD still applies to logic-heavy snippets.
+2. **Standard** — typical feature with 2–3 natural work splits (sub-issues or distinct file groups).
+   - Implementation team with one teammate per split.
+3. **Deep** — epic with many sub-issues, cross-module work, or architecture-changing scope.
+   - Larger implementation team; peer coordination via messages; lead merges results.
+
+Decision tree:
+
+1. Issue has zero sub-issues and the diff will live in one module? → Lightweight
+2. Issue has 4+ sub-issues, or touches 3+ independent modules? → Deep
+3. Otherwise → Standard
+
 ## Process
 
 1. Read the issue, all comments, and linked sub-issues to understand the full scope.
 
-2. **Create a git worktree** for the feature (`git worktree add`). Worktrees keep the main workspace clean and let teammates operate in isolation.
+2. **Create a git worktree** for the feature (`git worktree add`). Worktrees keep the main workspace clean and let teammates operate in isolation. Lightweight still uses a worktree — the isolation is independent of team width.
 
    Before creating `./.claude/NOTES.md`, verify `/.claude/NOTES.md` is listed in the repo root `.gitignore`; add it there if missing. Then create `./.claude/NOTES.md` with the initial task list harvested from the issue. This is the living worklog for the phase — it survives unexpected session close and is the resume point if this session dies before `/wrap-up`. See `${CLAUDE_PLUGIN_ROOT}/_shared/notes-md-protocol.md`.
 
    **On resume in an existing worktree**, read `./.claude/NOTES.md` *before* re-reading the issue — it has the latest in-flight state. Resume from its **Next action on resume** field.
 
-3. **Spawn an implementation team** using TeamCreate:
-   - Assign each teammate a separate sub-issue or file group to avoid conflicts
-   - Teammates communicate peer-to-peer, share discoveries, and flag potential conflicts
-   - The lead coordinates via the shared task list and merges results
+3. **Implementation** — shape depends on Phase 0:
+   - **Lightweight**: lead codes inline. No TeamCreate. Skip to step 4.
+   - **Standard / Deep**: spawn an implementation team using TeamCreate.
+     - Assign each teammate a separate sub-issue or file group to avoid conflicts
+     - Teammates communicate peer-to-peer, share discoveries, and flag potential conflicts
+     - The lead coordinates via the shared task list and merges results
 
 4. Each teammate follows **test-driven development (TDD)** for logic-heavy code:
    - Write a failing test first — derive test cases from the acceptance criteria
@@ -57,8 +76,8 @@ A feature branch in a worktree with all acceptance criteria implemented, tests p
 
 - Use superpowers:test-driven-development for the TDD workflow
 - Use `git worktree add` / `git worktree remove` for worktree management. [worktrunk](https://github.com/max-sixty/worktrunk)'s `wt` wrapper is an optional convenience when installed; the skill assumes only the stock `git worktree` commands.
-- Use TeamCreate for team coordination
-- Do not ask the user whether to use teams — just use them
+- Use TeamCreate for team coordination in Standard and Deep scope; Lightweight codes inline without a team
+- Do not ask the user whether to use teams — pick the scope and go
 - Do not open a PR — that happens after /implement completes the full cycle
 - Always run the 5-question verification check before marking a task done
 - Consolidation scans are lightweight — spend seconds, not minutes

@@ -25,6 +25,24 @@ An interactive primitive is distinct from a specialist because it has no interna
 
 Use the cheapest pattern that fits. Parallel adds coordination overhead — prefer linear until independence is confirmed.
 
+## Right-sizing the team
+
+Width (how many specialists) is a separate decision from shape (linear vs parallel). Spawn the fewest specialists the task needs. Every orchestrator starts with a **Phase 0 — Scope Assessment** block that classifies the task before dispatching:
+
+| Scope           | Heuristic                                                            | Team shape                                                 |
+| --------------- | -------------------------------------------------------------------- | ---------------------------------------------------------- |
+| **Lightweight** | Single file / tightly scoped / no unknowns                           | No team — lead runs inline, or spawns a single agent       |
+| **Standard**    | Multi-file / typical feature / some unknowns                         | Core specialists only (2–3); optional roles stay dormant   |
+| **Deep**        | Cross-module / security / breaking change / architecture-changing    | All specialists + critique or adversarial pass             |
+
+Rules:
+
+- Collapse adjacent roles when inputs are trivial (e.g., `/verify` on a single AC runs inline — no team split).
+- Gate optional specialists on concrete signals (diff patterns, scope class, file paths) — not on orchestrator discretion.
+- Never pay coordination overhead for work a single agent completes in under a minute.
+
+See `skills/discovery/SKILL.md` and `skills/review/SKILL.md` for canonical Phase 0 blocks. The orchestrator template at `_templates/SKILL.orchestrator.template.md` includes a Phase 0 stub.
+
 ## Structured briefs
 
 A **seed brief** is context passed from an orchestrator to a specialist at spawn time. It replaces the specialist's own research phase when that research has already been done. Three standard forms:

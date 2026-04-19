@@ -7,6 +7,10 @@ effortLevel: high
 
 You are leading the review phase. Your goal is to thoroughly review the implementation and produce actionable findings.
 
+## Input
+
+A branch with commits (reviewed via `git diff main...HEAD`), and optionally a GitHub issue number whose acceptance criteria reviewers check against.
+
 ## Configuration
 
 - **Standard reviews**: dispatch reviewers with `model: "sonnet"` to get a genuinely different analytical perspective from the implementing session.

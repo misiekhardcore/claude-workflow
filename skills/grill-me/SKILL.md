@@ -10,4 +10,4 @@ Ask the questions one at a time.
 
 When a question has a bounded set of distinct options (2-4), use the `AskUserQuestion` tool to present them in a picker UI rather than a plain numbered list. Place the recommended option first with ` (Recommended)` appended to its label. Use `multiSelect: true` when choices are not mutually exclusive. Fall back to free-text prompts for open-ended exploration.
 
-If a question can be answered by exploring the codebase, explore the codebase instead.
+If a question can be answered by exploring the codebase, explore the codebase first and ask the question based on your findings if still in doubt.

@@ -37,7 +37,7 @@ Decision tree:
 ### Standard / Deep
 
 1. Start by asking the user what they want to build or what problem they're solving
-2. **Spawn a discovery team** using TeamCreate:
+2. **Spawn a discovery team** using TeamCreate, up to three specialists for Standard scope, up to five for Deep, depending on the complexity of the problem:
    - **Problem analyst** — uses /grill-me to interview the user: who is this for, what problem does it solve, what does success look like, what's out of scope
    - **Domain researcher** — explores the codebase for immediate framing context: existing patterns, related features, module boundaries. (Prior-art / institutional memory is upstream — see `## Input`.)
    - _(Deep only)_ **Failure-mode analyst** — explores competitive alternatives and failure modes: how this could break at scale, security/privacy edge cases, user-experience regressions. Prior-art research is handled by the upstream Prior-Art Scout.
