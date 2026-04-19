@@ -95,6 +95,13 @@ When passing a seed brief to a specialist:
 Optional: when invoked as a specialist from `/discovery`, may receive a **prior-art brief** as seed context (from the Prior-Art Scout). When a brief is provided, skip any internal prior-art search and incorporate the brief into the Product Pressure Test and problem statement synthesis. Without a brief, proceed as described below.
 ```
 
+`skills/describe/SKILL.md` shows the entry-point pattern: the specialist immediately classifies scope before any user interaction, which lets the orchestrator route it to Lightweight / Standard / Deep without overriding internal logic:
+
+```
+(blank line — signals start of scope classification block)
+Before starting, classify the task scope:
+```
+
 ## Hierarchical decomposition
 
 Orchestrators may nest: `/discovery` delegates to `/describe` and `/specify`; `/implement` delegates to `/build`, `/review`, and `/verify`. Rules:

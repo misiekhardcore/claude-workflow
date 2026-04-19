@@ -32,7 +32,8 @@ Classify before dispatching. See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` 
    - **Specialist B** — runs /<skill> to <do thing>.
 4. <Serialization rule — which specialist goes first and why.>
 5. **Write the handoff artifact** — update the GitHub issue body in place with decisions and the five-field block. See `${CLAUDE_PLUGIN_ROOT}/_shared/handoff-artifact.md`.
-6. Present output to the user for approval. After sign-off, tell them to start the next phase in a fresh session.
+6. Present output to the user for approval.
+7. After sign-off, tell them to start the next phase in a fresh session.
 
 ## Output
 
@@ -44,3 +45,4 @@ Classify before dispatching. See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` 
 - Spawn research team before the main team in Standard/Deep — never skip the seed-brief gate.
 - Lightweight runs inline — never pay coordination overhead for under-a-minute work.
 - See `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-rules.md` and `${CLAUDE_PLUGIN_ROOT}/_shared/handoff-artifact.md`.
+- See `${CLAUDE_PLUGIN_ROOT}/_shared/handoff-artifact.md` for the five-field handoff shape.
