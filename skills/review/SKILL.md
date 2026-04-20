@@ -7,6 +7,10 @@ effortLevel: high
 
 You are leading the review phase. Your goal is to thoroughly review the implementation and produce actionable findings.
 
+## Input
+
+A branch with commits (reviewed via `git diff main...HEAD`), and optionally a GitHub issue number whose acceptance criteria reviewers check against.
+
 ## Configuration
 
 - **Standard reviews**: dispatch reviewers with `model: "sonnet"` to get a genuinely different analytical perspective from the implementing session.
@@ -20,7 +24,7 @@ Reviewers must operate with fresh context, independent of the implementing sessi
 1. **Prepare the review package** — run `git diff main...HEAD` and capture the output. If a GitHub issue exists, run `gh issue view <number>` and capture its acceptance criteria. This package is the sole input to reviewers.
 2. **Reviewer preamble** — include this in every reviewer's dispatch: "You are reviewing code you did not write. Base your review ONLY on the diff and acceptance criteria provided below. Do not reference or assume any implementation context beyond what is explicitly given to you."
 
-## Phase 0 — Scope Assessment
+## Scope Assessment
 
 Before starting, classify the review scope:
 
@@ -33,6 +37,7 @@ Before starting, classify the review scope:
    - All specialist reviewers active. Veto power for security/performance.
 
 Decision tree:
+
 1. Is the diff under ~50 lines and touches one module? → Lightweight
 2. Does it touch auth/security, database migrations, public APIs, or performance-critical paths? → Deep
 3. Otherwise → Standard
@@ -108,6 +113,7 @@ Decision tree:
 ## Output
 
 A structured review report with:
+
 - Pass/fail per acceptance criterion
 - Issues found (with file:line references, severity, and confidence score)
 - Which conditional reviewers were activated and why (Standard) or note that all were active (Deep)

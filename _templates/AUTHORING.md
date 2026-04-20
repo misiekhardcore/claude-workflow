@@ -2,27 +2,51 @@
 
 This document defines the authoring conventions for workflow skills in this plugin. Read it when creating or editing a skill, or when `/new-skill` asks which `_shared/` files apply.
 
+## Skill types
+
+Every skill fills one of five authoring roles. These extend the three-role composition model in `_shared/composition.md` (orchestrator / specialist / primitive): the orchestrator role is split into two variants, and a utility type is added for maintenance skills. Choose the correct template before authoring.
+
+| Role                              | Definition                                                                                                                                                      | Examples                                                      | Typical model                |
+| --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- | ---------------------------- |
+| **Research-leading orchestrator** | Leads a phase; spawns a research team, then a main team of specialists; writes the handoff artifact. Used when deep reasoning happens at the orchestrator tier  | `/discovery`, `/define`                                       | `opus` + `effortLevel: high` |
+| **Coordinator orchestrator**      | Sequences already-designed sub-skills in a loop (e.g. build → review → verify). Deep reasoning lives in the sub-skills, not the orchestrator — no research team | `/implement`                                                  | `sonnet`                     |
+| **Specialist**                    | Executes a bounded task; receives a seed brief; reports findings to the orchestrator                                                                            | `/build`, `/review`, `/architecture`, `/specify`              | `sonnet`                     |
+| **Interactive primitive**         | Reusable inline behavior; invoked by specialists; no team, no handoff                                                                                           | `/grill-me`                                                   | `sonnet`                     |
+| **Utility**                       | User-invocable maintenance or post-work skill. No seed-brief contract, no phase handoff artifact, no team gating                                                | `/compound`, `/prune`, `/resolve-pr-feedback`, `/find-skills` | `sonnet` or `haiku`          |
+
+Use the role-specific template:
+
+- Research-leading or coordinator orchestrator → `${CLAUDE_PLUGIN_ROOT}/_templates/SKILL.orchestrator.template.md` (coordinator variants omit the research-team step — see the template header note)
+- Specialist or utility → `${CLAUDE_PLUGIN_ROOT}/_templates/SKILL.specialist.template.md` (utility skills simply have no seed-brief input and no handoff output)
+- Primitive → `${CLAUDE_PLUGIN_ROOT}/_templates/SKILL.primitive.template.md`
+
+For generic composition theory (patterns, briefs, decomposition rules), see `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
+
+## Composition patterns
+
+Multi-skill workflows follow four patterns: linear, branch, loop, and parallel. See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for definitions, when to use each, and the seed-brief contract that governs how orchestrators seed specialists with context. The three standard brief types (research, prior-art, fix) are defined there.
+
 ## Skill structure
 
-See `${CLAUDE_PLUGIN_ROOT}/_templates/SKILL.template.md` for the canonical shape. The template is a loose skeleton — not every section is required for every skill. Use what fits.
+Use the role-specific templates for new skills: orchestrator, specialist, or primitive. Each template is a loose skeleton — not every section is required. Use what fits.
 
 ### Frontmatter fields
 
-| Field | Required | Values | Notes |
-|-------|----------|--------|-------|
-| `name` | yes | lowercase kebab-case | Matches the directory name under `skills/` |
-| `description` | yes | 1–2 sentences | Primary trigger mechanism — include both what it does and when to use it |
-| `model` | yes | `haiku` \| `sonnet` \| `opus` | See model guide below |
-| `effortLevel` | no | `high` | Only for long-form research/decision-making (discovery, define, architecture, describe) |
-| `allowed-tools` | no | comma-separated tool names | Restrict the skill to a subset of tools. Omit to allow all tools. |
+| Field           | Required | Values                        | Notes                                                                                                                                                                                                                                                                |
+| --------------- | -------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `name`          | yes      | lowercase kebab-case          | Matches the directory name under `skills/`                                                                                                                                                                                                                           |
+| `description`   | yes      | 1–2 sentences                 | Primary trigger mechanism — include both what it does and when to use it                                                                                                                                                                                             |
+| `model`         | yes      | `haiku` \| `sonnet` \| `opus` | See model guide below                                                                                                                                                                                                                                                |
+| `effortLevel`   | no       | `high`                        | Only for long-form research/decision-making (discovery, define, architecture, describe)                                                                                                                                                                              |
+| `allowed-tools` | no       | space-separated tool names    | Pre-approves listed tools so they run without per-use permission prompts. Does **not** restrict access — every tool remains callable. Omit by default; to actually block tools, use deny rules in `.claude/settings.json` or a subagent with its own `tools:` field. |
 
 ### Model guide
 
-| Model | Use for |
-|-------|---------|
-| `haiku` | Fast lookup, formatting, retrieval, light verification |
-| `sonnet` | Standard multi-step workflows, implementation, review |
-| `opus` | Deep research, architecture, high-stakes decisions with many branches |
+| Model    | Use for                                                               |
+| -------- | --------------------------------------------------------------------- |
+| `haiku`  | Fast lookup, formatting, retrieval, light verification                |
+| `sonnet` | Standard multi-step workflows, implementation, review                 |
+| `opus`   | Deep research, architecture, high-stakes decisions with many branches |
 
 ## `_shared/` files — when and how
 
@@ -30,12 +54,13 @@ Shared protocols live at `${CLAUDE_PLUGIN_ROOT}/_shared/`. Reference them on-dem
 
 ### Decision table
 
-| `_shared/` file | Reference when the skill... |
-|---|---|
-| `handoff-artifact.md` | Writes or reads a GitHub issue handoff block (phase-boundary skills: `/discovery`, `/define`, `/implement`, `/wrap-up`) |
-| `interviewing-rules.md` | Interviews the user — asks questions, seeks approval, uses multi-choice forms (`/discovery`, `/define`, `/describe`, `/specify`, `/architecture`, `/design`, `/grill-me`, `/new-skill`) |
-| `notes-md-protocol.md` | Creates, updates, or resumes from `.claude/NOTES.md` (`/build`, `/wrap-up`) |
-| `compaction-protocol.md` | Manages in-phase context — clearing stale tool results, delegating bulk reads, using `/compact` (`/build`) |
+| `_shared/` file          | Reference when the skill...                                                                                                                                                             |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `handoff-artifact.md`    | Writes or reads a GitHub issue handoff block (phase-boundary skills: `/discovery`, `/define`, `/implement`, `/wrap-up`)                                                                 |
+| `interviewing-rules.md`  | Interviews the user — asks questions, seeks approval, uses multi-choice forms (`/discovery`, `/define`, `/describe`, `/specify`, `/architecture`, `/design`, `/grill-me`, `/new-skill`) |
+| `notes-md-protocol.md`   | Creates, updates, or resumes from `.claude/NOTES.md` (`/build`, `/wrap-up`)                                                                                                             |
+| `compaction-protocol.md` | Manages in-phase context — clearing stale tool results, delegating bulk reads, using `/compact` (`/build`)                                                                              |
+| `composition.md`         | Authors an orchestrator skill or designs a multi-skill workflow — patterns, briefs, decomposition rules                                                                                 |
 
 ### Reference pattern
 
@@ -71,7 +96,7 @@ See `${CLAUDE_PLUGIN_ROOT}/_shared/compaction-protocol.md`. Context editing firs
 ## Writing style
 
 - Use imperative form: "Read the issue", "Spawn a team", not "You should read" or "The skill reads".
-- Explain the *why* behind non-obvious constraints. A rule without rationale becomes cargo cult.
+- Explain the _why_ behind non-obvious constraints. A rule without rationale becomes cargo cult.
 - Avoid `ALWAYS` / `NEVER` in all-caps when a reasoned explanation works better — prefer "do X because Y" over "ALWAYS do X".
 - No multi-paragraph docstrings or comment blocks. One short comment line max.
 

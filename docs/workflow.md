@@ -1,15 +1,17 @@
 # Development Workflow
 
+> For the generic theory behind multi-skill composition — composition patterns, skill roles, and brief contracts — see `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`. This doc covers the applied phase shape; that doc covers the underlying model.
+
 A step-by-step walkthrough of the feature lifecycle in this repo: which skill runs when, what it expects as input, and what it leaves behind. The rules themselves live in `CLAUDE.md` and in each `skills/<name>/SKILL.md`; this doc stitches them into a single narrative so a newcomer doesn't have to read every `SKILL.md` to understand the flow.
 
 ## Workflow paths
 
 Pick the lightest path that fits the task (from `CLAUDE.md`):
 
-| Size | Path |
-|---|---|
-| Trivial fix | `/implement` |
-| Medium feature | `/discovery` → `/implement` |
+| Size                 | Path                                    |
+| -------------------- | --------------------------------------- |
+| Trivial fix          | `/implement`                            |
+| Medium feature       | `/discovery` → `/implement`             |
 | Large feature / epic | `/discovery` → `/define` → `/implement` |
 
 Handoff between phases uses the **GitHub issue body** as the durable artifact — see `${CLAUDE_PLUGIN_ROOT}/_shared/handoff-artifact.md` for the five-field structure. Within a phase, `./.claude/NOTES.md` is authoritative for in-flight state — see `${CLAUDE_PLUGIN_ROOT}/_shared/notes-md-protocol.md`. When context pressure mounts, follow `${CLAUDE_PLUGIN_ROOT}/_shared/compaction-protocol.md` (context editing first, sub-agent delegation second, `/compact` last).
@@ -70,15 +72,15 @@ When `/discovery` runs against an existing issue it **rewrites the five-field bl
 
 AC are the contract `/implement` verifies against, so silent changes have blast radius. After rewriting AC, `/discovery` checks for downstream artifacts:
 
-| Situation | Action |
-|-----------|--------|
-| A PR is already open | Post on the PR: "Acceptance criteria updated in #\<issue\>. Current AC: \<n/n\> still met, \<n\> changed, \<n\> new. Re-run /resolve-pr-feedback or /implement to reconcile." Does **not** close the PR. |
-| Sub-issues exist (from a prior `/define`) | Re-derive each sub-issue's AC slice from the new parent AC. Slices that no longer map get a superseded comment + close. |
-| Neither applies | Pure overwrite, nothing to reconcile. |
+| Situation                                 | Action                                                                                                                                                                                                   |
+| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A PR is already open                      | Post on the PR: "Acceptance criteria updated in #\<issue\>. Current AC: \<n/n\> still met, \<n\> changed, \<n\> new. Re-run /resolve-pr-feedback or /implement to reconcile." Does **not** close the PR. |
+| Sub-issues exist (from a prior `/define`) | Re-derive each sub-issue's AC slice from the new parent AC. Slices that no longer map get a superseded comment + close.                                                                                  |
+| Neither applies                           | Pure overwrite, nothing to reconcile.                                                                                                                                                                    |
 
 ---
 
-## Step 2 — `/define` (Opus, high effort) — *skip for medium features*
+## Step 2 — `/define` (Opus, high effort) — _skip for medium features_
 
 - **File:** `skills/define/SKILL.md`
 - **When:** After `/discovery`, for epics or architecturally significant work.
@@ -112,11 +114,11 @@ Re-running `/define` **replaces the `## Define Outcome` block in place**. No col
 
 When `/define` re-runs and the sub-issue breakdown changes, old sub-issues are reconciled explicitly:
 
-| Sub-issue state | Action |
-|-----------------|--------|
-| Still maps cleanly to a slice of the new breakdown | Keep it; update its body with the new AC slice. |
-| No longer maps | Post comment: "Superseded by re-defined scope in #\<epic\>. Closing unless there's work already in flight." Then close. |
-| Maps partially | Leave open; post a comment with the delta; flag in `## Define Outcome` as "needs manual review". |
+| Sub-issue state                                    | Action                                                                                                                  |
+| -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| Still maps cleanly to a slice of the new breakdown | Keep it; update its body with the new AC slice.                                                                         |
+| No longer maps                                     | Post comment: "Superseded by re-defined scope in #\<epic\>. Closing unless there's work already in flight." Then close. |
+| Maps partially                                     | Leave open; post a comment with the delta; flag in `## Define Outcome` as "needs manual review".                        |
 
 ---
 
@@ -141,20 +143,20 @@ Before writing any code, `/implement` fetches the issue body **and all comments*
 
 One comment per meaningful state change. Never more.
 
-| Checkpoint | Comment |
-|-----------|---------|
-| **Start** | `🤖 Starting implementation. Working from ## Define Outcome (last updated <date>). Branch: <branch>. Will post again when a draft PR is open or if the fix-cycle escalates to needs-human.` |
-| **Escalation** (only if max fix-cycle iterations hit or an AC cannot be met) | `🤖 Fix-cycle escalated after N iterations. Blocking issue: <one-line>. Details: <fold with reviewer findings and failing AC>. Need guidance before continuing.` |
-| **PR open** | `🤖 Draft PR opened: #<n>. AC status: <n/n met>. Review + verify clean. Ready for human review.` |
-| **Consolidation** (only if `/compound` filed new wiki notes) | `🤖 Captured learnings: <note title>` (or `inline` when claude-obsidian is not installed). |
+| Checkpoint                                                                   | Comment                                                                                                                                                                                     |
+| ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Start**                                                                    | `🤖 Starting implementation. Working from ## Define Outcome (last updated <date>). Branch: <branch>. Will post again when a draft PR is open or if the fix-cycle escalates to needs-human.` |
+| **Escalation** (only if max fix-cycle iterations hit or an AC cannot be met) | `🤖 Fix-cycle escalated after N iterations. Blocking issue: <one-line>. Details: <fold with reviewer findings and failing AC>. Need guidance before continuing.`                            |
+| **PR open**                                                                  | `🤖 Draft PR opened: #<n>. AC status: <n/n met>. Review + verify clean. Ready for human review.`                                                                                            |
+| **Consolidation** (only if `/compound` filed new wiki notes)                 | `🤖 Captured learnings: <note title>` (or `inline` when claude-obsidian is not installed).                                                                                                  |
 
 Not posted: per-commit updates, per-fix-cycle-iteration noise, internal reviewer findings (those belong in the fix-brief, not the issue thread).
 
 ### PR body wording
 
-| Situation | PR body contains |
-|-----------|-----------------|
-| PR delivers the full epic | `Closes #<epic>` |
+| Situation                         | PR body contains  |
+| --------------------------------- | ----------------- |
+| PR delivers the full epic         | `Closes #<epic>`  |
 | PR delivers one sub-issue of many | `Part of #<epic>` |
 
 ---
@@ -177,13 +179,13 @@ Not posted: per-commit updates, per-fix-cycle-iteration noise, internal reviewer
 
 ### Verdict table
 
-| Verdict | Reply posted? | Thread resolved? | Rationale |
-|---------|--------------|-----------------|-----------|
-| `fixed` | Yes — with commit SHA | Yes — auto-resolve | Acted on the request exactly as asked. |
-| `fixed-differently` | Yes — with rationale + commit SHA | Yes — auto-resolve | Addressed the underlying concern; reviewer can re-open if unhappy. |
-| `replied` | Yes — discussion only, no code change | No — leave open | Asking or disagreeing; reviewer owns the next move. |
-| `not-addressing` | Yes — with rationale | No — leave open | Declining is a human-to-human decision; reviewer resolves it (or insists). |
-| `needs-human` | Yes — escalation context | No — leave open | Could not act confidently; leaving open keeps it visible on the unresolved count. |
+| Verdict             | Reply posted?                         | Thread resolved?   | Rationale                                                                         |
+| ------------------- | ------------------------------------- | ------------------ | --------------------------------------------------------------------------------- |
+| `fixed`             | Yes — with commit SHA                 | Yes — auto-resolve | Acted on the request exactly as asked.                                            |
+| `fixed-differently` | Yes — with rationale + commit SHA     | Yes — auto-resolve | Addressed the underlying concern; reviewer can re-open if unhappy.                |
+| `replied`           | Yes — discussion only, no code change | No — leave open    | Asking or disagreeing; reviewer owns the next move.                               |
+| `not-addressing`    | Yes — with rationale                  | No — leave open    | Declining is a human-to-human decision; reviewer resolves it (or insists).        |
+| `needs-human`       | Yes — escalation context              | No — leave open    | Could not act confidently; leaving open keeps it visible on the unresolved count. |
 
 ### Verdict tag in reply
 
@@ -200,7 +202,7 @@ Fixed in abc1234 — replaced the N+1 loop with a single JOIN (benchmarks in com
 
 ---
 
-## Step 6 — `/wrap-up` (Sonnet) — *optional, end of session*
+## Step 6 — `/wrap-up` (Sonnet) — _optional, end of session_
 
 - **File:** `skills/wrap-up/SKILL.md`
 - **When:** End of a long or complex session, or when transitioning between phases mid-work.
@@ -213,11 +215,11 @@ Fixed in abc1234 — replaced the N+1 loop with a single JOIN (benchmarks in com
 
 The following three regions are always rewritten in place on re-run. None accumulate history inline.
 
-| Region | Written by |
-|--------|-----------|
-| Problem statement | `/discovery` |
-| Acceptance criteria | `/discovery` |
-| `## Define Outcome` block | `/define` |
+| Region                    | Written by   |
+| ------------------------- | ------------ |
+| Problem statement         | `/discovery` |
+| Acceptance criteria       | `/discovery` |
+| `## Define Outcome` block | `/define`    |
 
 Each re-running phase reads the existing region before overwriting so carry-forwards are deliberate. Stale downstream artifacts (sub-issues, open PRs) get a reconciliation pass in the phase's postamble.
 
@@ -239,12 +241,12 @@ All three are read-only from the perspective of downstream phases.
 
 Four tiers, no overlap:
 
-| Tier | Location | Lifetime | Authoritative for |
-|---|---|---|---|
-| `TodoWrite` | In-context | This session only | Throwaway working scratchpad |
-| `./.claude/NOTES.md` | Worktree-local | This phase, across sessions | In-flight decisions, current task, open questions |
-| GitHub issue body | Remote | Cross-phase | Acceptance criteria, prior-phase decisions, handoff state |
-| Durable vault (optional) | The claude-obsidian vault (git-tracked) | Durable, cross-feature | Compounded knowledge — bug-fix history, patterns, architectural insights (written by `/compound` via `/save` when the plugin is installed) |
+| Tier                     | Location                                | Lifetime                    | Authoritative for                                                                                                                          |
+| ------------------------ | --------------------------------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `TodoWrite`              | In-context                              | This session only           | Throwaway working scratchpad                                                                                                               |
+| `./.claude/NOTES.md`     | Worktree-local                          | This phase, across sessions | In-flight decisions, current task, open questions                                                                                          |
+| GitHub issue body        | Remote                                  | Cross-phase                 | Acceptance criteria, prior-phase decisions, handoff state                                                                                  |
+| Durable vault (optional) | The claude-obsidian vault (git-tracked) | Durable, cross-feature      | Compounded knowledge — bug-fix history, patterns, architectural insights (written by `/compound` via `/save` when the plugin is installed) |
 
 ---
 

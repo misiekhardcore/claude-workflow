@@ -6,6 +6,10 @@ model: sonnet
 
 You are performing an end-of-session audit. Review what happened in this session and surface anything the user should know before context is lost.
 
+## Input
+
+The current conversation history and `./.claude/NOTES.md` if present; optionally an active GitHub issue number whose body receives the audit update.
+
 ## Process
 
 1. Review the conversation history and identify:
