@@ -1,8 +1,8 @@
 ---
 name: "<skill-name>"
 description: "<Leads the X phase. Use when Y.>"
-model: opus
-effortLevel: high
+model: "<opus for research-leading orchestrators; sonnet for coordinator orchestrators>"
+# effortLevel: high  # Uncomment for research-leading orchestrators only
 ---
 
 You are leading the <phase name> phase. Your goal is to <objective>.

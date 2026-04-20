@@ -23,10 +23,6 @@ For the full lifecycle walkthrough — prerequisites, outcomes, and handoffs for
 
 The building blocks: `/describe`, `/specify`, `/architecture`, `/design`, `/build`, `/review`, `/verify`, `/grill-me`, `/wrap-up`, `/prune`, `/compound`.
 
-## Prerequisites
-
-Skills that spawn parallel sub-agents require `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` set in the environment. Without it, `TeamCreate` is unavailable and skills fall back to sequential execution, noting the degraded mode explicitly.
-
 ## Implementation Rules
 
 - **Default to single-agent.** Use `TeamCreate` only for parallelizable work across 3+ independent files or sub-issues.

@@ -63,7 +63,7 @@ Produced by a codebase/patterns research agent; consumed by `/architecture`, `/d
 
 ### Prior-art brief
 
-Produced by `/discovery`'s domain researcher; consumed by `/specify` (optional).
+Produced by `/discovery`'s **Prior-Art Scout**; consumed by `/describe` and, where applicable, `/specify` (optional).
 
 | Field               | Content                                              |
 | ------------------- | ---------------------------------------------------- |
@@ -89,11 +89,10 @@ When passing a seed brief to a specialist:
 2. The specialist checks for the brief at startup. When one is present, it skips its own research phase and uses the brief as starting context.
 3. Keep briefs bounded — never pad with information the specialist can find itself.
 
-`skills/describe/SKILL.md` shows the entry-point pattern: the specialist immediately classifies scope before any user interaction, which lets the orchestrator route it to Lightweight / Standard / Deep without overriding internal logic:
+`skills/describe/SKILL.md` shows the entry-point pattern — the specialist's `## Input` section declares the seed-brief contract explicitly:
 
 ```
-(blank line — signals start of scope classification block)
-Before starting, classify the task scope:
+Optional: when invoked as a specialist from `/discovery`, may receive a **prior-art brief** as seed context (from the Prior-Art Scout). When a brief is provided, skip any internal prior-art search and incorporate the brief into the Product Pressure Test and problem statement synthesis. Without a brief, proceed as described below.
 ```
 
 ## Hierarchical decomposition

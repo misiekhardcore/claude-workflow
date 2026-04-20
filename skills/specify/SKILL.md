@@ -10,7 +10,7 @@ You are leading a requirements team. Your job is to turn a problem statement int
 
 A problem statement from /describe, or a user-provided feature description.
 
-Optionally: a prior-art brief from /discovery's domain researcher. Fields: `problem_domain`, `existing_patterns`, `constraints`. When present, use it as starting context for existing patterns and constraints — skip any internal research that would duplicate it. See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for the full prior-art brief field list.
+Optionally: a prior-art brief from /discovery's Prior-Art Scout. Fields: `problem_domain`, `existing_patterns`, `constraints`. When present, use it as starting context for existing patterns and constraints — skip any internal research that would duplicate it. See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for the full prior-art brief field list.
 
 ## Process
 

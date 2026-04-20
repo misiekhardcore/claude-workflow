@@ -3,7 +3,7 @@
 Workflow skills plugin for Claude Code — a standardized lifecycle for feature development.
 
 ```mermaid
-%%{init: {'theme':'base', 'themeVariables': {'background':'#000','primaryColor':'#ffffff','primaryTextColor':'#000000','primaryBorderColor':'#000000','lineColor':'#000000','textColor':'#000000','titleColor':'#000000','clusterBkg':'#f3f4f6','clusterBorder':'#000000','edgeLabelBackground':'#ffffff','edgeLabelBackground':'#ffffff'}}}%%
+%%{init: {'theme':'base', 'themeVariables': {'background':'#000','primaryColor':'#ffffff','primaryTextColor':'#000000','primaryBorderColor':'#000000','lineColor':'#000000','textColor':'#000000','titleColor':'#000000','clusterBkg':'#f3f4f6','clusterBorder':'#000000','edgeLabelBackground':'#ffffff'}}}%%
 flowchart TB
     subgraph Canvas["Skills flowchart"]
         direction TB
@@ -100,7 +100,7 @@ Skills that spawn parallel sub-agents (`/discovery`, `/define`, `/implement`, an
 export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
 ```
 
-Without this flag, `TeamCreate` is unavailable. Skills detect its absence and fall back to sequential execution, noting the degraded mode explicitly.
+Without this flag, `TeamCreate` is unavailable. Skills detect its absence and fall back to spawning sub-agents individually (without team coordination), noting the degraded mode explicitly.
 
 ## Skills
 
@@ -148,8 +148,8 @@ Full lifecycle walkthrough: [`docs/workflow.md`](docs/workflow.md)
 
 This plugin ships an authoring standard for creating new skills:
 
-- **Template**: `_templates/SKILL.template.md` — loose skeleton with placeholders
-- **Convention doc**: `_templates/AUTHORING.md` — when and how to reference `_shared/` protocols
+- **Templates**: role-specific skeletons in `_templates/` — `SKILL.orchestrator.template.md`, `SKILL.specialist.template.md`, `SKILL.primitive.template.md`
+- **Convention doc**: `_templates/AUTHORING.md` — skill types, frontmatter fields, and when to reference `_shared/` protocols
 - **Scaffolder**: `/new-skill` — interactive, generates a conformant `SKILL.md`
 
 Shared protocols live at `_shared/`:

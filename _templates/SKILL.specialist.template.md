@@ -4,6 +4,8 @@ description: "<Does X. Use when Y.>"
 model: "<haiku | sonnet | opus>"
 # Uncomment only if this skill runs long-form multi-turn research or decision-making:
 # effortLevel: high
+# Uncomment to pre-approve a narrow tool surface (skips permission prompts; does not restrict access):
+# allowed-tools: Read Grep Glob Bash
 ---
 
 ## Input

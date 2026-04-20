@@ -4,7 +4,7 @@ This document defines the authoring conventions for workflow skills in this plug
 
 ## Skill types
 
-Every skill fills one of five roles. Choose the correct template before authoring.
+Every skill fills one of five authoring roles. These extend the three-role composition model in `_shared/composition.md` (orchestrator / specialist / primitive): the orchestrator role is split into two variants, and a utility type is added for maintenance skills. Choose the correct template before authoring.
 
 | Role                              | Definition                                                                                                                                                      | Examples                                                      | Typical model                |
 | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- | ---------------------------- |

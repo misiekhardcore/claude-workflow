@@ -48,7 +48,7 @@ A brief statement from the author of what the skill should do — or nothing, in
    - **All tools** — omit the field (default; what most skills want)
    - **Restricted subset** — set `allowed-tools:` explicitly
 
-     If the author picks **Restricted subset**, ask one free-text follow-up: "Which tools should it be allowed to use? (comma-separated — e.g. `Read, Grep, Glob, Bash`)". Validate that each entry is a real Claude Code tool name (reject unknown names and re-ask). Use the answer verbatim as the value of `allowed-tools:`.
+     If the author picks **Restricted subset**, ask one free-text follow-up: "Which tools should it be allowed to use? (space-separated — e.g. `Read Grep Glob Bash`)". Validate that each entry is a real Claude Code tool name (reject unknown names and re-ask). Use the answer verbatim as the value of `allowed-tools:`.
 
    g. **Shared protocols** — `AskUserQuestion` with `header: "Protocols"`, `multiSelect: true`, question: "Which shared protocols does this skill need?". Walk through the AUTHORING.md decision table. Options (4-option limit):
    - **Handoff artifact** — writes or reads a GitHub issue handoff block → include `handoff-artifact.md`
