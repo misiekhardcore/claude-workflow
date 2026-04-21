@@ -29,6 +29,18 @@ Decision tree:
 
 ## Process
 
+### Step 0 — Repository pre-flight
+
+1. Run `git remote -v` and `pwd` to detect the repository and branch.
+2. Display:
+   - Detected repository (owner/repo from origin remote URL)
+   - Current branch name
+   - Working directory path
+3. Ask the user to confirm: "Does this match the repo and branch you intend to work on?"
+4. Do not proceed with any `gh` or `git push` operations until the user explicitly confirms.
+
+### Steps 1+
+
 1. Read the issue, all comments, and linked sub-issues to understand the full scope.
 
 2. **Create a git worktree** for the feature (`git worktree add`). Worktrees keep the main workspace clean and let teammates operate in isolation. Lightweight still uses a worktree — the isolation is independent of team width.
