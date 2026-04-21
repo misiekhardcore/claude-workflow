@@ -27,6 +27,15 @@ Decision tree:
 2. Touches auth/security, migrations, public APIs, or performance-critical paths? → Deep
 3. Otherwise → Standard
 
+**Design gate** (Standard / Deep only):
+
+Once you've assessed the scope as **Standard** or **Deep**, inspect the GitHub issue body for a `## Decisions` or `## Solution` section containing architecture and design decisions from `/define`. If absent:
+- **Pause** and prompt: _"No architecture/design decisions recorded on this issue. Run `/define` first, or confirm this is a trivial enough change to skip the gate."_
+- If the user confirms this is trivial enough (typo, single-line fix, etc.), downgrade to **Trivial** scope and proceed.
+- Otherwise, wait for the user to run `/define`.
+
+Skip this gate for **Lightweight** scope.
+
 ## Process
 
 **Autonomy contract**: inside a single `/implement` invocation, run build → review → verify → fix cycles back-to-back without asking the user between sub-skills. The only user-interrupt point is after the PR is opened and the cycle has either (a) passed clean, (b) exhausted 3 cycles with findings remaining, or (c) hit a blocker the sub-skill cannot resolve. Status updates during the loop are informational only — do **not** end them with a question.
