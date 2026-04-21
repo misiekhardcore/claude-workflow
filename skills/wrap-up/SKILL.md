@@ -56,7 +56,7 @@ Example (for issue #42):
 
 - Be honest about uncertainty — this is a self-audit, not a sales pitch
 - Include assumptions even if you are fairly confident — the user decides what matters
-- If nothing significant was assumed, say so briefly and do not pad the report
+- Omit subsections with nothing to report (Assumptions Made, Uncertain Decisions, Scope Notes, Follow-ups) — a missing subsection means zero items. Never write "None" or other placeholder text.
 - The audit is not complete until it is written into the issue body or the user has explicitly declined
 - Update the issue **body** in place — never post the audit as a comment. See `${CLAUDE_PLUGIN_ROOT}/_shared/handoff-artifact.md`.
 - Never auto-update without user confirmation — show the draft and ask first

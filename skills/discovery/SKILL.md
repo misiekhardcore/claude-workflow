@@ -73,9 +73,9 @@ Decision tree:
    **(b) Handoff block** — the five fields below, in this order, matching `${CLAUDE_PLUGIN_ROOT}/_shared/handoff-artifact.md`. Field order is uniform across all phases so the next session can scan-read it. (The issue _title_ is set via `gh issue create --title` and is not part of the body handoff block.)
    - **Acceptance criteria** — from /specify output, as a numbered list of testable scenarios
    - **Constraints** — explicit in/out scope boundaries, non-negotiable decisions surfaced during discovery
-   - **Prior decisions** — any decisions already made during discovery (one line each, with rationale)
-   - **Evidence** — links to design reviews, benchmarks, prior discussions
-   - **Open questions** — things `/define` must resolve, explicit (say "None" if there are none)
+   - **Prior decisions** *(optional — omit if empty)* — any decisions already made during discovery (one line each, with rationale)
+   - **Evidence** *(optional — omit if empty)* — links to design reviews, benchmarks, prior discussions
+   - **Open questions** *(optional — omit if empty)* — things `/define` must resolve
 
 2. Present the issue to the user for approval. Do not proceed until sign-off.
 

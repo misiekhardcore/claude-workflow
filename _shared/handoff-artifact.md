@@ -8,15 +8,17 @@ This file is reference material — read it on demand when the skill reaches a h
 
 Every handoff artifact contains:
 
-1. **Acceptance criteria** — testable scenarios, unchanged from `/discovery`. One line each.
-2. **Constraints** — files in scope, files out of scope, non-negotiable decisions from `/define`.
-3. **Prior decisions** — "we chose X over Y because Z" entries. One line each. Include links to the conversation or code that produced the decision.
-4. **Evidence** — links to commits, PRs, benchmark output, design reviews, or approvals that justify each decision.
-5. **Open questions** — things the next phase must resolve. Explicit — no "obvious, will figure out later".
+1. **Acceptance criteria** — testable scenarios, unchanged from `/discovery`. One line each. **Mandatory.**
+2. **Constraints** — files in scope, files out of scope, non-negotiable decisions from `/define`. **Mandatory.**
+3. **Prior decisions** — "we chose X over Y because Z" entries. One line each. Include links to the conversation or code that produced the decision. *(Optional — omit heading when empty.)*
+4. **Evidence** — links to commits, PRs, benchmark output, design reviews, or approvals that justify each decision. *(Optional — omit heading when empty.)*
+5. **Open questions** — things the next phase must resolve. Explicit — no "obvious, will figure out later". *(Optional — omit heading when empty.)*
 
 ## Shape
 
-Always update the **issue body** in place. If a section for the current phase (e.g. `## Solution` for `/define`) does not exist in the body, append it; if it does, edit it. Comments are for discussion, not for handoff state — scan-reading a thread of comments is exactly the rot pattern this protocol avoids. Keep field order consistent across phases so the next session can scan-read the body top to bottom.
+Always update the **issue body** in place. If a section for the current phase (e.g. `## Solution` for `/define`) does not exist in the body, append it; if it does, edit it. Comments are for discussion, not for handoff state — scan-reading a thread of comments is exactly the rot pattern this protocol avoids.
+
+Fields appear in this order: Acceptance criteria, Constraints, Prior decisions, Evidence, Open questions. Omit optional fields entirely when empty — a missing heading means zero items, not an unwritten section. Never write placeholder text ("None", "No open questions", etc.).
 
 ```markdown
 ## Handoff: /<prev> → /<next>
@@ -30,17 +32,14 @@ Always update the **issue body** in place. If a section for the current phase (e
 - Out of scope: <paths>
 - Must reuse: <existing module/util>
 
-**Prior decisions**
+**Prior decisions** (optional)
 - <one-line decision> (why: <rationale>)
-- ...
 
-**Evidence**
+**Evidence** (optional)
 - <link to commit | PR | benchmark | design review>
-- ...
 
-**Open questions**
+**Open questions** (optional)
 - <question the next phase must resolve>
-- ...
 ```
 
 ## Precedence
@@ -59,7 +58,7 @@ When a phase ends, intra-phase state from `.claude/NOTES.md` that the next phase
 - **For cross-phase state, the issue body wins.** If in-context recall disagrees with the body, trust the body.
 - **Never include secrets.** Evidence links should point to internal systems, not pasted API keys, credentials, or internal hostnames in log dumps.
 - **Never drop prior decisions to save space.** If the list is long, that's the workflow working — not a bug.
-- **Open questions are mandatory.** If there are none, say so explicitly ("No open questions") — never omit the section.
+- **Mandatory fields:** Acceptance criteria and Constraints — include on every handoff. **Optional fields:** Prior decisions, Evidence, and Open questions — omit the heading entirely when empty. Never write placeholder text ("None", "No open questions", etc.).
 
 ## Final-pass checklist
 

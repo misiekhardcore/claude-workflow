@@ -50,7 +50,7 @@ Decision tree:
    - Record architecture decisions and design decisions (with visuals) inside that section.
    - Create sub-issues with GitHub relationships if the work decomposes.
    - Define the dependency graph — identify what can be parallelized.
-   - The updated body is the sole input to `/implement` — a fresh session will read it, not this conversation. Include all five handoff fields (Acceptance criteria, Constraints, Prior decisions, Evidence, Open questions). See `${CLAUDE_PLUGIN_ROOT}/_shared/handoff-artifact.md`.
+   - The updated body is the sole input to `/implement` — a fresh session will read it, not this conversation. Mandatory fields: Acceptance criteria and Constraints. Optional fields (omit heading when empty, no "None" placeholders): Prior decisions, Evidence, Open questions. See `${CLAUDE_PLUGIN_ROOT}/_shared/handoff-artifact.md`.
 
 6. Present all decisions to the user for approval. Do not proceed until sign-off.
 
