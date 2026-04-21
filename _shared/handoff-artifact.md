@@ -16,7 +16,7 @@ Every handoff artifact contains:
 
 ## Shape
 
-Always update the **issue body** in place. If a section for the current phase (e.g. `## /define`) does not exist in the body, append it; if it does, edit it. Comments are for discussion, not for handoff state — scan-reading a thread of comments is exactly the rot pattern this protocol avoids. Keep field order consistent across phases so the next session can scan-read the body top to bottom.
+Always update the **issue body** in place. If a section for the current phase (e.g. `## Solution` for `/define`) does not exist in the body, append it; if it does, edit it. Comments are for discussion, not for handoff state — scan-reading a thread of comments is exactly the rot pattern this protocol avoids. Keep field order consistent across phases so the next session can scan-read the body top to bottom.
 
 ```markdown
 ## Handoff: /<prev> → /<next>

@@ -46,7 +46,7 @@ Decision tree:
 4. The architecture specialist goes first. Once technical decisions are approved by the user, the design specialist (if applicable) works within those constraints. In Deep scope, the critique team runs after both and before user sign-off.
 
 5. **Update the GitHub issue body** with decisions. The body is the handoff artifact, single source of truth — always update it in place, never post handoff state as a comment:
-   - If the body already has a `## /define` section, edit it. If not, append one.
+   - If the body already has a `## Solution` section, edit it. If not, append one.
    - Record architecture decisions and design decisions (with visuals) inside that section.
    - Create sub-issues with GitHub relationships if the work decomposes.
    - Define the dependency graph — identify what can be parallelized.
