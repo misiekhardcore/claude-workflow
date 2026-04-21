@@ -61,6 +61,15 @@ When a phase ends, intra-phase state from `.claude/NOTES.md` that the next phase
 - **Never drop prior decisions to save space.** If the list is long, that's the workflow working — not a bug.
 - **Open questions are mandatory.** If there are none, say so explicitly ("No open questions") — never omit the section.
 
+## Final-pass checklist
+
+Before submitting the handoff artifact (issue update), every orchestrator must verify:
+
+- **Style match** — scan 2 recent examples in the same repository (prior issue bodies, `.claude/NOTES.md`, or adjacent `_shared/` files); flag any drift in heading levels, bullet formatting, or tone. Correct before updating the body.
+- **No duplication** — grep the repo and issue body for any heading, rule, or decision you added; if already present elsewhere, link to the existing item instead of duplicating it.
+- **No unrelated files** — run `git diff --name-only <base>..HEAD` and verify every file is in scope for the current issue. Flag outliers explicitly; do not silently include them.
+- **No untracked expected files** — run `git status --short`. If `.claude/`, `docs/`, or other expected directories have untracked files, surface them to the user before proceeding.
+
 ## Why this shape
 
 The five fields map to Anthropic's "structured handoff artifact" and OpenAI's `input_type` handoff metadata pattern. Summarization in place loses detail that the next phase needs; a body-update-in-place with this exact shape preserves the surviving content exactly and keeps the handoff scan-readable in a single fetch. See `${CLAUDE_PLUGIN_ROOT}/docs/context-hygiene.md` for the full rationale.
