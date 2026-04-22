@@ -90,7 +90,7 @@ A note on Opus 4.5/4.6 and "context anxiety": Anthropic reports they dropped con
 A worked instance of the canonical template from `${CLAUDE_PLUGIN_ROOT}/_shared/handoff-artifact.md`, paste-ready into the issue body before resetting the session:
 
 ```markdown
-## Implementation notes
+## Implementation plan
 
 **Acceptance criteria** (from /discovery, unchanged)
 - AC1: CSV export button appears on /reports for users with `reports.read`
