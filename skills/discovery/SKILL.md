@@ -70,7 +70,7 @@ Decision tree:
 
    **(a) Problem statement preamble** — `/discovery`-only, not part of the handoff field order. From /describe output: what the user is trying to do, why the current state is inadequate, who is affected. This is the framing the rest of the issue depends on. Subsequent phases do not update this section.
 
-   **(b) Handoff block** — the five fields below, in this order, matching `${CLAUDE_PLUGIN_ROOT}/_shared/handoff-artifact.md`. Field order is uniform across all phases so the next session can scan-read it. (The issue _title_ is set via `gh issue create --title` and is not part of the body handoff block.)
+   **(b) Handoff block** — under a `## Requirements` heading, the five fields below, in this order, matching `${CLAUDE_PLUGIN_ROOT}/_shared/handoff-artifact.md`. Field order is uniform across all phases so the next session can scan-read it. (The issue _title_ is set via `gh issue create --title` and is not part of the body handoff block.)
    - **Acceptance criteria** — from /specify output, as a numbered list of testable scenarios
    - **Constraints** — explicit in/out scope boundaries, non-negotiable decisions surfaced during discovery
    - **Prior decisions** *(optional — omit if empty)* — any decisions already made during discovery (one line each, with rationale)

@@ -29,7 +29,7 @@ Decision tree:
 
 **Design gate** (Standard / Deep only):
 
-Once you've assessed the scope as **Standard** or **Deep**, inspect the GitHub issue body for a `## Decisions` or `## Solution` section containing architecture and design decisions from `/define`. If absent:
+Once you've assessed the scope as **Standard** or **Deep**, inspect the GitHub issue body for a `## Implementation plan` section containing architecture and design decisions from `/define`. If absent:
 - **Pause** and prompt: _"No architecture/design decisions recorded on this issue. Run `/define` first, or confirm this is a trivial enough change to skip the gate."_
 - If the user confirms this is trivial enough (typo, single-line fix, etc.), downgrade to **Trivial** scope and proceed.
 - Otherwise, wait for the user to run `/define`.
