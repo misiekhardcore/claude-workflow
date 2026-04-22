@@ -14,17 +14,6 @@ Every handoff artifact contains:
 4. **Evidence** — links to commits, PRs, benchmark output, design reviews, or approvals that justify each decision. *(Optional — omit heading when empty.)*
 5. **Open questions** — things the next phase must resolve. Explicit — no "obvious, will figure out later". *(Optional — omit heading when empty.)*
 
-## Phase headings
-
-Each phase uses a fixed, human-readable heading that describes what the section contains — not the name of the command that produced it:
-
-| Phase | Section heading |
-|-------|----------------|
-| `/discovery` | `## Requirements` |
-| `/define` | `## Implementation plan` |
-| `/implement` | `## Implementation notes` |
-| `/wrap-up` | `## Session handoff` |
-
 ## Shape
 
 Always update the **issue body** in place. If a section for the current phase (e.g. `## Implementation plan` for `/define`, `## Session handoff` for `/wrap-up`) does not exist in the body, append it; if it does, edit it. Comments are for discussion, not for handoff state — scan-reading a thread of comments is exactly the rot pattern this protocol avoids.
@@ -64,7 +53,15 @@ When a phase ends, intra-phase state from `.claude/NOTES.md` that the next phase
 
 ## Rules
 
-- **Name sections by content, not by command.** Use the phase-specific heading from the table above (e.g. `## Implementation plan`, `## Requirements`) — never the slash command name (e.g. `## /define`, `## Handoff: /define → /implement`).
+- **Name sections by content, not by command.** Use the phase-specific heading below — never the slash command name (e.g. `## /define`, `## Handoff: /define → /implement`):
+
+  | Phase | Section heading |
+  |-------|----------------|
+  | `/discovery` | `## Requirements` |
+  | `/define` | `## Implementation plan` |
+  | `/implement` | `## Implementation notes` |
+  | `/wrap-up` | `## Session handoff` |
+
 - **Update the body, not a comment.** Every phase edits the issue body in place — append a new section if one does not exist for the current phase, edit the existing section if it does. Comments are for discussion only.
 - **Reset after updating.** Once the body is updated, tell the user to start the next phase in a fresh session. Do not call the next skill from within the current one.
 - **For cross-phase state, the issue body wins.** If in-context recall disagrees with the body, trust the body.
