@@ -28,7 +28,7 @@ The current conversation history and `./.claude/NOTES.md` if present; optionally
 
 3. **Determine the active issue.** Check the git branch name for an issue reference, or run `gh issue list --search <branch-slug>`, or ask the user directly. The audit must be tied to a specific issue — this is the handoff artifact for the next phase. See `${CLAUDE_PLUGIN_ROOT}/_shared/handoff-artifact.md` for the shape.
 
-4. **Draft the body update.** Produce the audit in the Output format below. Fetch the current issue body (`gh issue view N --json body -q .body`), append or replace a `## Wrap-up — session handoff` section, and show the proposed new body to the user with: `Update issue #N body? (y/n)`. On yes, run `gh issue edit N --body-file -` with the new body. **Never auto-update** — wrong issue, leaked assumptions, or duplicate sections on replay all have real blast radius. Keep the draft visible in the terminal even if the user declines, so they can copy it manually.
+4. **Draft the body update.** Produce the audit in the Output format below. Fetch the current issue body (`gh issue view N --json body -q .body`), append or replace a `## Session handoff` section, and show the proposed new body to the user with: `Update issue #N body? (y/n)`. On yes, run `gh issue edit N --body-file -` with the new body. **Never auto-update** — wrong issue, leaked assumptions, or duplicate sections on replay all have real blast radius. Keep the draft visible in the terminal even if the user declines, so they can copy it manually.
 
 ## Output
 
@@ -38,7 +38,7 @@ Example (for issue #42):
 
     paste into issue #42 body — handoff artifact
 
-        ## Wrap-up — session handoff
+        ## Session handoff
 
         ### Assumptions Made
         - [assumption] — [why] — [risk if wrong]

@@ -63,7 +63,7 @@ In this workflow:
 
 ### 4. Write `/wrap-up` output into the issue body before the session ends
 
-`/wrap-up` surfaces assumptions, uncertainties, and follow-ups — but without persistence, that output stays in the conversation and is lost when the session ends. That defeats rule (1). Fix: whenever `/wrap-up` runs at a phase boundary, edit the GitHub issue **body** in place to append a `## Wrap-up — session handoff` section. The captured content then survives the reset and lives in the same scan-readable artifact as the rest of the phase state.
+`/wrap-up` surfaces assumptions, uncertainties, and follow-ups — but without persistence, that output stays in the conversation and is lost when the session ends. That defeats rule (1). Fix: whenever `/wrap-up` runs at a phase boundary, edit the GitHub issue **body** in place to append a `## Session handoff` section. The captured content then survives the reset and lives in the same scan-readable artifact as the rest of the phase state.
 
 ## Why
 
@@ -90,7 +90,7 @@ A note on Opus 4.5/4.6 and "context anxiety": Anthropic reports they dropped con
 A worked instance of the canonical template from `${CLAUDE_PLUGIN_ROOT}/_shared/handoff-artifact.md`, paste-ready into the issue body before resetting the session:
 
 ```markdown
-## Handoff: /define → /implement
+## Implementation plan
 
 **Acceptance criteria** (from /discovery, unchanged)
 - AC1: CSV export button appears on /reports for users with `reports.read`

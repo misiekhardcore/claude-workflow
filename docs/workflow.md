@@ -88,16 +88,16 @@ AC are the contract `/implement` verifies against, so silent changes have blast 
 - **What it does:** Spawns research agents (codebase research + patterns/learnings scan against the claude-obsidian vault via `wiki-query` when available, else skipped with a note), then dispatches:
   - `/architecture` (`skills/architecture/SKILL.md`) — codebase analyst + solution architect + devil's advocate converge on a technical approach, producing component diagrams, trade-off tables, and a sub-task dependency graph. Uses `/grill-me` (`skills/grill-me/SKILL.md`) to pin down open decisions with the user.
   - `/design` (`skills/design/SKILL.md`) — UX researcher + design proposer + a11y reviewer, only when the task has visual aspects. Produces prototypes, wireframes, and interaction flows.
-- **Outcome:** The issue body is updated in place with a `## Define Outcome` section (see below), plus any sub-issues created and linked. **User approval is required** before `/implement`.
+- **Outcome:** The issue body is updated in place with a `## Implementation plan` section (see below), plus any sub-issues created and linked. **User approval is required** before `/implement`.
 - **Hands off to:** `/implement`.
 
 ### Sub-issue inheritance
 
 Each sub-issue receives the same five-field block inherited from the parent epic, pre-populated with the slice of acceptance criteria it covers.
 
-### `## Define Outcome` block
+### `## Implementation plan` block
 
-`/define` writes a `## Define Outcome` section into the epic issue body containing:
+`/define` writes a `## Implementation plan` section into the epic issue body containing:
 
 - The chosen architecture / decomposition rationale.
 - The sub-issue breakdown (list with links) and dependency graph.
@@ -105,7 +105,7 @@ Each sub-issue receives the same five-field block inherited from the parent epic
 
 ### Re-run semantics
 
-Re-running `/define` **replaces the `## Define Outcome` block in place**. No collapsed history.
+Re-running `/define` **replaces the `## Implementation plan` block in place**. No collapsed history.
 
 - The preamble reads the existing block before replacing, so architecture decisions still valid are carried forward intentionally (not by accumulation).
 - If a sub-issue was linked to a specific architecture decision that no longer appears in the new block, the sub-issue link becomes the only remaining reference — this forces the re-run to confront whether the sub-issue is still valid.
@@ -118,7 +118,7 @@ When `/define` re-runs and the sub-issue breakdown changes, old sub-issues are r
 | -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | Still maps cleanly to a slice of the new breakdown | Keep it; update its body with the new AC slice.                                                                         |
 | No longer maps                                     | Post comment: "Superseded by re-defined scope in #\<epic\>. Closing unless there's work already in flight." Then close. |
-| Maps partially                                     | Leave open; post a comment with the delta; flag in `## Define Outcome` as "needs manual review".                        |
+| Maps partially                                     | Leave open; post a comment with the delta; flag in `## Implementation plan` as "needs manual review".                        |
 
 ---
 
@@ -137,7 +137,7 @@ When `/define` re-runs and the sub-issue breakdown changes, old sub-issues are r
 
 ### Preamble (read before doing anything)
 
-Before writing any code, `/implement` fetches the issue body **and all comments**. Any comment newer than the last `## Define Outcome` update is treated as material input. If conflicting information is found, `/implement` **halts and asks** — it never silently picks one interpretation.
+Before writing any code, `/implement` fetches the issue body **and all comments**. Any comment newer than the last `## Implementation plan` update is treated as material input. If conflicting information is found, `/implement` **halts and asks** — it never silently picks one interpretation.
 
 ### Issue comments posted by `/implement`
 
@@ -145,7 +145,7 @@ One comment per meaningful state change. Never more.
 
 | Checkpoint                                                                   | Comment                                                                                                                                                                                     |
 | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Start**                                                                    | `🤖 Starting implementation. Working from ## Define Outcome (last updated <date>). Branch: <branch>. Will post again when a draft PR is open or if the fix-cycle escalates to needs-human.` |
+| **Start**                                                                    | `🤖 Starting implementation. Working from ## Implementation plan (last updated <date>). Branch: <branch>. Will post again when a draft PR is open or if the fix-cycle escalates to needs-human.` |
 | **Escalation** (only if max fix-cycle iterations hit or an AC cannot be met) | `🤖 Fix-cycle escalated after N iterations. Blocking issue: <one-line>. Details: <fold with reviewer findings and failing AC>. Need guidance before continuing.`                            |
 | **PR open**                                                                  | `🤖 Draft PR opened: #<n>. AC status: <n/n met>. Review + verify clean. Ready for human review.`                                                                                            |
 | **Consolidation** (only if `/compound` filed new wiki notes)                 | `🤖 Captured learnings: <note title>` (or `inline` when claude-obsidian is not installed).                                                                                                  |
@@ -219,7 +219,7 @@ The following three regions are always rewritten in place on re-run. None accumu
 | ------------------------- | ------------ |
 | Problem statement         | `/discovery` |
 | Acceptance criteria       | `/discovery` |
-| `## Define Outcome` block | `/define`    |
+| `## Implementation plan` block | `/define`    |
 
 Each re-running phase reads the existing region before overwriting so carry-forwards are deliberate. Stale downstream artifacts (sub-issues, open PRs) get a reconciliation pass in the phase's postamble.
 

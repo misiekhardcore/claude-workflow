@@ -16,12 +16,12 @@ Every handoff artifact contains:
 
 ## Shape
 
-Always update the **issue body** in place. If a section for the current phase (e.g. `## Solution` for `/define`) does not exist in the body, append it; if it does, edit it. Comments are for discussion, not for handoff state — scan-reading a thread of comments is exactly the rot pattern this protocol avoids.
+Always update the **issue body** in place. If a section for the current phase (e.g. `## Implementation plan` for `/define`, `## Session handoff` for `/wrap-up`) does not exist in the body, append it; if it does, edit it. Comments are for discussion, not for handoff state — scan-reading a thread of comments is exactly the rot pattern this protocol avoids.
 
 Fields appear in this order: Acceptance criteria, Constraints, Prior decisions, Evidence, Open questions. Omit optional fields entirely when empty — a missing heading means zero items, not an unwritten section. Never write placeholder text ("None", "No open questions", etc.).
 
 ```markdown
-## Handoff: /<prev> → /<next>
+## Implementation plan
 
 **Acceptance criteria** (from /discovery, unchanged)
 - AC1: ...
@@ -52,6 +52,15 @@ Two persistent stores, no overlap:
 When a phase ends, intra-phase state from `.claude/NOTES.md` that the next phase needs is **promoted** into the issue body (typically by `/wrap-up`). Until promotion, the issue does not know about it. After promotion, the issue body is the source of truth for that item.
 
 ## Rules
+
+- **Name sections by content, not by command.** Use the phase-specific heading below — never the slash command name (e.g. `## /define`, `## Handoff: /define → /implement`):
+
+  | Phase | Section heading |
+  |-------|----------------|
+  | `/discovery` | `## Requirements` |
+  | `/define` | `## Implementation plan` |
+  | `/implement` | `## Implementation notes` |
+  | `/wrap-up` | `## Session handoff` |
 
 - **Update the body, not a comment.** Every phase edits the issue body in place — append a new section if one does not exist for the current phase, edit the existing section if it does. Comments are for discussion only.
 - **Reset after updating.** Once the body is updated, tell the user to start the next phase in a fresh session. Do not call the next skill from within the current one.
