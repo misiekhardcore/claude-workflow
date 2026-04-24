@@ -162,6 +162,10 @@ Shared protocols live at `_shared/`:
 | `compaction-protocol.md` | Context editing → delegation → /compact order                      |
 | `composition.md`         | Multi-skill composition patterns, skill roles, and brief contracts |
 
+## Releasing
+
+Versions in `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` (both `metadata.version` and `plugins[0].version`) must agree — the marketplace listing and distribution tooling depend on it. Trigger the **Release** workflow (`.github/workflows/release.yml`) via `workflow_dispatch` to bump all three in lockstep, commit, tag, and publish. Do not hand-edit; if you must, update all three fields in the same commit.
+
 ## License
 
 MIT
