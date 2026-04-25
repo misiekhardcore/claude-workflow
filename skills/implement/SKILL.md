@@ -1,6 +1,6 @@
 ---
 name: implement
-description: Full implementation cycle — build, review, and verify a feature until ready, then open a PR. Orchestrates /build → /review → /verify in a loop. Use after /define has produced approved architecture decisions.
+description: Full implementation cycle — build, review, and verify a feature from a GitHub issue, then open a PR.
 model: sonnet
 ---
 
