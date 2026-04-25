@@ -42,6 +42,13 @@ Decision tree:
 2. Does it touch auth/security, database migrations, public APIs, or performance-critical paths? → Deep
 3. Otherwise → Standard
 
+### Spawn justification
+
+Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`. `Fallback:` applies when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset.
+
+- **Standard**: TeamCreate at ≥3 active reviewers, else 2 parallel subagents. Comm-pivot ✓ (converge on disagreements), disjoint ✓, parallel ✓, payoff ≥3× at scale. Gate: ≥3 reviewers active. Fallback: sequential subagents.
+- **Deep**: TeamCreate. All four ✓ across 4 review axes; opus premium justified by criticality. Fallback: sequential subagents.
+
 ## Process
 
 ### Lightweight
@@ -61,7 +68,7 @@ Decision tree:
    - **Performance reviewer** — activate when the diff touches database queries or data access patterns (e.g., `query`, `findAll`, `SELECT`, `JOIN`, `index`). Trigger on file paths matching `**/db/**`, `**/queries/**` or database-related content — NOT on generic JS iteration methods like `forEach` or `map`.
    - **Migration reviewer** — activate when the diff includes schema changes or data migrations. Trigger on file paths matching `**/migrations/**`, `**/db/**` or content matching `CREATE TABLE`, `ALTER TABLE`, `addColumn`, `migration`.
 
-3. **Spawn a review team** using TeamCreate with `model: "sonnet"` and the base reviewers plus any activated conditional reviewers. Include the reviewer preamble from Context Isolation above in each reviewer's instructions.
+3. **Dispatch reviewers** per the Spawn justification gate (TeamCreate at ≥3 active reviewers with `model: "sonnet"`, else parallel subagents). Include the reviewer preamble from Context Isolation above in each reviewer's instructions.
    - **Correctness reviewer** (always-on) — checks that the implementation satisfies every acceptance criterion, handles edge cases, and has no logical errors.
    - **Standards reviewer** (always-on) — checks code style, naming, patterns, test quality, and adherence to project conventions.
    - **Security reviewer** (conditional) — checks for authentication/authorization bugs, injection vulnerabilities, secret exposure, and unsafe data handling.

@@ -6,6 +6,12 @@ model: sonnet
 
 You are leading the knowledge compounding phase. Your job is to capture what was just learned — the fix, the insight, the pattern — into a structured, reusable artifact that future agents and developers can discover and reuse.
 
+### Spawn justification
+
+Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
+
+- **Full-mode team**: 3 parallel subagents + lead synthesis. Comm-pivot ✗ (independent reads, end-synthesis), disjoint ✓, parallel ✓, payoff ≥3×. Fallback: n/a — no flag dependency (parallel subagents do not require `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`).
+
 This skill extracts the learning and drafts it. **Filing is delegated** to the `claude-obsidian` plugin when available: its `/save` command handles vault placement, frontmatter, cross-links, hot-cache updates, and the operation log automatically. If `claude-obsidian` is not installed, the drafted note is emitted inline for the user to copy into whatever knowledge store they prefer.
 
 ## Input
@@ -43,7 +49,7 @@ Single-pass extraction. Work through these steps yourself:
 
 ### Full
 
-1. **Spawn a compounding team** using TeamCreate with three specialists:
+1. **Dispatch 3 parallel subagents** (one Task tool call per agent in a single message):
    - **Context analyst** — reviews the full conversation history and git diff to extract: what broke, what was tried, what worked, and why.
    - **Solution extractor** — distills the fix into a reusable pattern: root cause, solution steps, prevention guidance.
    - **Overlap scanner** — if `claude-obsidian:wiki-query` is available, asks it for existing coverage of the module, symptoms, or root cause. Reports:
@@ -52,7 +58,7 @@ Single-pass extraction. Work through these steps yourself:
      - **No overlap** → recommend creating new.
      - If `wiki-query` is not available, report `"skipped: no vault query tool available"`.
 
-2. Teammates share findings via messages. Synthesize into a single drafted note.
+2. Wait for all three subagents to return, then synthesize their findings into a single drafted note (lead synthesis).
 
 3. File the note:
    - If `claude-obsidian:save` is available → invoke `/save` with the drafted content and, if the overlap scanner recommended an update, pass the target note identifier so `/save` updates in place rather than creating a new note.

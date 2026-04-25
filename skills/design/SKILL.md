@@ -6,6 +6,12 @@ model: sonnet
 
 You are leading a design team. Your job is to explore visual and interaction design approaches with the user and converge on the right design for the feature.
 
+### Spawn justification
+
+Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
+
+- **Design session**: researcher subagent → proposer lead-inline (grill-me) → a11y subagent. Comm-pivot ✗ (sequential handoff), disjoint n/a (sequential), parallel ✗ (interactive grill-me), payoff <3×. Fallback: n/a — no flag dependency.
+
 ## Input
 
 A GitHub issue with architecture decisions (from /define).
@@ -15,12 +21,11 @@ Optionally: a research brief from /define's research team. Fields: `tech_stack`,
 ## Process
 
 1. Read the issue and architecture decisions to understand constraints
-2. **Spawn a design team** using TeamCreate:
-   - **UX researcher** — explores existing UI patterns in the codebase, accessibility requirements, and design system constraints
-   - **Design proposer** — uses /grill-me to explore design options with the user, producing prototypes for each approach
-   - **Accessibility reviewer** — evaluates each proposal for a11y compliance, keyboard navigation, and screen reader support
-3. Teammates share findings via messages. The researcher feeds context to the proposer; the a11y reviewer critiques proposals.
-4. For each design decision, present **2-3 visual approaches**:
+2. **Run the design session** sequentially:
+   - Dispatch the **UX researcher** as a subagent to explore existing UI patterns in the codebase, accessibility requirements, and design system constraints; its findings seed the proposer.
+   - The **Design proposer** runs interactively in the lead session via /grill-me, informed by the researcher's findings.
+   - After the proposer session reaches proposed designs, dispatch the **Accessibility reviewer** as a subagent to evaluate each proposal for a11y compliance, keyboard navigation, and screen reader support. Feed its findings back into the lead session for final resolution.
+3. For each design decision, present **2-3 visual approaches**:
    - Code prototypes with screenshots (HTML/React/etc.)
    - Wireframe diagrams (ASCII or Mermaid)
    - Interaction flow diagrams (state machines, sequence diagrams)

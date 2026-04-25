@@ -7,6 +7,13 @@ effortLevel: high
 
 You are leading an architecture team. Your job is to explore technical approaches with the user and converge on the right architecture for the feature.
 
+### Spawn justification
+
+Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`. `Fallback:` applies when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset.
+
+- **Research team**: 2 parallel subagents. Comm-pivot ✗ (read-only), disjoint ✓, parallel ✓, payoff ≥3×. Fallback: sequential subagents.
+- **Architecture session**: analyst subagent → architect lead-inline (grill-me) → devil's advocate subagent. Comm-pivot ✗ (sequential handoff), disjoint n/a (sequential), parallel ✗ (interactive grill-me), payoff <3×. Fallback: n/a — no flag dependency.
+
 ## Input
 
 A GitHub issue with problem statement and acceptance criteria (from /discovery).
@@ -15,7 +22,7 @@ A GitHub issue with problem statement and acceptance criteria (from /discovery).
 
 1. Read the issue and understand the requirements
 
-2. **Dispatch parallel research agents** using TeamCreate before the architecture team begins:
+2. **Dispatch 2 parallel research subagents** (one Task tool call per agent in a single message) before the architecture session begins:
    - **Codebase research agent** — systematic scan of relevant code: technology stack, module structure, related implementations, naming conventions, existing patterns. Outputs a structured context brief.
    - **Patterns/learnings agent** — gathers prior art from, in order:
      1. **The claude-obsidian vault, if available.** If `claude-obsidian:wiki-query` is usable, ask it for concepts/entities/sources/meta relevant to the feature (prior decisions, patterns, bug-fix history). Use whatever vocabulary the plugin expects — the agent does not know or need a filesystem path.
@@ -26,16 +33,14 @@ A GitHub issue with problem statement and acceptance criteria (from /discovery).
 
    **Gate rule**: skip external/web research when internal sources (vault + project docs) yield 3+ direct pattern examples. Always run full research for security, payments, privacy topics, or when local patterns are thin (fewer than 3 examples).
 
-   Research results feed into the architecture team's context before they begin proposing approaches.
+   Research results feed into the architecture session before it begins proposing approaches.
 
-3. **Spawn an architecture team** using TeamCreate, providing them with the research output:
-   - **Codebase analyst** — reviews the research brief and explores specific architectural constraints: module boundaries, deployment topology, and integration points NOT covered by the research scan
-   - **Solution architect** — uses /grill-me to explore approaches with the user, informed by both research and analyst findings
-   - **Devil's advocate** — challenges proposed approaches, identifies risks, edge cases, and scaling concerns
+3. **Run the architecture session** sequentially:
+   - Run the **Codebase analyst** as a subagent seeded with the research brief; it explores specific architectural constraints (module boundaries, deployment topology, integration points NOT covered by the research scan) and returns a findings report.
+   - The **Solution architect** runs interactively in the lead session via /grill-me, informed by both the research brief and the analyst's findings.
+   - After the architect session reaches a proposed approach, dispatch the **Devil's advocate** as a subagent to challenge it — identifying risks, edge cases, and scaling concerns. Feed its findings back into the lead session for final resolution.
 
-4. Teammates share findings via messages. The analyst feeds context to the architect; the devil's advocate critiques proposals.
-
-5. For each major decision, present **2-3 approaches** with:
+4. For each major decision, present **2-3 approaches** with:
    - Architecture diagram (Mermaid component/sequence diagram)
    - Trade-off table (pros, cons, complexity, risk)
    - Code structure preview (directory layout, key interfaces)

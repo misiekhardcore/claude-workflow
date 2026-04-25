@@ -27,6 +27,13 @@ Decision tree:
 2. Issue has 4+ sub-issues, or touches 3+ independent modules? → Deep
 3. Otherwise → Standard
 
+### Spawn justification
+
+Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`. `Fallback:` applies when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset.
+
+- **Standard**: TeamCreate at ≥3 splits, else parallel subagents. Comm-pivot ✓ at scale, disjoint ✓, parallel ✓, payoff ≥3× only at ≥3 splits. Gate: ≥3 sub-issues OR ≥3 disjoint file groups. Fallback: parallel subagents or sequential.
+- **Deep**: TeamCreate. All four ✓ for epics. Fallback: sequential subagents.
+
 ## Process
 
 ### Step 0 — Repository pre-flight
@@ -49,12 +56,10 @@ Decision tree:
 
    **On resume in an existing worktree**, read `./.claude/NOTES.md` _before_ re-reading the issue — it has the latest in-flight state. Resume from its **Next action on resume** field.
 
-3. **Implementation** — shape depends on scope:
-   - **Lightweight**: lead codes inline. No TeamCreate. Skip to step 4.
-   - **Standard / Deep**: spawn an implementation team using TeamCreate.
-     - Assign each teammate a separate sub-issue or file group to avoid conflicts
-     - Teammates communicate peer-to-peer, share discoveries, and flag potential conflicts
-     - The lead coordinates via the shared task list and merges results
+3. **Implementation** — spawn workers per the Spawn justification block (Lightweight: inline; Standard/Deep: subagents or TeamCreate per gate).
+   - Assign each worker a separate sub-issue or file group to avoid conflicts
+   - With TeamCreate, teammates communicate peer-to-peer; with subagents, the lead merges results
+   - The lead coordinates via the shared task list
 
 4. Each teammate follows **test-driven development (TDD)** for logic-heavy code:
    - Write a failing test first — derive test cases from the acceptance criteria
@@ -88,7 +93,7 @@ A feature branch in a worktree with all acceptance criteria implemented, tests p
 
 - Use superpowers:test-driven-development for the TDD workflow
 - Use `git worktree add` / `git worktree remove` for worktree management. [worktrunk](https://github.com/max-sixty/worktrunk)'s `wt` wrapper is an optional convenience when installed; the skill assumes only the stock `git worktree` commands.
-- Use TeamCreate for team coordination in Standard and Deep scope; Lightweight codes inline without a team
+- Pick the spawn primitive per the Spawn justification block above. Lightweight codes inline.
 - Do not ask the user whether to use teams — pick the scope and go
 - Do not open a PR — that happens after /implement completes the full cycle
 - Always run the 5-question verification check before marking a task done

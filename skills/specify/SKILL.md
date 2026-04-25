@@ -6,6 +6,12 @@ model: sonnet
 
 You are leading a requirements team. Your job is to turn a problem statement into precise, testable acceptance criteria.
 
+### Spawn justification
+
+Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
+
+- **Requirements (happy-path + edge-case)**: sequential grill-me passes in lead session. Comm-pivot ✗ (analysts contend for the same user input channel), disjoint n/a (sequential), parallel ✗ (interactive), payoff <3×. Fallback: n/a — no flag dependency.
+
 ## Input
 
 A problem statement from /describe, or a user-provided feature description.
@@ -15,10 +21,10 @@ Optionally: a prior-art brief from /discovery's Prior-Art Scout. Fields: `proble
 ## Process
 
 1. Review the problem statement (or ask the user to describe the feature)
-2. **Spawn a requirements team** using TeamCreate:
-   - **Happy-path analyst** — uses /grill-me to drill into normal usage flows, expected behavior, and performance expectations
-   - **Edge-case analyst** — uses /grill-me to drill into boundaries, error scenarios, security considerations, and failure modes
-3. Teammates work in parallel, share findings via messages, and challenge each other's assumptions
+2. **Run two sequential grill-me passes in the lead session**:
+   - **Happy-path pass** — use /grill-me to drill into normal usage flows, expected behavior, and performance expectations
+   - **Edge-case pass** — use /grill-me to drill into boundaries, error scenarios, security considerations, and failure modes
+3. Incorporate findings from both passes and challenge assumptions across them
 4. For each requirement, produce a **concrete testable scenario**:
    ```
    GIVEN <precondition>
