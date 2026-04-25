@@ -25,25 +25,28 @@ Decision tree:
 2. Does it touch auth/security/payments, cross modules, change architecture, or span multiple teams? → Deep
 3. Otherwise → Standard
 
+### Spawn justification
+
+See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for the four-criterion `TeamCreate` rubric and primitive ladder.
+
+- **Standard discovery team**: describe lead-inline + Prior-Art Scout parallel subagent + specify sequential subagent — comm-pivot ✗ (specialists hand off asynchronously; no mid-task peer coordination needed), tasks are read-only or run interactively in the lead session, wall-clock payoff <3×. Activated for Standard scope. Fallback when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset: sequential subagent invocations (Prior-Art Scout → describe → specify).
+- **Deep discovery team**: TeamCreate — comm-pivot ✓ (adversarial questioner reacts live to flow-analyst and prior-art findings), classifiably parallel ✓ (multi-perspective synthesis with adversarial challenge), wall-clock payoff ≥3× for cross-module or security-scope work. Gated on Deep scope. Fallback when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset: sequential subagent invocations (Prior-Art Scout → describe → flow analyst → specify → adversarial questioner).
+
 ## Process
 
 ### Standard
 
-1. **Spawn a discovery team** using TeamCreate with up to three specialists, depending on the complexity of the problem:
-   - **Describe specialist** — runs /describe to explore the problem space with the user. Produces visualizations, explores user stories, maps boundaries.
-   - **Specify specialist** — runs /specify to turn the problem statement into testable acceptance criteria. Produces concrete GIVEN/WHEN/THEN scenarios.
-   - **Prior-Art Scout** — gathers institutional memory in parallel with the describe specialist. Sources, in order:
+1. **Dispatch the Prior-Art Scout as a parallel subagent** (one Task tool call) while beginning the describe flow in the lead session:
+   - **Prior-Art Scout** — gathers institutional memory in parallel. Sources, in order:
      1. **The claude-obsidian vault, if available.** If `claude-obsidian:wiki-query` is usable, ask it for concepts/entities/sources/meta relevant to the topic (prior decisions, patterns, bug-fix history). If not installed, record `Vault query skipped — claude-obsidian not installed.` in the brief.
      2. **Past GitHub issues and PRs** via `gh issue list --search "<topic>" --state all` and `gh pr list --search "<topic>" --state all`.
      3. **Project documentation** — ADRs and design notes under `docs/**` and relevant READMEs.
 
      Output: a structured brief with **Prior decisions**, **Prior attempts and outcomes**, **Related open/closed issues**, **Relevant patterns**. Feeds both describe and specify.
 
-2. The Prior-Art Scout runs in parallel with the describe specialist — no blocking. Its brief is passed to `/describe` as seed context; the describe specialist skips its own prior-art exploration when a brief is provided (mirrors the `/define` → `/architecture` seed-brief contract).
+2. **Run /describe in the lead session** (lead-inline) to explore the problem space with the user. When the Prior-Art Scout brief is available, incorporate it as seed context; the lead skips its own prior-art exploration when a brief is provided (mirrors the `/define` → `/architecture` seed-brief contract).
 
-3. The describe specialist goes first with the user. Once the problem statement is clear and the user has explicitly approved it, hand findings (plus the scout brief) to the specify specialist.
-
-4. The specify specialist drills into requirements, with the scout brief available as supplementary context. Once acceptance criteria are approved by the user, combine outputs.
+3. Once the problem statement is clear and the user has explicitly approved it, run /specify as a **sequential subagent**, passing findings and the scout brief as seed context. Once acceptance criteria are approved by the user, combine outputs.
 
 ### Deep
 

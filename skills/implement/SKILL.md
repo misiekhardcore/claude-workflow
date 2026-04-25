@@ -36,6 +36,10 @@ Once you've assessed the scope as **Standard** or **Deep**, inspect the GitHub i
 
 Skip this gate for **Lightweight** scope.
 
+### Spawn justification
+
+`/implement` is a coordinator (per `${CLAUDE_PLUGIN_ROOT}/_templates/AUTHORING.md`). It dispatches `/build`, `/review`, `/verify`, `/compound`, and `/wrap-up` sequentially; each owns its own scope assessment and spawn rubric. The team premium (or its absence) is paid inside the sub-skills, not here.
+
 ## Process
 
 **Autonomy contract**: inside a single `/implement` invocation, run build → review → verify → fix cycles back-to-back without asking the user between sub-skills. The only user-interrupt point is after the PR is opened and the cycle has either (a) passed clean, (b) exhausted 3 cycles with findings remaining, or (c) hit a blocker the sub-skill cannot resolve. Status updates during the loop are informational only — do **not** end them with a question.

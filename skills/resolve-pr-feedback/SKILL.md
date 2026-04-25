@@ -6,6 +6,12 @@ model: sonnet
 
 You are leading the PR feedback resolution process. Your job is to systematically process review feedback on a pull request — triage it, fix what can be fixed, and reply with clear verdicts.
 
+### Spawn justification
+
+See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for the four-criterion `TeamCreate` rubric and primitive ladder.
+
+- **Fix team**: TeamCreate when ≥3 non-overlapping file groups; otherwise dispatch parallel subagents (one Task tool call per file group in a single message) — comm-pivot ✓ at sufficient scale (agents may surface cross-thread regressions), file-disjoint ✓ (conflict avoidance already mapped), classifiably parallel ✓, wall-clock payoff ≥3× only at ≥3 file groups. Gated on ≥3 non-overlapping file groups. Fallback when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset: parallel subagents (for 1–2 groups) or sequential subagent invocations.
+
 ## Input
 
 Either:
@@ -87,8 +93,8 @@ Group threads by concern category. Present the triage summary to the user before
 
 **Conflict avoidance:** Before dispatching, map each thread to the file(s) it affects. No two agents may work on the same file in parallel. Threads touching the same file are handled sequentially within one agent.
 
-**Spawn a fix team** using TeamCreate:
-- One agent per non-overlapping file group
+**Dispatch fix agents** — when ≥3 non-overlapping file groups exist, spawn a fix team using TeamCreate; otherwise dispatch parallel subagents (one Task tool call per file group in a single message):
+- One agent (or subagent) per non-overlapping file group
 - Each agent receives its assigned threads and the full PR diff for context
 - Each agent:
   1. Reads the review comment carefully

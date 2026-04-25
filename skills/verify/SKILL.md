@@ -40,6 +40,12 @@ Decision tree:
 2. Touches auth/security, migrations, public APIs, or perf-critical paths? → Deep
 3. Otherwise → Standard
 
+### Spawn justification
+
+See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for the four-criterion `TeamCreate` rubric and primitive ladder.
+
+- **Standard/Deep QA team**: TeamCreate when ≥4 acceptance criteria; otherwise dispatch parallel subagents (one Task tool call per criteria group in a single message) — comm-pivot ✓ (teammates cross-verify each other's findings), file-disjoint ✓ (criteria are independent), classifiably parallel ✓, wall-clock payoff ≥3× only at ≥4 AC. Gated on ≥4 acceptance criteria. Fallback when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset: sequential subagent invocations.
+
 ## Process
 
 ### Lightweight
@@ -53,11 +59,11 @@ Decision tree:
 
 1. Read the GitHub issue and extract all acceptance criteria.
 
-2. **Spawn a QA team** using TeamCreate:
-   - Split acceptance criteria across teammates
-   - Each teammate is dispatched with the verification package (diff + AC + test commands) only — never the build session history
-   - Each teammate verifies their assigned criteria independently
-   - Teammates cross-verify each other's findings via messages
+2. **Dispatch QA verifiers** — when ≥4 acceptance criteria exist, spawn a QA team using TeamCreate; otherwise dispatch parallel subagents (one Task tool call per criteria group in a single message):
+   - Split acceptance criteria across teammates (or subagents)
+   - Each is dispatched with the verification package (diff + AC + test commands) only — never the build session history
+   - Each verifies their assigned criteria independently
+   - Teammates cross-verify each other's findings via messages (TeamCreate) or findings are merged by the lead (subagents)
    - **Deep scope only**: add one specialist QA teammate matched to the diff — security QA when the diff touches auth/authz/secret handling, performance QA when it touches queries/hot paths/migrations.
 
 3. Each teammate:

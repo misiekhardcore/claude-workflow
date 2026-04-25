@@ -32,16 +32,22 @@ Decision tree:
 2. Does it cross module boundaries, touch auth/security/payments, or require architecture decisions? → Deep
 3. Otherwise → Standard
 
+### Spawn justification
+
+See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for the four-criterion `TeamCreate` rubric and primitive ladder.
+
+- **Standard discovery session** (domain researcher + problem analyst): domain researcher subagent + problem analyst lead-inline — comm-pivot ✗ (researcher does a one-shot codebase read; analyst runs interactively in lead session), sequential handoff, wall-clock payoff <3×. Fallback when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset: n/a — no flag dependency (researcher is a subagent; analyst runs in lead session).
+- **Deep discovery session** (researcher + failure-mode + analyst): researcher subagent + failure-mode subagent + analyst lead-inline — comm-pivot ✗ (researcher and failure-mode analyst do independent reads; problem analyst is the interactive lead), classifiably parallel for the two subagents ✓, wall-clock payoff ≥3× for the subagent pair. Fallback when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset: sequential subagent invocations (researcher → failure-mode → analyst lead-inline).
+
 ## Process
 
 ### Standard / Deep
 
 1. Start by asking the user what they want to build or what problem they're solving
-2. **Spawn a discovery team** using TeamCreate, up to three specialists for Standard scope, up to five for Deep, depending on the complexity of the problem:
-   - **Problem analyst** — uses /grill-me to interview the user: who is this for, what problem does it solve, what does success look like, what's out of scope
-   - **Domain researcher** — explores the codebase for immediate framing context: existing patterns, related features, module boundaries. (Prior-art / institutional memory is upstream — see `## Input`.)
-   - _(Deep only)_ **Failure-mode analyst** — explores competitive alternatives and failure modes: how this could break at scale, security/privacy edge cases, user-experience regressions. Prior-art research is handled by the upstream Prior-Art Scout.
-3. Teammates share findings via messages. The domain researcher surfaces codebase context that informs the analyst's questions.
+2. **Dispatch subagents and run the problem analyst in the lead session**:
+   - **Standard**: dispatch the **Domain researcher** as a subagent to explore the codebase for immediate framing context (existing patterns, related features, module boundaries). The **Problem analyst** runs interactively in the lead session via /grill-me, informed by the researcher's findings when available.
+   - **Deep**: dispatch the **Domain researcher** and the **Failure-mode analyst** as parallel subagents (one Task tool call per agent in a single message). The failure-mode analyst explores competitive alternatives and failure modes (scale, security/privacy edge cases, UX regressions). The **Problem analyst** runs interactively in the lead session via /grill-me, incorporating both subagents' findings.
+3. Subagent findings are fed into the lead session to inform the analyst's questions before the grill-me interaction begins.
 4. **Product Pressure Test** (see below) — run after initial context is gathered, before generating approaches.
 5. For each major concept or decision point, **produce a visual**:
    - User journey → flowchart or sequence diagram (Mermaid)
