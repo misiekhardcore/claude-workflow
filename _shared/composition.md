@@ -36,7 +36,7 @@ Scope is a **cost gradient**, not just a complexity gradient — each step up ro
 | Scope           | Heuristic                                                         | Primitive                                | ~Cost vs single session |
 | --------------- | ----------------------------------------------------------------- | ---------------------------------------- | ----------------------- |
 | **Lightweight** | Single file / tightly scoped / no unknowns                        | Inline single agent                      | ≈ 1×                    |
-| **Standard**    | Multi-file / typical feature / some unknowns                      | 2–3 sequential subagents                 | ≈ 2×                    |
+| **Standard**    | Multi-file / typical feature / some unknowns                      | 2–3 sequential subagents                 | ≈ 1–2× per spawn        |
 | **Deep**        | Cross-module / security / breaking change / architecture-changing | All specialists, optionally `TeamCreate` | up to ≈ 7×              |
 
 > Agent teams use approximately 7x more tokens than standard sessions when teammates run in plan mode, because each teammate maintains its own context window and runs as a separate Claude instance.
@@ -44,7 +44,7 @@ Scope is a **cost gradient**, not just a complexity gradient — each step up ro
 
 ### What loads into a teammate
 
-Each teammate is a fresh Claude Code instance. At spawn it loads CLAUDE.md (project + global), MCP servers, skills (project + user), and the lead's spawn prompt. The lead's conversation history, files-read cache, and intermediate tool results **do not carry** — which is why N teammates costs ≈ N × single-session baseline.
+Each teammate is a fresh Claude Code instance. At spawn it loads CLAUDE.md (project + global), MCP servers, skills (project + user), and the lead's spawn prompt. The lead's conversation history, files-read cache, and intermediate tool results **do not carry** — which is why N teammates cost ≈ N × single-session baseline.
 
 ### TeamCreate decision rubric
 
