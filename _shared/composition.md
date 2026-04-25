@@ -29,16 +29,39 @@ Use the cheapest pattern that fits. Parallel adds coordination overhead — pref
 
 ## Right-sizing the team
 
-Width (how many specialists) is a separate decision from shape (linear vs parallel). Spawn the fewest specialists the task needs. Every orchestrator starts with a **Scope Assessment** block that classifies the task before dispatching:
+Width (how many specialists) is a separate decision from shape (linear vs parallel). Spawn the fewest specialists the task needs. Every orchestrator starts with a **Scope Assessment** block that classifies the task before dispatching.
 
-| Scope           | Heuristic                                                         | Team shape                                               |
-| --------------- | ----------------------------------------------------------------- | -------------------------------------------------------- |
-| **Lightweight** | Single file / tightly scoped / no unknowns                        | No team — lead runs inline, or spawns a single agent     |
-| **Standard**    | Multi-file / typical feature / some unknowns                      | Core specialists only (2–3); optional roles stay dormant |
-| **Deep**        | Cross-module / security / breaking change / architecture-changing | All specialists + critique or adversarial pass           |
+Scope is a **cost gradient**, not just a complexity gradient — each step up roughly multiplies token usage:
+
+| Scope           | Heuristic                                                         | Primitive                                | ~Cost vs single session |
+| --------------- | ----------------------------------------------------------------- | ---------------------------------------- | ----------------------- |
+| **Lightweight** | Single file / tightly scoped / no unknowns                        | Inline single agent                      | ≈ 1×                    |
+| **Standard**    | Multi-file / typical feature / some unknowns                      | 2–3 sequential subagents                 | ≈ 2–4× total            |
+| **Deep**        | Cross-module / security / breaking change / architecture-changing | All specialists, optionally `TeamCreate` | up to ≈ 7×              |
+
+> Agent teams use approximately 7x more tokens than standard sessions when teammates run in plan mode, because each teammate maintains its own context window and runs as a separate Claude instance.
+> — [Anthropic, _Manage costs effectively_](https://docs.anthropic.com/en/docs/claude-code/costs)
+
+In the table above, interpret that quote as an approximate upper bound of **~7× total token usage** versus a single standard session, **not** ~7× additional on top of the baseline.
+
+### What loads into a teammate
+
+Each teammate is a fresh Claude Code instance. At spawn it loads CLAUDE.md (project + global), MCP servers, skills (project + user), and the lead's spawn prompt. The lead's conversation history, files-read cache, and intermediate tool results **do not carry** — which is why N teammates cost ≈ N × single-session baseline.
+
+### TeamCreate decision rubric
+
+Replaces the older "3+ independent files" heuristic. All four criteria should hold before paying the team premium:
+
+1. **Communication pivot** — workers genuinely need to share findings mid-task. If a single synthesizer can merge results at the end, use parallel subagents instead.
+2. **File disjointness** — teammates own non-overlapping file sets, or merge conflicts will swallow the speedup.
+3. **Classifiably parallel task shape** — sequential / state-dependent reasoning degrades severely under MAS (Google DeepMind / MIT, _Towards a Science of Scaling Agent Systems_, arXiv:2512.08296: 39–70% degradation on PlanCraft, with MAS-Independent at −70%).
+4. **Expected wall-clock payoff ≥ 3×** — parallelism buys wall-clock, not tokens. Below 3×, the ~7× premium is not justified.
+
+Counter-evidence: Anthropic's multi-agent research system beat a single agent by >90% on parallelizable research at ~15× tokens. The often-quoted "Princeton NLP: MAS matches single-agent on 64% of benchmarks" line is commonly cited but the provenance is unverified — treat as folklore until pinned down.
 
 Rules:
 
+- Default to the cheapest primitive that fits: inline → subagent → `/batch` or worktrees → `TeamCreate`.
 - Collapse adjacent roles when inputs are trivial (e.g., `/verify` on a single AC runs inline — no team split).
 - Gate optional specialists on concrete signals (diff patterns, scope class, file paths) — not on orchestrator discretion.
 - Never pay coordination overhead for work a single agent completes in under a minute.
@@ -123,3 +146,7 @@ See `${CLAUDE_PLUGIN_ROOT}/_shared/handoff-artifact.md` for the five-field hando
 | **Over-parallelization**    | Parallel specialists produce contradictory outputs            | Serialize when outputs must agree (e.g., architecture before design)     |
 | **Missing flag**            | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset             | Fall back to sequential; note degraded mode explicitly                   |
 | **Handoff-brief confusion** | In-phase briefs get written to the issue body                 | Seed briefs are ephemeral; only handoff artifacts update the issue body  |
+| **Inline overrun**          | Lead session bloats reading large files / verbose tool output | Delegate verbose work to a subagent; only the summary returns to context |
+| **Subagent re-research**    | Custom subagents start fresh and re-read files the lead loaded | Pass file paths and prior findings in the spawn prompt — no inheritance  |
+| **Team idle drift**         | Teammates left running after the task is done keep burning tokens | Shut down explicitly; idle teammates do not auto-terminate              |
+| **`/batch` cross-talk**     | Batched items try to coordinate via filesystem side effects   | Use `TeamCreate` when coordination is required; `/batch` assumes self-contained items |
