@@ -42,6 +42,8 @@ Scope is a **cost gradient**, not just a complexity gradient — each step up ro
 > Agent teams use approximately 7x more tokens than standard sessions when teammates run in plan mode, because each teammate maintains its own context window and runs as a separate Claude instance.
 > — [Anthropic, _Manage costs effectively_](https://docs.anthropic.com/en/docs/claude-code/costs)
 
+In the table above, interpret that quote as an approximate upper bound of **~7× total token usage** versus a single standard session, **not** ~7× additional on top of the baseline.
+
 ### What loads into a teammate
 
 Each teammate is a fresh Claude Code instance. At spawn it loads CLAUDE.md (project + global), MCP servers, skills (project + user), and the lead's spawn prompt. The lead's conversation history, files-read cache, and intermediate tool results **do not carry** — which is why N teammates cost ≈ N × single-session baseline.
