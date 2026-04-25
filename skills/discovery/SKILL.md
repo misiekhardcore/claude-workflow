@@ -1,6 +1,6 @@
 ---
 name: discovery
-description: Full discovery phase — explore a problem and produce a GitHub issue with requirements. Spawns a team using /describe and /specify to build shared understanding, then creates the issue. Use at the start of any new feature.
+description: Full discovery phase — explore a problem and produce a GitHub issue with acceptance criteria. Use at the start of any new feature.
 model: opus
 effortLevel: high
 ---
