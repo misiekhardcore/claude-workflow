@@ -9,10 +9,10 @@ You are leading an architecture team. Your job is to explore technical approache
 
 ### Spawn justification
 
-See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for the four-criterion `TeamCreate` rubric and primitive ladder.
+Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`. `Fallback:` applies when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset.
 
-- **Research team** (codebase + patterns/learnings): 2 parallel subagents — comm-pivot ✗ (read-only research, no mid-task coordination needed), file-disjoint ✓, classifiably parallel ✓, wall-clock payoff ≥3× for two independent reads. Fallback when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset: sequential subagent invocations (codebase agent → patterns agent).
-- **Architecture session** (analyst + architect + devil's advocate): analyst subagent + architect lead-inline (grill-me) + devil's advocate subagent — comm-pivot ✗ (architect is the interactive lead; analyst seeds context before; devil's advocate critiques after), sequential reasoning required for interactive grill-me, wall-clock payoff <3×. Fallback when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset: n/a — no flag dependency (analyst and devil's advocate are subagents; architect runs in lead session).
+- **Research team**: 2 parallel subagents. Comm-pivot ✗ (read-only), disjoint ✓, parallel ✓, payoff ≥3×. Fallback: sequential subagents.
+- **Architecture session**: analyst subagent → architect lead-inline (grill-me) → devil's advocate subagent. Comm-pivot ✗ (sequential handoff), parallel ✗ (interactive grill-me), payoff <3×. Fallback: n/a — no flag dependency.
 
 ## Input
 

@@ -34,10 +34,10 @@ Decision tree:
 
 ### Spawn justification
 
-See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for the four-criterion `TeamCreate` rubric and primitive ladder.
+Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`. `Fallback:` applies when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset.
 
-- **Standard discovery session** (domain researcher + problem analyst): domain researcher subagent + problem analyst lead-inline — comm-pivot ✗ (researcher does a one-shot codebase read; analyst runs interactively in lead session), sequential handoff, wall-clock payoff <3×. Fallback when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset: n/a — no flag dependency (researcher is a subagent; analyst runs in lead session).
-- **Deep discovery session** (researcher + failure-mode + analyst): researcher subagent + failure-mode subagent + analyst lead-inline — comm-pivot ✗ (researcher and failure-mode analyst do independent reads; problem analyst is the interactive lead), classifiably parallel for the two subagents ✓, wall-clock payoff ≥3× for the subagent pair. Fallback when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset: sequential subagent invocations (researcher → failure-mode → analyst lead-inline).
+- **Standard session**: domain researcher subagent + analyst lead-inline. Comm-pivot ✗ (one-shot handoff), parallel ✗ (analyst interactive), payoff <3×. Fallback: n/a — no flag dependency.
+- **Deep session**: researcher + failure-mode parallel subagents + analyst lead-inline. Comm-pivot ✗, disjoint ✓, parallel ✓ for subagent pair, payoff <3× total. Fallback: sequential subagents.
 
 ## Process
 
@@ -47,16 +47,15 @@ See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for the four-criterion `TeamC
 2. **Dispatch subagents and run the problem analyst in the lead session**:
    - **Standard**: dispatch the **Domain researcher** as a subagent to explore the codebase for immediate framing context (existing patterns, related features, module boundaries). The **Problem analyst** runs interactively in the lead session via /grill-me, informed by the researcher's findings when available.
    - **Deep**: dispatch the **Domain researcher** and the **Failure-mode analyst** as parallel subagents (one Task tool call per agent in a single message). The failure-mode analyst explores competitive alternatives and failure modes (scale, security/privacy edge cases, UX regressions). The **Problem analyst** runs interactively in the lead session via /grill-me, incorporating both subagents' findings.
-3. Subagent findings are fed into the lead session to inform the analyst's questions before the grill-me interaction begins.
-4. **Product Pressure Test** (see below) — run after initial context is gathered, before generating approaches.
-5. For each major concept or decision point, **produce a visual**:
+3. **Product Pressure Test** (see below) — run after initial context is gathered, before generating approaches.
+4. For each major concept or decision point, **produce a visual**:
    - User journey → flowchart or sequence diagram (Mermaid)
    - Feature comparison → table
    - System boundaries → ASCII or Mermaid diagram
    - Data relationships → entity diagrams
    - Alternatives → side-by-side comparison tables with trade-offs
-6. After each visual, confirm understanding before moving on
-7. Synthesize team findings into a structured problem statement
+5. After each visual, confirm understanding before moving on
+6. Synthesize team findings into a structured problem statement
 
 ### Lightweight
 

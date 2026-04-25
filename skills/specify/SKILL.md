@@ -8,9 +8,9 @@ You are leading a requirements team. Your job is to turn a problem statement int
 
 ### Spawn justification
 
-See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for the four-criterion `TeamCreate` rubric and primitive ladder.
+Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
 
-- **Requirements team** (happy-path + edge-case analysts): sequential grill-me passes in the lead session — comm-pivot ✗ (both analysts contend for the same user input channel; parallelizing them would fragment the conversation), classifiably sequential ✓ (interactive grill-me degrades under MAS), no parallel speedup. Fallback when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset: n/a — no flag dependency (both passes run in the lead session).
+- **Requirements (happy-path + edge-case)**: sequential grill-me passes in lead session. Comm-pivot ✗ (analysts contend for the same user input channel), parallel ✗ (interactive). Fallback: n/a — no flag dependency.
 
 ## Input
 

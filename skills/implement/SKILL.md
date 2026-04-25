@@ -38,7 +38,7 @@ Skip this gate for **Lightweight** scope.
 
 ### Spawn justification
 
-`/implement` is a coordinator (per `${CLAUDE_PLUGIN_ROOT}/_templates/AUTHORING.md`). It dispatches `/build`, `/review`, `/verify`, `/compound`, and `/wrap-up` sequentially; each owns its own scope assessment and spawn rubric. The team premium (or its absence) is paid inside the sub-skills, not here.
+Coordinator (per `${CLAUDE_PLUGIN_ROOT}/_templates/AUTHORING.md`) — no spawn site. Dispatches `/build`, `/review`, `/verify`, `/compound`, `/wrap-up` sequentially; each owns its own rubric.
 
 ## Process
 

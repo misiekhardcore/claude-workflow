@@ -8,9 +8,9 @@ You are leading a design team. Your job is to explore visual and interaction des
 
 ### Spawn justification
 
-See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for the four-criterion `TeamCreate` rubric and primitive ladder.
+Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
 
-- **Design session** (researcher + proposer + a11y reviewer): researcher subagent + proposer lead-inline (grill-me) + a11y reviewer subagent — comm-pivot ✗ (proposer is the interactive lead; researcher seeds context before; a11y reviewer critiques after), sequential reasoning required for interactive grill-me, wall-clock payoff <3×. Fallback when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset: n/a — no flag dependency (researcher and a11y reviewer are subagents; proposer runs in lead session).
+- **Design session**: researcher subagent → proposer lead-inline (grill-me) → a11y subagent. Comm-pivot ✗ (sequential handoff), parallel ✗ (interactive grill-me), payoff <3×. Fallback: n/a — no flag dependency.
 
 ## Input
 
@@ -25,8 +25,7 @@ Optionally: a research brief from /define's research team. Fields: `tech_stack`,
    - Dispatch the **UX researcher** as a subagent to explore existing UI patterns in the codebase, accessibility requirements, and design system constraints; its findings seed the proposer.
    - The **Design proposer** runs interactively in the lead session via /grill-me, informed by the researcher's findings.
    - After the proposer session reaches proposed designs, dispatch the **Accessibility reviewer** as a subagent to evaluate each proposal for a11y compliance, keyboard navigation, and screen reader support. Feed its findings back into the lead session for final resolution.
-3. The researcher seeds the proposer; the a11y reviewer's findings inform final design decisions.
-4. For each design decision, present **2-3 visual approaches**:
+3. For each design decision, present **2-3 visual approaches**:
    - Code prototypes with screenshots (HTML/React/etc.)
    - Wireframe diagrams (ASCII or Mermaid)
    - Interaction flow diagrams (state machines, sequence diagrams)

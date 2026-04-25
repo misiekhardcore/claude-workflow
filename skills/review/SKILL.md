@@ -44,10 +44,10 @@ Decision tree:
 
 ### Spawn justification
 
-See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for the four-criterion `TeamCreate` rubric and primitive ladder.
+Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`. `Fallback:` applies when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset.
 
-- **Standard review team**: TeamCreate when ≥3 reviewers are active after diff analysis; otherwise dispatch 2 parallel subagents (one Task tool call per reviewer in a single message) — comm-pivot ✓ (reviewers converge on disagreements), file-disjoint ✓ (reviewers read the same diff independently), classifiably parallel ✓, wall-clock payoff ≥3× only at ≥3 active reviewers. Gated on ≥3 reviewers active. Fallback when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset: sequential subagent invocations.
-- **Deep review team**: TeamCreate — comm-pivot ✓ (security and performance reviewers must coordinate on findings), file-disjoint ✓, classifiably parallel ✓ (4 independent review axes), wall-clock payoff ≥3× with opus premium justified by finding criticality. Fallback when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset: sequential subagent invocations.
+- **Standard**: TeamCreate at ≥3 active reviewers, else 2 parallel subagents. Comm-pivot ✓ (converge on disagreements), disjoint ✓, parallel ✓, payoff ≥3× at scale. Gate: ≥3 reviewers active. Fallback: sequential subagents.
+- **Deep**: TeamCreate. All four ✓ across 4 review axes; opus premium justified by criticality. Fallback: sequential subagents.
 
 ## Process
 
@@ -68,7 +68,7 @@ See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for the four-criterion `TeamC
    - **Performance reviewer** — activate when the diff touches database queries or data access patterns (e.g., `query`, `findAll`, `SELECT`, `JOIN`, `index`). Trigger on file paths matching `**/db/**`, `**/queries/**` or database-related content — NOT on generic JS iteration methods like `forEach` or `map`.
    - **Migration reviewer** — activate when the diff includes schema changes or data migrations. Trigger on file paths matching `**/migrations/**`, `**/db/**` or content matching `CREATE TABLE`, `ALTER TABLE`, `addColumn`, `migration`.
 
-3. **Dispatch reviewers** — when ≥3 reviewers are active after diff analysis, spawn a review team using TeamCreate with `model: "sonnet"`; otherwise dispatch 2 parallel subagents (one Task tool call per reviewer in a single message). Include the reviewer preamble from Context Isolation above in each reviewer's instructions.
+3. **Dispatch reviewers** per the Spawn justification gate (TeamCreate at ≥3 active reviewers with `model: "sonnet"`, else parallel subagents). Include the reviewer preamble from Context Isolation above in each reviewer's instructions.
    - **Correctness reviewer** (always-on) — checks that the implementation satisfies every acceptance criterion, handles edge cases, and has no logical errors.
    - **Standards reviewer** (always-on) — checks code style, naming, patterns, test quality, and adherence to project conventions.
    - **Security reviewer** (conditional) — checks for authentication/authorization bugs, injection vulnerabilities, secret exposure, and unsafe data handling.

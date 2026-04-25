@@ -29,10 +29,10 @@ Decision tree:
 
 ### Spawn justification
 
-See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for the four-criterion `TeamCreate` rubric and primitive ladder.
+Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`. `Fallback:` applies when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset.
 
-- **Standard implementation team**: TeamCreate when ≥3 sub-issues OR ≥3 disjoint file groups; otherwise dispatch parallel subagents (one Task tool call per split in a single message) — comm-pivot ✓ at sufficient scale (teammates flag conflicts mid-task), file-disjoint ✓, classifiably parallel ✓, wall-clock payoff ≥3× only at ≥3 splits. Gated on ≥3 sub-issues OR ≥3 disjoint file groups. Fallback when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset: parallel subagents (for 2 splits) or sequential subagent invocations.
-- **Deep implementation team**: TeamCreate — comm-pivot ✓ (epics require mid-task coordination across modules), file-disjoint ✓, classifiably parallel ✓, wall-clock payoff ≥3× for epics with 4+ sub-issues. Fallback when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset: sequential subagent invocations.
+- **Standard**: TeamCreate at ≥3 splits, else parallel subagents. Comm-pivot ✓ at scale, disjoint ✓, parallel ✓, payoff ≥3× only at ≥3 splits. Gate: ≥3 sub-issues OR ≥3 disjoint file groups. Fallback: parallel subagents or sequential.
+- **Deep**: TeamCreate. All four ✓ for epics. Fallback: sequential subagents.
 
 ## Process
 
@@ -56,16 +56,10 @@ See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for the four-criterion `TeamC
 
    **On resume in an existing worktree**, read `./.claude/NOTES.md` _before_ re-reading the issue — it has the latest in-flight state. Resume from its **Next action on resume** field.
 
-3. **Implementation** — shape depends on scope:
-   - **Lightweight**: lead codes inline. No TeamCreate. Skip to step 4.
-   - **Standard**: when ≥3 sub-issues exist OR ≥3 disjoint file groups are identified, spawn an implementation team using TeamCreate; otherwise dispatch parallel subagents (one Task tool call per split in a single message).
-     - Assign each teammate (or subagent) a separate sub-issue or file group to avoid conflicts
-     - Teammates communicate peer-to-peer (TeamCreate) or results are merged by the lead (subagents)
-     - The lead coordinates via the shared task list and merges results
-   - **Deep**: spawn an implementation team using TeamCreate (epic scope justifies the team premium).
-     - Assign each teammate a separate sub-issue or file group to avoid conflicts
-     - Teammates communicate peer-to-peer, share discoveries, and flag potential conflicts
-     - The lead coordinates via the shared task list and merges results
+3. **Implementation** — spawn workers per the Spawn justification block (Lightweight: inline; Standard/Deep: subagents or TeamCreate per gate).
+   - Assign each worker a separate sub-issue or file group to avoid conflicts
+   - With TeamCreate, teammates communicate peer-to-peer; with subagents, the lead merges results
+   - The lead coordinates via the shared task list
 
 4. Each teammate follows **test-driven development (TDD)** for logic-heavy code:
    - Write a failing test first — derive test cases from the acceptance criteria
@@ -99,7 +93,7 @@ A feature branch in a worktree with all acceptance criteria implemented, tests p
 
 - Use superpowers:test-driven-development for the TDD workflow
 - Use `git worktree add` / `git worktree remove` for worktree management. [worktrunk](https://github.com/max-sixty/worktrunk)'s `wt` wrapper is an optional convenience when installed; the skill assumes only the stock `git worktree` commands.
-- Use TeamCreate for Standard scope only when ≥3 sub-issues OR ≥3 disjoint file groups; use parallel subagents below that threshold. Deep scope always uses TeamCreate. Lightweight codes inline without a team.
+- Pick the spawn primitive per the Spawn justification block above. Lightweight codes inline.
 - Do not ask the user whether to use teams — pick the scope and go
 - Do not open a PR — that happens after /implement completes the full cycle
 - Always run the 5-question verification check before marking a task done

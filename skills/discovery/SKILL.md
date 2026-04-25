@@ -27,10 +27,10 @@ Decision tree:
 
 ### Spawn justification
 
-See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for the four-criterion `TeamCreate` rubric and primitive ladder.
+Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`. `Fallback:` applies when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset.
 
-- **Standard discovery team**: describe lead-inline + Prior-Art Scout parallel subagent + specify sequential subagent — comm-pivot ✗ (specialists hand off asynchronously; no mid-task peer coordination needed), tasks are read-only or run interactively in the lead session, wall-clock payoff <3×. Activated for Standard scope. Fallback when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset: sequential subagent invocations (Prior-Art Scout → describe → specify).
-- **Deep discovery team**: TeamCreate — comm-pivot ✓ (adversarial questioner reacts live to flow-analyst and prior-art findings), classifiably parallel ✓ (multi-perspective synthesis with adversarial challenge), wall-clock payoff ≥3× for cross-module or security-scope work. Gated on Deep scope. Fallback when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset: sequential subagent invocations (Prior-Art Scout → describe → flow analyst → specify → adversarial questioner).
+- **Standard team**: describe lead-inline + scout parallel subagent + specify sequential subagent. Comm-pivot ✗ (async handoff), disjoint ✓, parallel ✓ scout-only, payoff <3×. Fallback: sequential subagents (scout → describe → specify).
+- **Deep team**: TeamCreate. Comm-pivot ✓ (adversarial questioner reacts live), disjoint ✓, parallel ✓, payoff ≥3× cross-module/security. Gate: Deep scope. Fallback: sequential subagents.
 
 ## Process
 

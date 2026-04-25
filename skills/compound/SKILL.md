@@ -8,9 +8,9 @@ You are leading the knowledge compounding phase. Your job is to capture what was
 
 ### Spawn justification
 
-See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for the four-criterion `TeamCreate` rubric and primitive ladder.
+Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
 
-- **Full-mode compounding team** (context analyst + solution extractor + overlap scanner): 3 parallel subagents + lead synthesis — comm-pivot ✗ (three independent reads with end-synthesis by lead; no mid-task coordination needed), file-disjoint ✓ (each reads a different dimension of the conversation), classifiably parallel ✓, wall-clock payoff ≥3× for independent reads. Fallback when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset: sequential subagent invocations (context analyst → solution extractor → overlap scanner → lead synthesis).
+- **Full-mode team**: 3 parallel subagents + lead synthesis. Comm-pivot ✗ (independent reads, end-synthesis), disjoint ✓, parallel ✓, payoff ≥3×. Fallback: sequential subagents.
 
 This skill extracts the learning and drafts it. **Filing is delegated** to the `claude-obsidian` plugin when available: its `/save` command handles vault placement, frontmatter, cross-links, hot-cache updates, and the operation log automatically. If `claude-obsidian` is not installed, the drafted note is emitted inline for the user to copy into whatever knowledge store they prefer.
 

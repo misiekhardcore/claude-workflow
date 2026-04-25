@@ -30,11 +30,11 @@ Decision tree:
 
 ### Spawn justification
 
-See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for the four-criterion `TeamCreate` rubric and primitive ladder.
+Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`. `Fallback:` applies when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset.
 
-- **Research team** (codebase + patterns/learnings): 2 parallel subagents — comm-pivot ✗ (read-only research, no mid-task coordination needed), file-disjoint ✓, classifiably parallel ✓, wall-clock payoff ≥3× for two independent reads. Fallback when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset: sequential subagent invocations (codebase agent → patterns agent).
-- **Standard definition team** (architecture → design): sequential subagent invocations — comm-pivot ✗ (design follows architecture, strictly ordered), sequential reasoning required, no parallel speedup. Fallback when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset: same — sequential subagents do not require the experimental flag.
-- **Deep critique team**: TeamCreate — comm-pivot ✓ (adversarial reviewers coordinate critique findings across migration, security, and rollout axes), classifiably parallel ✓, wall-clock payoff ≥3× for high-risk plans. Gated on Deep scope AND a security/payments/migration signal in the issue. Fallback when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset: sequential subagent invocations (critic runs after architecture and design complete).
+- **Research team**: 2 parallel subagents. Comm-pivot ✗ (read-only), disjoint ✓, parallel ✓, payoff ≥3×. Fallback: sequential subagents.
+- **Standard definition team**: sequential subagents (architecture → design). Comm-pivot ✗ (strictly ordered), parallel ✗, no speedup. Fallback: n/a — no flag dependency.
+- **Deep critique team**: TeamCreate. Comm-pivot ✓ (cross-axis critique), disjoint ✓, parallel ✓, payoff ≥3× for high-risk plans. Gate: Deep scope AND security/payments/migration signal. Fallback: sequential subagents.
 
 ## Process
 
@@ -46,10 +46,10 @@ See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for the four-criterion `TeamC
 
    The brief feeds both the architecture and design specialists as seed context.
 
-3. **Run the definition specialists sequentially** — shape depends on scope:
-   - **Lightweight**: lead writes the architecture summary inline against the research already in the issue. No team.
-   - **Standard**: run the **Architecture specialist** as a sequential subagent seeded with the research brief (skips its own research phase). Then run the **Design specialist** as a sequential subagent seeded with the research brief when the feature has visual aspects. Each is a Task tool call with the prior output as seed brief.
-   - **Deep**: same specialists as Standard, then spawn a **TeamCreate critique team** to critique the plan before finalizing (adversarial review, migration safety, rollout risks) — gated on Deep scope AND a security/payments/migration signal in the issue.
+3. **Run the definition specialists** per the Spawn justification block:
+   - **Lightweight**: lead writes the architecture summary inline against the research already in the issue.
+   - **Standard**: run Architecture as a sequential subagent seeded with the research brief, then Design as a sequential subagent when the feature has visual aspects.
+   - **Deep**: same as Standard, then spawn the critique team (adversarial review, migration safety, rollout risks).
 
 4. The architecture specialist goes first. Once technical decisions are approved by the user, the design specialist (if applicable) works within those constraints. In Deep scope, the critique team runs after both and before user sign-off.
 
@@ -67,6 +67,6 @@ See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for the four-criterion `TeamC
 ## Rules
 
 - **Require explicit full approval** before finalizing. Partial feedback is NOT approval.
-- Deep scope spawns a TeamCreate critique team before finalizing only when a security/payments/migration signal is present; Standard uses sequential subagents; Lightweight skips both.
+- Spawn primitives and gates per the Spawn justification block above.
 - Respect existing codebase patterns unless there's a strong reason to deviate
 - See `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-rules.md` for the questioning protocol — apply it throughout all user interactions.
