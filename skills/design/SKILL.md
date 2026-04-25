@@ -10,7 +10,7 @@ You are leading a design team. Your job is to explore visual and interaction des
 
 Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
 
-- **Design session**: researcher subagent → proposer lead-inline (grill-me) → a11y subagent. Comm-pivot ✗ (sequential handoff), parallel ✗ (interactive grill-me), payoff <3×. Fallback: n/a — no flag dependency.
+- **Design session**: researcher subagent → proposer lead-inline (grill-me) → a11y subagent. Comm-pivot ✗ (sequential handoff), disjoint n/a (sequential), parallel ✗ (interactive grill-me), payoff <3×. Fallback: n/a — no flag dependency.
 
 ## Input
 

@@ -36,7 +36,7 @@ Decision tree:
 
 Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`. `Fallback:` applies when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset.
 
-- **Standard session**: domain researcher subagent + analyst lead-inline. Comm-pivot ✗ (one-shot handoff), parallel ✗ (analyst interactive), payoff <3×. Fallback: n/a — no flag dependency.
+- **Standard session**: domain researcher subagent + analyst lead-inline. Comm-pivot ✗ (one-shot handoff), disjoint n/a (sequential), parallel ✗ (analyst interactive), payoff <3×. Fallback: n/a — no flag dependency.
 - **Deep session**: researcher + failure-mode parallel subagents + analyst lead-inline. Comm-pivot ✗, disjoint ✓, parallel ✓ for subagent pair, payoff <3× total. Fallback: sequential subagents.
 
 ## Process

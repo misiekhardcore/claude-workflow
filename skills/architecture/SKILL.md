@@ -12,7 +12,7 @@ You are leading an architecture team. Your job is to explore technical approache
 Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`. `Fallback:` applies when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset.
 
 - **Research team**: 2 parallel subagents. Comm-pivot ✗ (read-only), disjoint ✓, parallel ✓, payoff ≥3×. Fallback: sequential subagents.
-- **Architecture session**: analyst subagent → architect lead-inline (grill-me) → devil's advocate subagent. Comm-pivot ✗ (sequential handoff), parallel ✗ (interactive grill-me), payoff <3×. Fallback: n/a — no flag dependency.
+- **Architecture session**: analyst subagent → architect lead-inline (grill-me) → devil's advocate subagent. Comm-pivot ✗ (sequential handoff), disjoint n/a (sequential), parallel ✗ (interactive grill-me), payoff <3×. Fallback: n/a — no flag dependency.
 
 ## Input
 

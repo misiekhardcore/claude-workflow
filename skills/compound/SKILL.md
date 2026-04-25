@@ -10,7 +10,7 @@ You are leading the knowledge compounding phase. Your job is to capture what was
 
 Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
 
-- **Full-mode team**: 3 parallel subagents + lead synthesis. Comm-pivot ✗ (independent reads, end-synthesis), disjoint ✓, parallel ✓, payoff ≥3×. Fallback: sequential subagents.
+- **Full-mode team**: 3 parallel subagents + lead synthesis. Comm-pivot ✗ (independent reads, end-synthesis), disjoint ✓, parallel ✓, payoff ≥3×. Fallback: n/a — no flag dependency (parallel subagents do not require `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`).
 
 This skill extracts the learning and drafts it. **Filing is delegated** to the `claude-obsidian` plugin when available: its `/save` command handles vault placement, frontmatter, cross-links, hot-cache updates, and the operation log automatically. If `claude-obsidian` is not installed, the drafted note is emitted inline for the user to copy into whatever knowledge store they prefer.
 

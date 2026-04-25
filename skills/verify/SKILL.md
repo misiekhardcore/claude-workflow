@@ -42,9 +42,9 @@ Decision tree:
 
 ### Spawn justification
 
-Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
+Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`. `Fallback:` applies when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset.
 
-- **Standard/Deep QA**: TeamCreate at ≥4 AC, else parallel subagents. Comm-pivot ✓ (cross-verify findings), disjoint ✓, parallel ✓, payoff ≥3× at ≥4 AC. Gate: ≥4 acceptance criteria. Fallback when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset: sequential subagents.
+- **Standard/Deep QA**: TeamCreate at ≥4 AC, else parallel subagents. Comm-pivot ✓ (cross-verify findings), disjoint ✓, parallel ✓, payoff ≥3× at ≥4 AC. Gate: ≥4 acceptance criteria. Fallback: sequential subagents.
 
 ## Process
 

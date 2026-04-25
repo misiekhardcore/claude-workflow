@@ -10,7 +10,7 @@ You are leading a requirements team. Your job is to turn a problem statement int
 
 Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
 
-- **Requirements (happy-path + edge-case)**: sequential grill-me passes in lead session. Comm-pivot ✗ (analysts contend for the same user input channel), parallel ✗ (interactive). Fallback: n/a — no flag dependency.
+- **Requirements (happy-path + edge-case)**: sequential grill-me passes in lead session. Comm-pivot ✗ (analysts contend for the same user input channel), disjoint n/a (sequential), parallel ✗ (interactive), payoff <3×. Fallback: n/a — no flag dependency.
 
 ## Input
 
