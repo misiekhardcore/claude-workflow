@@ -29,6 +29,10 @@ The building blocks: `/describe`, `/specify`, `/architecture`, `/design`, `/buil
 - **Use the cheapest viable model.** Skills set their own `model:` and `effortLevel:` — trust them.
 - **Respond concisely.** No filler, no preamble.
 
+## Token budgets
+
+For per-artifact budgets (`.claude/NOTES.md` <1k, issue body <2k, seed brief <500 tokens), per-phase context targets, CLAUDE.md placement and sizing, the `@`-import syntax, and the skill-invocation duplication anti-pattern, see `${CLAUDE_PLUGIN_ROOT}/docs/token-budgets.md`. Read it once when setting up a new project and revisit when long sessions start misbehaving.
+
 ## Authoring New Skills
 
 To scaffold a new skill conforming to this standard, run `/new-skill`. It will interview you, generate a conformant `SKILL.md`, and write it to your chosen location.

@@ -33,4 +33,5 @@ If a future skill makes the vault mandatory, declare `dependencies: ["claude-obs
 ## See also
 
 - [`README.md`](../README.md) — `claude-obsidian` integration overview
+- [`token-budgets.md`](token-budgets.md) — CLAUDE.md placement, `@`-import syntax, and per-artifact token budgets that compose with the MCP-scope rules above
 - [`plugin.json`](../.claude-plugin/plugin.json) — plugin metadata
