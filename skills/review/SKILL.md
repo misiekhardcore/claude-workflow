@@ -46,7 +46,7 @@ Decision tree:
 
 Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`. `Fallback:` applies when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset. Model tiers: see **Configuration** section.
 
-- **Standard**: TeamCreate at ≥3 active reviewers, else 2 parallel subagents with `model: "sonnet"`. Comm-pivot ✓ (converge on disagreements), disjoint ✓, parallel ✓, payoff ≥3× at scale. Gate: ≥3 reviewers active. Fallback: sequential subagents.
+- **Standard**: TeamCreate with `model: "sonnet"` at ≥3 active reviewers, else 2 parallel subagents with `model: "sonnet"`. Comm-pivot ✓ (converge on disagreements), disjoint ✓, parallel ✓, payoff ≥3× at scale. Gate: ≥3 reviewers active. Fallback: sequential subagents.
 - **Deep**: TeamCreate with `model: "opus"`. All four ✓ across 4 review axes; opus premium justified by criticality. Fallback: sequential subagents.
 
 ## Process
