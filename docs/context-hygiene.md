@@ -151,6 +151,7 @@ This matches Anthropic's sub-agent pattern: the reviewer runs in isolation, retu
 
 ## See Also
 
+- `${CLAUDE_PLUGIN_ROOT}/docs/token-budgets.md` — concrete per-artifact and per-phase budgets the rules above assume; CLAUDE.md placement and `@`-import syntax.
 - `${CLAUDE_PLUGIN_ROOT}/_shared/handoff-artifact.md` — canonical handoff shape.
 - `${CLAUDE_PLUGIN_ROOT}/_shared/compaction-protocol.md` — trigger list and tool order for in-phase context pressure.
 - `${CLAUDE_PLUGIN_ROOT}/_shared/notes-md-protocol.md` — NOTES.md as an external ledger the model can diff against after `/compact`.

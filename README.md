@@ -144,12 +144,16 @@ Without `claude-obsidian` every skill still runs; vault operations are skipped w
 
 Full lifecycle walkthrough: [`docs/workflow.md`](docs/workflow.md)
 
+## Token budgets and CLAUDE.md placement
+
+Per-artifact and per-phase token budgets, the context-rot threshold (~12% of window), CLAUDE.md placement and `@`-import syntax, and the skill-invocation duplication anti-pattern: [`docs/token-budgets.md`](docs/token-budgets.md). For *why* phases reset, see [`docs/context-hygiene.md`](docs/context-hygiene.md).
+
 ## Ecosystem
 
 When working across multiple plugins and repositories, see [`docs/cross-plugin.md`](docs/cross-plugin.md) for guidance on:
 - MCP scope (shared vs. plugin-bundled servers)
 - Inter-plugin dependency declarations
-- CLAUDE.md layering (`~/.claude/CLAUDE.md`, `./CLAUDE.md`, `./CLAUDE.local.md`)
+- Optional `claude-obsidian` integration via runtime detection
 
 ## Authoring standard
 

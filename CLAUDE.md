@@ -29,6 +29,10 @@ The building blocks: `/describe`, `/specify`, `/architecture`, `/design`, `/buil
 - **Use the cheapest viable model.** Skills set their own `model:` and `effortLevel:` — trust them.
 - **Respond concisely.** No filler, no preamble.
 
+## Token budgets
+
+Per-artifact and per-phase budgets, CLAUDE.md placement, and `@`-imports: `${CLAUDE_PLUGIN_ROOT}/docs/token-budgets.md`.
+
 ## Authoring New Skills
 
 To scaffold a new skill conforming to this standard, run `/new-skill`. It will interview you, generate a conformant `SKILL.md`, and write it to your chosen location.

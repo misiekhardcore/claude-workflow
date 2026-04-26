@@ -150,3 +150,9 @@ See `${CLAUDE_PLUGIN_ROOT}/_shared/handoff-artifact.md` for the five-field hando
 | **Subagent re-research**    | Custom subagents start fresh and re-read files the lead loaded | Pass file paths and prior findings in the spawn prompt — no inheritance  |
 | **Team idle drift**         | Teammates left running after the task is done keep burning tokens | Shut down explicitly; idle teammates do not auto-terminate              |
 | **`/batch` cross-talk**     | Batched items try to coordinate via filesystem side effects   | Use `TeamCreate` when coordination is required; `/batch` assumes self-contained items |
+
+## See also
+
+- `${CLAUDE_PLUGIN_ROOT}/docs/token-budgets.md` — per-artifact budgets (seed brief <500 tokens, sub-agent report 1–2k tokens) and per-phase context targets that the cost rubric above assumes.
+- `${CLAUDE_PLUGIN_ROOT}/docs/context-hygiene.md` — why phases reset and how briefs avoid context bleed across specialist boundaries.
+- `${CLAUDE_PLUGIN_ROOT}/_shared/handoff-artifact.md` — five-field issue-body shape that crosses phase boundaries.

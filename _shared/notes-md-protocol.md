@@ -100,4 +100,4 @@ On a fresh session in an existing worktree, `.claude/NOTES.md` exists ⇒ this i
 
 ## Why
 
-Context rot makes in-context recall unreliable for long sessions, even when the window is nowhere near full. The fix is to externalize the state that the model needs to trust — onto disk, in a file the model re-reads on demand. A gitignored worktree-local worklog is the cheapest durable answer. See `${CLAUDE_PLUGIN_ROOT}/docs/context-hygiene.md` for the full rationale.
+Context rot makes in-context recall unreliable for long sessions, even when the window is nowhere near full. The fix is to externalize the state that the model needs to trust — onto disk, in a file the model re-reads on demand. A gitignored worktree-local worklog is the cheapest durable answer. See `${CLAUDE_PLUGIN_ROOT}/docs/context-hygiene.md` for the full rationale and `${CLAUDE_PLUGIN_ROOT}/docs/token-budgets.md` for the <1k cap alongside the other artifact budgets.
