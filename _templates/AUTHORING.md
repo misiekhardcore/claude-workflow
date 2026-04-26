@@ -146,6 +146,20 @@ New skills created via `/new-skill` will be guided through this decision during 
 - Keep `SKILL.md` under 500 lines. If you're approaching this limit, split domain content into `references/` sub-files and link to them with clear "read when X" guidance.
 - The body is loaded into context on every invocation — keep it focused on instructions, not background narrative.
 
+### Progressive disclosure via `references/`
+
+The `references/` convention trades startup cost (the main skill loads faster) for on-demand cost (the reference doc loads only when that branch executes). Use it when:
+
+1. A section is **>~40 lines** and only runs in a specific execution branch (e.g., "when no skills are found" or "when filing a note").
+2. The section does **not influence the default path** — removing it doesn't break the core logic for users who never hit that branch.
+3. The default path is **still complete** without manually loading the reference doc.
+
+**Worked example**: `/find-skills` originally had "Common Skill Categories", "Tips for Effective Searches", and "When No Skills Are Found" inline (~44 lines). These are only consulted when helping users refine searches or handle empty results — not on the main flow path (steps 1–5 of "How to Help Users"). They were moved to `skills/find-skills/references/categories.md`. The main skill now says: "Read `skills/find-skills/references/categories.md` when you need to help users refine their search strategy or handle cases where no skills are found."
+
+The default path (finding and presenting skills) remains self-contained. A user invoking `/find-skills` without needing the categorical reference still completes successfully.
+
+**Another example**: `/compound` separates the Bug Track and Knowledge Track templates (together ~45 lines) into `skills/compound/references/knowledge-tracks.md`. These are only consulted when writing the output note — the core mode-selection logic and dispatch remain inline. The skill says: "See `skills/compound/references/knowledge-tracks.md` for the full templates."
+
 ## Writing style
 
 - Use imperative form: "Read the issue", "Spawn a team", not "You should read" or "The skill reads".
