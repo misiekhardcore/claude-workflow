@@ -22,15 +22,9 @@ Skills probe for these commands; if present, the vault-aware path activates, oth
 
 If a future skill makes the vault mandatory, declare `dependencies: ["claude-obsidian"]` in `plugin.json` and update this section.
 
-## CLAUDE.md ownership in this ecosystem
+## CLAUDE.md ownership
 
-| Layer | Path | Owner | Contains |
-|---|---|---|---|
-| Ecosystem | `~/.claude/CLAUDE.md` | `claude-config` repo | Cross-project conventions, plugin install guidance, shared shortcuts |
-| Project | `./CLAUDE.md` (committed) | The project repo | Project-specific idioms, code style, how to invoke the project's skills/tests |
-| Personal | `./CLAUDE.local.md` (gitignored) | Individual user | Local quirks, per-machine overrides |
-
-Each layer assumes the previous one is loaded and states only what differs. Before adding a rule, grep existing layers — if it already exists upstream, reference it instead of duplicating.
+`~/.claude/CLAUDE.md` is sourced from the [`claude-config`](https://github.com/misiekhardcore/claude-config) repo, not authored ad-hoc per machine. For the semantics of project (`./CLAUDE.md`) vs personal (`./CLAUDE.local.md`) scopes and load order, see Claude Code's memory documentation.
 
 ## See also
 
