@@ -144,6 +144,13 @@ Without `claude-obsidian` every skill still runs; vault operations are skipped w
 
 Full lifecycle walkthrough: [`docs/workflow.md`](docs/workflow.md)
 
+## Ecosystem
+
+When working across multiple plugins and repositories, see [`docs/cross-plugin.md`](docs/cross-plugin.md) for guidance on:
+- MCP scope (shared vs. plugin-bundled servers)
+- Inter-plugin dependency declarations
+- CLAUDE.md layering (`~/.claude/CLAUDE.md`, `./CLAUDE.md`, `./CLAUDE.local.md`)
+
 ## Authoring standard
 
 This plugin ships an authoring standard for creating new skills:
