@@ -154,7 +154,7 @@ The `references/` convention trades startup cost (the main skill loads faster) f
 2. The section does **not influence the default path** — removing it doesn't break the core logic for users who never hit that branch.
 3. The default path is **still complete** without manually loading the reference doc.
 
-**Worked example**: `/find-skills` originally had "Common Skill Categories", "Tips for Effective Searches", and "When No Skills Are Found" inline (~44 lines). These are only consulted when helping users refine searches or handle empty results — not on the main flow path (steps 1–5 of "How to Help Users"). They were moved to `skills/find-skills/references/categories.md`. The main skill now says: "Read `skills/find-skills/references/categories.md` when you need to help users refine their search strategy or handle cases where no skills are found."
+**Worked example**: `/find-skills` originally had "Common Skill Categories", "Tips for Effective Searches", and "When No Skills Are Found" inline (~44 lines). These are only consulted when helping users refine searches or handle empty results — not on the main flow path (steps 1–6 of "How to Help Users Find Skills"). They were moved to `skills/find-skills/references/categories.md`. The main skill now says: "Read `skills/find-skills/references/categories.md` when you need to help users refine their search strategy or handle cases where no skills are found."
 
 The default path (finding and presenting skills) remains self-contained. A user invoking `/find-skills` without needing the categorical reference still completes successfully.
 

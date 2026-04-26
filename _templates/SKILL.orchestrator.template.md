@@ -13,7 +13,7 @@ You are leading the <phase name> phase. Your goal is to <objective>.
 
 <!-- What the orchestrator receives — issue number, handoff block, or problem statement. -->
 
-### Scope Assessment
+## Scope Assessment
 
 Classify before dispatching. See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for the right-sizing rationale and cost models.
 
