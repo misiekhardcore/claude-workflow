@@ -31,7 +31,7 @@ The building blocks: `/describe`, `/specify`, `/architecture`, `/design`, `/buil
 
 ## Token budgets
 
-For per-artifact budgets (`.claude/NOTES.md` <1k, issue body <2k, seed brief <500 tokens), per-phase context targets, CLAUDE.md placement and sizing, the `@`-import syntax, and the skill-invocation duplication anti-pattern, see `${CLAUDE_PLUGIN_ROOT}/docs/token-budgets.md`. Read it once when setting up a new project and revisit when long sessions start misbehaving.
+Per-artifact and per-phase budgets, CLAUDE.md placement, and `@`-imports: `${CLAUDE_PLUGIN_ROOT}/docs/token-budgets.md`.
 
 ## Authoring New Skills
 

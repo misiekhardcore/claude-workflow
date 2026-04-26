@@ -155,8 +155,6 @@ When working across multiple plugins and repositories, see [`docs/cross-plugin.m
 - Inter-plugin dependency declarations
 - Optional `claude-obsidian` integration via runtime detection
 
-CLAUDE.md placement (`~/.claude/CLAUDE.md`, `./CLAUDE.md`, `./CLAUDE.local.md`) and sizing targets are in [`docs/token-budgets.md`](docs/token-budgets.md).
-
 ## Authoring standard
 
 This plugin ships an authoring standard for creating new skills:
