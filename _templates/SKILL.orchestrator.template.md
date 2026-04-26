@@ -15,11 +15,15 @@ You are leading the <phase name> phase. Your goal is to <objective>.
 
 ## Scope Assessment
 
-Classify before dispatching. See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for the right-sizing rationale.
+Classify before dispatching. See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for the right-sizing rationale and cost models.
 
 - **Lightweight** — <heuristic>. Lead runs inline; no team; skip step 2.
 - **Standard** — <heuristic>. Core specialists only; optional roles stay dormant.
 - **Deep** — <heuristic>. Full team + critique/adversarial pass.
+
+### Spawn justification
+
+Document your choice explicitly. State which rubric factors from composition.md apply (communication pivot, file disjointness, parallelism, wall-clock payoff) and which gate conditions trigger dispatch. See `/discovery`, `/define`, `/implement` for the established pattern.
 
 ## Process
 

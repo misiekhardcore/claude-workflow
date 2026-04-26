@@ -50,7 +50,14 @@ A brief statement from the author of what the skill should do — or nothing, in
 
      If the author picks **Restricted subset**, ask one free-text follow-up: "Which tools should it be allowed to use? (space-separated — e.g. `Read Grep Glob Bash`)". Validate that each entry is a real Claude Code tool name (reject unknown names and re-ask). Use the answer verbatim as the value of `allowed-tools:`.
 
-   g. **Shared protocols** — `AskUserQuestion` with `header: "Protocols"`, `multiSelect: true`, question: "Which shared protocols does this skill need?". Walk through the AUTHORING.md decision table. Options (4-option limit):
+   g. **Parallelism** — `AskUserQuestion` with `header: "Parallelism"`, question: "Does this skill spawn sub-agents or teams? If yes, which primitive?". Options:
+   - **No parallelism** — skill runs inline; no sub-agents or teams
+   - **Parallel subagents** — skill spawns 2–3 independent subagents (applies to all roles)
+   - **TeamCreate** — skill spawns a team (orchestrators / specialists only)
+
+     If the author picks **Parallel subagents** or **TeamCreate**, ask a follow-up free-text: "Which conditions gate the spawn decision? (reference the rubric in `_shared/composition.md` — e.g., scope class, file count, communication pivot)". Store the answer as a "Spawn justification" block in the skill body.
+
+   h. **Shared protocols** — `AskUserQuestion` with `header: "Protocols"`, `multiSelect: true`, question: "Which shared protocols does this skill need?". Walk through the AUTHORING.md decision table. Options (4-option limit):
    - **Handoff artifact** — writes or reads a GitHub issue handoff block → include `handoff-artifact.md`
    - **Interviewing rules** — interviews the user, asks questions, seeks approval → include `interviewing-rules.md`
    - **NOTES.md protocol** — creates or reads `.claude/NOTES.md` → include `notes-md-protocol.md`
@@ -61,7 +68,7 @@ A brief statement from the author of what the skill should do — or nothing, in
    - **No** — skip `composition.md`
    - **Yes** — include `composition.md`
 
-   h. **Target location** — `AskUserQuestion` with `header: "Target"`, question: "Where should the skill be written?". Options:
+   i. **Target location** — `AskUserQuestion` with `header: "Target"`, question: "Where should the skill be written?". Options:
    - **Personal (Recommended)** — `~/.claude/skills/<name>/SKILL.md` (individual use)
    - **Project** — `<cwd>/.claude/skills/<name>/SKILL.md` (committed to the current repo)
    - **Plugin** — `${CLAUDE_PLUGIN_ROOT}/skills/<name>/SKILL.md` (contributing to this plugin; dogfooding)
@@ -71,12 +78,16 @@ A brief statement from the author of what the skill should do — or nothing, in
    - Specialist or Utility → `${CLAUDE_PLUGIN_ROOT}/_templates/SKILL.specialist.template.md`. For Utility, remove the "Optionally: a seed brief" paragraph from Input — utility skills are user-invocable and don't receive briefs.
    - Primitive → `${CLAUDE_PLUGIN_ROOT}/_templates/SKILL.primitive.template.md`
 
+   Both orchestrator and specialist templates now include placeholders for parallelism justification (step 2g). Fill these in based on the author's answer.
+
    Read the selected template — that is the skeleton you will fill in.
 
 4. **Generate the SKILL.md** by filling in the selected template:
    - Frontmatter: `name`, `description`, `model`; include `effortLevel: high` / `allowed-tools: ...` only when the author opted in
    - Body: keep the skeleton sections (Input / Process / Output / Rules) as placeholders for the author to fill — don't invent domain content
-   - Append a reference line at the end of the relevant section for each selected `_shared/` file. Use the full `${CLAUDE_PLUGIN_ROOT}/_shared/<file>.md` path, matching the pattern in `_templates/AUTHORING.md` (§ "Reference pattern").
+   - If the author selected parallelism in step 2g, include the spawn-justification text from their answer in the "Spawn justification" block in the skill body (orchestrator or specialist templates both have this now)
+   - Append a reference line at the end of the relevant section for each selected `_shared/` file. Use the full `${CLAUDE_PLUGIN_ROOT}/_shared/<file>.md` path, matching the pattern in `_templates/AUTHORING.md` (§ "Reference pattern")
+   - Include `composition.md` reference if the author selected it in step 2h
 
 5. **Show the draft** to the author in a fenced code block. Ask: "Does this look right? Shall I write it to `<target-path>`? (y/n)". Do not write on silence or "looks good" — require an explicit yes.
 
