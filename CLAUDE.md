@@ -35,6 +35,8 @@ To scaffold a new skill conforming to this standard, run `/new-skill`. It will i
 
 For the full authoring standard — template shape, `_shared/` file conventions, naming rules — see `${CLAUDE_PLUGIN_ROOT}/_templates/AUTHORING.md`.
 
-## Note on `${CLAUDE_PLUGIN_ROOT}`
+## Plugin path variables
 
-Skills in this plugin reference shared protocols via `${CLAUDE_PLUGIN_ROOT}/_shared/<file>.md`. If your Claude Code version does not expand this variable inline in skill body text, the fallback convention is: skills reference `_shared/<file>.md` and Claude resolves the path by globbing against the plugin cache at `~/.claude/plugins/cache/<marketplace>/claude-workflow/<version>/`.
+**`${CLAUDE_PLUGIN_ROOT}`** — the plugin's installation directory. Skills reference shared protocols via `${CLAUDE_PLUGIN_ROOT}/_shared/<file>.md`. If your Claude Code version does not expand this variable inline in skill body text, the fallback convention is: skills reference `_shared/<file>.md` and Claude resolves the path by globbing against the plugin cache at `~/.claude/plugins/cache/<marketplace>/claude-workflow/<version>/`.
+
+**`${CLAUDE_PLUGIN_DATA}`** — a persistent directory (`~/.claude/plugins/data/claude-workflow/`) for cached state that survives plugin updates. Use it for installed dependencies, compiled indexes, or cached fetched data. See `${CLAUDE_PLUGIN_ROOT}/_templates/AUTHORING.md` for the diff-then-install pattern when detecting dependency updates.
