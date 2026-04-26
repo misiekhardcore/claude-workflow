@@ -14,6 +14,10 @@ model: "<haiku | sonnet | opus>"
 
 Optionally: a <research | prior-art | fix> brief from <source skill>. When present, skip internal research and use the brief as starting context. See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for the brief field list.
 
+### Parallelism choice
+
+If this specialist spawns sub-agents or teams internally, state your choice explicitly: inline, parallel subagents, or TeamCreate. Document the gate conditions from `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` that justify the choice. See `/resolve-pr-feedback`, `/compound` for examples.
+
 ## Process
 
 1. Check for a seed brief. If present, skip to step 3.

@@ -123,6 +123,18 @@ The `diff` chain exits nonzero when either stored copy is missing (first run) or
 }
 ```
 
+## Parallelism decision
+
+When authoring an orchestrator or designing a multi-skill workflow, you must make an explicit parallelism choice. See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for the full rubric — it defines Scope Assessment (Lightweight / Standard / Deep), TeamCreate decision criteria, and cost models for different primitives.
+
+**Key decision points:**
+
+- **Scope Assessment**: Classify before spawning. Lightweight runs inline; Standard/Deep trigger dispatch. See composition.md for heuristics and cost gradients.
+- **Primitive choice**: Default to inline → subagent → TeamCreate. Parallel adds coordination overhead — confirm genuine communication pivot, file disjointness, classifiable parallelism, and ≥3× wall-clock payoff before paying the ~7× token premium.
+- **Spawn justification**: Document your choice in the skill body. State which rubric factors apply and which don't. See existing orchestrators (`/discovery`, `/define`, `/implement`, `/review`) for the established pattern — a short "Spawn justification" block naming the cost class and required conditions.
+
+New skills created via `/new-skill` will be guided through this decision during scaffolding.
+
 ## Naming conventions
 
 - **Skill directory**: `skills/<name>/` — lowercase kebab-case, matches the `name` frontmatter field.
