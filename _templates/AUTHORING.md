@@ -82,6 +82,45 @@ See `${CLAUDE_PLUGIN_ROOT}/_shared/notes-md-protocol.md`.
 See `${CLAUDE_PLUGIN_ROOT}/_shared/compaction-protocol.md`. Context editing first, sub-agents second, `/compact` last.
 ```
 
+## Persistent plugin data
+
+Use `${CLAUDE_PLUGIN_DATA}` to store cached state that survives across plugin updates and sessions. This resolves to `~/.claude/plugins/data/claude-workflow/` — a directory created automatically on first use. Common uses include caching fetched data, compiled indexes, or installed dependencies.
+
+When your hook or MCP server needs to detect updates and reinstall dependencies, use the diff-then-install pattern. This example checks if a bundled manifest has changed and reinstalls `node_modules` only when needed:
+
+```json
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "diff -q \"${CLAUDE_PLUGIN_ROOT}/package.json\" \"${CLAUDE_PLUGIN_DATA}/package.json\" >/dev/null 2>&1 || (cd \"${CLAUDE_PLUGIN_DATA}\" && cp \"${CLAUDE_PLUGIN_ROOT}/package.json\" . && npm install) || rm -f \"${CLAUDE_PLUGIN_DATA}/package.json\""
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+The `diff` exits nonzero when the stored copy is missing (first run) or differs from the bundled version (after an update), triggering reinstall. If installation fails, the trailing `rm` removes the stale manifest so the next session retries. Scripts can then reference the persisted `node_modules`:
+
+```json
+{
+  "mcpServers": {
+    "my-server": {
+      "command": "node",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/server.js"],
+      "env": {
+        "NODE_PATH": "${CLAUDE_PLUGIN_DATA}/node_modules"
+      }
+    }
+  }
+}
+```
+
 ## Naming conventions
 
 - **Skill directory**: `skills/<name>/` — lowercase kebab-case, matches the `name` frontmatter field.
