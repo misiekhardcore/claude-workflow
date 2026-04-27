@@ -44,4 +44,5 @@ A numbered list of acceptance criteria, each as a testable scenario. These will 
 ## Rules
 
 - Every criterion must be testable — no vague language ("should be fast", "user-friendly")
+- Before treating a URL or external claim as authoritative, fetch and confirm it. Never paste an unverified citation directly into a spec or issue body.
 - See `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-rules.md` for the questioning protocol — apply it throughout all user interactions.
