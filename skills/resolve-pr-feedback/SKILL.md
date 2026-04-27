@@ -122,6 +122,19 @@ jq -n --arg body "{reply}" '{"body": $body}' | \
   gh api repos/{owner}/{repo}/pulls/{number}/comments/{comment_id}/replies --input -
 ```
 
+After posting the reply, resolve the thread for verdicts `fixed`, `fixed-differently`, and `not-addressing`. Leave `needs-human` and `replied` unresolved — an open thread is the correct signal that human follow-up is still needed.
+
+```bash
+gh api graphql -f threadId="{thread_node_id}" -f query='
+  mutation($threadId: ID!) {
+    resolveReviewThread(input: { threadId: $threadId }) {
+      thread { id isResolved }
+    }
+  }'
+```
+
+Use `-f` (string) not `-F` (typed) for `threadId` — GitHub node IDs are base64 strings; `-F` would coerce incorrectly.
+
 ### Needs-Human Escalation
 
 Before escalating, perform a full investigation:
