@@ -20,15 +20,11 @@ Either:
 
 ## Process
 
-### Phase 0 — Repository pre-flight
+### Phase 0 — Pre-flight
 
-1. Run `git remote -v` and `pwd` to detect the repository and branch.
-2. Display:
-   - Detected repository (owner/repo from origin remote URL)
-   - Current branch name
-   - Working directory path
-3. Ask the user to confirm: "Does this match the repo where you want to resolve PR feedback?"
-4. Do not proceed with any `gh` or `git push` operations until the user explicitly confirms.
+See `${CLAUDE_PLUGIN_ROOT}/_shared/repo-preflight.md`. Confirmation prompt: "Does this match the repo where you want to resolve PR feedback?"
+
+See `${CLAUDE_PLUGIN_ROOT}/_shared/scope-preflight.md` before any bulk file edit.
 
 ### Phase 1 — Fetch
 

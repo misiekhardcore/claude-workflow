@@ -53,7 +53,9 @@ Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`. `Fallback:` applies when
 
 4. The architecture specialist goes first. Once technical decisions are approved by the user, the design specialist (if applicable) works within those constraints. In Deep scope, the critique team runs after both and before user sign-off.
 
-5. **Update the GitHub issue body** with decisions. The body is the handoff artifact, single source of truth — always update it in place, never post handoff state as a comment:
+5. See `${CLAUDE_PLUGIN_ROOT}/_shared/repo-preflight.md` before updating the issue body or creating sub-issues.
+
+   **Update the GitHub issue body** with decisions. The body is the handoff artifact, single source of truth — always update it in place, never post handoff state as a comment:
    - If the body already has a `## Implementation plan` section, edit it. If not, append one.
    - Record architecture decisions and design decisions (with visuals) inside that section.
    - Create sub-issues with GitHub relationships if the work decomposes.

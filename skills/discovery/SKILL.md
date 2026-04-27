@@ -69,6 +69,8 @@ Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`. `Fallback:` applies when
 
 ### Issue Creation (all modes)
 
+See `${CLAUDE_PLUGIN_ROOT}/_shared/repo-preflight.md` before any `gh issue` operation.
+
 1. **Create a GitHub issue** (`gh issue create`) as a self-contained brief for the next phase. The issue body has two parts:
 
    **(a) Problem statement preamble** — `/discovery`-only, not part of the handoff field order. From /describe output: what the user is trying to do, why the current state is inadequate, who is affected. This is the framing the rest of the issue depends on. Subsequent phases do not update this section.
