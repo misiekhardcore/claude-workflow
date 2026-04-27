@@ -38,9 +38,10 @@ Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`. `Fallback:` applies when
 
 ### Step 0 — Pre-flight
 
-See `${CLAUDE_PLUGIN_ROOT}/_shared/repo-preflight.md`. Confirmation prompt: "Does this match the repo and branch you intend to work on?"
+See `${CLAUDE_PLUGIN_ROOT}/_shared/repo-preflight.md`.
+Confirmation prompt: "Does this match the repo and branch you intend to work on?"
 
-See `${CLAUDE_PLUGIN_ROOT}/_shared/scope-preflight.md` before any bulk file edit.
+See `${CLAUDE_PLUGIN_ROOT}/_shared/scope-preflight.md` and run it when its Trigger conditions apply.
 
 ### Steps 1+
 

@@ -4,7 +4,7 @@ Used by skills that originate `gh` mutations or `git push` operations. Read this
 
 ## Steps
 
-1. Run `git remote -v` and `pwd` to detect the repository and branch.
+1. Run `git remote -v` and `pwd` to detect the repository and working directory. Run `git branch --show-current` (or `git rev-parse --abbrev-ref HEAD`) to detect the current branch.
 2. Display:
    - Detected repository (owner/repo from origin remote URL)
    - Current branch name

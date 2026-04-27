@@ -22,9 +22,10 @@ Either:
 
 ### Phase 0 — Pre-flight
 
-See `${CLAUDE_PLUGIN_ROOT}/_shared/repo-preflight.md`. Confirmation prompt: "Does this match the repo where you want to resolve PR feedback?"
+See `${CLAUDE_PLUGIN_ROOT}/_shared/repo-preflight.md`.
+Confirmation prompt: "Does this match the repo where you want to resolve PR feedback?"
 
-See `${CLAUDE_PLUGIN_ROOT}/_shared/scope-preflight.md` before any bulk file edit.
+If the trigger conditions in `${CLAUDE_PLUGIN_ROOT}/_shared/scope-preflight.md` apply, run that preflight before making bulk file edits.
 
 ### Phase 1 — Fetch
 
