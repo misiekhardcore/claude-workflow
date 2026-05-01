@@ -61,9 +61,11 @@ In this workflow:
 - `/build` should delegate to an Explore sub-agent for any of: understanding an unfamiliar area of the codebase, parsing a long log, reading API docs, grepping wide paths. Ask for a focused report bounded by what the lead actually needs to make the next decision — not a fixed word limit.
 - Pass briefs, not session history. Sub-agents need objective + constraint + "what to report on" — not the conversation that led you to spawn them.
 
-### 4. Write `/wrap-up` output into the issue body before the session ends
+### 4. Persist end-of-phase state into the issue body before the session ends
 
-`/wrap-up` surfaces assumptions, uncertainties, and follow-ups — but without persistence, that output stays in the conversation and is lost when the session ends. That defeats rule (1). Fix: whenever `/wrap-up` runs at a phase boundary, edit the GitHub issue **body** in place to append a `## Session handoff` section. The captured content then survives the reset and lives in the same scan-readable artifact as the rest of the phase state.
+At phase boundaries (`/discovery`, `/define`), the orchestrator edits the GitHub issue **body** in place with the handoff artifact so state survives the context reset. The captured content lives in the same scan-readable artifact as the rest of the phase state.
+
+For `/implement`: this phase is terminal — its output is the PR, not an issue body update. End-of-phase state (assumptions, uncertainties, follow-ups, outstanding findings) flows into the PR body's `## Notes` section. `/wrap-up` is now a user-invoked cleanup utility (worktree + branch removal), not a phase-boundary skill.
 
 ## Why
 
@@ -81,7 +83,7 @@ A note on Opus 4.5/4.6 and "context anxiety": Anthropic reports they dropped con
 
 - **Rule 1 (reset + artifact)** applies at every phase boundary, always. No exceptions.
 - **Rules 2 and 3** apply within a phase whenever a concept shift occurs. See `${CLAUDE_PLUGIN_ROOT}/_shared/compaction-protocol.md` for the full trigger list and the tool-order decision (context editing → sub-agent → `/compact`).
-- **Rule 4** applies whenever `/wrap-up` runs at a phase boundary — its output is written into the issue body before the session ends.
+- **Rule 4** applies at every phase boundary — `/discovery` and `/define` write to the issue body; `/implement` writes to the PR body. `/wrap-up` is a cleanup utility, not a phase-boundary skill.
 
 ## Examples
 
@@ -156,7 +158,7 @@ This matches Anthropic's sub-agent pattern: the reviewer runs in isolation, retu
 - `${CLAUDE_PLUGIN_ROOT}/_shared/compaction-protocol.md` — trigger list and tool order for in-phase context pressure.
 - `${CLAUDE_PLUGIN_ROOT}/_shared/notes-md-protocol.md` — NOTES.md as an external ledger the model can diff against after `/compact`.
 - `${CLAUDE_PLUGIN_ROOT}/skills/compound/SKILL.md` — how learnings from a completed phase become durable wiki notes.
-- `${CLAUDE_PLUGIN_ROOT}/skills/wrap-up/SKILL.md` — end-of-session assumption audit; remember to persist its output per rule (4).
+- `${CLAUDE_PLUGIN_ROOT}/skills/wrap-up/SKILL.md` — worktree + branch cleanup utility; invoke after the PR is merged or accepted.
 
 ## Sources
 

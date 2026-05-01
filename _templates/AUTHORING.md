@@ -12,7 +12,7 @@ Every skill fills one of five authoring roles. These extend the three-role compo
 | **Coordinator orchestrator**      | Sequences already-designed sub-skills in a loop (e.g. build → review → verify). Deep reasoning lives in the sub-skills, not the orchestrator — no research team | `/implement`                                                  | `sonnet`                     |
 | **Specialist**                    | Executes a bounded task; receives a seed brief; reports findings to the orchestrator                                                                            | `/build`, `/review`, `/architecture`, `/specify`              | `sonnet`                     |
 | **Interactive primitive**         | Reusable inline behavior; invoked by specialists; no team, no handoff                                                                                           | `/grill-me`                                                   | `sonnet`                     |
-| **Utility**                       | User-invocable maintenance or post-work skill. No seed-brief contract, no phase handoff artifact, no team gating                                                | `/compound`, `/prune`, `/resolve-pr-feedback`, `/find-skills` | `sonnet` or `haiku`          |
+| **Utility**                       | User-invocable maintenance or post-work skill. No seed-brief contract, no phase handoff artifact, no team gating                                                | `/compound`, `/prune`, `/resolve-pr-feedback`, `/find-skills`, `/wrap-up` | `sonnet` or `haiku`          |
 
 Use the role-specific template:
 
@@ -56,9 +56,10 @@ Shared protocols live at `${CLAUDE_PLUGIN_ROOT}/_shared/`. Reference them on-dem
 
 | `_shared/` file          | Reference when the skill...                                                                                                                                                             |
 | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `handoff-artifact.md`    | Writes or reads a GitHub issue handoff block (phase-boundary skills: `/discovery`, `/define`, `/implement`, `/wrap-up`)                                                                 |
+| `handoff-artifact.md`    | Writes or reads a GitHub issue handoff block (phase-boundary skills: `/discovery`, `/define`). Note: `/implement` is the terminal phase — its output is the PR, not an issue body update. `/wrap-up` is a utility, not a phase-boundary skill. |
 | `interviewing-rules.md`  | Interviews the user — asks questions, seeks approval, uses multi-choice forms (`/discovery`, `/define`, `/describe`, `/specify`, `/architecture`, `/design`, `/grill-me`, `/new-skill`) |
-| `notes-md-protocol.md`   | Creates, updates, or resumes from `.claude/NOTES.md` (`/build`, `/wrap-up`)                                                                                                             |
+| `notes-md-protocol.md`   | Creates, updates, or resumes from `.claude/NOTES.md` (`/build`); harvests and deletes it (`/implement` at PR-creation time)                                                             |
+| `specialist-mode.md`     | Documents or implements specialist-mode detection (seed-brief check, skip-list, standalone fallback) for any skill that can be seeded by an orchestrator                                |
 | `compaction-protocol.md` | Manages in-phase context — clearing stale tool results, delegating bulk reads, using `/compact` (`/build`)                                                                              |
 | `composition.md`         | Authors an orchestrator skill or designs a multi-skill workflow — patterns, briefs, decomposition rules                                                                                 |
 
