@@ -28,3 +28,7 @@ If the user does not confirm, do not edit any of the listed files. Reply:
 > Holding off — please clarify which files are in scope.
 
 Re-prompt with a narrowed list when the user provides scope.
+
+## Orchestrator pattern
+
+When an orchestrator (e.g. `/implement`) runs this preflight at entry and passes `scope_class` in every seed brief, specialists skip their own scope-class and file-scope confirmations. See `${CLAUDE_PLUGIN_ROOT}/_shared/specialist-mode.md`.

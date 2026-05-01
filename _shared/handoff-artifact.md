@@ -1,6 +1,8 @@
 # Handoff Artifact — Shared Template
 
-Used by phase-boundary skills (`/discovery`, `/define`, `/implement`, `/wrap-up`) to hand off state to the next phase. The GitHub issue body is the artifact. Each phase updates the body in place with the five fields below, then the user resets and starts the next phase in a fresh session.
+Used by phase-boundary skills (`/discovery`, `/define`) to hand off state to the next phase. The GitHub issue body is the artifact. Each phase updates the body in place with the five fields below, then the user resets and starts the next phase in a fresh session.
+
+`/implement` is the **terminal phase** — its output is the PR, not an issue body update. `/wrap-up` is a user-invoked cleanup utility, not a phase-boundary skill.
 
 This file is reference material — read it on demand when the skill reaches a handoff step. Do not preload.
 
@@ -16,7 +18,7 @@ Every handoff artifact contains:
 
 ## Shape
 
-Always update the **issue body** in place. If a section for the current phase (e.g. `## Implementation plan` for `/define`, `## Session handoff` for `/wrap-up`) does not exist in the body, append it; if it does, edit it. Comments are for discussion, not for handoff state — scan-reading a thread of comments is exactly the rot pattern this protocol avoids.
+Always update the **issue body** in place. If a section for the current phase (e.g. `## Implementation plan` for `/define`) does not exist in the body, append it; if it does, edit it. Comments are for discussion, not for handoff state — scan-reading a thread of comments is exactly the rot pattern this protocol avoids.
 
 Fields appear in this order: Acceptance criteria, Constraints, Prior decisions, Evidence, Open questions. Omit optional fields entirely when empty — a missing heading means zero items, not an unwritten section. Never write placeholder text ("None", "No open questions", etc.).
 
@@ -49,7 +51,7 @@ Two persistent stores, no overlap:
 - **The issue body is authoritative for cross-phase state** — acceptance criteria, locked architectural decisions, the handoff fields above.
 - **`.claude/NOTES.md` is authoritative for in-flight state within a phase** — current task, intra-phase decisions not yet promoted, working open questions. See `${CLAUDE_PLUGIN_ROOT}/_shared/notes-md-protocol.md`.
 
-When a phase ends, intra-phase state from `.claude/NOTES.md` that the next phase needs is **promoted** into the issue body (typically by `/wrap-up`). Until promotion, the issue does not know about it. After promotion, the issue body is the source of truth for that item.
+When a phase ends, intra-phase state from `.claude/NOTES.md` that the next phase needs is **promoted** into the issue body. Until promotion, the issue does not know about it. After promotion, the issue body is the source of truth for that item.
 
 ## Rules
 
@@ -59,8 +61,6 @@ When a phase ends, intra-phase state from `.claude/NOTES.md` that the next phase
   |-------|----------------|
   | `/discovery` | `## Requirements` |
   | `/define` | `## Implementation plan` |
-  | `/implement` | `## Implementation notes` |
-  | `/wrap-up` | `## Session handoff` |
 
 - **Update the body, not a comment.** Every phase edits the issue body in place — append a new section if one does not exist for the current phase, edit the existing section if it does. Comments are for discussion only.
 - **Reset after updating.** Once the body is updated, tell the user to start the next phase in a fresh session. Do not call the next skill from within the current one.

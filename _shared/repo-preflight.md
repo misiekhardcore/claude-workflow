@@ -15,3 +15,7 @@ Used by skills that originate `gh` mutations or `git push` operations. Read this
 ## Why
 
 `gh` issue and PR mutations are public, persistent, and cross-repo (the `--repo` flag silently routes to a different upstream). A wrong-repo mutation has higher blast radius than a wrong-branch push. This single gate covers both surfaces.
+
+## Orchestrator pattern
+
+When an orchestrator (e.g. `/implement`) runs this preflight at entry, it passes `preflight_verified: true` in every seed brief it issues to specialists. Specialists skip this step when a valid seed brief is present — see `${CLAUDE_PLUGIN_ROOT}/_shared/specialist-mode.md`.
