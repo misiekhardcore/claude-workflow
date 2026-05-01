@@ -6,6 +6,15 @@ model: haiku
 
 You are leading the verification phase. Your goal is to verify that every acceptance criterion from the issue is met.
 
+## Specialist mode
+
+When invoked by `/implement` with a `<seed-brief>` block, skip:
+- repo-preflight (already run by the orchestrator; `preflight_verified: true` is in the brief)
+
+Always keep: AC verification rigor — pass/fail evidence is never delegated to the orchestrator.
+
+Without a seed brief, run all prompts as described below. See `${CLAUDE_PLUGIN_ROOT}/_shared/specialist-mode.md`.
+
 ## Input
 
 A branch with commits and a GitHub issue number whose acceptance criteria will be verified against the running code.
@@ -42,7 +51,7 @@ Decision tree:
 
 ### Spawn justification
 
-Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`. `Fallback:` applies when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset.
+Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
 
 - **Standard/Deep QA**: TeamCreate at ≥4 AC, else parallel subagents. Comm-pivot ✓ (cross-verify findings), disjoint ✓, parallel ✓, payoff ≥3× at ≥4 AC. Model: dispatch QA workers with `model: "haiku"` — QA verification is highly structured (AC-based pass/fail with evidence collection); haiku handles this capably and matches the lead agent's model tier. Gate: ≥4 acceptance criteria. Fallback: sequential subagents.
 

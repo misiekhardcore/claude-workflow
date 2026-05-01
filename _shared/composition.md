@@ -112,11 +112,30 @@ When passing a seed brief to a specialist:
 2. The specialist checks for the brief at startup. When one is present, it skips its own research phase and uses the brief as starting context.
 3. Keep briefs bounded — never pad with information the specialist can find itself.
 
+**Transport format** — raw YAML inside an XML tag, no inner code fence:
+
+```
+<seed-brief>
+preflight_verified: true
+scope_class: Standard
+repo: owner/repo
+branch: feat/branch-name
+active_issue: 42
+payload:
+  type: fix|research|prior-art
+  # type-specific fields from the table above
+</seed-brief>
+```
+
+The XML tag marks the boundary; the YAML is parseable without a fence. The `payload` envelope decouples brief metadata from the type-specific content. Required fields and validation rules are in `${CLAUDE_PLUGIN_ROOT}/_shared/specialist-mode.md`.
+
 `skills/describe/SKILL.md` shows the entry-point pattern — the specialist's `## Input` section declares the seed-brief contract explicitly:
 
 ```
 Optional: when invoked as a specialist from `/discovery`, may receive a **prior-art brief** as seed context (from the Prior-Art Scout). When a brief is provided, skip any internal prior-art search and incorporate the brief into the Product Pressure Test and problem statement synthesis. Without a brief, proceed as described below.
 ```
+
+See `${CLAUDE_PLUGIN_ROOT}/_shared/specialist-mode.md` for the detection mechanism, validation rules, skip-list per specialist, and standalone-fallback behavior.
 
 ## Hierarchical decomposition
 

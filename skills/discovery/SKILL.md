@@ -27,7 +27,7 @@ Decision tree:
 
 ### Spawn justification
 
-Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`. `Fallback:` applies when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset.
+Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
 
 - **Standard team**: describe lead-inline + scout parallel subagent + specify sequential subagent. Comm-pivot ✗ (async handoff), disjoint ✓, parallel ✓ scout-only, payoff <3×. Fallback: sequential subagents (scout → describe → specify).
 - **Deep team**: TeamCreate. Comm-pivot ✓ (adversarial questioner reacts live), disjoint ✓, parallel ✓, payoff ≥3× cross-module/security. Gate: Deep scope. Fallback: sequential subagents.

@@ -30,7 +30,7 @@ Decision tree:
 
 ### Spawn justification
 
-Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`. `Fallback:` applies when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset.
+Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
 
 - **Research team**: 2 parallel subagents. Comm-pivot ✗ (read-only), disjoint ✓, parallel ✓, payoff ≥3×. Fallback: sequential subagents.
 - **Standard definition team**: sequential subagents (architecture → design). Comm-pivot ✗ (strictly ordered), disjoint n/a (sequential), parallel ✗, payoff <3×. Fallback: n/a — no flag dependency.

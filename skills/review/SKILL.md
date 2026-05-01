@@ -7,6 +7,15 @@ effortLevel: high
 
 You are leading the review phase. Your goal is to thoroughly review the implementation and produce actionable findings.
 
+## Specialist mode
+
+When invoked by `/implement` with a `<seed-brief>` block, skip:
+- repo-preflight (already run by the orchestrator; `preflight_verified: true` is in the brief)
+
+Always keep: severity/finding-depth gates — rigor of review is not delegated to the orchestrator.
+
+Without a seed brief, run all prompts as described below. See `${CLAUDE_PLUGIN_ROOT}/_shared/specialist-mode.md`.
+
 ## Input
 
 A branch with commits (reviewed via `git diff main...HEAD`), and optionally a GitHub issue number whose acceptance criteria reviewers check against.
@@ -44,7 +53,7 @@ Decision tree:
 
 ### Spawn justification
 
-Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`. `Fallback:` applies when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset. Model tiers: see **Configuration** section.
+Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`. Model tiers: see **Configuration** section.
 
 - **Standard**: TeamCreate with `model: "sonnet"` at ≥3 active reviewers, else 2 parallel subagents with `model: "sonnet"`. Comm-pivot ✓ (converge on disagreements), disjoint ✓, parallel ✓, payoff ≥3× at scale. Gate: ≥3 reviewers active. Fallback: sequential subagents.
 - **Deep**: TeamCreate with `model: "opus"`. All four ✓ across 4 review axes; opus premium justified by criticality. Fallback: sequential subagents.

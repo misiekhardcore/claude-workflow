@@ -16,7 +16,7 @@ This skill extracts the learning and drafts it. **Filing is delegated** to the `
 
 ## Input
 
-The current conversation context — a completed debugging session, feature implementation, or fix.
+The current conversation context — a completed debugging session, feature implementation, or fix. When invoked from `/implement` end-of-flow, may also read `<worktree-root>/.claude/NOTES.md` for in-phase decisions and open questions not yet captured in the conversation context.
 
 ## Process
 

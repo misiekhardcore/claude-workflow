@@ -34,7 +34,7 @@ Rule of thumb:
 - **Between features** — promote durable learnings to the vault's concept notes via `/compound` (which delegates to `claude-obsidian`'s `/save` when available). That's what crosses the worktree boundary.
 - **Want a quick "what have I been working on lately" cache across the repo** — that's the vault's hot cache, not NOTES.md. Hot cache is curated and committed; NOTES.md is raw and ephemeral.
 
-`/wrap-up` is the bridge: it harvests NOTES.md at clean exit and drafts a GitHub-issue comment, and it's the natural trigger point to ask whether anything in NOTES.md deserves promotion to the vault.
+`/implement` is the harvest point: at PR creation it reads NOTES.md, flows the decisions and open questions into the PR body, then deletes NOTES.md after `/compound` has run.
 
 ## Location and lifecycle
 
@@ -42,8 +42,9 @@ Rule of thumb:
 - **Created by `/build`** at the start of the phase, immediately after `git worktree add`, with the initial task list harvested from the issue.
 - **Updated by `/build`** after each completed task, each significant decision, and before any summarization-based `/compact`.
 - **Read on resume by `/build`** — before re-reading the issue.
-- **Harvested by `/wrap-up`** into a GitHub issue comment on clean exit.
-- **Left in place** after the phase ends. Cleanup happens when the worktree is removed (`wt remove` deletes the worktree directory and `.claude/NOTES.md` goes with it). Do not delete it from within a running phase.
+- **Harvested by `/implement`** at PR-creation time — `## Decisions made this session` and `## Open questions` flow into the PR body's `## Notes` section.
+- **Deleted by `/implement`** after `/compound` has run. If `/implement` exits abnormally between PR creation and deletion, NOTES.md persists; `/wrap-up`'s worktree removal will clean it up implicitly.
+- **Left in place** by standalone `/build`, `/review`, or `/verify` runs — they do not open PRs and do not harvest. Cleanup happens when the worktree is removed (`wt remove` deletes the worktree directory and `.claude/NOTES.md` goes with it).
 - **Not committed to git.** Ensure `/.claude/NOTES.md` is gitignored at the repo root before creating it; add the entry if missing.
 
 ## Required sections
@@ -79,7 +80,7 @@ Update at these points (bullet-level only — fast):
 - **After each completed task** — flip the checkbox, log any decision that resulted from completing it.
 - **After each significant decision** — one line, with rationale.
 - **Before any summarization-based `/compact`** — write the Keep list into the file *first*, so the post-compaction summary can be diffed against an external record.
-- **Before ending the session normally** — `/wrap-up` will harvest it.
+- **Before ending the session normally** — `/implement` will harvest it at PR-creation time.
 
 Do not update for trivial moves (opening a file, running a test command). It is a checkpoint log, not a transcript.
 
@@ -96,7 +97,7 @@ On a fresh session in an existing worktree, `.claude/NOTES.md` exists ⇒ this i
 
 - **`.claude/NOTES.md` is authoritative for in-flight state.** In-context recall is rot-degraded by the time the file matters; trust the file.
 - **The issue is authoritative for cross-phase state.** Acceptance criteria, locked architectural decisions, prior-phase handoff content live in the issue, not the file.
-- **Never delete it automatically.** The owning session may archive it on clean exit; do not remove it from within a running phase.
+- **Deletion is `/implement`'s responsibility.** It deletes NOTES.md after `/compound` runs at PR-creation time. Standalone `/build` runs leave it in place — do not delete from within a running build phase.
 
 ## Why
 

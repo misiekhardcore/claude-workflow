@@ -7,6 +7,15 @@ effortLevel: high
 
 You are leading a product discovery team. Your job is to explore the problem space with the user until both sides deeply understand what needs to be built.
 
+## Specialist mode
+
+When invoked by `/discovery` with a `<seed-brief>` block, skip:
+- internal prior-art search (the prior-art brief already contains this; declared below in Input)
+
+Always keep: Product Pressure Test, grill-me interactions — these are discovery-phase reasoning, not state verification.
+
+Without a seed brief, run all steps as described below. See `${CLAUDE_PLUGIN_ROOT}/_shared/specialist-mode.md`.
+
 ## Input
 
 Optional: when invoked as a specialist from `/discovery`, may receive a **prior-art brief** as seed context (from the Prior-Art Scout). When a brief is provided, skip any internal prior-art search and incorporate the brief into the Product Pressure Test and problem statement synthesis. Without a brief, proceed as described below.
@@ -34,7 +43,7 @@ Decision tree:
 
 ### Spawn justification
 
-Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`. `Fallback:` applies when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset.
+Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
 
 - **Standard session**: domain researcher subagent + analyst lead-inline. Comm-pivot ✗ (one-shot handoff), disjoint n/a (sequential), parallel ✗ (analyst interactive), payoff <3×. Model: domain researcher uses `model: "sonnet"` (reading code and extracting patterns) — only lead analyst needs `opus` for interactive problem discovery. Fallback: n/a — no flag dependency.
 - **Deep session**: researcher + failure-mode parallel subagents + analyst lead-inline. Comm-pivot ✗, disjoint ✓, parallel ✓ for subagent pair, payoff <3× total. Model: domain researcher and failure-mode analyst both use `model: "sonnet"` (research and analysis) — only lead analyst needs `opus` for interactive discovery. Fallback: sequential subagents.

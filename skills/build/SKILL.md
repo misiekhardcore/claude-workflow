@@ -29,10 +29,21 @@ Decision tree:
 
 ### Spawn justification
 
-Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`. `Fallback:` applies when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset.
+Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
 
 - **Standard**: TeamCreate at ≥3 splits, else parallel subagents. Comm-pivot ✓ at scale, disjoint ✓, parallel ✓, payoff ≥3× only at ≥3 splits. Gate: ≥3 sub-issues OR ≥3 disjoint file groups. Fallback: parallel subagents or sequential.
 - **Deep**: TeamCreate. All four ✓ for epics. Fallback: sequential subagents.
+
+## Specialist mode
+
+When invoked by `/implement` with a `<seed-brief>` block, skip:
+- repo-preflight (already run by the orchestrator; `preflight_verified: true` is in the brief)
+- scope-preflight (scope class is in the brief as `scope_class`)
+- scope-class confirmation (the orchestrator has already classified)
+
+Always keep: the design gate — architecture decisions must be cross-phase verified even when seeded.
+
+Without a seed brief, run all prompts as described below. See `${CLAUDE_PLUGIN_ROOT}/_shared/specialist-mode.md`.
 
 ## Process
 

@@ -12,6 +12,16 @@ Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
 
 - **Requirements (happy-path + edge-case)**: sequential grill-me passes in lead session. Comm-pivot ✗ (analysts contend for the same user input channel), disjoint n/a (sequential), parallel ✗ (interactive), payoff <3×. Fallback: n/a — no flag dependency.
 
+## Specialist mode
+
+When invoked by `/discovery` or `/define` with a `<seed-brief>` block, skip:
+- scope-class confirmation (scope class is in the brief as `scope_class`)
+- file-scope confirmation (already verified by the orchestrator)
+
+Always keep: AC derivation gates — the quality of acceptance criteria is not delegated to the orchestrator.
+
+Without a seed brief, run all prompts as described below. See `${CLAUDE_PLUGIN_ROOT}/_shared/specialist-mode.md`.
+
 ## Input
 
 A problem statement from /describe, or a user-provided feature description.
