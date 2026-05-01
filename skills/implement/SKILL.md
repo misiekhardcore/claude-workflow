@@ -14,7 +14,7 @@ A GitHub issue number (with architecture/design decisions from /define) and any 
 
 Classify the work before dispatching. See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for the right-sizing rationale.
 
-1. **Trivial** — single-file fix, typo, docstring, rename, config tweak; AC list has 1–2 items; no logic changes.
+1. **Lightweight** — single-file fix, typo, docstring, rename, config tweak; AC list has 1–2 items; no logic changes.
    - Run `/build` inline (no implementation team); skip `/review` as a separate team; run a single inline AC check in place of `/verify`.
 2. **Standard** — typical multi-file feature with acceptance criteria spanning one module.
    - Full build → review → verify cycle with the default team widths each sub-skill picks.
@@ -23,7 +23,7 @@ Classify the work before dispatching. See `${CLAUDE_PLUGIN_ROOT}/_shared/composi
 
 Decision tree:
 
-1. Diff will be under ~50 lines with no logic changes? → Trivial
+1. Diff will be under ~50 lines with no logic changes? → Lightweight
 2. Touches auth/security, migrations, public APIs, or performance-critical paths? → Deep
 3. Otherwise → Standard
 
@@ -31,16 +31,20 @@ Decision tree:
 
 Once you've assessed the scope as **Standard** or **Deep**, inspect the GitHub issue body for a `## Implementation plan` section containing architecture and design decisions from `/define`. If absent:
 - **Pause** and prompt: _"No architecture/design decisions recorded on this issue. Run `/define` first, or confirm this is a trivial enough change to skip the gate."_
-- If the user confirms this is trivial enough (typo, single-line fix, etc.), downgrade to **Trivial** scope and proceed.
+- If the user confirms this is trivial enough (typo, single-line fix, etc.), downgrade to **Lightweight** scope and proceed.
 - Otherwise, wait for the user to run `/define`.
 
 Skip this gate for **Lightweight** scope.
+
+## Pre-flight
+
+Run `${CLAUDE_PLUGIN_ROOT}/_shared/repo-preflight.md` once at entry. Run `${CLAUDE_PLUGIN_ROOT}/_shared/scope-preflight.md` if the file list is 3 or more files. Pass `preflight_verified: true` in every seed brief issued to specialists — they skip their own preflight when this flag is set.
 
 ## Process
 
 **Autonomy contract**: inside a single `/implement` invocation, run build → review → verify → fix cycles back-to-back without asking the user between sub-skills. The only user-interrupt point is after the PR is opened and the cycle has either (a) passed clean, (b) exhausted 3 cycles with findings remaining, or (c) hit a blocker the sub-skill cannot resolve. Status updates during the loop are informational only — do **not** end them with a question.
 
-### Trivial
+### Lightweight
 
 1. Auto-run `/build` — lead codes inline in the worktree, no team spawn, TDD only for logic-heavy snippets.
 2. Auto-run an inline AC self-check — walk every acceptance criterion against the diff and the running code; skip the `/review` and `/verify` team spawns.
@@ -48,9 +52,24 @@ Skip this gate for **Lightweight** scope.
 
 ### Standard / Deep — autonomous cycle: build → review → verify
 
-1. Auto-run `/build` — spawns implementation team (or runs inline per `/build`'s own Scope Assessment), codes against the issue.
-2. Auto-run `/review` — spawns review team; Deep scope triggers `/review`'s Deep mode (all specialists, `opus`).
-3. Auto-run `/verify` — spawns QA team, verifies every acceptance criterion.
+Construct a seed brief for each specialist at spawn time:
+
+```
+<seed-brief>
+preflight_verified: true
+scope_class: <Lightweight|Standard|Deep>
+repo: <owner/repo>
+branch: <feat/slug>
+active_issue: <N>
+payload:
+  type: <fix|research>
+  # type-specific fields per _shared/composition.md
+</seed-brief>
+```
+
+1. Auto-run `/build` — spawns implementation team (or runs inline per `/build`'s own Scope Assessment), codes against the issue. Pass a seed brief with `type: research` and the issue's architectural context.
+2. Auto-run `/review` — spawns review team; Deep scope triggers `/review`'s Deep mode (all specialists, `opus`). Pass a seed brief with `type: research` (diff + AC).
+3. Auto-run `/verify` — spawns QA team, verifies every acceptance criterion. Pass a seed brief with `type: research` (diff + AC + test commands).
 4. **Evaluate findings** (no user prompt):
    - **Clean pass** (`/review` and `/verify` both return no issues) → exit loop, fall through to **PR creation**.
    - **Findings present** and cycle count < 3 → package a **fix brief** (failing criteria + reviewer findings as `file:line` + prior architectural decisions; no review/verify session history), auto-feed it to `/build`, auto-re-run `/review` and `/verify`. Do not ask the user to confirm the next iteration.
@@ -62,39 +81,53 @@ Progress reporting during the loop: emit one status line per cycle (`Cycle N/3 �
 
 Run these steps automatically, without asking:
 
-1. Push the branch to remote.
-2. Open a draft PR (`gh pr create --draft`).
-3. Link to the issue:
+1. Read `<worktree-root>/.claude/NOTES.md` if it exists. Harvest `## Decisions made this session` and `## Open questions` — these flow into the PR body's `## Notes` section.
+2. Push the branch to remote.
+3. Open a draft PR (`gh pr create --draft`) with the body shape below. Link to the issue:
    - `Closes #<issue>` — if this is the only/final PR for the issue.
    - `Related to #<issue>` — if this is a partial implementation.
-4. PR description must include:
-   - Summary of changes.
-   - **Manual testing** section with concrete repro steps someone can follow.
-   - **Outstanding findings** section when the loop exhausted 3 cycles — list each as `file:line — severity — description`.
-5. Use superpowers:finishing-a-development-branch for PR finalization.
+
+**PR body shape:**
+
+```markdown
+## Summary
+<1-2 sentences: what was implemented, why, ACs satisfied>
+
+## Testing notes
+<repro steps, env setup, expected behavior — concrete enough that a reviewer can verify locally>
+
+## Notes
+<free-form prose, with bullet lists where natural; absorbs assumptions, uncertainties, follow-ups, outstanding findings from NOTES.md harvest and any exhausted-exit findings>
+```
+
+`## Notes` is omitted entirely when there is nothing to note (no NOTES.md content, no outstanding findings).
+
+4. Run `/compound` — autonomous, reads the cycle context and any remaining NOTES.md content, files durable learnings to the wiki via `claude-obsidian:save` when the plugin is installed (otherwise returns the note inline).
+5. Delete `<worktree-root>/.claude/NOTES.md`.
+6. Exit with PR URL and any outstanding findings.
 
 ### Finalize
 
 One deterministic finalize block follows PR creation. Branch on the loop's exit state:
 
-- **Clean exit** (no remaining findings) → auto-run `/compound`, then auto-run `/wrap-up`. Present the PR URL and the `/wrap-up` handoff draft to the user as the final message. `/wrap-up` still asks before editing the issue body per its own contract — that prompt is the user's first interrupt point in the entire flow.
+- **Clean exit** (no remaining findings) → present the PR URL to the user. `/compound` has already run autonomously.
 - **Exhausted exit** (3 cycles consumed, findings remain) → present the PR URL plus the outstanding findings to the user and ask a single binary question: **"Continue the implementation loop, or accept this PR and close out?"**
-  - **Accept / close** → auto-run `/compound`, then auto-run `/wrap-up`.
-  - **Continue** → run one more build → review → verify cycle, then return to this finalize block. Each continuation is a new escalation — log it explicitly in the PR description under **Outstanding findings** before re-entering the loop.
-
-`/compound` drafts a structured note from the cycle's debugging, edge cases, and architectural surprises, and files it via `claude-obsidian:save` when the plugin is installed (otherwise it returns the note inline). `/wrap-up` produces the end-of-session assumptions audit and offers to patch the issue body. Both run without asking `/implement` for permission — their own contracts govern any remaining prompts.
+  - **Accept / close** → `/compound` has already run autonomously. Done.
+  - **Continue** → run one more build → review → verify cycle, then return to this finalize block. Each continuation is a new escalation — log it explicitly in the PR description under `## Notes` before re-entering the loop.
 
 ## Output
 
-A draft PR linking the issue (`Closes #N` or `Related to #N`) with acceptance criteria met (or with an explicit **Outstanding findings** block if the user accepted an exhausted exit), a Manual testing section with concrete repro steps, `/compound` run (filed or inline), and `/wrap-up` run (draft shown, issue body updated per the user's decision). No handoff artifact beyond the PR and issue body — this is the terminal phase.
+A draft PR linking the issue (`Closes #N` or `Related to #N`) with acceptance criteria met (or with an explicit outstanding findings block in `## Notes` if the user accepted an exhausted exit), a Testing notes section with concrete repro steps, and `/compound` run (filed or inline). No handoff artifact beyond the PR — this is the terminal phase.
 
 ## Rules
 
-- **Never prompt between sub-skills.** Build → review → verify → fix cycles and the PR / `/compound` / `/wrap-up` finalize chain all run without asking. The only permitted user-interrupt is the single binary question after an **exhausted exit** (3 cycles with findings remaining).
-- Do not open a PR until both /review and /verify pass clean (Standard/Deep) **or** the cycle has exhausted 3 iterations with findings attached. Trivial scope opens the PR after the inline AC self-check.
-- Maximum 3 build→review→verify cycles before escalating; escalation is the one-question finalize prompt, not per-cycle approval. Trivial never cycles — if it fails the inline check, upgrade to Standard and restart.
+- **Never prompt between sub-skills.** Build → review → verify → fix cycles and the PR / `/compound` finalize chain all run without asking. The only permitted user-interrupt is the single binary question after an **exhausted exit** (3 cycles with findings remaining).
+- Run repo-preflight once at entry; pass `preflight_verified: true` to every specialist via seed brief.
+- Do not open a PR until both /review and /verify pass clean (Standard/Deep) **or** the cycle has exhausted 3 iterations with findings attached. Lightweight scope opens the PR after the inline AC self-check.
+- Maximum 3 build→review→verify cycles before escalating; escalation is the one-question finalize prompt, not per-cycle approval. Lightweight never cycles — if it fails the inline check, upgrade to Standard and restart.
 - Each cycle must address **all** findings from the previous cycle; partial fixes do not count as a cycle.
 - Emit one status line per cycle for user visibility (`Cycle N/3 — …`). Status lines are informational and must never end with a question.
-- `/compound` and `/wrap-up` run automatically after PR creation on both clean and user-accepted exits. They own their own prompts; `/implement` does not wrap them in additional confirmations.
-- The GitHub issue body is the handoff artifact across phases; every sub-skill reads from and updates it in place. See `${CLAUDE_PLUGIN_ROOT}/_shared/handoff-artifact.md`.
-- In-phase state lives in `./.claude/NOTES.md` (read by `/build` on resume) and in the issue body (cross-phase). Do not re-issue instructions already captured in either.
+- `/compound` runs automatically after PR creation. It owns its own prompts; `/implement` does not wrap it in additional confirmations.
+- Do not call `/wrap-up`. It is a user-invoked utility — the user invokes it when ready to clean up the worktree and branch.
+- In-phase state lives in `./.claude/NOTES.md` (read by `/build` on resume) and in the issue body (cross-phase). See `${CLAUDE_PLUGIN_ROOT}/_shared/handoff-artifact.md`.
+- The issue body after `/implement` contains only `## Requirements` (from `/discovery`) and `## Implementation plan` (from `/define`). Do not write a `## Session handoff` block.
