@@ -14,6 +14,16 @@ Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`. `Fallback:` applies when
 - **Research team**: 2 parallel subagents. Comm-pivot ✗ (read-only), disjoint ✓, parallel ✓, payoff ≥3×. Model: dispatch with `model: "sonnet"` — both agents (codebase research and patterns/learnings) are read-only research, not deep architecture reasoning; sonnet handles this capably at lower token cost. Fallback: sequential subagents.
 - **Architecture session**: analyst subagent → architect lead-inline (grill-me) → devil's advocate subagent. Comm-pivot ✗ (sequential handoff), disjoint n/a (sequential), parallel ✗ (interactive grill-me), payoff <3×. Model: analyst and devil's advocate subagents use `model: "sonnet"` (constraint analysis and systematic challenge); lead architect (interactive) stays `opus`. Fallback: n/a — no flag dependency.
 
+## Specialist mode
+
+When invoked by `/define` with a `<seed-brief>` block, skip:
+- codebase-research subagent dispatch (research brief in the seed brief covers it)
+- patterns/learnings subagent dispatch (prior-art brief in the seed brief covers it)
+
+Always keep: the full architecture session (grill-me + devil's advocate) — interactive reasoning and challenge rounds are not delegatable.
+
+Without a seed brief, run all steps as described below. See `${CLAUDE_PLUGIN_ROOT}/_shared/specialist-mode.md`.
+
 ## Input
 
 A GitHub issue with problem statement and acceptance criteria (from /discovery).

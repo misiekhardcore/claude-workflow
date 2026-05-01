@@ -7,6 +7,15 @@ effortLevel: high
 
 You are leading the review phase. Your goal is to thoroughly review the implementation and produce actionable findings.
 
+## Specialist mode
+
+When invoked by `/implement` with a `<seed-brief>` block, skip:
+- repo-preflight (already run by the orchestrator; `preflight_verified: true` is in the brief)
+
+Always keep: severity/finding-depth gates — rigor of review is not delegated to the orchestrator.
+
+Without a seed brief, run all prompts as described below. See `${CLAUDE_PLUGIN_ROOT}/_shared/specialist-mode.md`.
+
 ## Input
 
 A branch with commits (reviewed via `git diff main...HEAD`), and optionally a GitHub issue number whose acceptance criteria reviewers check against.

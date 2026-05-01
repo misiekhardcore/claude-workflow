@@ -12,6 +12,15 @@ Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
 
 - **Design session**: researcher subagent → proposer lead-inline (grill-me) → a11y subagent. Comm-pivot ✗ (sequential handoff), disjoint n/a (sequential), parallel ✗ (interactive grill-me), payoff <3×. Model: UX researcher and accessibility reviewer both use `model: "haiku"` (pattern search and accessibility checklist validation are systematic, not creative) — reserve `sonnet` for the design proposer lead session (interactive, requires design judgment). Fallback: n/a — no flag dependency.
 
+## Specialist mode
+
+When invoked by `/define` with a `<seed-brief>` block, skip:
+- design-space research subagent dispatch (the research brief covers existing UI patterns)
+
+Always keep: the interactive design session (grill-me + a11y review) — design judgment and accessibility evaluation require live interaction.
+
+Without a seed brief, run all steps as described below. See `${CLAUDE_PLUGIN_ROOT}/_shared/specialist-mode.md`.
+
 ## Input
 
 A GitHub issue with architecture decisions (from /define).
