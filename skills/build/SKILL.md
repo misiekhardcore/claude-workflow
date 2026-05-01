@@ -29,7 +29,7 @@ Decision tree:
 
 ### Spawn justification
 
-Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`. `Fallback:` applies when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset.
+Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
 
 - **Standard**: TeamCreate at ≥3 splits, else parallel subagents. Comm-pivot ✓ at scale, disjoint ✓, parallel ✓, payoff ≥3× only at ≥3 splits. Gate: ≥3 sub-issues OR ≥3 disjoint file groups. Fallback: parallel subagents or sequential.
 - **Deep**: TeamCreate. All four ✓ for epics. Fallback: sequential subagents.

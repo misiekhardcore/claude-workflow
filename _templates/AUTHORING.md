@@ -132,9 +132,31 @@ When authoring an orchestrator or designing a multi-skill workflow, you must mak
 
 - **Scope Assessment**: Classify before spawning. Lightweight runs inline; Standard/Deep trigger dispatch. See composition.md for heuristics and cost gradients.
 - **Primitive choice**: Default to inline → subagent → TeamCreate. Parallel adds coordination overhead — confirm genuine communication pivot, file disjointness, classifiable parallelism, and ≥3× wall-clock payoff before paying the ~7× token premium.
-- **Spawn justification**: Document your choice in the skill body. State which rubric factors apply and which don't. See existing orchestrators (`/discovery`, `/define`, `/implement`, `/review`) for the established pattern — a short "Spawn justification" block naming the cost class and required conditions.
+- **Spawn justification**: Document your choice in the skill body. State which rubric factors apply and which don't. See the template below for the canonical shape.
 
 New skills created via `/new-skill` will be guided through this decision during scaffolding.
+
+### Spawn justification template
+
+Every orchestrator or specialist that dispatches a team or subagents includes a `### Spawn justification` block. Copy this structure — apply each rubric criterion explicitly. Vague references make the gate opaque to future authors.
+
+```markdown
+### Spawn justification
+
+Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
+
+- **<team or session name>**: <shape — e.g. "2 parallel subagents", "TeamCreate at ≥3 splits", "researcher subagent → architect lead-inline → critic subagent">. Comm-pivot <✓|✗> (<one-clause why>), disjoint <✓|✗|n/a> (<why>), parallel <✓|✗> (<why>), payoff <≥3×|<3×> (<why>). Model: <model choice + one-clause rationale>. Fallback: <see options below>.
+```
+
+**`Fallback:` options** — each entry describes what runs when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset (the env-var prerequisite is documented once in composition.md, not per skill):
+
+- `Fallback: sequential subagents` — degrade `TeamCreate` to one-at-a-time subagent dispatch.
+- `Fallback: parallel subagents or sequential` — when the gate already chooses subagents at low scale, this just clarifies the further degradation path.
+- `Fallback: n/a — no flag dependency` — for inline / interactive / single-subagent shapes that don't use `TeamCreate`. Use this exact wording so readers can grep for env-var-dependent skills.
+
+**What stays per-skill**: the rubric application — comm-pivot, disjoint, parallel, payoff judgments are role-specific and load-bearing. Don't compress them. The boilerplate "fallback applies when env var unset" sentence is redundant with composition.md's prerequisite line and should be omitted.
+
+See `skills/architecture/SKILL.md` and `skills/build/SKILL.md` for canonical examples.
 
 ## Naming conventions
 

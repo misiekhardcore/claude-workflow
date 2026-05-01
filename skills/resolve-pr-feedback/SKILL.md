@@ -8,7 +8,7 @@ You are leading the PR feedback resolution process. Your job is to systematicall
 
 ### Spawn justification
 
-Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`. `Fallback:` applies when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset.
+Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
 
 - **Fix team**: TeamCreate at ≥3 file groups, else parallel subagents. Comm-pivot ✓ at scale (cross-thread regressions), disjoint ✓ (mapped pre-dispatch), parallel ✓, payoff ≥3× at ≥3 groups. Gate: ≥3 non-overlapping file groups. Fallback: parallel subagents or sequential.
 

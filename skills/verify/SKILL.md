@@ -51,7 +51,7 @@ Decision tree:
 
 ### Spawn justification
 
-Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`. `Fallback:` applies when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset.
+Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
 
 - **Standard/Deep QA**: TeamCreate at ≥4 AC, else parallel subagents. Comm-pivot ✓ (cross-verify findings), disjoint ✓, parallel ✓, payoff ≥3× at ≥4 AC. Model: dispatch QA workers with `model: "haiku"` — QA verification is highly structured (AC-based pass/fail with evidence collection); haiku handles this capably and matches the lead agent's model tier. Gate: ≥4 acceptance criteria. Fallback: sequential subagents.
 
