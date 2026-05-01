@@ -48,7 +48,7 @@ Reviewers must operate with fresh context, independent of the implementing sessi
 
 1. **Prepare the review package** — the package is the sole input to reviewers.
    - **Branch modes:** run `git diff main...HEAD` and capture the output. If a GitHub issue exists, run `gh issue view <number>` and capture its acceptance criteria.
-   - **PR mode:** run `gh pr view <n> --json title,body,headRefName,baseRefName,closingIssuesReferences,author`, `gh pr diff <n>`, and — if `closingIssuesReferences` is non-empty — `gh issue view <linked>` for each linked issue. Capture all output. If no linked issue is found, note this in the package; the architecture/scope-creep persona will degrade per its rule in `references/personas.md`.
+   - **PR mode:** run `gh pr view <n> --json title,body,headRefName,baseRefName,closingIssuesReferences,author`, `gh pr diff <n>`, and — if `closingIssuesReferences` is non-empty — `gh issue view <linked>` for each linked issue. Capture all output. If no linked issue is found, set `no_linked_issue: true` on the review package; when dispatching the architecture/scope-creep persona, pass this flag through so it activates its degraded mode per the rule in `references/personas.md`.
 2. **Reviewer preamble** — include this in every reviewer's dispatch: "You are reviewing code you did not write. Base your review ONLY on the diff and acceptance criteria provided below. Do not reference or assume any implementation context beyond what is explicitly given to you."
 
 ## Scope Assessment
@@ -69,14 +69,16 @@ Decision tree:
 2. Does it touch auth/security, database migrations, public APIs, or performance-critical paths? → Deep
 3. Otherwise → Standard
 
+The chosen class is referenced as `scope_class` (one of `"Lightweight"`, `"Standard"`, `"Deep"`) by gates in `references/personas.md`.
+
 ### Spawn justification
 
 Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`. Model tiers: see **Configuration** section.
 
-- **Standard**: TeamCreate with `model: "sonnet"` at ≥3 active reviewers, else 2 parallel subagents with `model: "sonnet"`. Comm-pivot ✓ (converge on disagreements), disjoint ✓, parallel ✓, payoff ≥3× at scale. Gate: ≥3 reviewers active. Fallback: sequential subagents.
+- **Standard**: TeamCreate with `model: "sonnet"` at ≥3 active personas, else 2 parallel subagents with `model: "sonnet"`. Comm-pivot ✓ (converge on disagreements), disjoint ✓, parallel ✓, payoff ≥3× at scale. Gate: ≥3 personas active. Fallback: sequential subagents.
 - **Deep**: TeamCreate with `model: "opus"`. All four ✓ across review axes; opus premium justified by criticality. Fallback: sequential subagents.
 
-The two always-on personas (correctness, standards) plus any conditional personas whose gates fire all count toward the ≥3-reviewer threshold. The two conditional personas added in this skill — **docs consistency** and **architecture / scope-creep** — count alongside the existing security / performance / migration triggers.
+The two always-on personas (correctness, standards) plus any conditional personas whose gates fire all count toward the ≥3-persona threshold. The two conditional personas added in this skill — **docs consistency** and **architecture / scope-creep** — count alongside the existing security / performance / migration triggers.
 
 ## Personas
 
@@ -162,7 +164,7 @@ For every merged finding, compute:
 fp = sha256(file + ":" + line_bucket + ":" + normalized_title + ":" + severity)[:12]
 ```
 
-`line_bucket` and `normalized_title` are the same values used for the in-session merge tuple (Process step 5 above). The summary review body gets its own fingerprint:
+`line_bucket` and `normalized_title` are the same values used for the in-session merge tuple (Process step 5 above): `line_bucket = floor(line / 3) * 3` (so any two findings within ±3 lines of each other share a bucket), and `normalized_title` lowercases, strips trailing punctuation, and collapses whitespace. The summary review body gets its own fingerprint:
 
 ```
 summary_fp = sha256("summary:" + pr_number + ":" + sorted(per_finding_fps).join(","))[:12]

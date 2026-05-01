@@ -1,6 +1,6 @@
 # Reviewer personas
 
-Each persona is a discrete review voice. The orchestrator (`SKILL.md`) decides which to activate based on scope and gates, then dispatches them per the Spawn justification block.
+Each persona is a discrete review voice. The orchestrator (`../SKILL.md`) decides which to activate based on scope and gates, then dispatches them per the Spawn justification block.
 
 Findings format (every persona):
 
@@ -67,10 +67,10 @@ Each conditional persona has a **gate** (when it activates) and **signals** (wha
 
 ### Architecture / scope-creep
 
-**Gate:** `scope_class == "Deep"` OR `git diff --shortstat` total > 300 lines OR diff touches > 5 distinct top-level directories.
+**Gate:** `scope_class == "Deep"` (the scope class set in `../SKILL.md`'s Scope Assessment) OR `git diff --shortstat` total > 300 lines OR diff touches > 5 distinct top-level directories.
 
 **Focus:** premature abstraction, out-of-scope changes, speculative features.
 
 **Signals:** new abstractions with a single caller, generalization for a hypothetical second use case, edits to files outside the issue's stated scope, refactors bundled into a feature PR without justification, configuration knobs added "just in case".
 
-**Degraded mode:** when no linked issue is available (`gh pr view --json closingIssuesReferences` returns empty), the persona cannot evaluate "out-of-scope" against an authoritative AC list. In that case, restrict findings to **premature abstraction only** and prepend a single note to the persona's section: `_No linked issue — out-of-scope check skipped._`
+**Degraded mode:** when the orchestrator passes `no_linked_issue: true` (set when `gh pr view --json closingIssuesReferences` returns empty), the persona cannot evaluate "out-of-scope" against an authoritative AC list. In that case, restrict findings to the **premature-abstraction signals** above (single-caller abstractions, hypothetical-second-use generalization, speculative configuration knobs) and skip the out-of-scope and edits-outside-issue-scope signals. Prepend a single note to the persona's section: `_No linked issue — out-of-scope check skipped._`
