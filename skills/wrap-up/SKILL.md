@@ -1,63 +1,80 @@
 ---
 name: wrap-up
-description: End-of-session assumptions audit. Surfaces assumptions, uncertain decisions, and follow-ups from the current session. Harvests ./.claude/NOTES.md and updates the active GitHub issue body so it survives session reset. Use before ending long or complex sessions.
+description: Clean up local state after a PR is open — remove the worktree, delete the branch, and clear NOTES.md. User-invoked utility; run when ready to discard the feature worktree.
 model: sonnet
 ---
 
-You are performing an end-of-session audit. Review what happened in this session and surface anything the user should know before context is lost.
+You are cleaning up local state after a PR has been opened. Your job is to safely remove the feature worktree, delete the branch, and clear any remaining NOTES.md — confirming before destructive actions and refusing outright when the operation would destroy protected state.
 
 ## Input
 
-The current conversation history and `./.claude/NOTES.md` if present; optionally an active GitHub issue number whose body receives the audit update.
+The current worktree path and branch. Optionally, an open PR linked to the active issue (used to verify unpushed-commit safety).
 
 ## Process
 
-1. Review the conversation history and identify:
-   - **Assumptions** — decisions you made based on inference rather than explicit user instruction
-   - **Uncertainties** — places where you were unsure and chose one path over alternatives
-   - **Scope changes** — anything you did beyond or short of what was originally asked
-   - **Follow-ups** — work that remains, was deferred, or needs human verification
+### Step 1 — Detect state
 
-   Resolve the worktree root with `git rev-parse --show-toplevel` and check for `<root>/.claude/NOTES.md`. If it exists, read it first — it is the authoritative worklog for this phase. Merge its **Decisions made this session** and **Open questions** into the audit so nothing is lost on reset. See `${CLAUDE_PLUGIN_ROOT}/_shared/notes-md-protocol.md` for the file's section shape and lifecycle rules.
+Gather:
 
-2. For each item, note:
-   - What the assumption/decision was
-   - Why you made that choice
-   - What the alternative would have been
-   - Risk level (low/medium/high) if the assumption is wrong
+1. **Worktree path** — `git rev-parse --show-toplevel` from the current directory, or use the path the user provides.
+2. **Branch name** — `git rev-parse --abbrev-ref HEAD`.
+3. **Default branch** — `git symbolic-ref refs/remotes/origin/HEAD --short` (strips `origin/`). Fall back to checking the list `['main', 'master', 'develop']` only when the symbolic-ref lookup fails; log which method was used.
+4. **Worktree membership** — `git worktree list --porcelain`. Confirm the worktree path appears in this list.
+5. **Working-tree cleanliness** — `git status --short` and `git log @{u}..HEAD --oneline` (unpushed commits not in the PR).
+6. **PR state** — if the user provided a PR number, run `gh pr view <N> --json state,headRefName` to confirm it is open and points to the current branch.
 
-3. **Determine the active issue.** Check the git branch name for an issue reference, or run `gh issue list --search <branch-slug>`, or ask the user directly. The audit must be tied to a specific issue — this is the handoff artifact for the next phase. See `${CLAUDE_PLUGIN_ROOT}/_shared/handoff-artifact.md` for the shape.
+### Step 2 — Apply state machine
 
-4. **Draft the body update.** Produce the audit in the Output format below. Fetch the current issue body (`gh issue view N --json body -q .body`), append or replace a `## Session handoff` section, and show the proposed new body to the user with: `Update issue #N body? (y/n)`. On yes, run `gh issue edit N --body-file -` with the new body. **Never auto-update** — wrong issue, leaked assumptions, or duplicate sections on replay all have real blast radius. Keep the draft visible in the terminal even if the user declines, so they can copy it manually.
+| Condition | Outcome |
+|-----------|---------|
+| Branch matches the default branch | **Refuse outright.** No proceed-anyway prompt. |
+| Worktree path not in `git worktree list --porcelain` | **Refuse outright.** Out-of-tree paths are never managed by `/wrap-up`. |
+| Worktree is dirty (uncommitted changes, or unpushed commits not in the PR) | **Show state + proceed-anyway prompt** (see Step 3). |
+| Worktree is clean, feature branch, worktree in-tree | **Single confirmation** (see Step 4). |
+
+### Step 3 — Dirty worktree: proceed-anyway prompt
+
+Show what is dirty (uncommitted files, unpushed commit list). Then ask:
+
+> The worktree has unsaved state (shown above). Proceed with removal anyway?
+> On yes, I will use `git branch -D` (force-delete) if unpushed commits would be lost.
+
+Wait for explicit confirmation. Do not proceed on silence.
+
+### Step 4 — Single confirmation (clean or dirty-with-override)
+
+Show the exact actions that will run:
+
+> I will:
+> - `git worktree remove <path>` (removes the worktree directory and its contents, including `.claude/NOTES.md` if present)
+> - `git branch -d <branch>` (or `-D` if commits would be lost)
+>
+> Proceed?
+
+Wait for explicit confirmation. Do not proceed on silence.
+
+### Step 5 — Execute and report
+
+On confirm:
+
+1. `git worktree remove <path>` — removes the worktree directory. NOTES.md, if still present inside it, is removed implicitly.
+2. `git branch -d <branch>` (or `git branch -D <branch>` when the dirty-worktree path was confirmed and commits would be lost).
+3. Report what was removed: worktree path, branch name, whether NOTES.md was present.
 
 ## Output
 
-Present the audit as an indented code block (four-space indent) so the user can copy it even if they decline the auto-update prompt. Print the label `paste into issue #N body — handoff artifact` (with the actual issue number substituted) on the line immediately above the block.
+A one-line summary per removed artifact:
 
-Example (for issue #42):
-
-    paste into issue #42 body — handoff artifact
-
-        ## Session handoff
-
-        ### Assumptions Made
-        - [assumption] — [why] — [risk if wrong]
-
-        ### Uncertain Decisions
-        - [decision] — [alternatives considered] — [why this one]
-
-        ### Scope Notes
-        - [what changed from original ask]
-
-        ### Follow-ups
-        - [what remains or needs verification]
+```
+Removed worktree: <path>
+Deleted branch: <branch>
+NOTES.md removed with worktree (was present / was already absent)
+```
 
 ## Rules
 
-- Be honest about uncertainty — this is a self-audit, not a sales pitch
-- Include assumptions even if you are fairly confident — the user decides what matters
-- Omit subsections with nothing to report (Assumptions Made, Uncertain Decisions, Scope Notes, Follow-ups) — a missing subsection means zero items. Never write "None" or other placeholder text.
-- The audit is not complete until it is written into the issue body or the user has explicitly declined
-- Update the issue **body** in place — never post the audit as a comment. See `${CLAUDE_PLUGIN_ROOT}/_shared/handoff-artifact.md`.
-- Never auto-update without user confirmation — show the draft and ask first
-- After a successful update, leave `./.claude/NOTES.md` in place; the next session will read it on resume. Do not delete it automatically.
+- Refuse outright (no proceed-anyway) when the branch is the default branch or the worktree path is not in `git worktree list --porcelain`.
+- Use `git branch -D` only when the dirty-worktree override was explicitly confirmed by the user.
+- Single confirmation covers all removals — do not ask separately for each artifact.
+- Do not write to the GitHub issue body. This skill has no handoff artifact.
+- Do not read or harvest NOTES.md — `/implement` harvests it at PR-creation time. NOTES.md removal here is incidental (it goes with the worktree directory).
