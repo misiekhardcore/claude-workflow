@@ -48,7 +48,7 @@ Reviewers must operate with fresh context, independent of the implementing sessi
 
 1. **Prepare the review package** — the package is the sole input to reviewers.
    - **Branch modes:** run `git diff main...HEAD` and capture the output. If a GitHub issue exists, run `gh issue view <number>` and capture its acceptance criteria.
-   - **PR mode:** run `gh pr view <n> --json title,body,headRefName,baseRefName,closingIssuesReferences,author`, `gh pr diff <n>`, and — if `closingIssuesReferences` is non-empty — `gh issue view <linked>` for each linked issue. Capture all output. If no linked issue is found, set `no_linked_issue: true` on the review package; when dispatching the architecture/scope-creep persona, pass this flag through so it activates its degraded mode per the rule in `references/personas.md`.
+   - **PR mode:** run `gh pr view <n> --json title,body,headRefName,headRefOid,baseRefName,closingIssuesReferences,author`, `gh pr diff <n>`, and — if `closingIssuesReferences` is non-empty — `gh issue view <linked>` for each linked issue. Capture all output. `headRefOid` is the head commit SHA the review will be anchored to in **Posting findings to GitHub** step 4 (`commit_id`). If no linked issue is found, set `no_linked_issue: true` on the review package; when dispatching the architecture/scope-creep persona, pass this flag through so it activates its degraded mode per the rule in `references/personas.md`.
 2. **Reviewer preamble** — include this in every reviewer's dispatch: "You are reviewing code you did not write. Base your review ONLY on the diff and acceptance criteria provided below. Do not reference or assume any implementation context beyond what is explicitly given to you."
 
 ## Scope Assessment
@@ -125,7 +125,7 @@ Activate a conditional persona only when its gate fires against the prepared rev
      - 0.5–0.7 = suspicious but could be intentional
 
 5. **Merge and deduplicate findings** across all reviewers:
-   - Group findings by file + line_bucket (±3 lines) + normalized title (lowercase, strip trailing punctuation, collapse whitespace)
+   - Group findings by file + line_bucket (`floor(line / 3) * 3` — fixed 3-line windows) + normalized title (lowercase, strip trailing punctuation, collapse whitespace)
    - When 2+ reviewers flag the same issue, boost confidence by 0.10 (clamp to 1.0)
    - Suppress findings below the confidence thresholds defined in Rules
    - Merge duplicates into a single finding, noting which reviewers flagged it
@@ -161,10 +161,12 @@ This block runs only when the input was a PR argument. It posts a single GitHub 
 For every merged finding, compute:
 
 ```
-fp = sha256(file + ":" + line_bucket + ":" + normalized_title + ":" + severity)[:12]
+fp = sha256(file + ":" + line_bucket + ":" + normalized_title)[:12]
 ```
 
-`line_bucket` and `normalized_title` are the same values used for the in-session merge tuple (Process step 5 above): `line_bucket = floor(line / 3) * 3` (so any two findings within ±3 lines of each other share a bucket), and `normalized_title` lowercases, strips trailing punctuation, and collapses whitespace. The summary review body gets its own fingerprint:
+Severity is intentionally **not** part of the fingerprint: idempotency keys on location + title so reruns don't re-post the same finding when severity is recalibrated between runs or when personas disagree on severity.
+
+`line_bucket` and `normalized_title` are the same values used for the in-session merge tuple (Process step 5 above): `line_bucket = floor(line / 3) * 3` (groups lines into fixed 3-line windows so most near-duplicates collide on the same bucket; findings straddling a window boundary, e.g. lines 2 and 4, do not), and `normalized_title` lowercases, strips trailing punctuation, and collapses whitespace. The summary review body gets its own fingerprint:
 
 ```
 summary_fp = sha256("summary:" + pr_number + ":" + sorted(per_finding_fps).join(","))[:12]
@@ -177,12 +179,27 @@ Fetch every existing review comment authored by the runner on this PR, parse the
 ```bash
 me=$(gh api user --jq .login)
 existing=$(gh api "repos/{owner}/{repo}/pulls/{N}/comments" --paginate \
-  --jq "[.[] | select(.user.login==\"$me\") | .body | capture(\"<!-- review-fp: (?<fp>[a-f0-9]+) -->\").fp]")
+  --jq "[.[]
+          | select(.user.login==\"\$me\")
+          | .body
+          | select(test(\"<!-- review-fp: [a-f0-9]+ -->\"))
+          | capture(\"<!-- review-fp: (?<fp>[a-f0-9]+) -->\").fp]")
 ```
 
-Filtering by author avoids colliding with hand-written comments that happen to share file+line+title.
+The `select(test(...))` guard skips hand-written reviewer comments that don't carry the marker — without it, `capture` raises on the first non-marker body and aborts the prescan, blocking the post. Filtering by author also avoids colliding with hand-written comments that happen to share file+line+title.
 
-Also fetch existing review summary bodies and skip the entire post if a `<!-- review-summary-fp: <summary_fp> -->` already exists for this PR — a re-run with no new findings is a no-op.
+Also fetch existing review summary bodies and skip the entire post if a `<!-- review-summary-fp: <summary_fp> -->` already exists for this PR — a re-run with no new findings is a no-op. The summary lives on the review object itself, not on inline comments, so use `/pulls/{N}/reviews` (not `/pulls/{N}/comments`):
+
+```bash
+existing_summary_fps=$(gh api "repos/{owner}/{repo}/pulls/{N}/reviews" --paginate \
+  --jq "[.[]
+          | select(.user.login==\"\$me\")
+          | .body
+          | select(test(\"<!-- review-summary-fp: [a-f0-9]+ -->\"))
+          | capture(\"<!-- review-summary-fp: (?<fp>[a-f0-9]+) -->\").fp]")
+```
+
+Same hardening as the inline-comment prescan (filter by author + `select(test(...))` before `capture`). If `$summary_fp` is in `existing_summary_fps`, exit early without posting.
 
 ### 3. Build the review payload
 
@@ -205,12 +222,13 @@ Use a single REST call so the review is created with all comments in one transac
 ```bash
 jq -n \
   --arg body "$summary_body" \
+  --arg commit "$head_sha" \
   --argjson comments "$comments_json" \
-  '{event: "COMMENT", body: $body, comments: $comments}' | \
+  '{event: "COMMENT", commit_id: $commit, body: $body, comments: $comments}' | \
   gh api repos/{owner}/{repo}/pulls/{N}/reviews --input -
 ```
 
-`event` is `"COMMENT"` (not `"REQUEST_CHANGES"` or `"APPROVE"`) — review-only, no merge gating. Each entry in `$comments_json` carries `path`, `line` (or `start_line`/`line` for ranges), `side`, and `body` with the embedded fingerprint marker.
+`commit_id` is the `headRefOid` captured in **Context Isolation** step 1 — anchoring the review to that SHA prevents 422s and stops inline comments from drifting if the PR head advances mid-run. `event` is `"COMMENT"` (not `"REQUEST_CHANGES"` or `"APPROVE"`) — review-only, no merge gating. Each entry in `$comments_json` carries `path`, `line` (or `start_line`/`line` for ranges), `side`, and `body` with the embedded fingerprint marker.
 
 ### 5. Report back to the user
 

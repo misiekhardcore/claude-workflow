@@ -59,15 +59,15 @@ Each conditional persona has a **gate** (when it activates) and **signals** (wha
 
 ### Docs consistency
 
-**Gate:** diff touches markdown — any `**/*.md` change — OR adds/removes a skill or command (`skills/*/SKILL.md`, `commands/*.md`, `_shared/**/*.md`).
+**Gate:** diff touches markdown — any `**/*.md` change — OR adds/removes a skill (`skills/*/SKILL.md`, `_shared/**/*.md`).
 
 **Focus:** cross-references, stale mentions, duplication across `**/*.md`, `docs/**`, `_shared/**`.
 
-**Signals:** broken or stale links between skill files, contradictions between a renamed/moved file and references that still point at the old name, duplicated rule blocks that should be extracted into `_shared/`, command tables and skill catalogs that drift from the actual `skills/` and `commands/` directories.
+**Signals:** broken or stale links between skill files, contradictions between a renamed/moved file and references that still point at the old name, duplicated rule blocks that should be extracted into `_shared/`, skill catalogs that drift from the actual `skills/` directory.
 
 ### Architecture / scope-creep
 
-**Gate:** `scope_class == "Deep"` (the scope class set in `../SKILL.md`'s Scope Assessment) OR `git diff --shortstat` total > 300 lines OR diff touches > 5 distinct top-level directories.
+**Gate:** `scope_class == "Deep"` (the scope class set in `../SKILL.md`'s Scope Assessment) OR the captured diff in the review package totals > 300 changed lines OR the captured file list spans > 5 distinct top-level directories. Both signals are computed from the prepared review package — the captured `git diff main...HEAD` (branch mode) or `gh pr diff <n>` (PR mode) — so the gate behaves identically across modes and never re-shells out to `git`.
 
 **Focus:** premature abstraction, out-of-scope changes, speculative features.
 
