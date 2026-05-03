@@ -159,6 +159,8 @@ Not posted: per-commit updates, per-fix-cycle-iteration noise, internal reviewer
 | PR delivers the full epic         | `Closes #<epic>`  |
 | PR delivers one sub-issue of many | `Part of #<epic>` |
 
+The PR body uses a fixed three-section template — **Summary** / **Testing notes** / **Notes**. Before pushing, `/implement` reads `./.claude/NOTES.md` and harvests `## Decisions made this session` and `## Open questions` into the `## Notes` section, then deletes NOTES.md after `/compound` runs. The `## Notes` section is omitted entirely when there is nothing to record. This is why `/wrap-up` no longer drafts an audit block — the audit lives in the PR body, not the issue.
+
 ---
 
 ## Step 4 — `/compound` (Sonnet)
@@ -202,12 +204,12 @@ Fixed in abc1234 — replaced the N+1 loop with a single JOIN (benchmarks in com
 
 ---
 
-## Step 6 — `/wrap-up` (Sonnet) — _optional, end of session_
+## Step 6 — `/wrap-up` (Sonnet) — _optional, after the PR is open_
 
 - **File:** `skills/wrap-up/SKILL.md`
-- **When:** End of a long or complex session, or when transitioning between phases mid-work.
-- **What it does:** Reads `./.claude/NOTES.md`, identifies assumptions, uncertain decisions, scope changes, and follow-ups, then drafts an update to the active issue body (never auto-applies).
-- **Outcome:** An audit block the user can paste into the issue — Assumptions Made / Uncertain Decisions / Scope Notes / Follow-ups.
+- **When:** After a draft PR is open and the feature worktree is no longer needed (typically after merge).
+- **What it does:** Removes the feature worktree, deletes the branch, and clears `./.claude/NOTES.md`. Refuses outright on the default branch or out-of-tree paths; on a dirty worktree it surfaces unpushed/uncommitted state and requires an explicit proceed-anyway confirmation. **Not** an audit utility — assumptions, uncertainties, and follow-ups are harvested into the PR body's `## Notes` section by `/implement` before the PR opens.
+- **Outcome:** The worktree directory is gone, the branch is deleted (force-deleted if dirty and the user confirmed), and NOTES.md is removed.
 
 ---
 
@@ -255,3 +257,21 @@ Four tiers, no overlap:
 - **File:** `skills/prune/SKILL.md`
 - **When:** Monthly, or after major refactors.
 - **What it does:** Audits `CLAUDE.md` and auto-memory files for stale / superseded / unclear entries (semantic staleness). When `claude-obsidian` is installed, delegates the vault audit to `wiki-lint` (structural health — orphans, broken wikilinks, missing frontmatter) and folds the findings in. Without `claude-obsidian`, the vault lane is skipped with a one-line note. Never auto-deletes — produces recommendations for user approval.
+
+---
+
+## Maintenance — `/audit-issues` (Sonnet)
+
+- **File:** `skills/audit-issues/SKILL.md`
+- **When:** Periodically, or after a refactor that may have invalidated open issues.
+- **What it does:** Audits open GitHub issues in a target repo against the current local working tree. Runs five drift detectors — file-path-existence, numeric-claim-drift, version-reference-staleness, resolved-open-question, cross-issue-contradiction — and assigns a verdict (`unverifiable` > `premise-shifted` > `superseded by #N` > `contradicted` > `stale` > `valid`). Offers per-issue interactive `[e]dit / [c]lose / [s]kip` actions, mutating only after explicit confirmation. Requires a local clone at `~/Projects/<repo>`.
+- **Outcome:** Issue bodies edited or closed where the user approved; a stdout summary of findings.
+
+---
+
+## Autonomous variant — `/epic-autopilot` (Opus, high effort)
+
+- **File:** `skills/epic-autopilot/SKILL.md`
+- **When:** Large epics where you want the full `/discovery → /define → /implement` chain to run end-to-end with minimal supervision.
+- **What it does:** Five-stage orchestrator with explicit human gates after `/discovery`, after the epic-level `/define`, and after each per-sub-issue `/define`. Once all sub-issues are gated through, the autonomous phase opens the epic branch, computes a Kahn topological sort of the sub-issue dependency graph, dispatches `/implement` per tier as parallel `Task` subagents (with retry-once isolation on failure), and opens draft sub-PRs plus a top-level epic PR. Suppresses `/implement`'s exhausted-exit prompt via the seed-brief `autonomous: true` flag. Resumable from any stage via markers in the epic issue body.
+- **Outcome:** A draft epic PR targeting `main` and one draft sub-PR per sub-issue, each `Part of #<epic>`, with merge-order advisory in the epic PR body.

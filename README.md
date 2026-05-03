@@ -36,15 +36,17 @@ flowchart TB
         Discovery -->|create issue body| Define
         Define -->|issue body| Implement
         Implement --> PR([draft PR])
-        PR --> WrapUp["/wrap-up — harvest NOTES.md"]
         PR --> Compound["/compound — capture learnings"]
         PR --> ResolvePR["/resolve-pr-feedback — batch review responses"]
+        PR --> WrapUp["/wrap-up — remove worktree + branch"]
 
         subgraph Meta["Other tools"]
             direction LR
+            EpicAutopilot["/epic-autopilot — autonomous epic→PR"]
             NewSkill["/new-skill"]
             FindSkills["/find-skills"]
             Prune["/prune — audit memory"]
+            AuditIssues["/audit-issues — drift-check open issues"]
             GrillMe["/grill-me"]
         end
 
@@ -75,7 +77,7 @@ flowchart TB
     class Canvas canvas
     class Discovery,Define,Implement orch
     class D_Describe,D_Specify,D_Scout,Df_Arch,Df_Design,I_Build,I_Review,I_Verify spec
-    class GrillMe,NewSkill,FindSkills,Prune,WrapUp,Compound,ResolvePR,Save,WikiQuery,WikiLint meta
+    class GrillMe,NewSkill,FindSkills,Prune,AuditIssues,WrapUp,Compound,ResolvePR,EpicAutopilot,Save,WikiQuery,WikiLint meta
     class Obsidian ext
 ```
 
@@ -109,8 +111,9 @@ Without this flag, `TeamCreate` is unavailable. Skills detect its absence and fa
 | `/discovery`           | Explore a problem and produce a GitHub issue with acceptance criteria                                            |
 | `/define`              | Plan architecture and design; produces the implementation handoff                                                |
 | `/implement`           | Full build→review→verify cycle, ends with a draft PR                                                             |
+| `/epic-autopilot`      | Autonomous epic→PR pipeline; chains `/discovery → /define → /implement` per sub-issue with gated approvals       |
 | `/build`               | Code against an issue's acceptance criteria using TDD                                                            |
-| `/review`              | Review an implementation; correctness, standards, and conditional specialists                                    |
+| `/review`              | Review an implementation or external PR; correctness, standards, and conditional specialists                     |
 | `/verify`              | QA verification of every acceptance criterion                                                                    |
 | `/describe`            | Explore and understand a problem space interactively                                                             |
 | `/specify`             | Turn a problem statement into testable acceptance criteria                                                       |
@@ -118,8 +121,9 @@ Without this flag, `TeamCreate` is unavailable. Skills detect its absence and fa
 | `/design`              | Visual and UX design decisions — layouts, interaction flows                                                      |
 | `/grill-me`            | Relentless interviewing to stress-test a plan or design                                                          |
 | `/compound`            | Capture learnings as structured wiki notes; files via `claude-obsidian` when installed, otherwise reports inline |
-| `/wrap-up`             | End-of-session audit; harvests NOTES.md into the issue body                                                      |
+| `/wrap-up`             | Post-PR cleanup utility: remove the feature worktree, delete the branch, clear NOTES.md                          |
 | `/prune`               | Audit CLAUDE.md for staleness; delegates vault audit to `wiki-lint` when `claude-obsidian` is installed          |
+| `/audit-issues`        | Drift-check open GitHub issues against the current repo state; offers per-issue edit / close / skip              |
 | `/find-skills`         | Discover and install skills from the ecosystem                                                                   |
 | `/resolve-pr-feedback` | Process PR review feedback in bulk                                                                               |
 | `/new-skill`           | Scaffold a new skill conforming to this authoring standard                                                       |
@@ -176,6 +180,8 @@ Shared protocols live at `_shared/`:
 ## Releasing
 
 Versions in `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` (both `metadata.version` and `plugins[0].version`) must agree — the marketplace listing and distribution tooling depend on it. Trigger the **Release** workflow (`.github/workflows/release.yml`) via `workflow_dispatch` to bump all three in lockstep, commit, tag, and publish. Do not hand-edit; if you must, update all three fields in the same commit.
+
+Per-release notes (with full diffs) live on [GitHub Releases](https://github.com/misiekhardcore/claude-workflow/releases). A mirrored, in-repo summary is at [`CHANGELOG.md`](CHANGELOG.md).
 
 ## License
 
