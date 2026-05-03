@@ -144,6 +144,7 @@ Orchestrators may nest: `/discovery` delegates to `/describe` and `/specify`; `/
 - Maximum two levels of orchestration. Deeper nesting creates brittle context chains.
 - Each level owns its own handoff boundary — do not skip levels.
 - Sub-orchestrators do not inherit the parent's handoff artifact. Seed them with a brief.
+- Task sub-agents are fresh roots; the 2-level cap applies within each sub-agent's lineage, not across the parent's spawn graph.
 
 ## Handoff vs. seed brief
 
