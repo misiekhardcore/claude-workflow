@@ -50,7 +50,9 @@ Filters like `--label` and `--since` were rejected during `/define` — real tri
    ```
 
    Do not auto-clone. Do not fall back to a degraded mode that audits without repo state — the verifiers depend on the working tree.
-4. Pull the latest default branch (`git -C <local-tree> fetch --quiet origin && git -C <local-tree> rev-parse --abbrev-ref origin/HEAD`) so file existence and counts reflect what is actually on the trunk, not whatever happened to be checked out.
+4. Pull the latest default branch:
+   - Run `git -C <local-tree> fetch --quiet origin`. If fetch **fails** (no network, auth error), warn: `audit-issues: fetch failed — auditing against cached HEAD (results may be stale)` and continue.
+   - If fetch **succeeds**, run `git -C <local-tree> rev-parse --abbrev-ref origin/HEAD` to identify the default branch. If rev-parse fails (no `origin/HEAD`), abort: `audit-issues: cannot determine default branch in <local-tree>; run 'git remote set-head origin -a' and retry.`
 
 ### Phase 1 — Fetch issues once at the lead
 
@@ -70,7 +72,9 @@ Skip closed issues. Auditing closed issues is explicitly out of scope for v1.
 
 ### Phase 2 — Per-issue audit (subagent fan-out)
 
-For each target issue, spawn one Task subagent in parallel (single message, multiple Task calls). Seed each subagent with:
+**Single-issue shortcut:** If targeting exactly one issue (`len(issue_numbers) == 1`), run the subagent contract below inline — no Task dispatch. Otherwise, spawn one Task subagent per issue in a single parallel message.
+
+Seed each execution (inline or subagent) with:
 
 - The full body of its assigned issue.
 - The titles + numbers + 1-line `Prior decisions` excerpts of every other open issue in the repo (for cross-issue checks). Cap each excerpt to keep the brief bounded — full bodies are redundant.
@@ -87,7 +91,7 @@ Regex pass (deterministic, runs first):
 
 | Claim type | Pattern intent | Examples |
 |------------|---------------|----------|
-| File path | `` `path/like/this.ext` `` in inline code, or bare paths matching a known repo prefix | `` `skills/prune/SKILL.md` `` |
+| File path | `` `path/like/this.ext` `` in inline code, or bare paths (no backticks) whose first segment matches a top-level directory in the local working tree (`ls -d <tree>/*/` filtered to non-hidden dirs — e.g. `skills/`, `_shared/`, `docs/`) | `` `skills/prune/SKILL.md` ``, `_shared/handoff-artifact.md` |
 | Numeric claim | "<number> <plural noun>" tied to a repo concept (skills, files, agents, lines, etc.) | "11 skills", "6 detectors" |
 | Version reference | `vX.Y[.Z]`, "the X.Y MCP purge", or pinned package versions | "v1.0.0", "after the v1.0.0 MCP purge" |
 
@@ -109,25 +113,26 @@ The LLM extraction returns the strict JSON schema below — subagents must valid
 | `numeric-claim-drift` | For each numeric claim, recompute the count from the working tree. Counting strategy by noun: `skills` → `ls -d <tree>/skills/*/ \| wc -l`; `agents`/`hooks`/`commands` → grep the relevant config; otherwise use the noun's nearest natural counter. If the verifier cannot pick a counter, mark the finding as `unverifiable` and skip — do not invent a number. | `quote`, `claimed`, `actual`, `counter_used` |
 | `version-reference-staleness` | For each version reference, check `git -C <local-tree> tag --list` and the `CHANGELOG.md` (if present) for the current version. Flag when the issue references a version that is no longer the latest **and** the surrounding clause asserts something tense-sensitive ("after the v1.0.0 purge", "as of v1.2"). | `quote`, `referenced_version`, `current_version` |
 | `resolved-open-question` | For each open-question bullet, search recent commits and the issue's own comment thread for resolution language. Use `git -C <local-tree> log --since=<issue.updatedAt> --grep=<keyword>` plus `gh issue view <NN> --json comments`. Flag only when there is a positively-phrased commit subject or comment ("decided X", "resolved: Y") — do not flag from absence of activity. | `quote`, `evidence` (commit SHA or comment URL) |
-| `cross-issue-contradiction` | For each `#NN` reference, look up that sibling in the upfront issue-list snapshot. Pull its *Prior decisions* and *Constraints* sections. Flag when this issue's claim is directly negated by the sibling's later decision. | `quote`, `sibling_issue`, `sibling_quote` |
+| `cross-issue-contradiction` | For each `#NN` reference, look up that sibling in the seeded 1-line excerpts — never refetch full issue bodies. Flag when the excerpt directly negates this issue's claim. If the excerpt is too condensed to confirm or deny a contradiction, return `verdict: unverifiable` for that finding rather than speculating. | `quote`, `sibling_issue`, `sibling_quote` |
 
 **Step 3 — Assign a verdict.**
 
 | Triggering finding(s) | Verdict |
 |----------------------|---------|
+| Any detector or validation error prevents reliable completion | `unverifiable` |
 | No findings | `valid` |
 | Any of: file-path / numeric / version / open-question | `stale` |
 | Any cross-issue-contradiction | `contradicted` |
 | Sibling issue claims to subsume this issue's scope | `superseded by #N` |
 | ≥3 distinct detector categories firing | `premise-shifted` |
 
-When multiple verdicts could apply, pick the strongest in this order: `premise-shifted` > `superseded by #N` > `contradicted` > `stale` > `valid`.
+When multiple verdicts could apply, pick the strongest in this order: `unverifiable` > `premise-shifted` > `superseded by #N` > `contradicted` > `stale` > `valid`.
 
 **Step 4 — Return JSON.**
 
 ```yaml
 issue_number: 42
-verdict: valid | stale | contradicted | superseded by #N | premise-shifted
+verdict: valid | stale | contradicted | superseded by #N | premise-shifted | unverifiable
 findings:
   - detector: file-path-existence | numeric-claim-drift | version-reference-staleness | resolved-open-question | cross-issue-contradiction
     quote: "<verbatim from issue body, ≤200 chars>"
@@ -140,6 +145,8 @@ recommendation: edit | close | skip
 `recommendation` mapping: any `proposed_edit` populated → `edit`; verdict `premise-shifted` or `superseded by #N` and no fixable proposed edits → `close`; verdict `valid` → `skip`.
 
 Subagents that fail validation must return `verdict: unverifiable` with the validation error in `findings[0].evidence` rather than inventing a partial report. The lead surfaces unverifiable issues at the end of the run; the user decides whether to retry.
+
+Invariant check before returning: `verdict: valid` requires `findings: []` and `recommendation: skip`. Any report where `verdict: valid` but findings are non-empty or recommendation is not `skip` is itself a validation error — return `verdict: unverifiable` instead.
 
 ### Phase 3 — Aggregate and print
 
