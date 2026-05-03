@@ -38,7 +38,10 @@ Skip this gate for **Lightweight** scope.
 
 ## Pre-flight
 
-Run `${CLAUDE_PLUGIN_ROOT}/_shared/repo-preflight.md` once at entry. Run `${CLAUDE_PLUGIN_ROOT}/_shared/scope-preflight.md` if the file list is 3 or more files. Pass `preflight_verified: true` in every seed brief issued to specialists — they skip their own preflight when this flag is set.
+Run `${CLAUDE_PLUGIN_ROOT}/_shared/repo-preflight.md` once at entry.
+Suppress branch line: true
+
+Run `${CLAUDE_PLUGIN_ROOT}/_shared/scope-preflight.md` if the file list is 3 or more files. Pass `preflight_verified: true` in every seed brief issued to specialists — they skip their own preflight when this flag is set.
 
 ## Process
 

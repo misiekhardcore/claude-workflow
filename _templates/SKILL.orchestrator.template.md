@@ -8,6 +8,7 @@ model: "<opus for research-leading orchestrators; sonnet for coordinator orchest
 You are leading the <phase name> phase. Your goal is to <objective>.
 
 <!-- Coordinator variants (e.g. /implement): drop step 2 — upstream phases or sub-skills own research. -->
+<!-- Coordinator variants that are terminal phases (e.g. /implement): drop step 5 — output is the PR, not an issue body update. -->
 
 ## Input
 
