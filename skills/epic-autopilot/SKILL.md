@@ -93,16 +93,18 @@ Read each sub-issue body's `## Implementation plan` to extract the dependency gr
 5. Ties within a tier: break by ascending sub-issue number.
 ```
 
-**Cycle handling**: if Kahn's algorithm detects a back-edge (cycle), identify the pair with the higher-numbered sub-issue and remove that back-edge. Log to stdout:
-```
-Cycle broken: removed dep #<higher> → #<lower>
-```
-Continue Kahn's on the acyclic graph.
+**Cycle handling**: Kahn's algorithm detects a cycle when the worklist of zero-in-degree nodes empties while one or more nodes still have non-zero in-degree (i.e., not every node has been emitted into a tier). When this happens, break a cycle deterministically:
+
+1. Among the remaining (non-zero in-degree) nodes, pick the **highest-numbered** sub-issue `H` — this is the dependent that will be detached.
+2. Among the dependencies declared by `H`, pick the **lowest-numbered** dependency `L`.
+3. Drop `H`'s `depends on #L` declaration (decrement `H`'s in-degree by one).
+4. Log to stdout: `Cycle broken: removed dep #<H> → #<L>` (where `→` reads as "depends on", matching how the relationship was declared in `H`'s `## Implementation plan`).
+5. Resume Kahn's on the modified graph. Repeat the cycle-break step if another cycle remains, until every node is assigned a tier.
 
 **Branch base per sub-issue**:
 - Tier-1 → base is `feat/epic-<N>`.
 - Single-parent sub-issue → base is that parent's branch (`feat/epic-<N>-sub-<parentM>`).
-- Multi-parent sub-issue → base is the parent with the lowest tier number (most foundational). Document remaining parents in the sub-PR `## Notes` as manual merge steps.
+- Multi-parent sub-issue → base is the parent with the lowest tier number (most foundational); if multiple parents share the lowest tier, break the tie by choosing the **lowest-numbered** sub-issue among them (matches the ascending-issue-number tie-break used in tier computation, so base selection is deterministic across runs). Document remaining parents in the sub-PR `## Notes` as manual merge steps.
 
 #### 4c. Parallel Task dispatch — per tier
 
@@ -111,8 +113,8 @@ For each tier, in ascending tier order:
 1. **Before dispatching tier T**, verify every tier-T−1 sub-task has settled (PR open or FAILED). Tier 1 has no prerequisite.
 2. Dispatch all sub-tasks in the current tier as parallel `Task` sub-agents **in a single message**. For each sub-issue M in the tier:
    - Emit: `[sub-issue #<M>] dispatched (tier <T>)`
-   - Create the worktree and branch: `git worktree add .worktrees/feat/epic-<N>-sub-<M> feat/epic-<N>-sub-<M> --track origin/<base-branch>` (or create branch if not yet on remote, branching from the base computed in 4b).
-   - Pass the following seed brief to the sub-agent's `/implement` invocation:
+   - Create the worktree and branch from the base computed in 4b, with upstream tracking set so `/implement` can resolve the PR base later: `git worktree add .worktrees/feat/epic-<N>-sub-<M> -b feat/epic-<N>-sub-<M> <base-branch>`, then in the worktree run `git branch --set-upstream-to=origin/<base-branch>` (or push and `--track`-equivalent — the upstream must reflect the base, not `main`).
+   - Pass the following seed brief to the sub-agent's `/implement` invocation. Fields under `payload` follow the canonical **research brief** in `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` — only the fields epic-autopilot can populate are emitted; the others are intentionally omitted (`/implement` reads the rest from the sub-issue body it loads at startup):
 
 ```
 <seed-brief>
@@ -124,10 +126,12 @@ active_issue: <M>
 autonomous: true
 payload:
   type: research
-  architectural_context: <summary of sub-issue #M's ## Implementation plan>
-  parent_branch: <base-branch>
+  prior_art: "Sub-issue #<M>'s ## Implementation plan in its issue body (architecture and design decisions from /define)"
+  open_questions: "<any unresolved constraints surfaced during /define for sub-issue #<M>, or empty>"
 </seed-brief>
 ```
+
+The PR base for the sub-task is **not** carried in the brief — it is communicated via the worktree's git upstream. `/implement` detects it with `git rev-parse --abbrev-ref --symbolic-full-name @{u}` and passes `--base <detected>` to `gh pr create`. This keeps the brief schema aligned with `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`'s research-brief contract.
 
 3. Wait for all sub-agents in the tier to settle before dispatching the next tier.
 
@@ -217,7 +221,7 @@ A permanently-FAILED sub-task (branch exists, no PR, two prior retries) will be 
 - Each tier's sub-agents dispatch in a single message (parallel Task calls). Tier T+1 does not start until every tier-T agent has settled.
 - Sub-task retry policy: retry exactly once on abort; FAILED on second abort; siblings continue regardless.
 - `/implement` receives `autonomous: true` in its seed brief for all sub-tasks — this suppresses its exhausted-exit prompt and auto-accepts the PR. Do not pass `autonomous: true` outside sub-task spawns.
-- The multi-parent branch base is the parent with the lowest tier number (most foundational); other parents are documented as manual merge steps in the sub-PR `## Notes`.
+- The multi-parent branch base is the parent with the lowest tier number (most foundational); if multiple parents share the lowest tier, the lowest-numbered sub-issue among them wins. Other parents are documented as manual merge steps in the sub-PR `## Notes`.
 - The epic PR body must include the sub-issue/sub-PR table, merge-order advisory, and `Closes #<N>`.
 - `/compound` and `/wrap-up` are not run by epic-autopilot — they remain user-invoked utilities.
 - See `${CLAUDE_PLUGIN_ROOT}/_shared/specialist-mode.md` for the `autonomous` seed-brief field contract.
