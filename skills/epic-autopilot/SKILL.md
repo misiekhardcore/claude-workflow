@@ -29,11 +29,7 @@ Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
 
 ### Stage 0 — Resume detection
 
-On every invocation, read the epic issue body first. Detect prior phase completion from markers:
-
-- `## Implementation plan` present in body → /discovery and epic-level /define already done. Jump to **Stage 3** (per-sub-issue /define) for any sub-issues not yet defined, or to **Stage 4** (autonomous phase) if all sub-issues have a linked PR or branch (per resume logic in Stage 4).
-- `## Requirements` present but no `## Implementation plan` → /discovery done, epic /define needed. Jump to **Stage 2**.
-- Neither present (or free-text input) → start from **Stage 1**.
+On every invocation, read the epic issue body and any sub-issue bodies first; consult the **Resume logic** table at the bottom of this skill to decide which stage to enter.
 
 ### Stage 1 — Discovery gate
 
@@ -135,25 +131,18 @@ The PR base for the sub-task is **not** carried in the brief — it is communica
 
 3. Wait for all sub-agents in the tier to settle before dispatching the next tier.
 
-#### 4d. Sub-task failure handling
+#### 4d. Sub-task settlement and failure handling
 
-Each sub-agent runs `/implement` end-to-end and attempts to open a draft PR. If a sub-agent **aborts** (returns an error or fails to open a PR):
+Each sub-agent runs `/implement` end-to-end and attempts to open a draft PR. The `autonomous: true` flag in the seed brief suppresses `/implement`'s exhausted-exit prompt, so a draft PR (even exhausted-accepted with findings) settles successfully.
 
-- **Attempt 1**: retry the sub-agent once with the same seed brief.
-  - Emit: `[sub-issue #<M>] RETRYING (attempt 2/2)`
-- **Attempt 2**: if the retry also aborts, mark the sub-task FAILED and continue sibling sub-tasks.
-  - Emit: `[sub-issue #<M>] FAILED — second retry exhausted`
-
-A sub-task that produces a draft PR (even exhausted-accepted with findings) is considered settled successfully. The `/implement` `autonomous: true` flag ensures no prompt is emitted even on exhausted exit.
-
-#### 4e. Settlement status lines
-
-For each sub-task that settles (after awaiting its Task sub-agent):
+After each sub-task settles, emit one status line:
 - Clean exit: `[sub-issue #<M>] PR opened: <url> (cycles:<N>)`
 - Exhausted-accepted: `[sub-issue #<M>] PR opened: <url> (cycles:3 [exhausted-accepted])`
 - FAILED: `[sub-issue #<M>] FAILED — second retry exhausted`
 
-#### 4f. Epic PR creation
+If a sub-agent **aborts** (returns an error or fails to open a PR), retry exactly once with the same seed brief (emit `[sub-issue #<M>] RETRYING (attempt 2/2)`); if the retry also aborts, mark FAILED and continue sibling sub-tasks.
+
+#### 4e. Epic PR creation
 
 After every sub-task across all tiers has settled (PR open or FAILED):
 
@@ -214,15 +203,9 @@ A permanently-FAILED sub-task (branch exists, no PR, two prior retries) will be 
 ## Rules
 
 - Require explicit user approval at each gate (Stage 1, Stage 2, and each Stage 3 sub-issue). Silence is not approval.
-- Autonomous phase (Stage 4 onward) emits no human prompts. The only output is status lines and, at exit, the PR summary.
 - The user must not modify the epic issue body or any sub-issue body during Stage 4. Sub-agents read at spawn time and do not re-fetch mid-run.
-- The epic branch (`feat/epic-<N>`) must be created and pushed before any sub-task spawns — this is non-negotiable.
 - Sub-issue branch and worktree names follow the pattern `feat/epic-<N>-sub-<M>` exactly. M is the GitHub sub-issue number (globally unique), so names are collision-safe across parallel spawns.
-- Each tier's sub-agents dispatch in a single message (parallel Task calls). Tier T+1 does not start until every tier-T agent has settled.
-- Sub-task retry policy: retry exactly once on abort; FAILED on second abort; siblings continue regardless.
-- `/implement` receives `autonomous: true` in its seed brief for all sub-tasks — this suppresses its exhausted-exit prompt and auto-accepts the PR. Do not pass `autonomous: true` outside sub-task spawns.
-- The multi-parent branch base is the parent with the lowest tier number (most foundational); if multiple parents share the lowest tier, the lowest-numbered sub-issue among them wins. Other parents are documented as manual merge steps in the sub-PR `## Notes`.
-- The epic PR body must include the sub-issue/sub-PR table, merge-order advisory, and `Closes #<N>`.
+- `autonomous: true` in the seed brief is reserved for sub-task spawns from this skill. Do not pass it from any other orchestrator — the default `false` preserves `/implement`'s exhausted-exit rigor gate.
 - `/compound` and `/wrap-up` are not run by epic-autopilot — they remain user-invoked utilities.
 - See `${CLAUDE_PLUGIN_ROOT}/_shared/specialist-mode.md` for the `autonomous` seed-brief field contract.
 - See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for the orchestration-depth and Task sub-agent rules.
