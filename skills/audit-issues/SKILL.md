@@ -52,23 +52,38 @@ Filters like `--label` and `--since` were rejected during `/define` — real tri
    Do not auto-clone. Do not fall back to a degraded mode that audits without repo state — the verifiers depend on the working tree.
 4. Pull the latest default branch:
    - Run `git -C <local-tree> fetch --quiet origin`. If fetch **fails** (no network, auth error), warn: `audit-issues: fetch failed — auditing against cached HEAD (results may be stale)` and continue.
-   - If fetch **succeeds**, run `git -C <local-tree> rev-parse --abbrev-ref origin/HEAD` to identify the default branch. If rev-parse fails (no `origin/HEAD`), abort: `audit-issues: cannot determine default branch in <local-tree>; run 'git remote set-head origin -a' and retry.`
+   - Run `git -C <local-tree> rev-parse --abbrev-ref origin/HEAD` to identify the default branch (e.g. `origin/main`). If rev-parse fails (no `origin/HEAD`), abort: `audit-issues: cannot determine default branch in <local-tree>; run 'git remote set-head origin -a' and retry.`
+   - **Never check out** the default branch — the user may be on a feature branch with uncommitted work. Instead, all verifiers read from the fetched ref (`origin/HEAD`) directly via `git show <ref>:<path>`, `git ls-tree <ref> -- <path>`, and `git -C <local-tree> log <ref>` rather than from the working directory.
+   - Bind `<default-ref>` (the resolved `origin/<default>` value) into the subagent seed (Phase 2). All detector commands below substitute `<default-ref>` for the explicit ref argument.
 
 ### Phase 1 — Fetch issues once at the lead
 
-The lead runs a single `gh` call and shares the result with all subagents so cross-issue contradiction checks do not refetch.
+The lead fetches enough state for both the audited issues and the sibling-excerpt seed used by `cross-issue-contradiction`. The fetch shape depends on whether `issue_numbers` is set:
+
+**Targeted form (`#NN`, `#NN #MM …`, `owner/repo#NN`)** — fetch the requested issues directly so a `--limit` cap can never silently drop them:
 
 ```bash
-gh issue list \
-  --repo <owner>/<repo> \
-  --state open \
-  --limit 200 \
-  --json number,title,body,labels,updatedAt,url
+# Per requested number — runs in parallel:
+gh issue view <NN> --repo <owner>/<repo> \
+  --json number,title,body,labels,updatedAt,createdAt,url,state
+
+# Plus one sibling-excerpt fetch for cross-issue checks (paginated, --limit 0 = unbounded):
+gh issue list --repo <owner>/<repo> --state open --limit 0 \
+  --json number,title,body,updatedAt
 ```
 
-If `issue_numbers` is set, filter the result in memory rather than firing one `gh issue view` per number — keeps wall time flat and gives every subagent the same sibling-issue set for cross-issue checks.
+If any requested issue's state is `closed`, abort with `audit-issues: #<NN> is closed; auditing closed issues is out of scope for v1.` rather than silently skipping.
 
-Skip closed issues. Auditing closed issues is explicitly out of scope for v1.
+**All-open form (empty arg or `owner/repo`)** — single paginated fetch:
+
+```bash
+gh issue list --repo <owner>/<repo> --state open --limit 0 \
+  --json number,title,body,labels,updatedAt,createdAt,url
+```
+
+`--limit 0` instructs `gh` to paginate until exhausted. Never use a finite `--limit` — repos with hundreds of open issues will silently truncate, and a `#NN` request whose target falls outside the page is the worst-case failure mode.
+
+Skip closed issues in the seed set. Auditing closed issues is explicitly out of scope for v1.
 
 ### Phase 2 — Per-issue audit (subagent fan-out)
 
@@ -83,7 +98,7 @@ Seed each execution (inline or subagent) with:
 
 #### Subagent contract
 
-Each subagent runs five detectors against its issue body and returns a structured JSON report. Treat the issue body as the source of claims; treat the local tree (HEAD of default branch) as ground truth.
+Each subagent runs five detectors against its issue body and returns a structured JSON report. Treat the issue body as the source of claims; treat the fetched `<default-ref>` (Phase 0) as ground truth — never the user's working-tree checkout, which may be a feature branch.
 
 **Step 1 — Hybrid claim extraction.**
 
@@ -109,11 +124,11 @@ The LLM extraction returns the strict JSON schema below — subagents must valid
 
 | Detector | Verifier action | Finding shape |
 |----------|----------------|---------------|
-| `file-path-existence` | For each extracted path, test `[ -e <local-tree>/<path> ]`. If missing, also `git -C <local-tree> log --diff-filter=D --name-only -- <path>` to recover the deletion commit. | `quote`, `path`, `evidence` (deletion commit SHA + date if known, else `not found`) |
-| `numeric-claim-drift` | For each numeric claim, recompute the count from the working tree. Counting strategy by noun: `skills` → `ls -d <tree>/skills/*/ \| wc -l`; `agents`/`hooks`/`commands` → grep the relevant config; otherwise use the noun's nearest natural counter. If the verifier cannot pick a counter, mark the finding as `unverifiable` and skip — do not invent a number. | `quote`, `claimed`, `actual`, `counter_used` |
-| `version-reference-staleness` | For each version reference, check `git -C <local-tree> tag --list` and the `CHANGELOG.md` (if present) for the current version. Flag when the issue references a version that is no longer the latest **and** the surrounding clause asserts something tense-sensitive ("after the v1.0.0 purge", "as of v1.2"). | `quote`, `referenced_version`, `current_version` |
-| `resolved-open-question` | For each open-question bullet, search recent commits and the issue's own comment thread for resolution language. Use `git -C <local-tree> log --since=<issue.updatedAt> --grep=<keyword>` plus `gh issue view <NN> --json comments`. Flag only when there is a positively-phrased commit subject or comment ("decided X", "resolved: Y") — do not flag from absence of activity. | `quote`, `evidence` (commit SHA or comment URL) |
-| `cross-issue-contradiction` | For each `#NN` reference, look up that sibling in the seeded 1-line excerpts — never refetch full issue bodies. Flag when the excerpt directly negates this issue's claim. If the excerpt is too condensed to confirm or deny a contradiction, return `verdict: unverifiable` for that finding rather than speculating. | `quote`, `sibling_issue`, `sibling_quote` |
+| `file-path-existence` | For each extracted path, test `git -C <local-tree> ls-tree -r --name-only <default-ref> -- <path>` (path-existence on the fetched default branch — independent of the user's current checkout). If missing, also `git -C <local-tree> log <default-ref> --diff-filter=D --name-only -- <path>` to recover the deletion commit. | `quote`, `path`, `evidence` (deletion commit SHA + date if known, else `not found`) |
+| `numeric-claim-drift` | For each numeric claim, recompute the count from `<default-ref>`. Counting strategy by noun: `skills` → `git -C <local-tree> ls-tree -d --name-only <default-ref> skills/ \| wc -l`; `agents`/`hooks`/`commands` → `git show <default-ref>:<config-path>` then grep; otherwise use the noun's nearest natural counter. If the verifier cannot pick a counter, mark the finding as `unverifiable` and skip — do not invent a number. | `quote`, `claimed`, `actual`, `counter_used` |
+| `version-reference-staleness` | For each version reference, check `git -C <local-tree> tag --list` (tags are not branch-scoped) and `git show <default-ref>:CHANGELOG.md` (if present) for the current version. Flag when the issue references a version that is no longer the latest **and** the surrounding clause asserts something tense-sensitive ("after the v1.0.0 purge", "as of v1.2"). | `quote`, `referenced_version`, `current_version` |
+| `resolved-open-question` | For each open-question bullet, search the issue's full history for resolution language. Lower bound for `git log --since=...` is **`min(issue.createdAt, oldest_comment_timestamp)`**, not `issue.updatedAt` (which can be bumped by unrelated label/body activity after the resolution landed). Use `git -C <local-tree> log <default-ref> --since=<lower-bound> --grep=<keyword>` plus `gh issue view <NN> --json comments,createdAt`. Flag only when there is a positively-phrased commit subject or comment ("decided X", "resolved: Y") — do not flag from absence of activity. | `quote`, `evidence` (commit SHA or comment URL) |
+| `cross-issue-contradiction` | Scan **every** sibling excerpt in the seeded set, not only siblings already linked as `#NN` from this issue's body — unlinked contradictions are the dominant stale-state case. For each sibling whose excerpt asserts something covering this issue's claim domain (same module path, same numeric noun, same decision topic), check whether the excerpt directly negates this issue's claim. Never refetch full issue bodies. If the excerpt is too condensed to confirm or deny, return that finding as `unverifiable` rather than speculating. Findings include both the explicit `#NN` references (high-precision) and the broad scan (high-recall); deduplicate by sibling number. | `quote`, `sibling_issue`, `sibling_quote`, `match_kind` (`linked` \| `unlinked`) |
 
 **Step 3 — Assign a verdict.**
 
@@ -175,17 +190,26 @@ End with a one-line summary: `audit-issues: <total> issues — <valid> valid, <s
 
 ### Phase 4 — Interactive `[e]dit / [c]lose / [s]kip`
 
-Walk the per-issue blocks in order. After each block, prompt:
+Walk the per-issue blocks in order. After each block, prompt **with the option set parametric on verdict** — never show `[c]lose` for verdicts that cannot close.
 
-```
-[e]dit / [c]lose / [s]kip ?
-```
+| Verdict | Prompt shown |
+|---------|--------------|
+| `valid` | `[s]kip ?` (no findings to edit; nothing to close) |
+| `stale`, `contradicted`, `unverifiable` | `[e]dit / [s]kip ?` |
+| `premise-shifted`, `superseded by #N` | `[e]dit / [c]lose / [s]kip ?` |
 
 Rules for the prompt:
 
-- `c` is offered **only** when the verdict is `premise-shifted` or `superseded by #N`. For other verdicts, present `[e]dit / [s]kip` and reject `c` if entered.
+- Closeable verdict set is exactly `{premise-shifted, superseded by #N}`. Reject `c` keystrokes when the verdict is outside that set, even if a stray `c` is entered.
 - `e` triggers an edit preview: show the diff between the current body and the proposed body (with each `proposed_edit` applied), then ask `apply? [y/n]`. On `y`, run `gh issue edit <NN> --repo <owner>/<repo> --body-file <tempfile>`. On `n`, return to the `[e]/[c]/[s]` prompt for that issue.
-- `c` triggers a close preview: show the closing comment (auto-drafted from the verdict + linked sibling for `superseded by #N`, or the firing detector summary for `premise-shifted`), then ask `close? [y/n]`. On `y`, run `gh issue close <NN> --repo <owner>/<repo> --comment <body>`. On `n`, return to the prompt.
+- `c` triggers a close preview: show the closing comment (auto-drafted from the verdict + linked sibling for `superseded by #N`, or the firing detector summary for `premise-shifted`), then ask `close? [y/n]`. On `y`, post the comment via `--body-file` (safe for quotes, newlines, backticks, shell metacharacters) **then** close — `gh issue close` itself has no `--body-file` flag, so the post-and-close split is the only safe pattern:
+  ```bash
+  tmp=$(mktemp); printf '%s' "$body" > "$tmp"
+  gh issue comment <NN> --repo <owner>/<repo> --body-file "$tmp"
+  gh issue close   <NN> --repo <owner>/<repo> --reason "not planned"
+  rm -f "$tmp"
+  ```
+  Mirrors the body-passing pattern in `skills/resolve-pr-feedback/SKILL.md`. Never use `gh issue close --comment "$body"` — inline interpolation breaks on metacharacters in the generated text. On `n`, return to the prompt.
 - `s` advances to the next issue with no mutation.
 
 Emit a final per-issue summary line after the loop: `<applied edits>/<offered edits> applied, <closed>/<offered closes> closed, <skipped>` so the user can confirm the mutations match their intent.
