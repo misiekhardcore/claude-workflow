@@ -7,9 +7,9 @@ Used by skills that originate `gh` mutations or `git push` operations. Read this
 1. Run `git remote -v` and `pwd` to detect the repository and working directory. Run `git branch --show-current` (or `git rev-parse --abbrev-ref HEAD`) to detect the current branch.
 2. Display:
    - Detected repository (owner/repo from origin remote URL)
-   - Current branch name
+   - Current branch name (omit when the caller has set `Suppress branch line: true` colocated with the reference — used by worktree-spawning callers like `/implement` where the displayed branch would imply the work lands on the current branch)
    - Working directory path
-3. Ask the user to confirm. Default prompt: "Does this match the repo and branch you intend to operate on?" Callers may override by setting a `Confirmation prompt:` line colocated with the reference.
+3. Ask the user to confirm. Default prompt: "Does this match the repo and branch you intend to operate on?" — when the caller has set `Suppress branch line: true`, drop the "and branch" clause so the prompt becomes "Does this match the repo you intend to operate on?" (the user was not shown a branch and should not be asked to confirm one). Callers may override either default by setting a `Confirmation prompt:` line colocated with the reference.
 4. Do not proceed with any `gh` or `git push` operation until the user explicitly confirms.
 
 ## Why
