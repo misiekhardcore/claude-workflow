@@ -8,6 +8,22 @@ GitHub Releases (with auto-generated notes and source tarballs) remain the canon
 
 _No changes yet._
 
+## [1.0.2] — 2026-05-04
+
+### Fixed
+
+- **`marketplace.json` source format** — switched the single plugin entry from a github-ref object (`{ "source": "github", "repo": "misiekhardcore/claude-workflow", "ref": "main" }`) to the canonical self-reference form (`"source": "./"`). The github-ref form forced the plugin loader to perform a second clone (separate from the marketplace clone) into a versioned cache directory, and that step was failing silently across version bumps — `installed_plugins.json` would record the new version and a fresh `lastUpdated` timestamp, but the cache directory under `~/.claude/plugins/cache/claude-workflow/` would not exist on disk and `gitCommitSha` never advanced past the v0.7.0 commit. Existing broken installs may need to remove the `claude-workflow@claude-workflow` entry from `installed_plugins.json` and reinstall once. (#65)
+
+[Full diff](https://github.com/misiekhardcore/claude-workflow/compare/v1.0.1...v1.0.2)
+
+## [1.0.1] — 2026-05-03
+
+### Fixed
+
+- **`/implement` preflight branch display** refined; orchestrator template carves out a terminal-phase exception so `/implement` is correctly treated as the terminal step in the seed-brief contract introduced in 1.0.0. (#64)
+
+[Full diff](https://github.com/misiekhardcore/claude-workflow/compare/v1.0.0...v1.0.1)
+
 ## [1.0.0] — 2026-05-03
 
 First major release. Locks in the specialist-mode contract that lets orchestrators drive the build → review → verify loop autonomously, repurposes `/wrap-up` from an audit step into a worktree-cleanup utility, and adds two new skills: `/epic-autopilot` (autonomous epic-to-PR pipeline) and `/audit-issues` (drift-check for open GitHub issues).
