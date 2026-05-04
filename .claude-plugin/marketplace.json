@@ -11,11 +11,7 @@
   "plugins": [
     {
       "name": "claude-workflow",
-      "source": {
-        "source": "github",
-        "repo": "misiekhardcore/claude-workflow",
-        "ref": "main"
-      },
+      "source": "./",
       "description": "Workflow skills for Claude Code — standardized feature lifecycle: /discovery → /define → /implement. 17 skills, shared protocols, authoring standard, /new-skill scaffolder.",
       "version": "1.0.1",
       "author": {
