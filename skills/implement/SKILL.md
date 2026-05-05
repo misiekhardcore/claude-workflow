@@ -86,6 +86,8 @@ Progress reporting during the loop: emit one status line per cycle (`Cycle N/3 �
 
 Run these steps automatically, without asking:
 
+**All git and `gh` commands in this block must run from within the worktree root** (`cd <worktree-root>` before the first command if the shell's CWD is not already there). Running from the main repo directory fails because `gh pr create` uses the current directory's branch, which would be `main`.
+
 1. Read `<worktree-root>/.claude/NOTES.md` if it exists. Harvest `## Decisions made this session` and `## Open questions` — these flow into the PR body's `## Notes` section.
 2. Push the branch to remote.
 3. Resolve the PR base. Run `git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null` — if it returns an upstream like `origin/<base>`, strip the `origin/` prefix and use `<base>` as the PR base. If no upstream is configured (standalone invocation in a fresh feature branch), default to the repo's default branch (typically `main`). Stacked-branch orchestrators (e.g. `/epic-autopilot`) pre-set the upstream so the sub-PR targets the correct parent branch.
