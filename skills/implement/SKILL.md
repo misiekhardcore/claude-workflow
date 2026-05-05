@@ -77,7 +77,7 @@ payload:
 3. Auto-run `/verify` — spawns QA team, verifies every acceptance criterion. Pass a seed brief with `type: research` (diff + AC + test commands).
 4. **Evaluate findings** (no user prompt):
    - **Clean pass** (`/review` and `/verify` both return no issues) → exit loop, fall through to **PR creation**.
-   - **Findings present** and cycle count < 3 → package a **fix brief** (failing criteria + reviewer findings as `file:line` + prior architectural decisions; no review/verify session history), auto-feed it to `/build`, auto-re-run `/review` and `/verify`. Do not ask the user to confirm the next iteration.
+   - **Findings present** and cycle count < 3 → package a **fix brief** (failing criteria + reviewer findings as `file:line` + prior architectural decisions; no review/verify session history). Before re-entering `/build`, write the fix brief to `./.claude/NOTES.md` and follow `${CLAUDE_PLUGIN_ROOT}/_shared/compaction-protocol.md` — context editing first (clear cycle N tool outputs already acted on), sub-agent delegation second, `/compact` last resort. After compaction, resume from the fix brief in NOTES.md. Then auto-feed to `/build`, auto-re-run `/review` and `/verify`. Do not ask the user to confirm the next iteration.
    - **Findings present** and cycle count = 3 → exit loop with findings attached; fall through to **PR creation** and surface the remaining findings in the finalize step.
 
 Progress reporting during the loop: emit one status line per cycle (`Cycle N/3 — /build <state>, /review <n findings>, /verify <n failures>`) so the user can follow along, but never pause for input.
@@ -85,6 +85,8 @@ Progress reporting during the loop: emit one status line per cycle (`Cycle N/3 �
 ### PR creation (after the loop exits — clean or exhausted)
 
 Run these steps automatically, without asking:
+
+**All git and `gh` commands in this block must run from within the worktree root** (`cd <worktree-root>` before the first command if the shell's CWD is not already there). Running from the main repo directory fails because `gh pr create` uses the current directory's branch, which would be `main`.
 
 1. Read `<worktree-root>/.claude/NOTES.md` if it exists. Harvest `## Decisions made this session` and `## Open questions` — these flow into the PR body's `## Notes` section.
 2. Push the branch to remote.
