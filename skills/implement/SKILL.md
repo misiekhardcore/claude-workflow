@@ -77,7 +77,7 @@ payload:
 3. Auto-run `/verify` — spawns QA team, verifies every acceptance criterion. Pass a seed brief with `type: research` (diff + AC + test commands).
 4. **Evaluate findings** (no user prompt):
    - **Clean pass** (`/review` and `/verify` both return no issues) → exit loop, fall through to **PR creation**.
-   - **Findings present** and cycle count < 3 → package a **fix brief** (failing criteria + reviewer findings as `file:line` + prior architectural decisions; no review/verify session history), auto-feed it to `/build`, auto-re-run `/review` and `/verify`. Do not ask the user to confirm the next iteration.
+   - **Findings present** and cycle count < 3 → package a **fix brief** (failing criteria + reviewer findings as `file:line` + prior architectural decisions; no review/verify session history). Before re-entering `/build`, write the fix brief to `./.claude/NOTES.md` and follow `${CLAUDE_PLUGIN_ROOT}/_shared/compaction-protocol.md` — context editing first (clear cycle N tool outputs already acted on), sub-agent delegation second, `/compact` last resort. After compaction, resume from the fix brief in NOTES.md. Then auto-feed to `/build`, auto-re-run `/review` and `/verify`. Do not ask the user to confirm the next iteration.
    - **Findings present** and cycle count = 3 → exit loop with findings attached; fall through to **PR creation** and surface the remaining findings in the finalize step.
 
 Progress reporting during the loop: emit one status line per cycle (`Cycle N/3 — /build <state>, /review <n findings>, /verify <n failures>`) so the user can follow along, but never pause for input.
