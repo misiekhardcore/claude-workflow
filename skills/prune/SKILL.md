@@ -34,22 +34,30 @@ This skill has three lanes:
 
 ### Authoring lane (always)
 
-For each `CLAUDE.md`, `AGENTS.md`, or `SKILL.md` file in scope, run the five checks below. Each finding must cite its empirical source so the user can judge whether to act on it.
+**Discovery — enumerate files in scope before running checks:**
+- `CLAUDE.md` files: global `~/.claude/CLAUDE.md`, project-root `CLAUDE.md`, and any subdirectory `CLAUDE.md` files (e.g., `src/CLAUDE.md`).
+- `AGENTS.md` files: project-root `AGENTS.md` and any subdirectory `AGENTS.md` files. Also check `GEMINI.md` — it is the Gemini CLI equivalent of `AGENTS.md` and follows the same authoring rules.
+- `SKILL.md` files: enumerate all `SKILL.md` files under `.claude/skills/` and any active skill plugin directories (e.g., `~/.claude/plugins/cache/*/skills/*/SKILL.md`).
+
+Use `find` (or equivalent) to enumerate, then classify each file by its path position (global / project-root / subdirectory) for the length-triage cap lookup.
+
+For each discovered file, run the five checks below. Each finding must cite its empirical source so the user can judge whether to act on it.
 
 4. **Length triage** — Count the file's total lines. Flag if it exceeds the applicable cap:
    - Global `~/.claude/CLAUDE.md`: 50 lines
    - Project-root `CLAUDE.md` / `AGENTS.md`: 200 lines
-   - Subdirectory `CLAUDE.md` / `AGENTS.md` / `SKILL.md`: 50 lines
+   - Subdirectory `CLAUDE.md` / `AGENTS.md`: 50 lines
+   - `SKILL.md` (any location): skip the length check — skill files have no empirically-derived cap and are expected to be longer than agent-config files.
 
    Configurable: if the user has specified a different cap, use that instead.
 
    *Citation: project sizing guidance (progressive disclosure — 100–150 line main file + on-demand reference docs delivered +10–15% across benchmark metrics).*
 
-5. **Unpaired "don't" detector** — Scan every line that starts with `Don't`, `Avoid`, or `Never`. For each, look for a paired `Do`, `✅`, `Use`, or `Prefer` line within a configurable window (default: 3 lines after). List every unpaired entry with file path and line number.
+5. **Unpaired "don't" detector** — Scan every line whose content, after stripping any leading list marker (`- `, `* `, `+ `, or `N. `), starts with `Don't`, `Avoid`, or `Never`. For each, look for a paired `Do`, `✅`, `Use`, or `Prefer` line (also after stripping list markers) within a configurable window (default: 3 lines after). List every unpaired entry with file path and line number.
 
    *Citation: Augment Code empirical study — "pair every 'don't' with a 'do'"; warning-only documentation underperforms paired guidance.*
 
-6. **Warning-stack threshold** — Count total `Don't`-style lines (starting with `Don't`, `Avoid`, or `Never`) per file:
+6. **Warning-stack threshold** — Count total "don't"-style lines per file. A line counts if its content, after stripping any leading list marker (`- `, `* `, `+ `, or `N. `), starts with `Don't`, `Avoid`, or `Never`:
    - `> 10` → warning; cite the excessive-warnings anti-pattern.
    - `> 30` → error; cite the finding that 30+ "don't" rules roughly doubled PR time and dropped `completeness` 20% on simple tasks.
 
