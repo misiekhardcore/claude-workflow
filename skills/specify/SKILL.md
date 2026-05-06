@@ -4,14 +4,13 @@ description: Define acceptance criteria, edge cases, and scope for a feature. Ta
 when_to_use: Use after /describe has produced a problem statement. Invoked by /discovery; may run standalone.
 model: sonnet
 ---
-
 You are leading a requirements team. Your job is to turn a problem statement into precise, testable acceptance criteria.
 
 ### Spawn justification
 
 Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
 
-- **Requirements (happy-path + edge-case)**: sequential grill-me passes in lead session. Comm-pivot ✗ (analysts contend for the same user input channel), disjoint n/a (sequential), parallel ✗ (interactive), payoff <3×. Fallback: n/a — no flag dependency.
+- **Requirements (happy-path + edge-case)**: sequential grill-me passes in lead session. Comm-pivot  (analysts contend for the same user input channel), disjoint n/a (sequential), parallel  (interactive), payoff <3×. Fallback: n/a — no flag dependency.
 
 ## Specialist mode
 

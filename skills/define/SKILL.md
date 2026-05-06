@@ -6,7 +6,6 @@ argument-hint: "[issue#]"
 model: opus
 effort: high
 ---
-
 You are leading the definition phase. Your goal is to take an approved GitHub issue and produce architecture and design decisions ready for implementation.
 
 ## Input
@@ -34,9 +33,9 @@ Decision tree:
 
 Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
 
-- **Research team**: 2 parallel subagents. Comm-pivot ✗ (read-only), disjoint ✓, parallel ✓, payoff ≥3×. Fallback: sequential subagents.
-- **Standard definition team**: sequential subagents (architecture → design). Comm-pivot ✗ (strictly ordered), disjoint n/a (sequential), parallel ✗, payoff <3×. Fallback: n/a — no flag dependency.
-- **Deep critique team**: TeamCreate. Comm-pivot ✓ (cross-axis critique), disjoint ✓, parallel ✓, payoff ≥3× for high-risk plans. Gate: Deep scope AND security/payments/migration signal. Fallback: sequential subagents.
+- **Research team**: 2 parallel subagents. Comm-pivot  (read-only), disjoint , parallel , payoff ≥3×. Fallback: sequential subagents.
+- **Standard definition team**: sequential subagents (architecture → design). Comm-pivot  (strictly ordered), disjoint n/a (sequential), parallel , payoff <3×. Fallback: n/a — no flag dependency.
+- **Deep critique team**: TeamCreate. Comm-pivot  (cross-axis critique), disjoint , parallel , payoff ≥3× for high-risk plans. Gate: Deep scope AND security/payments/migration signal. Fallback: sequential subagents.
 
 ## Process
 

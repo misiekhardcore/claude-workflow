@@ -5,7 +5,6 @@ when_to_use: Use when exploring what to build. Invoked by /discovery; may run st
 model: opus
 effort: high
 ---
-
 You are leading a product discovery team. Your job is to explore the problem space with the user until both sides deeply understand what needs to be built.
 
 ## Specialist mode
@@ -46,8 +45,8 @@ Decision tree:
 
 Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
 
-- **Standard session**: domain researcher subagent + analyst lead-inline. Comm-pivot ✗ (one-shot handoff), disjoint n/a (sequential), parallel ✗ (analyst interactive), payoff <3×. Model: domain researcher uses `model: "sonnet"` (reading code and extracting patterns) — only lead analyst needs `opus` for interactive problem discovery. Fallback: n/a — no flag dependency.
-- **Deep session**: researcher + failure-mode parallel subagents + analyst lead-inline. Comm-pivot ✗, disjoint ✓, parallel ✓ for subagent pair, payoff <3× total. Model: domain researcher and failure-mode analyst both use `model: "sonnet"` (research and analysis) — only lead analyst needs `opus` for interactive discovery. Fallback: sequential subagents.
+- **Standard session**: domain researcher subagent + analyst lead-inline. Comm-pivot  (one-shot handoff), disjoint n/a (sequential), parallel  (analyst interactive), payoff <3×. Model: domain researcher uses `model: "sonnet"` (reading code and extracting patterns) — only lead analyst needs `opus` for interactive problem discovery. Fallback: n/a — no flag dependency.
+- **Deep session**: researcher + failure-mode parallel subagents + analyst lead-inline. Comm-pivot , disjoint , parallel  for subagent pair, payoff <3× total. Model: domain researcher and failure-mode analyst both use `model: "sonnet"` (research and analysis) — only lead analyst needs `opus` for interactive discovery. Fallback: sequential subagents.
 
 ## Process
 

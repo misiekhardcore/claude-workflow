@@ -6,11 +6,11 @@ Generic theory behind the applied phase shape in `docs/workflow.md`. Read when a
 
 ## Skill roles
 
-| Role                      | Definition                                                                           | Examples                                                    | Typical model |
-| ------------------------- | ------------------------------------------------------------------------------------ | ----------------------------------------------------------- | ------------- |
-| **Orchestrator**          | Leads a phase; spawns and coordinates specialists; writes the handoff artifact       | `/discovery`, `/define`, `/implement`                       | `opus`        |
-| **Specialist**            | Executes a bounded task; receives a seed brief; reports findings to the orchestrator | `/build`, `/review`, `/verify`, `/architecture`, `/specify` | `sonnet`      |
-| **Interactive primitive** | Reusable inline behavior; invoked by specialists; no team, no handoff                | `/grill-me`                                                 | `sonnet`      |
+|Role|Definition|Examples|Typical model|
+|-|-|-|-|
+|**Orchestrator**|Leads a phase; spawns and coordinates specialists; writes the handoff artifact|`/discovery`, `/define`, `/implement`|`opus`|
+|**Specialist**|Executes a bounded task; receives a seed brief; reports findings to the orchestrator|`/build`, `/review`, `/verify`, `/architecture`, `/specify`|`sonnet`|
+|**Interactive primitive**|Reusable inline behavior; invoked by specialists; no team, no handoff|`/grill-me`|`sonnet`|
 
 An interactive primitive is distinct from a specialist because it has no internal team and produces no handoff artifact. Collapsing it into "specialist" loses the boundary that it is a pure behavior library.
 
@@ -18,12 +18,12 @@ This table uses the three-role abstraction for composition theory. The authoring
 
 ## Composition patterns
 
-| Pattern      | Shape               | When to use                                                                   |
-| ------------ | ------------------- | ----------------------------------------------------------------------------- |
-| **Linear**   | A → B → C           | Strict ordering; each step depends on the previous output                     |
-| **Branch**   | A → (B or C)        | Mutually exclusive paths driven by a condition (scope class, flag, file type) |
-| **Loop**     | A → B → A (on fail) | Iterative refinement; fix cycles in `/implement`                              |
-| **Parallel** | A → (B ∥ C) → merge | Independent work streams; requires `TeamCreate`                               |
+|Pattern|Shape|When to use|
+|-|-|-|
+|**Linear**|A → B → C|Strict ordering; each step depends on the previous output|
+|**Branch**|A → (B or C)|Mutually exclusive paths driven by a condition (scope class, flag, file type)|
+|**Loop**|A → B → A (on fail)|Iterative refinement; fix cycles in `/implement`|
+|**Parallel**|A → (B ∥ C) → merge|Independent work streams; requires `TeamCreate`|
 
 Use the cheapest pattern that fits. Parallel adds coordination overhead — prefer linear until independence is confirmed.
 
@@ -33,11 +33,11 @@ Width (how many specialists) is a separate decision from shape (linear vs parall
 
 Scope is a **cost gradient**, not just a complexity gradient — each step up roughly multiplies token usage:
 
-| Scope           | Heuristic                                                         | Primitive                                | ~Cost vs single session |
-| --------------- | ----------------------------------------------------------------- | ---------------------------------------- | ----------------------- |
-| **Lightweight** | Single file / tightly scoped / no unknowns                        | Inline single agent                      | ≈ 1×                    |
-| **Standard**    | Multi-file / typical feature / some unknowns                      | 2–3 sequential subagents                 | ≈ 2–4× total            |
-| **Deep**        | Cross-module / security / breaking change / architecture-changing | All specialists, optionally `TeamCreate` | up to ≈ 7×              |
+|Scope|Heuristic|Primitive|~Cost vs single session|
+|-|-|-|-|
+|**Lightweight**|Single file / tightly scoped / no unknowns|Inline single agent|≈ 1×|
+|**Standard**|Multi-file / typical feature / some unknowns|2–3 sequential subagents|≈ 2–4× total|
+|**Deep**|Cross-module / security / breaking change / architecture-changing|All specialists, optionally `TeamCreate`|up to ≈ 7×|
 
 > Agent teams use approximately 7x more tokens than standard sessions when teammates run in plan mode, because each teammate maintains its own context window and runs as a separate Claude instance.
 > — [Anthropic, _Manage costs effectively_](https://docs.anthropic.com/en/docs/claude-code/costs)
@@ -76,33 +76,33 @@ A **seed brief** is context passed from an orchestrator to a specialist at spawn
 
 Produced by a codebase/patterns research agent; consumed by `/architecture`, `/design`, or `/build` specialists.
 
-| Field            | Content                                           |
-| ---------------- | ------------------------------------------------- |
-| `tech_stack`     | Languages, frameworks, key libraries              |
-| `module_map`     | Relevant modules, boundaries, and ownership       |
-| `patterns`       | 3+ direct pattern examples from the codebase      |
-| `prior_art`      | Vault concepts/entities or external references    |
-| `open_questions` | Unresolved constraints the specialist must handle |
+|Field|Content|
+|-|-|
+|`tech_stack`|Languages, frameworks, key libraries|
+|`module_map`|Relevant modules, boundaries, and ownership|
+|`patterns`|3+ direct pattern examples from the codebase|
+|`prior_art`|Vault concepts/entities or external references|
+|`open_questions`|Unresolved constraints the specialist must handle|
 
 ### Prior-art brief
 
 Produced by `/discovery`'s **Prior-Art Scout**; consumed by `/describe` and, where applicable, `/specify` (optional).
 
-| Field               | Content                                              |
-| ------------------- | ---------------------------------------------------- |
-| `problem_domain`    | Domain area the feature touches                      |
-| `existing_patterns` | Similar features or prior solutions in the codebase  |
-| `constraints`       | Non-negotiable constraints surfaced during discovery |
+|Field|Content|
+|-|-|
+|`problem_domain`|Domain area the feature touches|
+|`existing_patterns`|Similar features or prior solutions in the codebase|
+|`constraints`|Non-negotiable constraints surfaced during discovery|
 
 ### Fix brief
 
 Produced by `/review` or `/verify`; consumed by `/build` for remediation cycles.
 
-| Field             | Content                                           |
-| ----------------- | ------------------------------------------------- |
-| `failing_ac`      | Which acceptance criteria are not met             |
-| `findings`        | Reviewer findings as `file:line — description`    |
-| `prior_decisions` | Architectural decisions that must not be reversed |
+|Field|Content|
+|-|-|
+|`failing_ac`|Which acceptance criteria are not met|
+|`findings`|Reviewer findings as `file:line — description`|
+|`prior_decisions`|Architectural decisions that must not be reversed|
 
 ## Seed-brief contract
 
@@ -148,28 +148,28 @@ Orchestrators may nest: `/discovery` delegates to `/describe` and `/specify`; `/
 
 ## Handoff vs. seed brief
 
-|                       | Handoff artifact                                           | Seed brief                                 |
-| --------------------- | ---------------------------------------------------------- | ------------------------------------------ |
-| **Stored in**         | GitHub issue body (durable)                                | In-context at spawn (ephemeral)            |
-| **Crosses**           | Phase boundaries (`/discovery` → `/define` → `/implement`) | Intra-phase specialist boundaries          |
-| **Authoritative for** | Acceptance criteria, prior decisions, open questions       | Research context, prior art, fix findings  |
-| **Written by**        | Phase-boundary orchestrators                               | Research agents, review/verify specialists |
+||Handoff artifact|Seed brief|
+|-|-|-|
+|**Stored in**|GitHub issue body (durable)|In-context at spawn (ephemeral)|
+|**Crosses**|Phase boundaries (`/discovery` → `/define` → `/implement`)|Intra-phase specialist boundaries|
+|**Authoritative for**|Acceptance criteria, prior decisions, open questions|Research context, prior art, fix findings|
+|**Written by**|Phase-boundary orchestrators|Research agents, review/verify specialists|
 
 See `${CLAUDE_PLUGIN_ROOT}/_shared/handoff-artifact.md` for the five-field handoff structure. Seed briefs are ephemeral — only handoff artifacts update the issue body.
 
 ## Failure modes
 
-| Mode                        | Symptom                                                       | Mitigation                                                               |
-| --------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------ |
-| **Context bleed**           | Specialist output leaks into the next specialist's context    | Pass seed briefs explicitly; do not forward full conversation history    |
-| **Brief inflation**         | Seed briefs grow to include everything, defeating compression | Cap briefs to the fields above; omit what the specialist can find itself |
-| **Over-parallelization**    | Parallel specialists produce contradictory outputs            | Serialize when outputs must agree (e.g., architecture before design)     |
-| **Missing flag**            | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset             | Fall back to sequential; note degraded mode explicitly                   |
-| **Handoff-brief confusion** | In-phase briefs get written to the issue body                 | Seed briefs are ephemeral; only handoff artifacts update the issue body  |
-| **Inline overrun**          | Lead session bloats reading large files / verbose tool output | Delegate verbose work to a subagent; only the summary returns to context |
-| **Subagent re-research**    | Custom subagents start fresh and re-read files the lead loaded | Pass file paths and prior findings in the spawn prompt — no inheritance  |
-| **Team idle drift**         | Teammates left running after the task is done keep burning tokens | Shut down explicitly; idle teammates do not auto-terminate              |
-| **`/batch` cross-talk**     | Batched items try to coordinate via filesystem side effects   | Use `TeamCreate` when coordination is required; `/batch` assumes self-contained items |
+|Mode|Symptom|Mitigation|
+|-|-|-|
+|**Context bleed**|Specialist output leaks into the next specialist's context|Pass seed briefs explicitly; do not forward full conversation history|
+|**Brief inflation**|Seed briefs grow to include everything, defeating compression|Cap briefs to the fields above; omit what the specialist can find itself|
+|**Over-parallelization**|Parallel specialists produce contradictory outputs|Serialize when outputs must agree (e.g., architecture before design)|
+|**Missing flag**|`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset|Fall back to sequential; note degraded mode explicitly|
+|**Handoff-brief confusion**|In-phase briefs get written to the issue body|Seed briefs are ephemeral; only handoff artifacts update the issue body|
+|**Inline overrun**|Lead session bloats reading large files / verbose tool output|Delegate verbose work to a subagent; only the summary returns to context|
+|**Subagent re-research**|Custom subagents start fresh and re-read files the lead loaded|Pass file paths and prior findings in the spawn prompt — no inheritance|
+|**Team idle drift**|Teammates left running after the task is done keep burning tokens|Shut down explicitly; idle teammates do not auto-terminate|
+|**`/batch` cross-talk**|Batched items try to coordinate via filesystem side effects|Use `TeamCreate` when coordination is required; `/batch` assumes self-contained items|
 
 ## See also
 

@@ -5,7 +5,6 @@ when_to_use: Use after /define has produced approved architecture decisions. Inv
 argument-hint: "[issue#]"
 model: sonnet
 ---
-
 You are leading the build phase. Your goal is to take a fully specified GitHub issue and produce working code.
 
 ## Input
@@ -33,8 +32,8 @@ Decision tree:
 
 Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
 
-- **Standard**: TeamCreate at ≥3 splits, else parallel subagents. Comm-pivot ✓ at scale, disjoint ✓, parallel ✓, payoff ≥3× only at ≥3 splits. Gate: ≥3 sub-issues OR ≥3 disjoint file groups. Fallback: parallel subagents or sequential.
-- **Deep**: TeamCreate. All four ✓ for epics. Fallback: sequential subagents.
+- **Standard**: TeamCreate at ≥3 splits, else parallel subagents. Comm-pivot  at scale, disjoint , parallel , payoff ≥3× only at ≥3 splits. Gate: ≥3 sub-issues OR ≥3 disjoint file groups. Fallback: parallel subagents or sequential.
+- **Deep**: TeamCreate. All four  for epics. Fallback: sequential subagents.
 
 ## Specialist mode
 

@@ -1,10 +1,9 @@
 ---
-name: "<skill-name>"
-description: "<Leads the X phase. Use when Y.>"
-model: "<opus for research-leading orchestrators; sonnet for coordinator orchestrators>"
+name: <skill-name>
+description: <Leads the X phase. Use when Y.>
+model: <opus for research-leading orchestrators; sonnet for coordinator orchestrators>
 # effort: high  # Uncomment for research-leading orchestrators only
 ---
-
 You are leading the <phase name> phase. Your goal is to <objective>.
 
 <!-- Coordinator variants (e.g. /implement): drop step 2 — upstream phases or sub-skills own research. -->

@@ -8,12 +8,12 @@ This file is reference material — read it on demand when a skill creates, upda
 
 Four tiers, no overlap:
 
-| Tier | Where | Lifetime | Authoritative for |
-|------|-------|----------|-------------------|
-| `TodoWrite` | In-context | This session only | Throwaway working scratchpad |
-| `.claude/NOTES.md` | Worktree-local file (gitignored) | This phase, across sessions | In-flight decisions, current task, open questions |
-| GitHub issue | Remote | Cross-phase | Acceptance criteria, prior-phase decisions, handoff state |
-| Durable vault (optional) | The claude-obsidian vault (git-tracked) | Durable, cross-feature | Compounded knowledge — patterns, bug-fix history, architectural insights |
+|Tier|Where|Lifetime|Authoritative for|
+|-|-|-|-|
+|`TodoWrite`|In-context|This session only|Throwaway working scratchpad|
+|`.claude/NOTES.md`|Worktree-local file (gitignored)|This phase, across sessions|In-flight decisions, current task, open questions|
+|GitHub issue|Remote|Cross-phase|Acceptance criteria, prior-phase decisions, handoff state|
+|Durable vault (optional)|The claude-obsidian vault (git-tracked)|Durable, cross-feature|Compounded knowledge — patterns, bug-fix history, architectural insights|
 
 `TodoWrite` and `.claude/NOTES.md` are not mirrored — they serve different roles, and manual sync invites drift. The durable vault tier only materializes when the `claude-obsidian` plugin is installed and a vault has been bootstrapped (`/wiki`); without it, the tier is absent and skills that would write to it degrade gracefully.
 
@@ -21,12 +21,12 @@ Four tiers, no overlap:
 
 The `claude-obsidian` plugin ships its own running-memory mechanisms inside the vault. They look superficially similar to `.claude/NOTES.md` but serve a different purpose — keep the boundary sharp:
 
-| Artifact | Scope | Lifetime | Written by | Committed? |
-|---|---|---|---|---|
-| `.claude/NOTES.md` | One worktree, one feature | Ends when the worktree is removed | `/build` (scratch while coding) | No (gitignored) |
-| Vault hot cache | Whole repo, all work | Cross-session, curated recent context | `/save`, `/compound`, or manual vault edits | Yes |
-| Session archive | One session's archive | Permanent | `/save` at session end (Karpathy-style session capture) | Yes |
-| Vault log | Whole repo | Permanent, append-only | Every `/save` or `/compound` emits a line | Yes |
+|Artifact|Scope|Lifetime|Written by|Committed?|
+|-|-|-|-|-|
+|`.claude/NOTES.md`|One worktree, one feature|Ends when the worktree is removed|`/build` (scratch while coding)|No (gitignored)|
+|Vault hot cache|Whole repo, all work|Cross-session, curated recent context|`/save`, `/compound`, or manual vault edits|Yes|
+|Session archive|One session's archive|Permanent|`/save` at session end (Karpathy-style session capture)|Yes|
+|Vault log|Whole repo|Permanent, append-only|Every `/save` or `/compound` emits a line|Yes|
 
 Rule of thumb:
 - **While working** — log to `.claude/NOTES.md`. It's phase-local scratch; nothing leaves the worktree.

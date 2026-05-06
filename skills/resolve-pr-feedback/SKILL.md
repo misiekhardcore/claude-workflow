@@ -5,14 +5,13 @@ when_to_use: Use when a PR has review comments to address or when given a specif
 argument-hint: "[thread-URL]"
 model: sonnet
 ---
-
 You are leading the PR feedback resolution process. Your job is to systematically process review feedback on a pull request — triage it, fix what can be fixed, and reply with clear verdicts.
 
 ### Spawn justification
 
 Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
 
-- **Fix team**: TeamCreate at ≥3 file groups, else parallel subagents. Comm-pivot ✓ at scale (cross-thread regressions), disjoint ✓ (mapped pre-dispatch), parallel ✓, payoff ≥3× at ≥3 groups. Gate: ≥3 non-overlapping file groups. Fallback: parallel subagents or sequential.
+- **Fix team**: TeamCreate at ≥3 file groups, else parallel subagents. Comm-pivot  at scale (cross-thread regressions), disjoint  (mapped pre-dispatch), parallel , payoff ≥3× at ≥3 groups. Gate: ≥3 non-overlapping file groups. Fallback: parallel subagents or sequential.
 
 ## Input
 
@@ -110,13 +109,13 @@ Group threads by concern category. Present the triage summary to the user before
 
 Each thread gets a verdict:
 
-| Verdict | Meaning | Reply template |
-|---|---|---|
-| `fixed` | Implemented exactly as requested | "Fixed in {commit_sha}." |
-| `fixed-differently` | Addressed the concern but with a different approach | "Addressed differently: {explanation}. See {commit_sha}." |
-| `replied` | Disagree or need clarification — no code change | "{explanation}" |
-| `not-addressing` | Intentionally not changing — with rationale | "Not addressing: {rationale}" |
-| `needs-human` | Cannot resolve confidently — escalating | "Needs human review: {context}" |
+|Verdict|Meaning|Reply template|
+|-|-|-|
+|`fixed`|Implemented exactly as requested|"Fixed in {commit_sha}."|
+|`fixed-differently`|Addressed the concern but with a different approach|"Addressed differently: {explanation}. See {commit_sha}."|
+|`replied`|Disagree or need clarification — no code change|"{explanation}"|
+|`not-addressing`|Intentionally not changing — with rationale|"Not addressing: {rationale}"|
+|`needs-human`|Cannot resolve confidently — escalating|"Needs human review: {context}"|
 
 Post replies on the PR using safe body passing to avoid shell injection:
 ```bash

@@ -8,11 +8,11 @@ A step-by-step walkthrough of the feature lifecycle in this repo: which skill ru
 
 Pick the lightest path that fits the task (from `CLAUDE.md`):
 
-| Size                 | Path                                    |
-| -------------------- | --------------------------------------- |
-| Trivial fix          | `/implement`                            |
-| Medium feature       | `/discovery` → `/implement`             |
-| Large feature / epic | `/discovery` → `/define` → `/implement` |
+|Size|Path|
+|-|-|
+|Trivial fix|`/implement`|
+|Medium feature|`/discovery` → `/implement`|
+|Large feature / epic|`/discovery` → `/define` → `/implement`|
 
 Handoff between phases uses the **GitHub issue body** as the durable artifact — see `${CLAUDE_PLUGIN_ROOT}/_shared/handoff-artifact.md` for the five-field structure. Within a phase, `./.claude/NOTES.md` is authoritative for in-flight state — see `${CLAUDE_PLUGIN_ROOT}/_shared/notes-md-protocol.md`. When context pressure mounts, follow `${CLAUDE_PLUGIN_ROOT}/_shared/compaction-protocol.md` (context editing first, sub-agent delegation second, `/compact` last).
 
@@ -34,8 +34,6 @@ Handoff between phases uses the **GitHub issue body** as the durable artifact �
                                                                                        │
                                                                               /resolve-pr-feedback
 ```
-
----
 
 ## Step 1 — `/discovery` (Opus, high effort)
 
@@ -72,13 +70,11 @@ When `/discovery` runs against an existing issue it **rewrites the five-field bl
 
 AC are the contract `/implement` verifies against, so silent changes have blast radius. After rewriting AC, `/discovery` checks for downstream artifacts:
 
-| Situation                                 | Action                                                                                                                                                                                                   |
-| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| A PR is already open                      | Post on the PR: "Acceptance criteria updated in #\<issue\>. Current AC: \<n/n\> still met, \<n\> changed, \<n\> new. Re-run /resolve-pr-feedback or /implement to reconcile." Does **not** close the PR. |
-| Sub-issues exist (from a prior `/define`) | Re-derive each sub-issue's AC slice from the new parent AC. Slices that no longer map get a superseded comment + close.                                                                                  |
-| Neither applies                           | Pure overwrite, nothing to reconcile.                                                                                                                                                                    |
-
----
+|Situation|Action|
+|-|-|
+|A PR is already open|Post on the PR: "Acceptance criteria updated in #\<issue\>. Current AC: \<n/n\> still met, \<n\> changed, \<n\> new. Re-run /resolve-pr-feedback or /implement to reconcile." Does **not** close the PR.|
+|Sub-issues exist (from a prior `/define`)|Re-derive each sub-issue's AC slice from the new parent AC. Slices that no longer map get a superseded comment + close.|
+|Neither applies|Pure overwrite, nothing to reconcile.|
 
 ## Step 2 — `/define` (Opus, high effort) — _skip for medium features_
 
@@ -114,13 +110,11 @@ Re-running `/define` **replaces the `## Implementation plan` block in place**. N
 
 When `/define` re-runs and the sub-issue breakdown changes, old sub-issues are reconciled explicitly:
 
-| Sub-issue state                                    | Action                                                                                                                  |
-| -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| Still maps cleanly to a slice of the new breakdown | Keep it; update its body with the new AC slice.                                                                         |
-| No longer maps                                     | Post comment: "Superseded by re-defined scope in #\<epic\>. Closing unless there's work already in flight." Then close. |
-| Maps partially                                     | Leave open; post a comment with the delta; flag in `## Implementation plan` as "needs manual review".                        |
-
----
+|Sub-issue state|Action|
+|-|-|
+|Still maps cleanly to a slice of the new breakdown|Keep it; update its body with the new AC slice.|
+|No longer maps|Post comment: "Superseded by re-defined scope in #\<epic\>. Closing unless there's work already in flight." Then close.|
+|Maps partially|Leave open; post a comment with the delta; flag in `## Implementation plan` as "needs manual review".|
 
 ## Step 3 — `/implement` (Sonnet)
 
@@ -143,25 +137,23 @@ Before writing any code, `/implement` fetches the issue body **and all comments*
 
 One comment per meaningful state change. Never more.
 
-| Checkpoint                                                                   | Comment                                                                                                                                                                                     |
-| ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Start**                                                                    | `🤖 Starting implementation. Working from ## Implementation plan (last updated <date>). Branch: <branch>. Will post again when a draft PR is open or if the fix-cycle escalates to needs-human.` |
-| **Escalation** (only if max fix-cycle iterations hit or an AC cannot be met) | `🤖 Fix-cycle escalated after N iterations. Blocking issue: <one-line>. Details: <fold with reviewer findings and failing AC>. Need guidance before continuing.`                            |
-| **PR open**                                                                  | `🤖 Draft PR opened: #<n>. AC status: <n/n met>. Review + verify clean. Ready for human review.`                                                                                            |
-| **Consolidation** (only if `/compound` filed new wiki notes)                 | `🤖 Captured learnings: <note title>` (or `inline` when claude-obsidian is not installed).                                                                                                  |
+|Checkpoint|Comment|
+|-|-|
+|**Start**|` Starting implementation. Working from ## Implementation plan (last updated <date>). Branch: <branch>. Will post again when a draft PR is open or if the fix-cycle escalates to needs-human.`|
+|**Escalation** (only if max fix-cycle iterations hit or an AC cannot be met)|` Fix-cycle escalated after N iterations. Blocking issue: <one-line>. Details: <fold with reviewer findings and failing AC>. Need guidance before continuing.`|
+|**PR open**|` Draft PR opened: #<n>. AC status: <n/n met>. Review + verify clean. Ready for human review.`|
+|**Consolidation** (only if `/compound` filed new wiki notes)|` Captured learnings: <note title>` (or `inline` when claude-obsidian is not installed).|
 
 Not posted: per-commit updates, per-fix-cycle-iteration noise, internal reviewer findings (those belong in the fix-brief, not the issue thread).
 
 ### PR body wording
 
-| Situation                         | PR body contains  |
-| --------------------------------- | ----------------- |
-| PR delivers the full epic         | `Closes #<epic>`  |
-| PR delivers one sub-issue of many | `Part of #<epic>` |
+|Situation|PR body contains|
+|-|-|
+|PR delivers the full epic|`Closes #<epic>`|
+|PR delivers one sub-issue of many|`Part of #<epic>`|
 
 The PR body uses a fixed three-section template — **Summary** / **Testing notes** / **Notes**. Before pushing, `/implement` reads `./.claude/NOTES.md` and harvests `## Decisions made this session` and `## Open questions` into the `## Notes` section, then deletes NOTES.md after `/compound` runs. The `## Notes` section is omitted entirely when there is nothing to record. This is why `/wrap-up` no longer drafts an audit block — the audit lives in the PR body, not the issue.
-
----
 
 ## Step 4 — `/compound` (Sonnet)
 
@@ -169,8 +161,6 @@ The PR body uses a fixed three-section template — **Summary** / **Testing note
 - **When:** Automatically after a successful `/implement`. Not a separate user invocation — it is part of `/implement`'s postamble.
 - **What it does:** Extracts the learning and drafts it using **Bug Track** (Problem / Symptoms / What Didn't Work / Solution / Why It Works / Prevention) or **Knowledge Track** (Context / Guidance / Why / When / Examples) format, then checks for overlap with existing knowledge via `claude-obsidian:wiki-query` when available. Filing is delegated: if `claude-obsidian:save` is available, `/save` places the note in the vault, attaches frontmatter, cross-links, updates the hot cache, and appends a log entry. If `claude-obsidian` is not installed, the drafted note is emitted inline for the user to capture into whatever knowledge store they prefer.
 - **Outcome:** Either a durable vault note (when `claude-obsidian` is active) or a structured Markdown block in the response. Never auto-deletes or overwrites without flagging.
-
----
 
 ## Step 5 — `/resolve-pr-feedback` (Sonnet)
 
@@ -181,13 +171,13 @@ The PR body uses a fixed three-section template — **Summary** / **Testing note
 
 ### Verdict table
 
-| Verdict             | Reply posted?                         | Thread resolved?   | Rationale                                                                         |
-| ------------------- | ------------------------------------- | ------------------ | --------------------------------------------------------------------------------- |
-| `fixed`             | Yes — with commit SHA                 | Yes — auto-resolve | Acted on the request exactly as asked.                                            |
-| `fixed-differently` | Yes — with rationale + commit SHA     | Yes — auto-resolve | Addressed the underlying concern; reviewer can re-open if unhappy.                |
-| `replied`           | Yes — discussion only, no code change | No — leave open    | Asking or disagreeing; reviewer owns the next move.                               |
-| `not-addressing`    | Yes — with rationale                  | No — leave open    | Declining is a human-to-human decision; reviewer resolves it (or insists).        |
-| `needs-human`       | Yes — escalation context              | No — leave open    | Could not act confidently; leaving open keeps it visible on the unresolved count. |
+|Verdict|Reply posted?|Thread resolved?|Rationale|
+|-|-|-|-|
+|`fixed`|Yes — with commit SHA|Yes — auto-resolve|Acted on the request exactly as asked.|
+|`fixed-differently`|Yes — with rationale + commit SHA|Yes — auto-resolve|Addressed the underlying concern; reviewer can re-open if unhappy.|
+|`replied`|Yes — discussion only, no code change|No — leave open|Asking or disagreeing; reviewer owns the next move.|
+|`not-addressing`|Yes — with rationale|No — leave open|Declining is a human-to-human decision; reviewer resolves it (or insists).|
+|`needs-human`|Yes — escalation context|No — leave open|Could not act confidently; leaving open keeps it visible on the unresolved count.|
 
 ### Verdict tag in reply
 
@@ -202,8 +192,6 @@ Fixed in abc1234 — replaced the N+1 loop with a single JOIN (benchmarks in com
 
 `/resolve-pr-feedback` fetches the current state of each thread before acting. If it sees its own previous verdict tag and no new comments since, it skips that thread. If a reviewer unresolves a thread `/resolve-pr-feedback` previously resolved, the next run treats it as a fresh triage entry (up to the 2-cycle cap per round).
 
----
-
 ## Step 6 — `/wrap-up` (Sonnet) — _optional, after the PR is open_
 
 - **File:** `skills/wrap-up/SKILL.md`
@@ -211,21 +199,17 @@ Fixed in abc1234 — replaced the N+1 loop with a single JOIN (benchmarks in com
 - **What it does:** Removes the feature worktree, deletes the branch, and clears `./.claude/NOTES.md`. Refuses outright on the default branch or out-of-tree paths; on a dirty worktree it surfaces unpushed/uncommitted state and requires an explicit proceed-anyway confirmation. **Not** an audit utility — assumptions, uncertainties, and follow-ups are harvested into the PR body's `## Notes` section by `/implement` before the PR opens.
 - **Outcome:** The worktree directory is gone, the branch is deleted (force-deleted if dirty and the user confirmed), and NOTES.md is removed.
 
----
-
 ## Consistency rule: replace in place
 
 The following three regions are always rewritten in place on re-run. None accumulate history inline.
 
-| Region                    | Written by   |
-| ------------------------- | ------------ |
-| Problem statement         | `/discovery` |
-| Acceptance criteria       | `/discovery` |
-| `## Implementation plan` block | `/define`    |
+|Region|Written by|
+|-|-|
+|Problem statement|`/discovery`|
+|Acceptance criteria|`/discovery`|
+|`## Implementation plan` block|`/define`|
 
 Each re-running phase reads the existing region before overwriting so carry-forwards are deliberate. Stale downstream artifacts (sub-issues, open PRs) get a reconciliation pass in the phase's postamble.
-
----
 
 ## Audit surface
 
@@ -237,20 +221,16 @@ No phase contract tries to be its own audit log. The canonical audit sources are
 
 All three are read-only from the perspective of downstream phases.
 
----
-
 ## Memory hierarchy
 
 Four tiers, no overlap:
 
-| Tier                     | Location                                | Lifetime                    | Authoritative for                                                                                                                          |
-| ------------------------ | --------------------------------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `TodoWrite`              | In-context                              | This session only           | Throwaway working scratchpad                                                                                                               |
-| `./.claude/NOTES.md`     | Worktree-local                          | This phase, across sessions | In-flight decisions, current task, open questions                                                                                          |
-| GitHub issue body        | Remote                                  | Cross-phase                 | Acceptance criteria, prior-phase decisions, handoff state                                                                                  |
-| Durable vault (optional) | The claude-obsidian vault (git-tracked) | Durable, cross-feature      | Compounded knowledge — bug-fix history, patterns, architectural insights (written by `/compound` via `/save` when the plugin is installed) |
-
----
+|Tier|Location|Lifetime|Authoritative for|
+|-|-|-|-|
+|`TodoWrite`|In-context|This session only|Throwaway working scratchpad|
+|`./.claude/NOTES.md`|Worktree-local|This phase, across sessions|In-flight decisions, current task, open questions|
+|GitHub issue body|Remote|Cross-phase|Acceptance criteria, prior-phase decisions, handoff state|
+|Durable vault (optional)|The claude-obsidian vault (git-tracked)|Durable, cross-feature|Compounded knowledge — bug-fix history, patterns, architectural insights (written by `/compound` via `/save` when the plugin is installed)|
 
 ## Maintenance — `/prune` (Haiku)
 
@@ -258,16 +238,12 @@ Four tiers, no overlap:
 - **When:** Monthly, or after major refactors.
 - **What it does:** Audits `CLAUDE.md` and auto-memory files for stale / superseded / unclear entries (semantic staleness). When `claude-obsidian` is installed, delegates the vault audit to `wiki-lint` (structural health — orphans, broken wikilinks, missing frontmatter) and folds the findings in. Without `claude-obsidian`, the vault lane is skipped with a one-line note. Never auto-deletes — produces recommendations for user approval.
 
----
-
 ## Maintenance — `/audit-issues` (Sonnet)
 
 - **File:** `skills/audit-issues/SKILL.md`
 - **When:** Periodically, or after a refactor that may have invalidated open issues.
 - **What it does:** Audits open GitHub issues in a target repo against the current local working tree. Runs five drift detectors — file-path-existence, numeric-claim-drift, version-reference-staleness, resolved-open-question, cross-issue-contradiction — and assigns a verdict (`unverifiable` > `premise-shifted` > `superseded by #N` > `contradicted` > `stale` > `valid`). Offers per-issue interactive `[e]dit / [c]lose / [s]kip` actions, mutating only after explicit confirmation. Requires a local clone at `~/Projects/<repo>`.
 - **Outcome:** Issue bodies edited or closed where the user approved; a stdout summary of findings.
-
----
 
 ## Autonomous variant — `/epic-autopilot` (Opus, high effort)
 

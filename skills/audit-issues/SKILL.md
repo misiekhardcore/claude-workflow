@@ -4,7 +4,6 @@ description: Audit open GitHub issues for staleness vs. current repo state. Flag
 argument-hint: "[owner/repo | #NN | owner/repo#NN]"
 model: sonnet
 ---
-
 You are auditing open GitHub issues for drift against the current state of their repository. Issues queued weeks or months ago accumulate broken file references, stale numeric claims, version references, resolved open questions, and cross-issue contradictions; this skill detects that drift and offers per-issue fix-or-close actions.
 
 This is a read-first, mutate-on-confirm utility. The product is the **updated set of issues themselves** — there is no parallel report artifact.
@@ -13,7 +12,7 @@ This is a read-first, mutate-on-confirm utility. The product is the **updated se
 
 Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
 
-- **Per-issue audit fan-out**: one Task subagent per audited issue, each running extraction + the five verifiers and returning a structured JSON report; lead aggregates and prints. Comm-pivot ✗ (subagents do not need to share findings mid-task — cross-issue checks use the upfront issue-list snapshot the lead passes in), disjoint ✓ (each subagent owns one issue body + the read-only repo tree), parallel ✓ (extraction + gh/grep verification per issue is independent), payoff ≥3× (sequential ≈ 30–60s for ~15 issues; parallel ≈ one issue's wall time). Model: sonnet — issue prose extraction needs comprehension, not deep reasoning. Fallback: n/a — no flag dependency (parallel subagents do not require `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`).
+- **Per-issue audit fan-out**: one Task subagent per audited issue, each running extraction + the five verifiers and returning a structured JSON report; lead aggregates and prints. Comm-pivot  (subagents do not need to share findings mid-task — cross-issue checks use the upfront issue-list snapshot the lead passes in), disjoint  (each subagent owns one issue body + the read-only repo tree), parallel  (extraction + gh/grep verification per issue is independent), payoff ≥3× (sequential ≈ 30–60s for ~15 issues; parallel ≈ one issue's wall time). Model: sonnet — issue prose extraction needs comprehension, not deep reasoning. Fallback: n/a — no flag dependency (parallel subagents do not require `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`).
 
 Skip the fan-out when only one issue is targeted (`#NN` form) — run extraction + verification inline.
 
@@ -21,13 +20,13 @@ Skip the fan-out when only one issue is targeted (`#NN` form) — run extraction
 
 Positional argument forms (no flags):
 
-| Form | Meaning |
-|------|---------|
-| _(empty)_ | Audit all open issues in the repo of the current working directory. |
-| `owner/repo` | Audit all open issues in `owner/repo`. |
-| `#NN` | Audit a single issue in the current repo. |
-| `#NN #MM …` | Audit a specific subset in the current repo. |
-| `owner/repo#NN` | Audit a single issue in a different repo. |
+|Form|Meaning|
+|-|-|
+|_(empty)_|Audit all open issues in the repo of the current working directory.|
+|`owner/repo`|Audit all open issues in `owner/repo`.|
+|`#NN`|Audit a single issue in the current repo.|
+|`#NN #MM …`|Audit a specific subset in the current repo.|
+|`owner/repo#NN`|Audit a single issue in a different repo.|
 
 Filters like `--label` and `--since` were rejected during `/define` — real triage targets a specific repo or specific issue numbers, not slices of label space. Add only when a concrete use case demands it.
 
@@ -105,42 +104,42 @@ Each subagent runs five detectors against its issue body and returns a structure
 
 Regex pass (deterministic, runs first):
 
-| Claim type | Pattern intent | Examples |
-|------------|---------------|----------|
-| File path | `` `path/like/this.ext` `` in inline code, or bare paths (no backticks) whose first segment matches a top-level directory in the local working tree (`ls -d <tree>/*/` filtered to non-hidden dirs — e.g. `skills/`, `_shared/`, `docs/`) | `` `skills/prune/SKILL.md` ``, `_shared/handoff-artifact.md` |
-| Numeric claim | "<number> <plural noun>" tied to a repo concept (skills, files, agents, lines, etc.) | "11 skills", "6 detectors" |
-| Version reference | `vX.Y[.Z]`, "the X.Y MCP purge", or pinned package versions | "v1.0.0", "after the v1.0.0 MCP purge" |
+|Claim type|Pattern intent|Examples|
+|-|-|-|
+|File path|`` `path/like/this.ext` `` in inline code, or bare paths (no backticks) whose first segment matches a top-level directory in the local working tree (`ls -d <tree>/*/` filtered to non-hidden dirs — e.g. `skills/`, `_shared/`, `docs/`)|`` `skills/prune/SKILL.md` ``, `_shared/handoff-artifact.md`|
+|Numeric claim|"<number> <plural noun>" tied to a repo concept (skills, files, agents, lines, etc.)|"11 skills", "6 detectors"|
+|Version reference|`vX.Y[.Z]`, "the X.Y MCP purge", or pinned package versions|"v1.0.0", "after the v1.0.0 MCP purge"|
 
 LLM pass (one call per issue, runs second; grounded in the regex output to reduce hallucination):
 
-| Claim type | What the LLM extracts |
-|------------|----------------------|
-| Cross-issue reference | `#NN` mentions in *Prior decisions* / body, with the surrounding clause that states the dependency |
-| Open question | Bullets under an *Open questions* heading, or sentences phrased as unresolved decisions |
-| Premise statement | The "Motivation" or "Context" claim describing the gap the issue addresses |
+|Claim type|What the LLM extracts|
+|-|-|
+|Cross-issue reference|`#NN` mentions in *Prior decisions* / body, with the surrounding clause that states the dependency|
+|Open question|Bullets under an *Open questions* heading, or sentences phrased as unresolved decisions|
+|Premise statement|The "Motivation" or "Context" claim describing the gap the issue addresses|
 
 The LLM extraction returns the strict JSON schema below — subagents must validate before printing.
 
 **Step 2 — Run the five detectors.**
 
-| Detector | Verifier action | Finding shape |
-|----------|----------------|---------------|
-| `file-path-existence` | For each extracted path, test `git -C <local-tree> ls-tree -r --name-only <default-ref> -- <path>` (path-existence on the fetched default branch — independent of the user's current checkout). If missing, also `git -C <local-tree> log <default-ref> --diff-filter=D --name-only -- <path>` to recover the deletion commit. | `quote`, `path`, `evidence` (deletion commit SHA + date if known, else `not found`) |
-| `numeric-claim-drift` | For each numeric claim, recompute the count from `<default-ref>`. Counting strategy by noun: `skills` → `git -C <local-tree> ls-tree -d --name-only <default-ref> skills/ \| wc -l`; `agents`/`hooks`/`commands` → `git show <default-ref>:<config-path>` then grep; otherwise use the noun's nearest natural counter. If the verifier cannot pick a counter, mark the finding as `unverifiable` and skip — do not invent a number. | `quote`, `claimed`, `actual`, `counter_used` |
-| `version-reference-staleness` | For each version reference, check `git -C <local-tree> tag --list` (tags are not branch-scoped) and `git show <default-ref>:CHANGELOG.md` (if present) for the current version. Flag when the issue references a version that is no longer the latest **and** the surrounding clause asserts something tense-sensitive ("after the v1.0.0 purge", "as of v1.2"). | `quote`, `referenced_version`, `current_version` |
-| `resolved-open-question` | For each open-question bullet, search the issue's full history for resolution language. Lower bound for `git log --since=...` is **`min(issue.createdAt, oldest_comment_timestamp)`**, not `issue.updatedAt` (which can be bumped by unrelated label/body activity after the resolution landed). Use `git -C <local-tree> log <default-ref> --since=<lower-bound> --grep=<keyword>` plus `gh issue view <NN> --json comments,createdAt`. Flag only when there is a positively-phrased commit subject or comment ("decided X", "resolved: Y") — do not flag from absence of activity. | `quote`, `evidence` (commit SHA or comment URL) |
-| `cross-issue-contradiction` | Scan **every** sibling excerpt in the seeded set, not only siblings already linked as `#NN` from this issue's body — unlinked contradictions are the dominant stale-state case. For each sibling whose excerpt asserts something covering this issue's claim domain (same module path, same numeric noun, same decision topic), check whether the excerpt directly negates this issue's claim. Never refetch full issue bodies. If the excerpt is too condensed to confirm or deny, return that finding as `unverifiable` rather than speculating. Findings include both the explicit `#NN` references (high-precision) and the broad scan (high-recall); deduplicate by sibling number. | `quote`, `sibling_issue`, `sibling_quote`, `match_kind` (`linked` \| `unlinked`) |
+|Detector|Verifier action|Finding shape|
+|-|-|-|
+|`file-path-existence`|For each extracted path, test `git -C <local-tree> ls-tree -r --name-only <default-ref> -- <path>` (path-existence on the fetched default branch — independent of the user's current checkout). If missing, also `git -C <local-tree> log <default-ref> --diff-filter=D --name-only -- <path>` to recover the deletion commit.|`quote`, `path`, `evidence` (deletion commit SHA + date if known, else `not found`)|
+|`numeric-claim-drift`|For each numeric claim, recompute the count from `<default-ref>`. Counting strategy by noun: `skills` → `git -C <local-tree> ls-tree -d --name-only <default-ref> skills/ \|wc -l`; `agents`/`hooks`/`commands` → `git show <default-ref>:<config-path>` then grep; otherwise use the noun's nearest natural counter. If the verifier cannot pick a counter, mark the finding as `unverifiable` and skip — do not invent a number.|`quote`, `claimed`, `actual`, `counter_used`|
+|`version-reference-staleness`|For each version reference, check `git -C <local-tree> tag --list` (tags are not branch-scoped) and `git show <default-ref>:CHANGELOG.md` (if present) for the current version. Flag when the issue references a version that is no longer the latest **and** the surrounding clause asserts something tense-sensitive ("after the v1.0.0 purge", "as of v1.2").|`quote`, `referenced_version`, `current_version`|
+|`resolved-open-question`|For each open-question bullet, search the issue's full history for resolution language. Lower bound for `git log --since=...` is **`min(issue.createdAt, oldest_comment_timestamp)`**, not `issue.updatedAt` (which can be bumped by unrelated label/body activity after the resolution landed). Use `git -C <local-tree> log <default-ref> --since=<lower-bound> --grep=<keyword>` plus `gh issue view <NN> --json comments,createdAt`. Flag only when there is a positively-phrased commit subject or comment ("decided X", "resolved: Y") — do not flag from absence of activity.|`quote`, `evidence` (commit SHA or comment URL)|
+|`cross-issue-contradiction`|Scan **every** sibling excerpt in the seeded set, not only siblings already linked as `#NN` from this issue's body — unlinked contradictions are the dominant stale-state case. For each sibling whose excerpt asserts something covering this issue's claim domain (same module path, same numeric noun, same decision topic), check whether the excerpt directly negates this issue's claim. Never refetch full issue bodies. If the excerpt is too condensed to confirm or deny, return that finding as `unverifiable` rather than speculating. Findings include both the explicit `#NN` references (high-precision) and the broad scan (high-recall); deduplicate by sibling number.|`quote`, `sibling_issue`, `sibling_quote`, `match_kind` (`linked` \|`unlinked`)|
 
 **Step 3 — Assign a verdict.**
 
-| Triggering finding(s) | Verdict |
-|----------------------|---------|
-| Any detector or validation error prevents reliable completion | `unverifiable` |
-| No findings | `valid` |
-| Any of: file-path / numeric / version / open-question | `stale` |
-| Any cross-issue-contradiction | `contradicted` |
-| Sibling issue claims to subsume this issue's scope | `superseded by #N` |
-| ≥3 distinct detector categories firing | `premise-shifted` |
+|Triggering finding(s)|Verdict|
+|-|-|
+|Any detector or validation error prevents reliable completion|`unverifiable`|
+|No findings|`valid`|
+|Any of: file-path / numeric / version / open-question|`stale`|
+|Any cross-issue-contradiction|`contradicted`|
+|Sibling issue claims to subsume this issue's scope|`superseded by #N`|
+|≥3 distinct detector categories firing|`premise-shifted`|
 
 When multiple verdicts could apply, pick the strongest in this order: `unverifiable` > `premise-shifted` > `superseded by #N` > `contradicted` > `stale` > `valid`.
 
@@ -193,11 +192,11 @@ End with a one-line summary: `audit-issues: <total> issues — <valid> valid, <s
 
 Walk the per-issue blocks in order. After each block, prompt **with the option set parametric on verdict** — never show `[c]lose` for verdicts that cannot close.
 
-| Verdict | Prompt shown |
-|---------|--------------|
-| `valid` | `[s]kip ?` (no findings to edit; nothing to close) |
-| `stale`, `contradicted`, `unverifiable` | `[e]dit / [s]kip ?` |
-| `premise-shifted`, `superseded by #N` | `[e]dit / [c]lose / [s]kip ?` |
+|Verdict|Prompt shown|
+|-|-|
+|`valid`|`[s]kip ?` (no findings to edit; nothing to close)|
+|`stale`, `contradicted`, `unverifiable`|`[e]dit / [s]kip ?`|
+|`premise-shifted`, `superseded by #N`|`[e]dit / [c]lose / [s]kip ?`|
 
 Rules for the prompt:
 

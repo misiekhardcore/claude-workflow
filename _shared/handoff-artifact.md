@@ -57,10 +57,10 @@ When a phase ends, intra-phase state from `.claude/NOTES.md` that the next phase
 
 - **Name sections by content, not by command.** Use the phase-specific heading below — never the slash command name (e.g. `## /define`, `## Handoff: /define → /implement`):
 
-  | Phase | Section heading |
-  |-------|----------------|
-  | `/discovery` | `## Requirements` |
-  | `/define` | `## Implementation plan` |
+  |Phase|Section heading|
+  |-|-|
+  |`/discovery`|`## Requirements`|
+  |`/define`|`## Implementation plan`|
 
 - **Update the body, not a comment.** Every phase edits the issue body in place — append a new section if one does not exist for the current phase, edit the existing section if it does. Comments are for discussion only.
 - **Reset after updating.** Once the body is updated, tell the user to start the next phase in a fresh session. Do not call the next skill from within the current one.

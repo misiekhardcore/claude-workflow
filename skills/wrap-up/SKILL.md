@@ -4,7 +4,6 @@ description: Clean up local state after a PR is open — remove the worktree, de
 when_to_use: Run when ready to discard the feature worktree after a PR is open.
 model: sonnet
 ---
-
 You are cleaning up local state after a PR has been opened. Your job is to safely remove the feature worktree, delete the branch, and clear any remaining NOTES.md — confirming before destructive actions and refusing outright when the operation would destroy protected state.
 
 ## Input
@@ -26,12 +25,12 @@ Gather:
 
 ### Step 2 — Apply state machine
 
-| Condition | Outcome |
-|-----------|---------|
-| Branch matches the default branch | **Refuse outright.** No proceed-anyway prompt. |
-| Worktree path not in `git worktree list --porcelain` | **Refuse outright.** Out-of-tree paths are never managed by `/wrap-up`. |
-| Worktree is dirty (uncommitted changes, or unpushed commits not in the PR) | **Show state + proceed-anyway prompt** (see Step 3). |
-| Worktree is clean, feature branch, worktree in-tree | **Single confirmation** (see Step 4). |
+|Condition|Outcome|
+|-|-|
+|Branch matches the default branch|**Refuse outright.** No proceed-anyway prompt.|
+|Worktree path not in `git worktree list --porcelain`|**Refuse outright.** Out-of-tree paths are never managed by `/wrap-up`.|
+|Worktree is dirty (uncommitted changes, or unpushed commits not in the PR)|**Show state + proceed-anyway prompt** (see Step 3).|
+|Worktree is clean, feature branch, worktree in-tree|**Single confirmation** (see Step 4).|
 
 ### Step 3 — Dirty worktree: proceed-anyway prompt
 

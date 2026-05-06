@@ -6,7 +6,6 @@ argument-hint: "[epic# | description]"
 model: opus
 effort: high
 ---
-
 You are orchestrating the autonomous epic-to-PR pipeline. Your goal is to take an epic GitHub issue (or a free-text description) and produce a set of draft sub-PRs plus a top-level epic PR, with no human prompts after the per-sub-issue /define gates.
 
 ## Input
@@ -24,8 +23,8 @@ Always **Deep** — this is a fanout orchestrator. No inline path exists; the sk
 
 Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
 
-- **Per-sub-issue /define gate**: sequential single-subagent per sub-issue (one at a time). Comm-pivot ✗ (no mid-task coordination), disjoint n/a, parallel ✗ (user approval required between each), payoff n/a. Model: sonnet. Fallback: n/a — no flag dependency.
-- **Autonomous phase — parallel Task sub-agents per tier**: one Task sub-agent per sub-issue within a tier, dispatched in a single message. Comm-pivot ✗ (sub-issues are disjoint; lead aggregates at settle), disjoint ✓ (each sub-agent works on a separate branch and sub-issue), parallel ✓ (tier-independent sub-issues), payoff ≥3× (wall-clock on ≥3 sub-issues). Model: opus per sub-agent (inherits from `/implement`'s own model). Fallback: sequential subagents.
+- **Per-sub-issue /define gate**: sequential single-subagent per sub-issue (one at a time). Comm-pivot  (no mid-task coordination), disjoint n/a, parallel  (user approval required between each), payoff n/a. Model: sonnet. Fallback: n/a — no flag dependency.
+- **Autonomous phase — parallel Task sub-agents per tier**: one Task sub-agent per sub-issue within a tier, dispatched in a single message. Comm-pivot  (sub-issues are disjoint; lead aggregates at settle), disjoint  (each sub-agent works on a separate branch and sub-issue), parallel  (tier-independent sub-issues), payoff ≥3× (wall-clock on ≥3 sub-issues). Model: opus per sub-agent (inherits from `/implement`'s own model). Fallback: sequential subagents.
 
 ## Process
 
@@ -190,15 +189,15 @@ Print exit summary to stdout and exit. The run is complete when all sub-PRs have
 
 On re-invocation with the same epic issue number, epic-autopilot detects prior state and skips completed phases:
 
-| State detected | Action |
-|----------------|--------|
-| No `## Requirements` in epic body | Re-run from Stage 1 |
-| `## Requirements` but no `## Implementation plan` | Re-run from Stage 2 |
-| `## Implementation plan` present | Skip Stages 1–2; check sub-issues |
-| Sub-issue has `## Implementation plan` | Skip per-sub-issue /define for that sub-issue |
-| Sub-issue has open PR on its branch | Sub-task settled; skip |
-| Sub-issue has branch but no open PR | Re-run `/implement` in the existing worktree for that sub-issue |
-| Sub-issue has neither branch nor PR | Fresh sub-task spawn |
+|State detected|Action|
+|-|-|
+|No `## Requirements` in epic body|Re-run from Stage 1|
+|`## Requirements` but no `## Implementation plan`|Re-run from Stage 2|
+|`## Implementation plan` present|Skip Stages 1–2; check sub-issues|
+|Sub-issue has `## Implementation plan`|Skip per-sub-issue /define for that sub-issue|
+|Sub-issue has open PR on its branch|Sub-task settled; skip|
+|Sub-issue has branch but no open PR|Re-run `/implement` in the existing worktree for that sub-issue|
+|Sub-issue has neither branch nor PR|Fresh sub-task spawn|
 
 A permanently-FAILED sub-task (branch exists, no PR, two prior retries) will be re-attempted on every resume. To skip it permanently, manually delete the branch and mark the sub-issue with a `skip` label before re-invoking.
 

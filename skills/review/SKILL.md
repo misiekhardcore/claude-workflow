@@ -5,7 +5,6 @@ argument-hint: "[PR# or URL]"
 model: sonnet
 effort: high
 ---
-
 You are leading the review phase. Your goal is to thoroughly review the implementation and produce actionable findings.
 
 ## Specialist mode
@@ -29,11 +28,11 @@ One of:
 
 The input determines the dispatch mode. An explicit PR argument always wins over an implicit seed brief.
 
-| Trigger | Source of diff | Source of AC | Output |
-|---|---|---|---|
-| Branch + seed brief (from `/implement`) | `git diff main...HEAD` | seed brief | **Fix brief** returned to `/build` |
-| Branch standalone | `git diff main...HEAD` | `gh issue view <n>` (if supplied) | **Findings report** to the user |
-| PR argument | `gh pr view <n>` + `gh pr diff <n>` | linked issue from `gh pr view --json closingIssuesReferences`, if any | **Posted GitHub review** (inline comments + summary), plus a short report to the user |
+|Trigger|Source of diff|Source of AC|Output|
+|-|-|-|-|
+|Branch + seed brief (from `/implement`)|`git diff main...HEAD`|seed brief|**Fix brief** returned to `/build`|
+|Branch standalone|`git diff main...HEAD`|`gh issue view <n>` (if supplied)|**Findings report** to the user|
+|PR argument|`gh pr view <n>` + `gh pr diff <n>`|linked issue from `gh pr view --json closingIssuesReferences`, if any|**Posted GitHub review** (inline comments + summary), plus a short report to the user|
 
 The fix-brief path is unchanged — `/implement` invocations continue to receive a fix brief via the seed-brief route. PR-mode runs never return a fix brief; there is no `/build` consumer.
 
@@ -76,8 +75,8 @@ The chosen class is referenced as `scope_class` (one of `"Lightweight"`, `"Stand
 
 Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`. Model tiers: see **Configuration** section.
 
-- **Standard**: TeamCreate with `model: "sonnet"` at ≥3 active personas, else 2 parallel subagents with `model: "sonnet"`. Comm-pivot ✓ (converge on disagreements), disjoint ✓, parallel ✓, payoff ≥3× at scale. Gate: ≥3 personas active. Fallback: sequential subagents.
-- **Deep**: TeamCreate with `model: "opus"`. All four ✓ across review axes; opus premium justified by criticality. Fallback: sequential subagents.
+- **Standard**: TeamCreate with `model: "sonnet"` at ≥3 active personas, else 2 parallel subagents with `model: "sonnet"`. Comm-pivot  (converge on disagreements), disjoint , parallel , payoff ≥3× at scale. Gate: ≥3 personas active. Fallback: sequential subagents.
+- **Deep**: TeamCreate with `model: "opus"`. All four  across review axes; opus premium justified by criticality. Fallback: sequential subagents.
 
 The two always-on personas (correctness, standards) plus any conditional personas whose gates fire all count toward the ≥3-persona threshold. The two conditional personas added in this skill — **docs consistency** and **architecture / scope-creep** — count alongside the existing security / performance / migration triggers.
 

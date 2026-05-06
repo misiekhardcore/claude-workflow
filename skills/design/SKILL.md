@@ -3,14 +3,13 @@ name: design
 description: Explore visual and UX design for a feature. Targeted grill-me wrapper for design decisions — UI layouts, interaction flows, component structure.
 model: sonnet
 ---
-
 You are leading a design team. Your job is to explore visual and interaction design approaches with the user and converge on the right design for the feature.
 
 ### Spawn justification
 
 Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
 
-- **Design session**: researcher subagent → proposer lead-inline (grill-me) → a11y subagent. Comm-pivot ✗ (sequential handoff), disjoint n/a (sequential), parallel ✗ (interactive grill-me), payoff <3×. Model: UX researcher and accessibility reviewer both use `model: "haiku"` (pattern search and accessibility checklist validation are systematic, not creative) — reserve `sonnet` for the design proposer lead session (interactive, requires design judgment). Fallback: n/a — no flag dependency.
+- **Design session**: researcher subagent → proposer lead-inline (grill-me) → a11y subagent. Comm-pivot  (sequential handoff), disjoint n/a (sequential), parallel  (interactive grill-me), payoff <3×. Model: UX researcher and accessibility reviewer both use `model: "haiku"` (pattern search and accessibility checklist validation are systematic, not creative) — reserve `sonnet` for the design proposer lead session (interactive, requires design judgment). Fallback: n/a — no flag dependency.
 
 ## Specialist mode
 

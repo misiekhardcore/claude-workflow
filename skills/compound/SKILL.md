@@ -1,16 +1,15 @@
 ---
 name: compound
-description: "Capture learnings from completed work into durable wiki notes. Delegates to /save when claude-obsidian is available; otherwise emits inline."
+description: Capture learnings from completed work into durable wiki notes. Delegates to /save when claude-obsidian is available; otherwise emits inline.
 model: sonnet
 ---
-
 You are leading the knowledge compounding phase. Your job is to capture what was just learned — the fix, the insight, the pattern — into a structured, reusable artifact that future agents and developers can discover and reuse.
 
 ### Spawn justification
 
 Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
 
-- **Full-mode team**: 3 parallel subagents + lead synthesis. Comm-pivot ✗ (independent reads, end-synthesis), disjoint ✓, parallel ✓, payoff ≥3×. Fallback: n/a — no flag dependency (parallel subagents do not require `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`).
+- **Full-mode team**: 3 parallel subagents + lead synthesis. Comm-pivot  (independent reads, end-synthesis), disjoint , parallel , payoff ≥3×. Fallback: n/a — no flag dependency (parallel subagents do not require `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`).
 
 This skill extracts the learning and drafts it. **Filing is delegated** to the `claude-obsidian` plugin when available: its `/save` command handles vault placement, frontmatter, cross-links, hot-cache updates, and the operation log automatically. If `claude-obsidian` is not installed, the drafted note is emitted inline for the user to copy into whatever knowledge store they prefer.
 

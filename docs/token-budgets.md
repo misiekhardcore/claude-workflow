@@ -12,12 +12,12 @@ Context rot — degradation of retrieval, reasoning, and instruction-following �
 
 The lifecycle moves state between three artifact tiers. Each has a hard cap that other skills assume:
 
-| Artifact | Cap | Why this number |
-| --- | --- | --- |
-| `.claude/NOTES.md` (per session) | **<1k tokens** | Re-read on every resume and before every `/compact`; must fit in one screen ([`_shared/notes-md-protocol.md`](../_shared/notes-md-protocol.md)) |
-| GitHub issue body (handoff artifact) | **<2k tokens** | Loaded fully at the start of every phase; the five-field shape in [`_shared/handoff-artifact.md`](../_shared/handoff-artifact.md) targets this |
-| Seed brief to a sub-agent | **<500 tokens** | A brief is objective + constraint + report contract — not session history. Sub-agents return 1–2k token reports, not the briefs they received |
-| Sub-agent report back to lead | 1–2k tokens | Quoted from Anthropic's reference figure for the isolation pattern; enforced by asking for a "focused report bounded by what the lead needs to decide" |
+|Artifact|Cap|Why this number|
+|-|-|-|
+|`.claude/NOTES.md` (per session)|**<1k tokens**|Re-read on every resume and before every `/compact`; must fit in one screen ([`_shared/notes-md-protocol.md`](../_shared/notes-md-protocol.md))|
+|GitHub issue body (handoff artifact)|**<2k tokens**|Loaded fully at the start of every phase; the five-field shape in [`_shared/handoff-artifact.md`](../_shared/handoff-artifact.md) targets this|
+|Seed brief to a sub-agent|**<500 tokens**|A brief is objective + constraint + report contract — not session history. Sub-agents return 1–2k token reports, not the briefs they received|
+|Sub-agent report back to lead|1–2k tokens|Quoted from Anthropic's reference figure for the isolation pattern; enforced by asking for a "focused report bounded by what the lead needs to decide"|
 
 If any artifact crosses its cap, the cause is almost always content that belongs in another tier: a long decision log in NOTES.md belongs in the issue body; a seed brief restating the conversation belongs in the issue body, not the brief.
 
@@ -25,11 +25,11 @@ If any artifact crosses its cap, the cause is almost always content that belongs
 
 The full session context — system prompt + CLAUDE.md + prior turns + tool output — at handoff:
 
-| Phase boundary | Target context size | Verification |
-| --- | --- | --- |
-| End of `/discovery` | **<15k tokens** | `/context` after the issue body is written, before resetting |
-| End of `/define` | **<15k tokens** | Same — define ends with the implementation plan written into the issue |
-| End of `/implement` (build → review → verify) | **<20k tokens** | `/context` after the draft PR is opened |
+|Phase boundary|Target context size|Verification|
+|-|-|-|
+|End of `/discovery`|**<15k tokens**|`/context` after the issue body is written, before resetting|
+|End of `/define`|**<15k tokens**|Same — define ends with the implementation plan written into the issue|
+|End of `/implement` (build → review → verify)|**<20k tokens**|`/context` after the draft PR is opened|
 
 These are *targets*, not enforced caps. They exist to make it obvious when a phase is dragging context that should have been delegated or reset. Crossing 30k near a phase boundary is the signal to bring forward the next reset and harvest into the issue body.
 
@@ -51,22 +51,22 @@ Compare the system + tools + messages totals against the targets above. The rele
 
 CLAUDE.md is loaded verbatim every turn. Where the file lives determines who pays for it.
 
-| Path | Loaded by | Lifetime | Use for |
-| --- | --- | --- | --- |
-| `~/.claude/CLAUDE.md` | Every session, every project | User-global | Tone, formatting, global rules, memory-system pointers |
-| `./CLAUDE.md` | Every session in this repo | Project, committed to git | Tech stack, build commands, project invariants, directory map |
-| `./CLAUDE.local.md` | Every session in this repo, only on this machine | Personal, **gitignored** | Local overrides, personal scratch rules, machine-specific paths |
-| `./<subdir>/CLAUDE.md` | Sessions whose CWD enters that subdir | Subsystem | Subsystem quirks that don't apply to the whole repo |
+|Path|Loaded by|Lifetime|Use for|
+|-|-|-|-|
+|`~/.claude/CLAUDE.md`|Every session, every project|User-global|Tone, formatting, global rules, memory-system pointers|
+|`./CLAUDE.md`|Every session in this repo|Project, committed to git|Tech stack, build commands, project invariants, directory map|
+|`./CLAUDE.local.md`|Every session in this repo, only on this machine|Personal, **gitignored**|Local overrides, personal scratch rules, machine-specific paths|
+|`./<subdir>/CLAUDE.md`|Sessions whose CWD enters that subdir|Subsystem|Subsystem quirks that don't apply to the whole repo|
 
 All files in the current path stack are loaded *additively* — global + project + subdir all pay tokens on every turn. Don't duplicate rules across levels.
 
 **Sizing targets** (from Anthropic's [costs guidance](https://code.claude.com/docs/en/costs) and the wiki concept note `claude-md-sizing`):
 
-| Scope | Recommended | Hard cap |
-| --- | --- | --- |
-| Global `~/.claude/CLAUDE.md` | <50 lines | 100 lines |
-| Project `./CLAUDE.md` | <200 lines | 300 lines |
-| Subdirectory `./sub/CLAUDE.md` | <50 lines | 100 lines |
+|Scope|Recommended|Hard cap|
+|-|-|-|
+|Global `~/.claude/CLAUDE.md`|<50 lines|100 lines|
+|Project `./CLAUDE.md`|<200 lines|300 lines|
+|Subdirectory `./sub/CLAUDE.md`|<50 lines|100 lines|
 
 Move out anything not used in the majority of sessions: long rule blocks (>50 lines) into a dedicated `REFERENCE.md` read on demand; workflow-specific instructions (PR review, migration steps) into skills that load only when invoked.
 

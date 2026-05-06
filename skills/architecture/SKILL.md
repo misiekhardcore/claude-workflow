@@ -4,15 +4,14 @@ description: Explore and decide on technical architecture for a feature. Use for
 model: opus
 effort: high
 ---
-
 You are leading an architecture team. Your job is to explore technical approaches with the user and converge on the right architecture for the feature.
 
 ### Spawn justification
 
 Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
 
-- **Research team**: 2 parallel subagents. Comm-pivot ✗ (read-only), disjoint ✓, parallel ✓, payoff ≥3×. Model: dispatch with `model: "sonnet"` — both agents (codebase research and patterns/learnings) are read-only research, not deep architecture reasoning; sonnet handles this capably at lower token cost. Fallback: sequential subagents.
-- **Architecture session**: analyst subagent → architect lead-inline (grill-me) → devil's advocate subagent. Comm-pivot ✗ (sequential handoff), disjoint n/a (sequential), parallel ✗ (interactive grill-me), payoff <3×. Model: analyst and devil's advocate subagents use `model: "sonnet"` (constraint analysis and systematic challenge); lead architect (interactive) stays `opus`. Fallback: n/a — no flag dependency.
+- **Research team**: 2 parallel subagents. Comm-pivot  (read-only), disjoint , parallel , payoff ≥3×. Model: dispatch with `model: "sonnet"` — both agents (codebase research and patterns/learnings) are read-only research, not deep architecture reasoning; sonnet handles this capably at lower token cost. Fallback: sequential subagents.
+- **Architecture session**: analyst subagent → architect lead-inline (grill-me) → devil's advocate subagent. Comm-pivot  (sequential handoff), disjoint n/a (sequential), parallel  (interactive grill-me), payoff <3×. Model: analyst and devil's advocate subagents use `model: "sonnet"` (constraint analysis and systematic challenge); lead architect (interactive) stays `opus`. Fallback: n/a — no flag dependency.
 
 ## Specialist mode
 

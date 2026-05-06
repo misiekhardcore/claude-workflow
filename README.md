@@ -106,27 +106,27 @@ Without this flag, `TeamCreate` is unavailable. Skills detect its absence and fa
 
 ## Skills
 
-| Skill                  | Description                                                                                                      |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `/discovery`           | Explore a problem and produce a GitHub issue with acceptance criteria                                            |
-| `/define`              | Plan architecture and design; produces the implementation handoff                                                |
-| `/implement`           | Full build→review→verify cycle, ends with a draft PR                                                             |
-| `/epic-autopilot`      | Autonomous epic→PR pipeline; chains `/discovery → /define → /implement` per sub-issue with gated approvals       |
-| `/build`               | Code against an issue's acceptance criteria using TDD                                                            |
-| `/review`              | Review an implementation or external PR; correctness, standards, and conditional specialists                     |
-| `/verify`              | QA verification of every acceptance criterion                                                                    |
-| `/describe`            | Explore and understand a problem space interactively                                                             |
-| `/specify`             | Turn a problem statement into testable acceptance criteria                                                       |
-| `/architecture`        | Decide on technical architecture — components, data flow, trade-offs                                             |
-| `/design`              | Visual and UX design decisions — layouts, interaction flows                                                      |
-| `/grill-me`            | Relentless interviewing to stress-test a plan or design                                                          |
-| `/compound`            | Capture learnings as structured wiki notes; files via `claude-obsidian` when installed, otherwise reports inline |
-| `/wrap-up`             | Post-PR cleanup utility: remove the feature worktree, delete the branch, clear NOTES.md                          |
-| `/prune`               | Audit CLAUDE.md for staleness; delegates vault audit to `wiki-lint` when `claude-obsidian` is installed          |
-| `/audit-issues`        | Drift-check open GitHub issues against the current repo state; offers per-issue edit / close / skip              |
-| `/find-skills`         | Discover and install skills from the ecosystem                                                                   |
-| `/resolve-pr-feedback` | Process PR review feedback in bulk                                                                               |
-| `/new-skill`           | Scaffold a new skill conforming to this authoring standard                                                       |
+|Skill|Description|
+|-|-|
+|`/discovery`|Explore a problem and produce a GitHub issue with acceptance criteria|
+|`/define`|Plan architecture and design; produces the implementation handoff|
+|`/implement`|Full build→review→verify cycle, ends with a draft PR|
+|`/epic-autopilot`|Autonomous epic→PR pipeline; chains `/discovery → /define → /implement` per sub-issue with gated approvals|
+|`/build`|Code against an issue's acceptance criteria using TDD|
+|`/review`|Review an implementation or external PR; correctness, standards, and conditional specialists|
+|`/verify`|QA verification of every acceptance criterion|
+|`/describe`|Explore and understand a problem space interactively|
+|`/specify`|Turn a problem statement into testable acceptance criteria|
+|`/architecture`|Decide on technical architecture — components, data flow, trade-offs|
+|`/design`|Visual and UX design decisions — layouts, interaction flows|
+|`/grill-me`|Relentless interviewing to stress-test a plan or design|
+|`/compound`|Capture learnings as structured wiki notes; files via `claude-obsidian` when installed, otherwise reports inline|
+|`/wrap-up`|Post-PR cleanup utility: remove the feature worktree, delete the branch, clear NOTES.md|
+|`/prune`|Audit CLAUDE.md for staleness; delegates vault audit to `wiki-lint` when `claude-obsidian` is installed|
+|`/audit-issues`|Drift-check open GitHub issues against the current repo state; offers per-issue edit / close / skip|
+|`/find-skills`|Discover and install skills from the ecosystem|
+|`/resolve-pr-feedback`|Process PR review feedback in bulk|
+|`/new-skill`|Scaffold a new skill conforming to this authoring standard|
 
 ## Optional: claude-obsidian integration
 
@@ -140,11 +140,11 @@ Without `claude-obsidian` every skill still runs; vault operations are skipped w
 
 ## Workflow paths
 
-| Task size            | Path                                    |
-| -------------------- | --------------------------------------- |
-| Trivial fix          | `/implement` directly                   |
-| Medium feature       | `/discovery` → `/implement`             |
-| Large feature / epic | `/discovery` → `/define` → `/implement` |
+|Task size|Path|
+|-|-|
+|Trivial fix|`/implement` directly|
+|Medium feature|`/discovery` → `/implement`|
+|Large feature / epic|`/discovery` → `/define` → `/implement`|
 
 Full lifecycle walkthrough: [`docs/workflow.md`](docs/workflow.md)
 
@@ -169,13 +169,13 @@ This plugin ships an authoring standard for creating new skills:
 
 Shared protocols live at `_shared/`:
 
-| File                     | Purpose                                                            |
-| ------------------------ | ------------------------------------------------------------------ |
-| `handoff-artifact.md`    | Five-field structure for cross-phase GitHub issue handoffs         |
-| `interviewing-rules.md`  | One-question-at-a-time interview protocol                          |
-| `notes-md-protocol.md`   | In-phase NOTES.md memory tier                                      |
-| `compaction-protocol.md` | Context editing → delegation → /compact order                      |
-| `composition.md`         | Multi-skill composition patterns, skill roles, and brief contracts |
+|File|Purpose|
+|-|-|
+|`handoff-artifact.md`|Five-field structure for cross-phase GitHub issue handoffs|
+|`interviewing-rules.md`|One-question-at-a-time interview protocol|
+|`notes-md-protocol.md`|In-phase NOTES.md memory tier|
+|`compaction-protocol.md`|Context editing → delegation → /compact order|
+|`composition.md`|Multi-skill composition patterns, skill roles, and brief contracts|
 
 ## Releasing
 

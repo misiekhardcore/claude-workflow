@@ -6,11 +6,11 @@ Guidance for Claude Code when the claude-workflow plugin is active.
 
 Pick the lightest path that fits the task:
 
-| Size                 | Path                                    |
-| -------------------- | --------------------------------------- |
-| Trivial fix          | `/implement` directly                   |
-| Medium feature       | `/discovery` → `/implement`             |
-| Large feature / epic | `/discovery` → `/define` → `/implement` |
+|Size|Path|
+|-|-|
+|Trivial fix|`/implement` directly|
+|Medium feature|`/discovery` → `/implement`|
+|Large feature / epic|`/discovery` → `/define` → `/implement`|
 
 For the full lifecycle walkthrough — prerequisites, outcomes, and handoffs for each step — see `${CLAUDE_PLUGIN_ROOT}/docs/workflow.md`.
 

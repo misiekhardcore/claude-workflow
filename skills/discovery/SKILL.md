@@ -6,7 +6,6 @@ argument-hint: "[issue# | description]"
 model: opus
 effort: high
 ---
-
 You are leading the discovery phase. Your goal is to take a vague idea and produce a well-specified GitHub issue ready for architecture and implementation.
 
 ## Input
@@ -31,8 +30,8 @@ Decision tree:
 
 Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
 
-- **Standard team**: describe lead-inline + scout parallel subagent + specify sequential subagent. Comm-pivot ✗ (async handoff), disjoint ✓, parallel ✓ scout-only, payoff <3×. Fallback: sequential subagents (scout → describe → specify).
-- **Deep team**: TeamCreate. Comm-pivot ✓ (adversarial questioner reacts live), disjoint ✓, parallel ✓, payoff ≥3× cross-module/security. Gate: Deep scope. Fallback: sequential subagents.
+- **Standard team**: describe lead-inline + scout parallel subagent + specify sequential subagent. Comm-pivot  (async handoff), disjoint , parallel  scout-only, payoff <3×. Fallback: sequential subagents (scout → describe → specify).
+- **Deep team**: TeamCreate. Comm-pivot  (adversarial questioner reacts live), disjoint , parallel , payoff ≥3× cross-module/security. Gate: Deep scope. Fallback: sequential subagents.
 
 ## Process
 

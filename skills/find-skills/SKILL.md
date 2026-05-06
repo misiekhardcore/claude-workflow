@@ -3,7 +3,6 @@ name: find-skills
 description: Discover and install agent skills when the user asks if Claude can do something or wants to extend capabilities.
 model: haiku
 ---
-
 # Find Skills
 
 This skill helps you discover and install skills from the open agent skills ecosystem.

@@ -36,15 +36,15 @@ The XML tag marks the boundary; the YAML is parseable without a fence. The `payl
 
 ## Required fields
 
-| Field | Type | Required | Notes |
-|-------|------|----------|-------|
-| `preflight_verified` | boolean | yes | Brief is rejected if `false` or missing |
-| `scope_class` | string | yes | Must be `Lightweight`, `Standard`, or `Deep` |
-| `repo` | string | yes | `owner/repo` — verified against `git remote -v` of the spawning worktree |
-| `branch` | string | yes | `feat/<slug>` — verified against `git rev-parse --abbrev-ref HEAD` |
-| `active_issue` | integer | yes | Ties the brief to its GitHub issue |
-| `payload` | object | yes | `{ type: fix|research|prior-art, ... }` — type-specific fields per `_shared/composition.md` |
-| `autonomous` | boolean | no | Default `false`. When `true`, suppresses `/implement`'s exhausted-exit prompt; only consumed by `/implement`. Do not set from non-autopilot orchestrators — default `false` preserves the rigor gate. |
+|Field|Type|Required|Notes|
+|-|-|-|-|
+|`preflight_verified`|boolean|yes|Brief is rejected if `false` or missing|
+|`scope_class`|string|yes|Must be `Lightweight`, `Standard`, or `Deep`|
+|`repo`|string|yes|`owner/repo` — verified against `git remote -v` of the spawning worktree|
+|`branch`|string|yes|`feat/<slug>` — verified against `git rev-parse --abbrev-ref HEAD`|
+|`active_issue`|integer|yes|Ties the brief to its GitHub issue|
+|`payload`|object|yes|`{ type: fix|research|prior-art, ... }` — type-specific fields per `_shared/composition.md`|
+|`autonomous`|boolean|no|Default `false`. When `true`, suppresses `/implement`'s exhausted-exit prompt; only consumed by `/implement`. Do not set from non-autopilot orchestrators — default `false` preserves the rigor gate.|
 
 When verification fails (wrong repo, wrong branch, missing required field), the specialist rejects the brief and falls back to standalone behavior with full prompts. Log which check failed.
 
@@ -52,16 +52,16 @@ When verification fails (wrong repo, wrong branch, missing required field), the 
 
 Confirmations that verify *state* are skipped when seeded; confirmations that drive *discovery* or *rigor* stay live.
 
-| Specialist | Skipped when seeded | Always kept |
-|-----------|---------------------|-------------|
-| `/build` | repo-preflight, scope-preflight, scope-class confirmation | design gate (architecture must be cross-phase verified) |
-| `/review` | repo-preflight | severity/finding-depth gates |
-| `/verify` | repo-preflight | AC verification rigor |
-| `/describe` | internal prior-art search (declared in Input section) | Product Pressure Test, grill-me interactions |
-| `/specify` | scope-class + file-scope confirmation | AC derivation gates |
-| `/architecture` | codebase-research / patterns-research subagent dispatches | architecture session (grill-me + devil's advocate) |
-| `/design` | design-space research subagents | interactive design session |
-| `/implement` | _(none — orchestrator role; preflights run at entry)_ | exhausted-exit prompt (rigor gate — suppressed only when `autonomous: true` in seed brief) |
+|Specialist|Skipped when seeded|Always kept|
+|-|-|-|
+|`/build`|repo-preflight, scope-preflight, scope-class confirmation|design gate (architecture must be cross-phase verified)|
+|`/review`|repo-preflight|severity/finding-depth gates|
+|`/verify`|repo-preflight|AC verification rigor|
+|`/describe`|internal prior-art search (declared in Input section)|Product Pressure Test, grill-me interactions|
+|`/specify`|scope-class + file-scope confirmation|AC derivation gates|
+|`/architecture`|codebase-research / patterns-research subagent dispatches|architecture session (grill-me + devil's advocate)|
+|`/design`|design-space research subagents|interactive design session|
+|`/implement`|_(none — orchestrator role; preflights run at entry)_|exhausted-exit prompt (rigor gate — suppressed only when `autonomous: true` in seed brief)|
 
 Each specialist documents a "Specialist mode" subsection in its own SKILL.md naming which prompts it skips.
 

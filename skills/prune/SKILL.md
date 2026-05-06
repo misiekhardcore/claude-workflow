@@ -4,7 +4,6 @@ description: Audit CLAUDE.md rules, AGENTS.md / SKILL.md authoring quality, and 
 when_to_use: Use monthly or after major refactors. Vault-internal health (orphans, broken links, frontmatter gaps) is delegated to claude-obsidian's wiki-lint when available.
 model: haiku
 ---
-
 You are auditing the project's Claude Code rules and documentation for staleness and authoring quality.
 
 This skill has three lanes:
@@ -54,7 +53,7 @@ For each discovered file, run the five checks below. Each finding must cite its 
 
    *Citation: project sizing guidance (progressive disclosure — 100–150 line main file + on-demand reference docs delivered +10–15% across benchmark metrics).*
 
-5. **Unpaired "don't" detector** — Scan every line whose content, after stripping any leading list marker (`- `, `* `, `+ `, or `N. `), starts with `Don't`, `Avoid`, or `Never`. For each, look for a paired `Do`, `✅`, `Use`, or `Prefer` line (also after stripping list markers) within a configurable window (default: 3 lines after). List every unpaired entry with file path and line number.
+5. **Unpaired "don't" detector** — Scan every line whose content, after stripping any leading list marker (`- `, `* `, `+ `, or `N. `), starts with `Don't`, `Avoid`, or `Never`. For each, look for a paired `Do`, `Always`, `Use`, or `Prefer` line (also after stripping list markers) within a configurable window (default: 3 lines after). List every unpaired entry with file path and line number.
 
    *Citation: Augment Code empirical study — "pair every 'don't' with a 'do'"; warning-only documentation underperforms paired guidance.*
 

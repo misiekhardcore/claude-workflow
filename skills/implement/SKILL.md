@@ -4,7 +4,6 @@ description: Full implementation cycle — build, review, and verify a feature f
 argument-hint: "[issue#]"
 model: sonnet
 ---
-
 You are orchestrating the full implementation cycle. Your goal is to take a fully defined GitHub issue and produce a ready-to-merge PR.
 
 ## Input

@@ -6,13 +6,13 @@ This document defines the authoring conventions for workflow skills in this plug
 
 Every skill fills one of five authoring roles. These extend the three-role composition model in `_shared/composition.md` (orchestrator / specialist / primitive): the orchestrator role is split into two variants, and a utility type is added for maintenance skills. Choose the correct template before authoring.
 
-| Role                              | Definition                                                                                                                                                      | Examples                                                      | Typical model                |
-| --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- | ---------------------------- |
-| **Research-leading orchestrator** | Leads a phase; spawns a research team, then a main team of specialists; writes the handoff artifact. Used when deep reasoning happens at the orchestrator tier  | `/discovery`, `/define`                                       | `opus` + `effort: high` |
-| **Coordinator orchestrator**      | Sequences already-designed sub-skills in a loop (e.g. build → review → verify). Deep reasoning lives in the sub-skills, not the orchestrator — no research team | `/implement`                                                  | `sonnet`                     |
-| **Specialist**                    | Executes a bounded task; receives a seed brief; reports findings to the orchestrator                                                                            | `/build`, `/review`, `/architecture`, `/specify`              | `sonnet`                     |
-| **Interactive primitive**         | Reusable inline behavior; invoked by specialists; no team, no handoff                                                                                           | `/grill-me`                                                   | `sonnet`                     |
-| **Utility**                       | User-invocable maintenance or post-work skill. No seed-brief contract, no phase handoff artifact, no team gating                                                | `/compound`, `/prune`, `/resolve-pr-feedback`, `/find-skills`, `/wrap-up` | `sonnet` or `haiku`          |
+|Role|Definition|Examples|Typical model|
+|-|-|-|-|
+|**Research-leading orchestrator**|Leads a phase; spawns a research team, then a main team of specialists; writes the handoff artifact. Used when deep reasoning happens at the orchestrator tier|`/discovery`, `/define`|`opus` + `effort: high`|
+|**Coordinator orchestrator**|Sequences already-designed sub-skills in a loop (e.g. build → review → verify). Deep reasoning lives in the sub-skills, not the orchestrator — no research team|`/implement`|`sonnet`|
+|**Specialist**|Executes a bounded task; receives a seed brief; reports findings to the orchestrator|`/build`, `/review`, `/architecture`, `/specify`|`sonnet`|
+|**Interactive primitive**|Reusable inline behavior; invoked by specialists; no team, no handoff|`/grill-me`|`sonnet`|
+|**Utility**|User-invocable maintenance or post-work skill. No seed-brief contract, no phase handoff artifact, no team gating|`/compound`, `/prune`, `/resolve-pr-feedback`, `/find-skills`, `/wrap-up`|`sonnet` or `haiku`|
 
 Use the role-specific template:
 
@@ -32,17 +32,17 @@ Use the role-specific templates for new skills: orchestrator, specialist, or pri
 
 ### Frontmatter fields
 
-| Field           | Required | Values                        | Notes                                                                                                                                                                                                                                                                |
-| --------------- | -------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `name`          | yes      | lowercase kebab-case          | Matches the directory name under `skills/`                                                                                                                                                                                                                           |
-| `description`   | yes      | 1–2 sentences, ≤150 chars     | Primary trigger mechanism — include both what it does and when to use it. Hard cap: 150 chars; move examples and use-cases into the skill body where they load on invocation only |
-| `model`         | yes      | `haiku` \| `sonnet` \| `opus` | See model guide below                                                                                                                                                                                                                                                |
-| `effort`        | no       | `low|medium|high|xhigh|max` | Elevates model effort for long-form research/decision-making. Use `high` for opus-tier research skills (discovery, define, architecture, describe).                                                                                                                  |
-| `when_to_use`   | no       | free text                     | Trigger phrases and "use before/after X" guidance. Rendered in the slash-command picker alongside `description`. Combined cap with `description`: 1,536 chars; keep `description` itself ≤150 chars per plugin convention.                                           |
-| `argument-hint` | no       | `[hint text]`                 | Hint shown after the slash command in the picker (e.g. `[issue#]`, `[PR# or URL]`). Forward-compatible; not yet rendered in plugin autocomplete (upstream bug [anthropics/claude-code#46626](https://github.com/anthropics/claude-code/issues/46626)).               |
-| `user-invocable`| no       | `false`                       | Set to `false` to hide the skill from the slash-command menu. Omit to keep visible (default). Use for orchestrator-internal specialists not meant for direct user invocation.                                                                                         |
-| `disable-model-invocation` | no | `true`                   | Prevents Claude from auto-invoking the skill without explicit user action.                                                                                                                                                                                            |
-| `allowed-tools` | no       | space-separated tool names    | Pre-approves listed tools so they run without per-use permission prompts. Does **not** restrict access — every tool remains callable. Omit by default; to actually block tools, use deny rules in `.claude/settings.json` or a subagent with its own `tools:` field. |
+|Field|Required|Values|Notes|
+|-|-|-|-|
+|`name`|yes|lowercase kebab-case|Matches the directory name under `skills/`|
+|`description`|yes|1–2 sentences, ≤150 chars|Primary trigger mechanism — include both what it does and when to use it. Hard cap: 150 chars; move examples and use-cases into the skill body where they load on invocation only|
+|`model`|yes|`haiku` \|`sonnet` \|`opus`|See model guide below|
+|`effort`|no|`low|medium|high|xhigh|max`|Elevates model effort for long-form research/decision-making. Use `high` for opus-tier research skills (discovery, define, architecture, describe).|
+|`when_to_use`|no|free text|Trigger phrases and "use before/after X" guidance. Rendered in the slash-command picker alongside `description`. Combined cap with `description`: 1,536 chars; keep `description` itself ≤150 chars per plugin convention.|
+|`argument-hint`|no|`[hint text]`|Hint shown after the slash command in the picker (e.g. `[issue#]`, `[PR# or URL]`). Forward-compatible; not yet rendered in plugin autocomplete (upstream bug [anthropics/claude-code#46626](https://github.com/anthropics/claude-code/issues/46626)).|
+|`user-invocable`|no|`false`|Set to `false` to hide the skill from the slash-command menu. Omit to keep visible (default). Use for orchestrator-internal specialists not meant for direct user invocation.|
+|`disable-model-invocation`|no|`true`|Prevents Claude from auto-invoking the skill without explicit user action.|
+|`allowed-tools`|no|space-separated tool names|Pre-approves listed tools so they run without per-use permission prompts. Does **not** restrict access — every tool remains callable. Omit by default; to actually block tools, use deny rules in `.claude/settings.json` or a subagent with its own `tools:` field.|
 
 ### Canonical field order
 
@@ -56,11 +56,11 @@ Omit optional fields when not set — never write empty strings or `null` as val
 
 ### Model guide
 
-| Model    | Use for                                                               |
-| -------- | --------------------------------------------------------------------- |
-| `haiku`  | Fast lookup, formatting, retrieval, light verification                |
-| `sonnet` | Standard multi-step workflows, implementation, review                 |
-| `opus`   | Deep research, architecture, high-stakes decisions with many branches |
+|Model|Use for|
+|-|-|
+|`haiku`|Fast lookup, formatting, retrieval, light verification|
+|`sonnet`|Standard multi-step workflows, implementation, review|
+|`opus`|Deep research, architecture, high-stakes decisions with many branches|
 
 ## `_shared/` files — when and how
 
@@ -68,14 +68,14 @@ Shared protocols live at `${CLAUDE_PLUGIN_ROOT}/_shared/`. Reference them on-dem
 
 ### Decision table
 
-| `_shared/` file          | Reference when the skill...                                                                                                                                                             |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `handoff-artifact.md`    | Writes or reads a GitHub issue handoff block (phase-boundary skills: `/discovery`, `/define`). Note: `/implement` is the terminal phase — its output is the PR, not an issue body update. `/wrap-up` is a utility, not a phase-boundary skill. |
-| `interviewing-rules.md`  | Interviews the user — asks questions, seeks approval, uses multi-choice forms (`/discovery`, `/define`, `/describe`, `/specify`, `/architecture`, `/design`, `/grill-me`, `/new-skill`) |
-| `notes-md-protocol.md`   | Creates, updates, or resumes from `.claude/NOTES.md` (`/build`); harvests and deletes it (`/implement` at PR-creation time)                                                             |
-| `specialist-mode.md`     | Documents or implements specialist-mode detection (seed-brief check, skip-list, standalone fallback) for any skill that can be seeded by an orchestrator                                |
-| `compaction-protocol.md` | Manages in-phase context — clearing stale tool results, delegating bulk reads, using `/compact` (`/build`)                                                                              |
-| `composition.md`         | Authors an orchestrator skill or designs a multi-skill workflow — patterns, briefs, decomposition rules                                                                                 |
+|`_shared/` file|Reference when the skill...|
+|-|-|
+|`handoff-artifact.md`|Writes or reads a GitHub issue handoff block (phase-boundary skills: `/discovery`, `/define`). Note: `/implement` is the terminal phase — its output is the PR, not an issue body update. `/wrap-up` is a utility, not a phase-boundary skill.|
+|`interviewing-rules.md`|Interviews the user — asks questions, seeks approval, uses multi-choice forms (`/discovery`, `/define`, `/describe`, `/specify`, `/architecture`, `/design`, `/grill-me`, `/new-skill`)|
+|`notes-md-protocol.md`|Creates, updates, or resumes from `.claude/NOTES.md` (`/build`); harvests and deletes it (`/implement` at PR-creation time)|
+|`specialist-mode.md`|Documents or implements specialist-mode detection (seed-brief check, skip-list, standalone fallback) for any skill that can be seeded by an orchestrator|
+|`compaction-protocol.md`|Manages in-phase context — clearing stale tool results, delegating bulk reads, using `/compact` (`/build`)|
+|`composition.md`|Authors an orchestrator skill or designs a multi-skill workflow — patterns, briefs, decomposition rules|
 
 ### Reference pattern
 

@@ -10,11 +10,11 @@ Why: when two plugins bundle overlapping servers, Claude Code loads both under d
 
 **Worked example.** Suppose both `claude-workflow` and `claude-obsidian` ship an `obsidian-vault` MCP server. Claude Code loads them as two separate clients:
 
-| Source | Tool identifier in skill bodies |
-| --- | --- |
-| User scope (`~/.claude/`)    | `mcp__obsidian-vault__obsidian_get_file_contents` |
-| `claude-workflow` plugin     | `mcp__plugin_claude-workflow_obsidian-vault__obsidian_get_file_contents` |
-| `claude-obsidian` plugin     | `mcp__plugin_claude-obsidian_obsidian-vault__obsidian_get_file_contents` |
+|Source|Tool identifier in skill bodies|
+|-|-|
+|User scope (`~/.claude/`)|`mcp__obsidian-vault__obsidian_get_file_contents`|
+|`claude-workflow` plugin|`mcp__plugin_claude-workflow_obsidian-vault__obsidian_get_file_contents`|
+|`claude-obsidian` plugin|`mcp__plugin_claude-obsidian_obsidian-vault__obsidian_get_file_contents`|
 
 Both plugins boot a separate server process pointed at the same vault, doubling resource use and racing on writes. Skills written against one identifier silently no-op when only the other is installed. Permission allowlists need three entries instead of one. Installing the server once at user scope collapses all three rows back to a single identifier.
 
