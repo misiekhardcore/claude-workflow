@@ -1,0 +1,21 @@
+{
+  "name": "claude-workflow",
+  "version": "0.0.1",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "prepare": "husky",
+    "format": "bin/minify-md -i -r ."
+  },
+  "devDependencies": {
+    "husky": "^9.1",
+    "lint-staged": "^15.5"
+  },
+  "lint-staged": {
+    "*.md": [
+      "bin/minify-md -i -r"
+    ]
+  }
+}
