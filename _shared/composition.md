@@ -21,7 +21,7 @@ Tally total token usage as ~N × single-session baseline.
 |-|-|-|-|
 |**Lightweight**|Single file, no unknowns|Inline single agent|~1×|
 |**Standard**|Multi-file, typical feature|2-3 sequential subagents|2–4×|
-|**Deep**|Cross-module, security, arch|All specialists + `TeamCreate`|Up to $7\times$|
+|**Deep**|Cross-module, security, arch|All specialists + `TeamCreate`|Up to ~7×|
 
 ### `TeamCreate` Rubric (All 4 must hold)
 1. **Communication Pivot**: Workers must share findings mid-task.

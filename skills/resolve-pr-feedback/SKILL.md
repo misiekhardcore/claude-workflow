@@ -34,7 +34,7 @@ Group by category → Present triage summary to user.
 - **Regression**: Run full project test suite after all fix agents complete.
 
 ### Phase 4 — Reply
-**Delegate reply drafting**: One sub-agent per thread (reply only — code fixes were grouped by file in Phase 3). Prompt: `cd <abs-path> && pwd`.
+**Delegate reply drafting**: One sub-agent per thread (reply text only — code fixes were grouped by file in Phase 3, and GitHub mutations stay in the main thread). Prompt: `cd <abs-path> && pwd`.
 **Verdict & Reply**:
 |Verdict|Meaning|Reply|
 |-|-|-|
@@ -44,8 +44,8 @@ Group by category → Present triage summary to user.
 |`not-addressing`|Intentional skip|"Not addressing: {rationale}"|
 |`needs-human`|Confidence too low|"Needs human review: {context}"|
 
-**Mutation**:
-1. Post reply via `gh api .../replies` (safe body passing).
+**Mutation (main thread)**:
+1. Post each drafted reply via `gh api .../replies` (safe body passing).
 2. Resolve thread if verdict in {`fixed`, `fixed-differently`, `not-addressing`}.
 
 ## Output
