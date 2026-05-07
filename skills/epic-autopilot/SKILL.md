@@ -6,7 +6,6 @@ argument-hint: "[epic# | description]"
 model: opus
 effort: high
 allowed-tools: Agent Bash Read TaskCreate TaskUpdate
-disable-model-invocation: true
 ---
 You are orchestrating the autonomous epic-to-PR pipeline. Your goal is to take an epic GitHub issue (or free-text description) and produce a set of draft sub-PRs plus a top-level epic PR, with no human prompts after the per-sub-issue /define gates.
 

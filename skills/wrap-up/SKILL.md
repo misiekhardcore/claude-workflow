@@ -4,7 +4,6 @@ description: Clean up local state after a PR is open — remove the worktree, de
 when_to_use: Run when ready to discard the feature worktree after a PR is open.
 model: sonnet
 allowed-tools: Bash Read
-disable-model-invocation: true
 ---
 <!-- Stays inline: destructive sequential ops — low context cost; must confirm before each step. -->
 

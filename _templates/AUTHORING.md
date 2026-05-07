@@ -30,7 +30,7 @@ Order: `name` → `description` → `when_to_use` → `argument-hint` → `model
 | `effort` | `low` / `high` | `high` for deep research/decision-making; `low` for maintenance/utility. Omit for standard. |
 | `allowed-tools` | space-separated tool names | Pre-approves a narrow tool surface (skips permission prompts). Does **not** restrict access — the agent can still call other tools if unlocked at runtime. `Agent` is a valid tool name and must be listed for all orchestrating skills. |
 | `user-invocable` | `false` | Hides the skill from the slash-command menu. Use for orchestrator-internal specialists. |
-| `disable-model-invocation` | `true` | Skips the model call entirely — the skill is treated as a pure pipeline step that only sequences sub-skills. Candidates: `wrap-up`, `resolve-pr-feedback`, `epic-autopilot`. |
+| `disable-model-invocation` | `true` | Skips the model call entirely — the skill is treated as a pure pipeline step that only sequences sub-skills. Only use for skills with no model-driven logic (no reasoning, no user interaction, no branching decisions). |
 
 #### tools vs allowed-tools (agent frontmatter)
 
