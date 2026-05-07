@@ -10,7 +10,7 @@ Systematically process PR feedback: Triage → Fix → Reply.
 
 ## I/O
 - **Input**: No arg (all unresolved threads on branch's PR) or thread URL.
-- **Pre-flight**: [Ref: repo-preflight]. If >= 3$ files, run [Ref: scope-preflight].
+- **Pre-flight**: [Ref: repo-preflight]. If >= 3 files, run [Ref: scope-preflight].
 
 ## Process
 
@@ -28,13 +28,13 @@ Group by category → Present triage summary to user.
 ### Phase 3 — Fix
 **Conflict Avoidance**: Map threads to files. No two agents on same file in parallel.
 **Dispatch**:
-- **Fix Agents**: TeamCreate (>= 3$ file groups) or parallel subagents (>= 2$ groups).
+- **Fix Agents**: TeamCreate (>= 3 file groups) or parallel subagents (>= 2 groups).
 - **Execution**: Read comment → read context → implement fix → verify → determine verdict.
-- **Retry**: <= 2$ cycles per thread → else `needs-human`.
+- **Retry**: <= 2 cycles per thread → else `needs-human`.
 - **Regression**: Run full project test suite after all fix agents complete.
 
 ### Phase 4 — Reply
-**Delegate**: One sub-agent per thread. Prompt: `cd <abs-path> && pwd`.
+**Delegate reply drafting**: One sub-agent per thread (reply only — code fixes were grouped by file in Phase 3). Prompt: `cd <abs-path> && pwd`.
 **Verdict & Reply**:
 |Verdict|Meaning|Reply|
 |:-|:-|:-|

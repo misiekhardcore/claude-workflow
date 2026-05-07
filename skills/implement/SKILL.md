@@ -10,11 +10,11 @@ Orchestrate build → review → verify → fix cycles to produce a ready-to-mer
 ## Scope Assessment
 |Scope|Criteria|Action|
 |:-|:-|:-|
-|**Lightweight**|<= 50$ lines, no logic change, 1-2 AC|`/build` (inline) → inline AC check → PR. Skip `/review` and `/verify` teams.|
+|**Lightweight**|<= 50 lines, no logic change, 1-2 AC|`/build` (inline) → inline AC check → PR. Skip `/review` and `/verify` teams.|
 |**Standard**|Typical multi-file, AC in one module|Full Build → Review → Verify cycle.|
 |**Deep**|Cross-module, security, migration, breaking|Full cycle + Deep review + extra critique iterations.|
 
-**Decision**: <= 50$ lines + no logic change → Lightweight; Auth/Security/Migrations/Perf → Deep; else → Standard.
+**Decision**: <= 50 lines + no logic change → Lightweight; Auth/Security/Migrations/Perf → Deep; else → Standard.
 
 ### Design Gate (Standard/Deep only)
 Verify `## Implementation plan` in issue body. If absent:
@@ -24,7 +24,7 @@ Verify `## Implementation plan` in issue body. If absent:
 
 ## Pre-flight
 1. [Ref: repo-preflight] at entry (suppress branch line).
-2. [Ref: scope-preflight] if >= 3$ files. Pass `preflight_verified: true` in seed-briefs.
+2. [Ref: scope-preflight] if >= 3 files. Pass `preflight_verified: true` in seed-briefs.
 
 ## Process
 **Autonomy Contract**: Run cycles back-to-back without prompting. Only interrupt after PR is open if (a) clean, (b) 3 cycles exhausted, or (c) blocker hit.
