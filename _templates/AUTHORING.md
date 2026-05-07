@@ -41,6 +41,14 @@ Do not preload. Reference on-demand via `${CLAUDE_PLUGIN_ROOT}/_shared/<file>.md
 
 `[Ref: name]` is shorthand for `${CLAUDE_PLUGIN_ROOT}/_shared/name.md`. Skills use it for compact inline references in space-constrained skill bodies.
 
+## Compaction Checklist
+Before declaring any compaction (density pass, context-hygiene trim) complete:
+- All gates and numeric thresholds preserved verbatim (no approximation).
+- All spawn rubrics, dispatch contracts, and payload specs intact.
+- All `[Ref:]` cross-references present — none silently removed.
+- All verdict/mutation/resolution steps accounted for.
+- Output format spec and section headings unchanged.
+
 ## Implementation Rigor
 - **Parallelism**: Default: inline → subagent → `TeamCreate`. Justify >= 3× payoff.
 - **Overrun Prevention**: Delegate to sub-agent if:

@@ -25,7 +25,7 @@ Lead architecture team. Goal: Converge on a technical approach via research, ite
 1. **Research** (Parallel, `sonnet`):
    - **Codebase Agent**: Scan tech stack, modules, related patterns.
    - **Patterns Agent**: Query `claude-obsidian` → Project docs → Context7/Web.
-   - **Gate**: Skip external research if >= 3$ internal patterns found (unless security/payments/privacy).
+   - **Gate**: Skip external research if >= 3 internal patterns found (unless security/payments/privacy).
 2. **Architecture Session** (Sequential):
    - **Analyst** (`sonnet`): Explore constraints (boundaries, topology, integration).
    - **Architect** (`opus`): Lead interactively via `/grill-me`.
@@ -35,7 +35,7 @@ Lead architecture team. Goal: Converge on a technical approach via research, ite
    - Trade-off table (Pros/Cons/Complexity/Risk).
    - Code structure preview (dirs/interfaces).
    - Rationale for recommendation.
-4. **Deepening**: Scan for vague language or thin sections → dispatch focused deepening agents (<= 2$ rounds).
+4. **Deepening**: Scan for vague language or thin sections → dispatch focused deepening agents (<= 2 rounds).
 
 ## Rules
 - **Code-First**: Never propose architecture without reading existing code.

@@ -24,7 +24,7 @@ Audit open issues for drift. Product: Updated issues themselves (mutate on confi
 - Abort if issue is `closed`.
 
 ### Phase 2 — Per-Issue Audit (Subagent Fan-out)
-Spawn one subagent per issue (parallel for >= 3$).
+Spawn one subagent per issue (parallel for >= 3).
 **Subagent Contract**: 5 detectors → structured JSON.
 
 1. **Hybrid Extraction**:

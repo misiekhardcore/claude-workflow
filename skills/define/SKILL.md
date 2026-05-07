@@ -11,7 +11,7 @@ Phase Lead. Goal: Transform an approved issue into a concrete implementation pla
 ## Scope Assessment
 |Scope|Criteria|Action|
 |-|-|-|
-|**Lightweight**|<= 1$ module, pattern exists, no visuals, no unknowns|Inline architecture summary (3-5 bullets). Skip research and `/architecture`.|
+|**Lightweight**|<= 1 module, pattern exists, no visuals, no unknowns|Inline architecture summary (3-5 bullets). Skip research and `/architecture`.|
 |**Standard**|Typical feature, some unknowns, may have visuals|Research team → `/architecture` → `/design` (if visual).|
 |**Deep**|Cross-module, security/payments, arch-changing, migration|Research team → `/architecture` → `/design` → critique team.|
 
