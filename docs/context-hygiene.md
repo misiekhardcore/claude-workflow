@@ -54,6 +54,13 @@ Sub-agent isolation is **structurally rot-proof**: the lead session never sees t
 
 The general rule: **anything that produces bulk tool output should run in a sub-agent that returns a distilled report**. The lead session stays on synthesis, where rot hurts most. Use Glob/Grep for narrow, directed lookups, and use sub-agents for broader exploration or any task likely to generate large volumes of output.
 
+Delegate proactively using this smell checklist from `${CLAUDE_PLUGIN_ROOT}/_templates/AUTHORING.md`:
+
+- **File-sweep smell** — reading ≥5 files in a loop before synthesizing.
+- **Fan-out smell** — iterating over N independent items (threads, lanes, issues) with similar processing per item.
+- **Thin-synthesis smell** — retrieval/formatting work only; the lead's role is receiving a summary, not running the retrieval.
+- **Verbose-tool-output smell** — a single tool call returns verbose output that gets scanned for a small set of fields; most discarded after reading.
+
 In this workflow:
 
 - `/review` already follows this pattern: fresh-context reviewers receive the diff, not the build history. Keep it that way.

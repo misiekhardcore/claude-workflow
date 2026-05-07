@@ -25,7 +25,7 @@ The building blocks: `/describe`, `/specify`, `/architecture`, `/design`, `/buil
 
 ## Implementation Rules
 
-- **Default to single-agent.** Use `TeamCreate` only for parallelizable work across 3+ independent files or sub-issues.
+- **Default to single-agent.** Use `TeamCreate` only for parallelizable work across 3+ independent files or sub-issues. When inline work would dominate the lead's context window (multi-file sweep, N-way fan-out, verbose I/O), delegate to Task sub-agents even below the TeamCreate threshold (see `_shared/composition.md` § "Main-thread overrun").
 - **Use the cheapest viable model.** Skills set their own `model:` and `effort:` — trust them.
 - **Respond concisely.** No filler, no preamble.
 

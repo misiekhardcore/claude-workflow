@@ -15,7 +15,7 @@ Optionally: a <research | prior-art | fix> brief from <source skill>. When prese
 
 ### Spawn justification
 
-If this specialist spawns sub-agents or teams internally, state your choice explicitly: inline, parallel subagents, or TeamCreate. Document the gate conditions from `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` that justify the choice. See `/resolve-pr-feedback`, `/compound` for examples.
+If this specialist spawns sub-agents or teams internally, state your choice explicitly: inline, parallel subagents, or TeamCreate. Document the gate conditions from `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` that justify the choice — include cost-based parallelism payoff AND inline overrun triggers (multi-file sweep, N-way fan-out, verbose I/O work; see the smell checklist in `${CLAUDE_PLUGIN_ROOT}/_templates/AUTHORING.md` § "Inline-overrun smell checklist"). See `/resolve-pr-feedback`, `/compound`, `/prune` for examples.
 
 ## Process
 

@@ -122,7 +122,7 @@ Without this flag, `TeamCreate` is unavailable. Skills detect its absence and fa
 |`/grill-me`|Relentless interviewing to stress-test a plan or design|
 |`/compound`|Capture learnings as structured wiki notes; files via `claude-obsidian` when installed, otherwise reports inline|
 |`/wrap-up`|Post-PR cleanup utility: remove the feature worktree, delete the branch, clear NOTES.md|
-|`/prune`|Audit CLAUDE.md for staleness; delegates vault audit to `wiki-lint` when `claude-obsidian` is installed|
+|`/prune`|Audit CLAUDE.md, SKILL.md, and auto-memory for staleness and authoring quality; dispatches three lanes to Task sub-agents; delegates vault audit to `wiki-lint` when `claude-obsidian` is installed|
 |`/audit-issues`|Drift-check open GitHub issues against the current repo state; offers per-issue edit / close / skip|
 |`/find-skills`|Discover and install skills from the ecosystem|
 |`/resolve-pr-feedback`|Process PR review feedback in bulk|

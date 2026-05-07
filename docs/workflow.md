@@ -232,11 +232,11 @@ Four tiers, no overlap:
 |GitHub issue body|Remote|Cross-phase|Acceptance criteria, prior-phase decisions, handoff state|
 |Durable vault (optional)|The claude-obsidian vault (git-tracked)|Durable, cross-feature|Compounded knowledge — bug-fix history, patterns, architectural insights (written by `/compound` via `/save` when the plugin is installed)|
 
-## Maintenance — `/prune` (Haiku)
+## Maintenance — `/prune` (Haiku, dispatches to Task sub-agents)
 
 - **File:** `skills/prune/SKILL.md`
 - **When:** Monthly, or after major refactors.
-- **What it does:** Audits `CLAUDE.md` and auto-memory files for stale / superseded / unclear entries (semantic staleness). When `claude-obsidian` is installed, delegates the vault audit to `wiki-lint` (structural health — orphans, broken wikilinks, missing frontmatter) and folds the findings in. Without `claude-obsidian`, the vault lane is skipped with a one-line note. Never auto-deletes — produces recommendations for user approval.
+- **What it does:** Spawns three parallel Task sub-agents (one per audit lane: rules, authoring, vault), collects their reports, and synthesizes findings on the main thread. Rules lane audits `CLAUDE.md` and auto-memory files for stale / superseded / unclear entries (semantic staleness). Authoring lane scans SKILL.md / AGENTS.md / CLAUDE.md files for structural issues (excessive warnings, unpaired guidance, long architecture sections). When `claude-obsidian` is installed, vault lane delegates to `wiki-lint` (structural health — orphans, broken wikilinks, missing frontmatter) and probes for semantic staleness. Without `claude-obsidian`, vault lane is skipped with a one-line note. Never auto-deletes — produces recommendations for user approval.
 
 ## Maintenance — `/audit-issues` (Sonnet)
 
