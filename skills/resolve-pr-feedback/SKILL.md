@@ -4,6 +4,8 @@ description: Process PR review feedback in bulk — triage, fix in parallel, and
 when_to_use: PR has review comments or given thread URL.
 argument-hint: "[thread-URL]"
 model: sonnet
+effort: high
+allowed-tools: Agent Bash Read
 ---
 ## Role & Constraints
 Systematically process PR feedback: Triage → Fix → Reply.

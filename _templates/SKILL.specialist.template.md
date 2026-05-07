@@ -1,11 +1,13 @@
 ---
 name: <skill-name>
 description: <Does X. Use when Y.>
+# when_to_use: <routing hint — when should this skill be invoked?>
+# argument-hint: "[arg]"  # Uncomment if skill accepts a positional argument
 model: <haiku | sonnet | opus>
-# Uncomment only if this skill runs long-form multi-turn research or decision-making:
-# effort: high
-# Uncomment to pre-approve a narrow tool surface (skips permission prompts; does not restrict access):
-# allowed-tools: Read Grep Glob Bash
+# effort: high  # Uncomment only if this skill runs long-form multi-turn research or decision-making
+# allowed-tools: Agent Bash Read  # Uncomment to pre-approve a narrow tool surface (skips permission prompts; does not restrict access)
+# user-invocable: false  # Uncomment to hide from slash-command menu
+# disable-model-invocation: true  # Uncomment for pipeline skills that only sequence sub-skills
 ---
 ## Input
 

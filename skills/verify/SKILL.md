@@ -1,7 +1,11 @@
 ---
 name: verify
 description: QA verification of implementation against AC. Reports pass/fail per criterion.
+when_to_use: Use to verify implementation against acceptance criteria. Reports pass/fail per criterion.
+argument-hint: "[issue#]"
 model: haiku
+effort: low
+allowed-tools: Agent Bash Read TaskCreate TaskUpdate
 ---
 ## Role & Constraints
 Lead verification phase. Goal: Verify every AC from the issue is met with evidence.

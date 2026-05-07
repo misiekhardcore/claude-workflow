@@ -1,9 +1,11 @@
 ---
 name: define
 description: Lead definition phase. Spawns /architecture and /design to produce technical decisions.
+when_to_use: Use after /discovery produces an approved issue with AC. Precedes /implement.
 argument-hint: "[issue#]"
 model: opus
 effort: high
+allowed-tools: Agent Bash Read
 ---
 ## Role & Constraints
 Phase Lead. Goal: Transform an approved issue into a concrete implementation plan (architecture + design).

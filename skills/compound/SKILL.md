@@ -1,7 +1,10 @@
 ---
 name: compound
 description: Capture learnings from completed work into durable wiki notes. Delegates to /save when claude-obsidian is available.
+when_to_use: Use after a feature is merged to capture learnings into durable wiki notes.
 model: sonnet
+effort: low
+allowed-tools: Agent Bash Read
 ---
 ## Role & Constraints
 Lead knowledge compounding. Goal: Extract fixes, insights, or patterns into reusable artifacts.

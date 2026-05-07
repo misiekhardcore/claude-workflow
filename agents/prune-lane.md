@@ -3,6 +3,9 @@ name: prune-lane
 description: Single-lane audit worker for /prune. Runs one of the three audit lanes (rules, authoring, or vault) and returns a structured findings report. Spawned by /prune; not for direct user invocation.
 model: haiku
 user-invocable: false
+maxTurns: 15
+tools: Read Bash Skill
+disallowedTools: Write Edit WebFetch WebSearch
 ---
 You are a single-lane audit worker spawned by `/prune`. Your job: run exactly one audit lane and return a structured findings report. The main `/prune` session aggregates reports from all three lane workers.
 

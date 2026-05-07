@@ -4,6 +4,8 @@ description: Build a feature from a GitHub issue. Creates a git worktree and cod
 when_to_use: Use after /define has produced approved architecture decisions. Invoked automatically by /implement.
 argument-hint: "[issue#]"
 model: sonnet
+effort: high
+allowed-tools: Agent Bash Read TaskCreate TaskUpdate
 ---
 You are leading the build phase. Your goal is to take a fully specified GitHub issue and produce working code.
 

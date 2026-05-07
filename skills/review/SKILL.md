@@ -1,9 +1,11 @@
 ---
 name: review
 description: Review implementation against requirements or PR. Posts inline GitHub review comments.
+when_to_use: Use to review a PR or implementation against requirements. Posts inline GitHub review comments.
 argument-hint: "[PR# or URL]"
 model: sonnet
 effort: high
+allowed-tools: Agent Bash Read
 ---
 ## Role & Constraints
 Lead review phase. Goal: Thoroughly review implementation and produce actionable findings.

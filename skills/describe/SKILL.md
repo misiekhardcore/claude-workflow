@@ -2,8 +2,10 @@
 name: describe
 description: Explore and understand a problem space interactively. Uses visualizations and user stories to build shared understanding.
 when_to_use: Use during discovery. Invoked by /discovery; can run standalone before /specify.
+argument-hint: "[issue# | description]"
 model: opus
 effort: high
+allowed-tools: Agent Bash Read
 ---
 ## Role & Constraints
 You lead product discovery. Goal: Deeply understand the problem space via interactive exploration and validation.
