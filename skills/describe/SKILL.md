@@ -17,7 +17,7 @@ You lead product discovery. Goal: Deeply understand the problem space via intera
 Classify scope before starting:
 
 |Scope|Criteria|Action|
-|:-|:-|:-|
+|-|-|-|
 |**Lightweight**|Trivial fix, clear requirements, <= 1$ file|Skip sub-agents. Single-pass problem statement. Skip PPT.|
 |**Standard**|Typical feature/fix with some unknowns|Spawn team + visuals. Run PPT.|
 |**Deep**|Complex, cross-cutting, security/auth, arch change|Full team + extra research agents. Run PPT.|

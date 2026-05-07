@@ -9,17 +9,17 @@ Logic for treating phase boundaries as context resets to prevent reasoning rot.
 4. **Durable State**: Persist end-of-phase state to issue body before reset.
 
 ## Implementation
-- **Sizing**: Treat rot threshold as $\approx 12\%$ of window (~120k for 1M model).
+- **Sizing**: Treat rot threshold as ~12% of window (~120k for 1M model).
 - **Scent of Rot**:
-  - File-sweep (>= 5$ files).
-  - Fan-out ($N \times \text{item\_size} > \text{budget}$).
+  - File-sweep (>= 5 files).
+  - Fan-out (N × item_size > budget).
   - Thin-synthesis (retrieval/formatting only).
   - Verbose-I/O (large output → small field set).
 
 ## Handoff Artifact
 Fixed shape per `_shared/handoff-artifact.md`:
-- Problem statement → AC → Out of scope → Open questions → References.
+- Acceptance criteria, Constraints, Prior decisions (opt), Evidence (opt), Open questions (opt).
 
 ## See also
-- [Ref: token-budgets] for concrete numbers.
-- [Ref: compaction-protocol] for in-phase pressure.
+- `${CLAUDE_PLUGIN_ROOT}/docs/token-budgets.md` for concrete numbers.
+- `${CLAUDE_PLUGIN_ROOT}/_shared/compaction-protocol.md` for in-phase pressure.

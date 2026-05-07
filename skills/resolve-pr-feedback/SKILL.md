@@ -37,7 +37,7 @@ Group by category → Present triage summary to user.
 **Delegate reply drafting**: One sub-agent per thread (reply only — code fixes were grouped by file in Phase 3). Prompt: `cd <abs-path> && pwd`.
 **Verdict & Reply**:
 |Verdict|Meaning|Reply|
-|:-|:-|:-|
+|-|-|-|
 |`fixed`|Exact implementation|"Fixed in {commit_sha}."|
 |`fixed-differently`|Addressed via other approach|"Addressed differently: {explanation}. See {commit_sha}."|
 |`replied`|Disagree/Clarify|"{explanation}"|

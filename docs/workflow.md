@@ -4,7 +4,7 @@ Lifecycle walkthrough from discovery to closure.
 
 ## Workflow Paths
 |Size|Path|Handoff|
-|:-|:-|:-|
+|-|-|-|
 |**Trivial**|`/implement`|→ PR|
 |**Medium**|`/discovery` → `/implement`|Issue Body → PR|
 |**Large**|`/discovery` → `/define` → `/implement`|Issue Body → Issue Body → PR|

@@ -21,7 +21,7 @@ Lead verification phase. Goal: Verify every AC from the issue is met with eviden
 
 ## Scope Assessment
 |Scope|Criteria|Action|
-|:-|:-|:-|
+|-|-|-|
 |**Lightweight**|<= 3 AC, simple repros, no security/perf|Lead verifies inline. No team.|
 |**Standard**|>= 4 AC, or spans multiple areas/files|QA team with AC split across teammates.|
 |**Deep**|Security-sensitive, perf-critical, migration|QA team + specialist QA (Security or Performance).|

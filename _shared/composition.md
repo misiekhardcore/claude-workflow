@@ -18,7 +18,7 @@ Framework for orchestrating specialists and managing token/context budgets.
 Tally total token usage as ~N × single-session baseline.
 
 |Scope|Heuristic|Team Shape|Approx Cost|
-|:-|:-|:-|:-|
+|-|-|-|-|
 |**Lightweight**|Single file, no unknowns|Inline single agent|~1×|
 |**Standard**|Multi-file, typical feature|2-3 sequential subagents|2–4×|
 |**Deep**|Cross-module, security, arch|All specialists + `TeamCreate`|Up to $7\times$|
@@ -40,14 +40,14 @@ Tally total token usage as ~N × single-session baseline.
 Passed as raw YAML in `<seed-brief>` tag. Specialist skips research if present.
 
 |Brief Type|Core Fields|
-|:-|:-|
+|-|-|
 |**Research**|`tech_stack`, `module_map`, `patterns`, `prior_art`, `open_questions`|
 |**Prior-Art**|`problem_domain`, `existing_patterns`, `constraints`|
 |**Fix**|`failing_ac`, `findings` (`file:line`), `prior_decisions`|
 
 ## Handoff vs Seed-Brief
 |Feature|Handoff Artifact|Seed Brief|
-|:-|:-|:-|
+|-|-|-|
 |**Storage**|GitHub Issue (Durable)|In-Context (Ephemeral)|
 |**Boundary**|Phase-to-Phase|Intra-Phase (Orch → Spec)|
 |**Authority**|AC, prior decisions|Research, prior art, findings|

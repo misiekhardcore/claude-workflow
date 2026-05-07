@@ -23,14 +23,14 @@ Lead review phase. Goal: Thoroughly review implementation and produce actionable
 
 ## Dispatch Modes
 |Trigger|Diff Source|AC Source|Output|
-|:-|:-|:-|:-|
+|-|-|-|-|
 |Branch + Seed|`git diff`|Seed brief|Fix brief → `/build`|
 |Branch Standalone|`git diff`|`gh issue view`|Findings report → User|
 |PR Argument|`gh pr diff`|Linked issue|Posted GitHub review|
 
 ## Scope Assessment
 |Scope|Criteria|Action|
-|:-|:-|:-|
+|-|-|-|
 |**Lightweight**|Diff <= 50 lines, 1 module|Single reviewer, quick pass.|
 |**Standard**|Typical feature/multi-file|2 base reviewers + conditional specialists.|
 |**Deep**|Security, perf, cross-cutting, migration|All specialist reviewers. Veto power for Security/Perf.|

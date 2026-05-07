@@ -11,7 +11,7 @@ Logic for standalone vs. orchestrator-invoked (seeded) execution.
 **Format**: Raw YAML in XML tag `<seed-brief>`, no inner fence.
 
 |Field|Type|Req|Notes|
-|:-|:-|:-|:-|
+|-|-|-|-|
 |`preflight_verified`|bool|Yes|Must be `true`|
 |`scope_class`|string|Yes|`Lightweight`, `Standard`, or `Deep`|
 |`repo`|string|Yes|`owner/repo` (verified vs `git remote -v`)|
@@ -26,7 +26,7 @@ Logic for standalone vs. orchestrator-invoked (seeded) execution.
 Confirmations verifying *state* are skipped; *discovery/rigor* gates remain.
 
 |Specialist|Skipped when Seeded|Always Kept|
-|:-|:-|:-|
+|-|-|-|
 |`/build`|repo/scope preflights, scope confirmation|design gate|
 |`/review`|repo-preflight|severity/depth gates|
 |`/verify`|repo-preflight|AC verification rigor|

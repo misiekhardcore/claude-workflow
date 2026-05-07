@@ -4,6 +4,8 @@ description: Turn a problem statement into precise, testable acceptance criteria
 when_to_use: Use after /describe. Invoked by /discovery; can run standalone.
 model: sonnet
 ---
+<!-- Stays inline: interactive — requires back-and-forth with user. -->
+
 ## Role & Constraints
 Lead requirements team. Goal: Transform problem statements into testable, non-vague AC.
 

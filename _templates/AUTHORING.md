@@ -6,7 +6,7 @@ Directives for creating/editing skills. Ensures consistency, token efficiency, a
 All skills map to one of these five roles (extending the [Ref: composition] model). Use the corresponding template.
 
 |Role|Definition|Example|Model|Template|
-|:-|:-|:-|:-|:-|
+|-|-|-|-|-|
 |**Research-Lead Orch**|Leads phase → research → specialists → handoff.|`/discovery`, `/define`|`opus`|`SKILL.orchestrator`|
 |**Coordinator Orch**|Sequences sub-skills in loop (Build → Review → Verify).|`/implement`|`sonnet`|`SKILL.orchestrator`|
 |**Specialist**|Bounded task → seed-brief → report findings.|`/build`, `/review`|`sonnet`|`SKILL.specialist`|

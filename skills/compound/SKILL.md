@@ -8,7 +8,7 @@ Lead knowledge compounding. Goal: Extract fixes, insights, or patterns into reus
 
 ## Mode Selection
 |Mode|Criteria|Action|
-|:-|:-|:-|
+|-|-|-|
 |**Lightweight**|Simple fix, single root cause, obvious recurrence|Single-pass extraction. No sub-agents.|
 |**Full**|Complex debug, non-obvious root cause, broad pattern|Parallel sub-agents for thorough extraction.|
 

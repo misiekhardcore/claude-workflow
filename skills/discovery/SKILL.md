@@ -11,7 +11,7 @@ Lead discovery phase. Goal: Transform vague ideas into well-specified GitHub iss
 
 ## Scope Assessment
 |Scope|Criteria|Action|
-|:-|:-|:-|
+|-|-|-|
 |**Lightweight**|Clear repro, single area|/describe (Lightweight) → minimal /specify → issue. No team.|
 |**Standard**|Typical feature, some unknowns|Team: /describe + /specify specialists + Prior-Art Scout.|
 |**Deep**|Cross-module, auth/security/payments, arch-changing|Full team + flow analyst + Prior-Art Scout + adversarial questioner.|
