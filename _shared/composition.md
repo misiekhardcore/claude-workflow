@@ -15,23 +15,23 @@ Framework for orchestrating specialists and managing token/context budgets.
 - **Parallel**: A → (B ∥ C) → merge (Independent streams; requires `TeamCreate`).
 
 ## Team Sizing & Cost
-Tally total token usage as $\approx N \times \text{single-session baseline}$.
+Tally total token usage as ~N × single-session baseline.
 
 |Scope|Heuristic|Team Shape|Approx Cost|
 |:-|:-|:-|:-|
-|**Lightweight**|Single file, no unknowns|Inline single agent|$1\times$|
-|**Standard**|Multi-file, typical feature|2-3 sequential subagents|$2\text{--}4\times$|
+|**Lightweight**|Single file, no unknowns|Inline single agent|~1×|
+|**Standard**|Multi-file, typical feature|2-3 sequential subagents|2–4×|
 |**Deep**|Cross-module, security, arch|All specialists + `TeamCreate`|Up to $7\times$|
 
 ### `TeamCreate` Rubric (All 4 must hold)
 1. **Communication Pivot**: Workers must share findings mid-task.
 2. **File Disjointness**: Non-overlapping file sets.
 3. **Parallel Shape**: Sequential reasoning is not required.
-4. **Payoff**: Expected wall-clock speedup >= 3\times$.
+4. **Payoff**: Expected wall-clock speedup >= 3×.
 
 ### Main-Thread Overrun (Delegate when:)
-- **Read Sweep**: >= 5$ independent files saturate lead context.
-- **N-way Fan-out**: $N \times \text{item\_size} > \text{context\_budget}$.
+- **Read Sweep**: >= 5 independent files saturate lead context.
+- **N-way Fan-out**: N × item_size > context_budget.
 - **Verbose I/O**: Pure retrieval/formatting with thin synthesis.
 
 **Spawn Prompt Essentials**: `cd <abs-path> && pwd`, absolute paths, load-bearing findings.
