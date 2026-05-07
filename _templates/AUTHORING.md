@@ -21,6 +21,35 @@ Order: `name` → `description` → `when_to_use` → `argument-hint` → `model
 - `description`: <= 150 chars. Trigger-focused.
 - `model`: `haiku` (fast/retrieval), `sonnet` (standard/impl), `opus` (deep research/arch).
 
+#### Optional frontmatter fields
+
+| Field | Values | When to use |
+|-|-|-|
+| `when_to_use` | short routing hint | All skills. Primary dispatch signal for the harness. |
+| `argument-hint` | `"[arg]"` string | Skills that accept a positional argument from the user. |
+| `effort` | `low` / `high` | `high` for deep research/decision-making; `low` for maintenance/utility. Omit for standard. |
+| `allowed-tools` | space-separated tool names | Pre-approves a narrow tool surface (skips permission prompts). Does **not** restrict access — the agent can still call other tools if unlocked at runtime. `Agent` is a valid tool name and must be listed for all orchestrating skills. |
+| `user-invocable` | `false` | Hides the skill from the slash-command menu. Use for orchestrator-internal specialists. |
+| `disable-model-invocation` | `true` | Skips the model call entirely — the skill is treated as a pure pipeline step that only sequences sub-skills. Candidates: `wrap-up`, `resolve-pr-feedback`, `epic-autopilot`. |
+
+#### tools vs allowed-tools (agent frontmatter)
+
+`allowed-tools` (skill frontmatter) and `tools` / `disallowedTools` (agent frontmatter) are distinct:
+
+- **`allowed-tools`** — skill-level hint, pre-approves tools to skip permission prompts. Does not block access.
+- **`tools`** — agent-level allowlist; only listed tools may be called (hard restriction).
+- **`disallowedTools`** — agent-level blocklist; listed tools are always blocked, regardless of `tools`.
+
+Agents (in `agents/`) use `tools` + `disallowedTools` for security isolation. Skills use `allowed-tools` for UX (fewer prompts).
+
+#### Plugin security restrictions
+
+Agents dispatched inside a plugin context run with constrained tool access by default. Declaring `tools:` in the agent frontmatter is the authoritative way to enforce least-privilege. `Skill` is a valid tool name for agents that need to invoke sub-skills (e.g. `prune-lane` invoking `claude-obsidian:wiki-lint`).
+
+#### context and agent frontmatter
+
+`context: fork` isolates an agent's context from the parent session. It is intentionally **not** used on claude-workflow orchestrating skills (`/define`, `/implement`, `/epic-autopilot`) because they need to sequence sub-skills with shared in-session state. Use `context: fork` only when the sub-task is fully self-contained and should not see parent context.
+
 ### Body Layout
 1. **Role & Constraints**: Imperative directives. No "You are a...".
 2. **Specialist Mode**: [Ref: specialist-mode] seed-brief skip-list.

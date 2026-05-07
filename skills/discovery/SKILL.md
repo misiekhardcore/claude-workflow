@@ -5,6 +5,7 @@ when_to_use: Start of any new feature or vague problem. Precedes /define.
 argument-hint: "[issue# | description]"
 model: opus
 effort: high
+allowed-tools: Agent Bash Read
 ---
 ## Role & Constraints
 Lead discovery phase. Goal: Transform vague ideas into well-specified GitHub issues ready for architecture and implementation.

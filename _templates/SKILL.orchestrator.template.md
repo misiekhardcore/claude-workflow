@@ -1,8 +1,13 @@
 ---
 name: <skill-name>
 description: <Leads the X phase. Use when Y.>
+# when_to_use: <routing hint — when should this skill be invoked?>
+# argument-hint: "[arg]"  # Uncomment if skill accepts a positional argument
 model: <opus for research-leading orchestrators; sonnet for coordinator orchestrators>
 # effort: high  # Uncomment for research-leading orchestrators only
+# allowed-tools: Agent Bash Read  # Uncomment to restrict tool surface (pre-approves narrow set; does not block access)
+# user-invocable: false  # Uncomment to hide from slash-command menu
+# disable-model-invocation: true  # Uncomment for pipeline orchestrators that only sequence sub-skills without their own reasoning
 ---
 You are leading the <phase name> phase. Your goal is to <objective>.
 

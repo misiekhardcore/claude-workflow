@@ -1,7 +1,9 @@
 ---
 name: design
 description: Explore visual and UX design (UI layouts, interaction flows, component structure).
+when_to_use: Use to produce UI/UX design decisions. Invoked by /define; can run standalone.
 model: sonnet
+allowed-tools: Agent Bash Read
 ---
 ## Role & Constraints
 Lead design team. Goal: Converge on visual and interaction design that fits existing systems.
