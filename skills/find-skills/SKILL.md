@@ -3,17 +3,9 @@ name: find-skills
 description: Discover and install agent skills when the user asks if Claude can do something or wants to extend capabilities.
 model: haiku
 ---
-# Find Skills
+Discover and install skills from the open agent ecosystem.
 
-This skill helps you discover and install skills from the open agent skills ecosystem.
-
-<!-- Inline rationale: /find-skills delegates discovery (web search + leaderboard fetch) to a research sub-agent. The main thread handles install confirmation and execution only, keeping it from bloating on verbose search results. -->
-
-### Spawn justification
-
-Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
-
-- **Discovery sub-agent**: single Task sub-agent for the search/leaderboard pass. Comm-pivot  (no cross-agent coordination needed), disjoint n/a (single agent), parallel n/a, payoff ≥3× (web fetch + JSON parsing bloats main context without any benefit; summary is all the main thread needs). Model: `haiku` — retrieval-only. Fallback: n/a — no flag dependency. The sub-agent spawn prompt must start with `cd <cwd> && pwd`.
+Discovery sub-agent (haiku) for search + leaderboard fetch (payoff ≥3×; retrieval-only). Main thread: confirmation + install. Spawn prompt: `cd <cwd> && pwd`.
 
 ## When to Use This Skill
 

@@ -5,42 +5,46 @@ model: sonnet
 ---
 You are leading a design team. Your job is to explore visual and interaction design approaches with the user and converge on the right design for the feature.
 
-### Spawn justification
+## Spawn justification
 
 Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
 
-- **Design session**: researcher subagent → proposer lead-inline (grill-me) → a11y subagent. Comm-pivot  (sequential handoff), disjoint n/a (sequential), parallel  (interactive grill-me), payoff <3×. Model: UX researcher and accessibility reviewer both use `model: "haiku"` (pattern search and accessibility checklist validation are systematic, not creative) — reserve `sonnet` for the design proposer lead session (interactive, requires design judgment). Fallback: n/a — no flag dependency.
+- **Design session**: researcher subagent → proposer lead-inline (grill-me) → a11y subagent. Sequential handoff, interactive grill-me, payoff <3×. Model: UX researcher and a11y reviewer use `model: "haiku"` (pattern search and a11y checklist are systematic); reserve `sonnet` for design proposer lead (interactive, requires design judgment).
 
 ## Specialist mode
 
 When invoked by `/define` with a `<seed-brief>` block, skip:
-- design-space research subagent dispatch (the research brief covers existing UI patterns)
+- design-space research subagent dispatch (research brief covers existing UI patterns)
 
-Always keep: the interactive design session (grill-me + a11y review) — design judgment and accessibility evaluation require live interaction.
+Always keep: interactive design session (grill-me + a11y review) — design judgment and accessibility evaluation require live interaction.
 
-Without a seed brief, run all steps as described below. See `${CLAUDE_PLUGIN_ROOT}/_shared/specialist-mode.md`.
+Without a seed brief, run all steps. See `${CLAUDE_PLUGIN_ROOT}/_shared/specialist-mode.md`.
 
 ## Input
 
 A GitHub issue with architecture decisions (from /define).
 
-Optionally: a research brief from /define's research team. Fields: `tech_stack`, `module_map`, `patterns`, `prior_art`, `open_questions`. When present, use it as starting context — the UX researcher skips internal research into existing UI patterns already covered by the brief. See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for the full research brief field list.
+Optionally: a research brief from /define's research team. Fields: `tech_stack`, `module_map`, `patterns`, `prior_art`, `open_questions`. When present, use as starting context — UX researcher skips internal research into existing UI patterns already covered. See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
 
 ## Process
 
-1. Read the issue and architecture decisions to understand constraints
+1. Read the issue and architecture decisions to understand constraints.
+
 2. **Run the design session** sequentially:
-   - Dispatch the **UX researcher** as a subagent to explore existing UI patterns in the codebase, accessibility requirements, and design system constraints; its findings seed the proposer.
-   - The **Design proposer** runs interactively in the lead session via /grill-me, informed by the researcher's findings.
-   - After the proposer session reaches proposed designs, dispatch the **Accessibility reviewer** as a subagent to evaluate each proposal for a11y compliance, keyboard navigation, and screen reader support. Feed its findings back into the lead session for final resolution.
+   - Dispatch **UX researcher** subagent to explore existing UI patterns in codebase, accessibility requirements, and design system constraints. Findings seed the proposer.
+   - **Design proposer** runs interactively in lead via /grill-me, informed by researcher findings.
+   - After proposer reaches proposed designs, dispatch **Accessibility reviewer** subagent to evaluate each proposal for a11y compliance, keyboard navigation, screen reader support. Feed findings back to lead for final resolution.
+
 3. For each design decision, present **2-3 visual approaches**:
    - Code prototypes with screenshots (HTML/React/etc.)
    - Wireframe diagrams (ASCII or Mermaid)
    - Interaction flow diagrams (state machines, sequence diagrams)
    - Component hierarchy trees
    - Side-by-side comparison of approaches
-5. User picks an approach (or asks for iterations)
-6. The chosen design becomes a constraint for implementation
+
+4. User picks an approach (or asks for iterations).
+
+5. The chosen design becomes a constraint for implementation.
 
 ## Output
 
@@ -57,5 +61,5 @@ This skill applies when the task has visual aspects (UI, webview, frontend). Ski
 
 ## Rules
 
-- Follow existing design system and component patterns unless explicitly diverging
-- See `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-rules.md` for the questioning protocol — apply it throughout all user interactions.
+- Follow existing design system and component patterns unless explicitly diverging.
+- See `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-rules.md` for the questioning protocol.

@@ -8,129 +8,117 @@ You are auditing the project's Claude Code rules and documentation for staleness
 
 This skill has three lanes:
 
-- **Rules lane** — always runs. Audits `CLAUDE.md`, imported files, and the harness's auto-memory.
-- **Authoring lane** — always runs. Checks `CLAUDE.md` / `AGENTS.md` / `SKILL.md` files for structural quality issues grounded in the Augment Code empirical study on AGENTS.md authoring.
-- **Vault lane** — optional. If the `claude-obsidian` plugin is installed, delegates the vault audit to its `wiki-lint` command and folds the findings in. If not, the vault lane is skipped with a one-line note.
-
-<!-- Inline rationale: /prune stays inline (no sub-agent delegation) intentionally only for the final aggregation step. Each lane is dispatched to its own Task sub-agent (see Spawn justification below); the main thread only aggregates findings. Three lanes read many files each — delegating prevents inline overrun. -->
+- **Rules lane** — audits `CLAUDE.md`, imported files, and the harness's auto-memory.
+- **Authoring lane** — checks `CLAUDE.md` / `AGENTS.md` / `SKILL.md` files for structural quality issues grounded in the Augment Code empirical study.
+- **Vault lane** — optional. If the `claude-obsidian` plugin is installed, delegates the vault audit to its `wiki-lint` command. If not, skipped with a one-line note.
 
 ### Spawn justification
 
 Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
 
-- **Three lane sub-agents (rules, authoring, vault)**: 3 parallel Task sub-agents. Comm-pivot  (lanes are independent; only the summary returns to main thread), disjoint  (rules reads CLAUDE.md/memory, authoring reads SKILL.md/AGENTS.md, vault delegates to wiki-lint — no file overlap), parallel  (all lanes can run simultaneously), payoff ≥3× (each lane reads many files; inline reading would dominate context). Model: `haiku` — retrieval/scan work, no synthesis. Fallback: sequential sub-agents (dispatch one lane at a time and merge findings).
+- **Three lane sub-agents (rules, authoring, vault)**: 3 parallel Task sub-agents. Independent reads, only summary returns to main; disjoint (rules/authoring/vault touch different files); parallel; payoff ≥3×. Model: `haiku` (retrieval/scan, no synthesis). Fallback: sequential.
 
 Each sub-agent spawn prompt must begin with:
 ```
-cd /path/to/repo && pwd  # verify CWD — sub-agents do not inherit parent CWD
+cd /path/to/repo && pwd  # verify CWD
 ```
 
 ## Process
 
 ### Dispatch
 
-Spawn one Task sub-agent per lane. Pass the working directory as an absolute path. Each sub-agent prompt must start with `cd <abs-path> && pwd` to verify CWD before reading any files. Dispatch all three in parallel; collect their output; proceed to the Classification and Output steps.
+Spawn one Task sub-agent per lane. Pass working directory as absolute path. Each sub-agent must start with `cd <abs-path> && pwd`. Dispatch all three in parallel; collect output; proceed to Classification and Output.
 
-- **Rules sub-agent** — runs the Rules lane below. Receives: `cwd`, global CLAUDE.md path, project CLAUDE.md path (if found), `~/.claude/projects/<project>/memory/` path.
-- **Authoring sub-agent** — runs the Authoring lane below. Receives: `cwd`, enumerated list of CLAUDE.md / AGENTS.md / SKILL.md paths (pass pre-enumerated to avoid re-enumeration overhead).
-- **Vault sub-agent** — runs the Vault lane below. Receives: `cwd`, whether `claude-obsidian` is installed (check once on main thread before dispatching).
+- **Rules sub-agent** — runs Rules lane. Receives: `cwd`, global CLAUDE.md path, project CLAUDE.md path (if found), `~/.claude/projects/<project>/memory/` path.
+- **Authoring sub-agent** — runs Authoring lane. Receives: `cwd`, pre-enumerated list of CLAUDE.md / AGENTS.md / SKILL.md paths.
+- **Vault sub-agent** — runs Vault lane. Receives: `cwd`, whether `claude-obsidian` is installed.
 
 ### Rules lane (always)
 
 1. **Gather all rule sources:**
    - `~/.claude/CLAUDE.md` (global)
    - Any `@imported` files referenced in CLAUDE.md
-   - Project-level `CLAUDE.md` (if exists in cwd)
-   - `~/.claude/projects/<project>/memory/MEMORY.md` + topic files — Claude Code's built-in auto memory (per-user, harness-managed). Group these together when reporting; do not propose edits inside `MEMORY.md` itself unless it is clearly stale, since the harness rewrites it.
+   - Project-level `CLAUDE.md` (if exists)
+   - `~/.claude/projects/<project>/memory/MEMORY.md` + topic files (harness-managed auto-memory).
 
 2. **For each rule or guidance item, assess:**
-   - Does the tool/command it references still exist? (e.g., if a rule references `yarn lint`, does the project still use yarn?)
-   - Does the pattern it describes still apply? (e.g., if a rule says "use X pattern for Y", does Y still exist in the codebase?)
-   - Has it been superseded by a newer rule or convention?
+   - Does the tool/command it references still exist?
+   - Does the pattern it describes still apply?
+   - Has it been superseded by a newer rule?
    - Is it redundant with built-in Claude Code behavior?
 
 3. **For each auto-memory file:**
-   - Is the information still accurate? (check against current state)
-   - Is it redundant with what's already in CLAUDE.md or the codebase?
+   - Is the information still accurate?
+   - Is it redundant with what's already in CLAUDE.md?
 
 ### Authoring lane (always)
 
-**Discovery — enumerate files in scope before running checks:**
-- `CLAUDE.md` files: global `~/.claude/CLAUDE.md`, project-root `CLAUDE.md`, and any subdirectory `CLAUDE.md` files (e.g., `src/CLAUDE.md`).
-- `AGENTS.md` files: project-root `AGENTS.md` and any subdirectory `AGENTS.md` files. Also check `GEMINI.md` — it is the Gemini CLI equivalent of `AGENTS.md` and follows the same authoring rules.
-- `SKILL.md` files: enumerate all `SKILL.md` files under `.claude/skills/` and any active skill plugin directories (e.g., `~/.claude/plugins/cache/*/skills/*/SKILL.md`).
+**Discovery — enumerate files in scope:**
+- `CLAUDE.md` files: global, project-root, subdirectories.
+- `AGENTS.md` files: project-root, subdirectories. Also check `GEMINI.md` (Gemini CLI equivalent).
+- `SKILL.md` files: all under `.claude/skills/` and active skill plugin directories.
 
-Use `find` (or equivalent) to enumerate, then classify each file by its path position (global / project-root / subdirectory) for the length-triage cap lookup.
+For each file, run these five checks. Each finding must cite its empirical source.
 
-For each discovered file, run the five checks below. Each finding must cite its empirical source so the user can judge whether to act on it.
+**Length triage** — Count total lines. Flag if it exceeds the applicable cap:
+- Global `~/.claude/CLAUDE.md`: 50 lines
+- Project-root `CLAUDE.md` / `AGENTS.md`: 200 lines
+- Subdirectory `CLAUDE.md` / `AGENTS.md`: 50 lines
+- `SKILL.md` (any location): no cap (expected longer than agent-config files)
 
-4. **Length triage** — Count the file's total lines. Flag if it exceeds the applicable cap:
-   - Global `~/.claude/CLAUDE.md`: 50 lines
-   - Project-root `CLAUDE.md` / `AGENTS.md`: 200 lines
-   - Subdirectory `CLAUDE.md` / `AGENTS.md`: 50 lines
-   - `SKILL.md` (any location): skip the length check — skill files have no empirically-derived cap and are expected to be longer than agent-config files.
+Configurable: user-specified caps override defaults. Citation: *project sizing guidance — progressive disclosure, 100–150 line main file + on-demand reference docs, +10–15% across benchmark metrics.*
 
-   Configurable: if the user has specified a different cap, use that instead.
+**Unpaired "don't" detector** — Scan every line starting with `Don't`, `Avoid`, or `Never` (after stripping list markers). Look for a paired `Do`, `Always`, `Use`, or `Prefer` line within 3 lines after. List every unpaired entry with file path and line number. Citation: *Augment Code study — "pair every 'don't' with a 'do'"; warning-only underperforms paired guidance.*
 
-   *Citation: project sizing guidance (progressive disclosure — 100–150 line main file + on-demand reference docs delivered +10–15% across benchmark metrics).*
+**Warning-stack threshold** — Count "don't"-style lines per file:
+- `> 10` → warning; cite excessive-warnings anti-pattern.
+- `> 30` → error; cite study: 30+ "don't" rules doubled PR time, dropped `completeness` 20%.
 
-5. **Unpaired "don't" detector** — Scan every line whose content, after stripping any leading list marker (`- `, `* `, `+ `, or `N. `), starts with `Don't`, `Avoid`, or `Never`. For each, look for a paired `Do`, `Always`, `Use`, or `Prefer` line (also after stripping list markers) within a configurable window (default: 3 lines after). List every unpaired entry with file path and line number.
+Citation: *Augment Code empirical study.*
 
-   *Citation: Augment Code empirical study — "pair every 'don't' with a 'do'"; warning-only documentation underperforms paired guidance.*
+**Architecture-overview smell** — Find headings containing `Architecture`, `How it works`, `Background`, or `Overview` (case-insensitive). If section body exceeds 30 lines, flag as candidate for relocation to load-on-demand reference file. Citation: *Augment Code study — long architecture sections caused 12-doc reads, 80K token burn, `completeness` dropped 25%.*
 
-6. **Warning-stack threshold** — Count total "don't"-style lines per file. A line counts if its content, after stripping any leading list marker (`- `, `* `, `+ `, or `N. `), starts with `Don't`, `Avoid`, or `Never`:
-   - `> 10` → warning; cite the excessive-warnings anti-pattern.
-   - `> 30` → error; cite the finding that 30+ "don't" rules roughly doubled PR time and dropped `completeness` 20% on simple tasks.
-
-   *Citation: Augment Code empirical study.*
-
-7. **Architecture-overview smell** — Find section headings containing `Architecture`, `How it works`, `Background`, or `Overview` (case-insensitive). If the section body exceeds 30 lines, flag it as a candidate for relocation to a load-on-demand reference file linked from the main doc.
-
-   *Citation: Augment Code empirical study — long architecture-overview sections caused agents to read 12 docs and burn 80K tokens before editing, dropping `completeness` 25%.*
-
-8. **Decision-table candidates** — Scan for prose runs matching the shape "Use X for A, use Y for B, …" with 3 or more branches. Surface these as candidates for conversion to a decision table (yes/no matrix or two-column table).
-
-   *Citation: Augment Code empirical study — decision tables added +25% on `best_practices` in affected areas.*
+**Decision-table candidates** — Scan for prose matching "Use X for A, use Y for B, …" with ≥3 branches. Surface as candidates for decision table conversion. Citation: *Augment Code study — decision tables added +25% on `best_practices`.*
 
 ### Vault lane (optional — claude-obsidian)
 
-9. **If `claude-obsidian:wiki-lint` is available:**
-   - Invoke it. It handles vault-structural checks (orphans, broken wikilinks, missing frontmatter fields, stale claims) — don't duplicate that work here.
-   - Additionally ask it (or use `claude-obsidian:wiki-query`) to flag concept/entity/source notes whose described problem, pattern, or root cause may no longer apply given recent code changes. That semantic check is the piece unique to `/prune`.
-   - Fold the returned findings into the audit report as a separate section titled "Vault (via wiki-lint)".
+**If `claude-obsidian:wiki-lint` is available:**
+- Invoke it. It handles vault-structural checks (orphans, broken wikilinks, missing frontmatter, stale claims).
+- Additionally ask it to flag concept/entity/source notes whose described problem, pattern, or root cause may no longer apply given recent code changes.
+- Fold returned findings into report as section titled "Vault (via wiki-lint)".
 
-10. **If `claude-obsidian` is not installed:**
-    - Skip step 9.
-    - Add a single line to the report: `Vault audit skipped — install claude-obsidian (claude plugin marketplace add AgriciDaniel/claude-obsidian) to enable.`
+**If `claude-obsidian` is not installed:**
+- Skip vault audit.
+- Add single line: `Vault audit skipped — install claude-obsidian (claude plugin marketplace add AgriciDaniel/claude-obsidian) to enable.`
 
 ### Classification (main thread — after sub-agents return)
 
-11. **Classify each rules-lane item** from the rules sub-agent's output:
-    - **Current** — still relevant, keep as-is
-    - **Stale** — references things that no longer exist, recommend removal
-    - **Superseded** — replaced by a newer rule/doc, recommend consolidation
-    - **Unclear** — cannot determine relevance, flag for human review
+**Classify each rules-lane item:**
+- **Current** — still relevant, keep as-is
+- **Stale** — references things that no longer exist, recommend removal
+- **Superseded** — replaced by newer rule/doc, recommend consolidation
+- **Unclear** — cannot determine relevance, flag for human review
 
 ### Aggregation (main thread)
 
-12. Merge the three sub-agent reports into the single audit report. Do not re-read files — synthesize only from the sub-agent outputs.
+Merge the three sub-agent reports into single audit report. Do not re-read files — synthesize only from sub-agent outputs.
 
 ## Output
 
 An audit report with:
 
 - Total rules/docs audited
-- Items by classification (current / stale / superseded / unclear) for the rules lane
-- **Authoring-quality findings** — grouped by file, one sub-section per check that produced findings; omit checks with no findings. Each finding includes file path, line number (where applicable), the specific issue, and its citation.
-- The vault lane's findings (or the "skipped" line) as a separate section
+- Items by classification (current / stale / superseded / unclear) for rules lane
+- **Authoring-quality findings** — grouped by file, one sub-section per check that produced findings. Each finding includes file path, line number (where applicable), specific issue, and citation.
+- Vault lane's findings (or the "skipped" line) as separate section
 - Specific recommendations for each non-current item
-- Suggested edits (but do NOT apply them without user approval)
+- Suggested edits (but do NOT apply without user approval)
 
 ## Rules
 
 - Never delete rules or docs automatically — present recommendations and wait for approval.
 - When in doubt, classify as "unclear" rather than "stale".
-- Main thread only aggregates — do not re-read files after sub-agents return; synthesize from sub-agent reports.
-- Do not scan vault files directly. The vault's structure is the `claude-obsidian` plugin's responsibility; this skill calls into it rather than walking paths.
+- Main thread only aggregates — do not re-read files after sub-agents return.
+- Do not scan vault files directly. The vault is the `claude-obsidian` plugin's responsibility.
 - Authoring-lane checks are non-destructive — list findings only; do not rewrite files.
-- Omit authoring-lane check sub-sections that have no findings; do not emit empty sections.
+- Omit authoring-lane check sub-sections with no findings; do not emit empty sections.

@@ -1,6 +1,6 @@
 # AUTHORING.md — Skill Authoring Standard
 
-This document defines the authoring conventions for workflow skills in this plugin. Read it when creating or editing a skill, or when `/new-skill` asks which `_shared/` files apply.
+Read when creating/editing a skill or when `/new-skill` asks which `_shared/` files apply.
 
 ## Skill types
 
@@ -16,15 +16,11 @@ Every skill fills one of five authoring roles. These extend the three-role compo
 
 Use the role-specific template:
 
-- Research-leading or coordinator orchestrator → `${CLAUDE_PLUGIN_ROOT}/_templates/SKILL.orchestrator.template.md` (coordinator variants omit the research-team step — see the template header note)
-- Specialist or utility → `${CLAUDE_PLUGIN_ROOT}/_templates/SKILL.specialist.template.md` (utility skills simply have no seed-brief input and no handoff output)
-- Primitive → `${CLAUDE_PLUGIN_ROOT}/_templates/SKILL.primitive.template.md`
+- Research-leading/coordinator orchestrator → `SKILL.orchestrator.template.md` (coordinator omits research-team step)
+- Specialist/utility → `SKILL.specialist.template.md` (utility has no seed-brief input/handoff output)
+- Primitive → `SKILL.primitive.template.md`
 
-For generic composition theory (patterns, briefs, decomposition rules), see `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
-
-## Composition patterns
-
-Multi-skill workflows follow four patterns: linear, branch, loop, and parallel. See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for definitions, when to use each, and the seed-brief contract that governs how orchestrators seed specialists with context. The three standard brief types (research, prior-art, fix) are defined there.
+Multi-skill workflows follow four patterns (linear, branch, loop, parallel). See `composition.md`.
 
 ## Skill structure
 
@@ -35,14 +31,14 @@ Use the role-specific templates for new skills: orchestrator, specialist, or pri
 |Field|Required|Values|Notes|
 |-|-|-|-|
 |`name`|yes|lowercase kebab-case|Matches the directory name under `skills/`|
-|`description`|yes|1–2 sentences, ≤150 chars|Primary trigger mechanism — include both what it does and when to use it. Hard cap: 150 chars; move examples and use-cases into the skill body where they load on invocation only|
+|`description`|yes|1–2 sentences, ≤150 chars|Primary trigger; what it does and when. Hard cap 150 chars; move examples to skill body|
 |`model`|yes|`haiku` \|`sonnet` \|`opus`|See model guide below|
 |`effort`|no|`low|medium|high|xhigh|max`|Elevates model effort for long-form research/decision-making. Use `high` for opus-tier research skills (discovery, define, architecture, describe).|
-|`when_to_use`|no|free text|Trigger phrases and "use before/after X" guidance. Rendered in the slash-command picker alongside `description`. Combined cap with `description`: 1,536 chars; keep `description` itself ≤150 chars per plugin convention.|
-|`argument-hint`|no|`[hint text]`|Hint shown after the slash command in the picker (e.g. `[issue#]`, `[PR# or URL]`). Forward-compatible; not yet rendered in plugin autocomplete (upstream bug [anthropics/claude-code#46626](https://github.com/anthropics/claude-code/issues/46626)).|
-|`user-invocable`|no|`false`|Set to `false` to hide the skill from the slash-command menu. Omit to keep visible (default). Use for orchestrator-internal specialists not meant for direct user invocation.|
-|`disable-model-invocation`|no|`true`|Prevents Claude from auto-invoking the skill without explicit user action.|
-|`allowed-tools`|no|space-separated tool names|Pre-approves listed tools so they run without per-use permission prompts. Does **not** restrict access — every tool remains callable. Omit by default; to actually block tools, use deny rules in `.claude/settings.json` or a subagent with its own `tools:` field.|
+|`when_to_use`|no|free text|Trigger phrases and "use before/after X" guidance. Combined cap with `description`: 1,536 chars|
+|`argument-hint`|no|`[hint text]`|Hint shown after slash command (e.g. `[issue#]`, `[PR# or URL]`)|
+|`user-invocable`|no|`false`|Set to `false` to hide from menu. Hide orchestrator-internal specialists|
+|`disable-model-invocation`|no|`true`|Prevent Claude auto-invoke without explicit user action|
+|`allowed-tools`|no|space-separated tool names|Pre-approve tools (skip prompts; doesn't restrict). Use deny rules in `.claude/settings.json` to block|
 
 ### Canonical field order
 
@@ -64,124 +60,78 @@ Omit optional fields when not set — never write empty strings or `null` as val
 
 ## `_shared/` files — when and how
 
-Shared protocols live at `${CLAUDE_PLUGIN_ROOT}/_shared/`. Reference them on-demand from the skill body; do not preload.
-
-### Decision table
+Shared protocols at `_shared/`. Reference on-demand from skill body; do not preload.
 
 |`_shared/` file|Reference when the skill...|
 |-|-|
-|`handoff-artifact.md`|Writes or reads a GitHub issue handoff block (phase-boundary skills: `/discovery`, `/define`). Note: `/implement` is the terminal phase — its output is the PR, not an issue body update. `/wrap-up` is a utility, not a phase-boundary skill.|
-|`interviewing-rules.md`|Interviews the user — asks questions, seeks approval, uses multi-choice forms (`/discovery`, `/define`, `/describe`, `/specify`, `/architecture`, `/design`, `/grill-me`, `/new-skill`)|
-|`notes-md-protocol.md`|Creates, updates, or resumes from `.claude/NOTES.md` (`/build`); harvests and deletes it (`/implement` at PR-creation time)|
-|`specialist-mode.md`|Documents or implements specialist-mode detection (seed-brief check, skip-list, standalone fallback) for any skill that can be seeded by an orchestrator|
-|`compaction-protocol.md`|Manages in-phase context — clearing stale tool results, delegating bulk reads, using `/compact` (`/build`)|
-|`composition.md`|Authors an orchestrator skill or designs a multi-skill workflow — patterns, briefs, decomposition rules|
+|`handoff-artifact.md`|Writes/reads GitHub issue handoff block (`/discovery`, `/define`; not `/implement` terminal phase)|
+|`interviewing-rules.md`|Interviews user (`/discovery`, `/define`, `/describe`, `/specify`, `/architecture`, `/design`, `/grill-me`, `/new-skill`)|
+|`notes-md-protocol.md`|Creates/updates/resumes `.claude/NOTES.md` (`/build`); harvests/deletes (`/implement`)|
+|`specialist-mode.md`|Detects specialist-mode, skip-list, standalone fallback for seeded skills|
+|`compaction-protocol.md`|Manages in-phase context, stale results, bulk reads, `/compact` (`/build`)|
+|`composition.md`|Orchestrator skill or multi-skill workflow — patterns, briefs, decomposition|
 
-### Reference pattern
-
-Add a reference line at the end of the relevant section in the skill body. Use the full `${CLAUDE_PLUGIN_ROOT}` path:
-
-```markdown
-See `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-rules.md` for the questioning protocol — apply it throughout all user interactions.
+Reference pattern: add line at relevant section end using full `${CLAUDE_PLUGIN_ROOT}` path.
 ```
-
-```markdown
-See `${CLAUDE_PLUGIN_ROOT}/_shared/handoff-artifact.md` for the five-field handoff shape.
-```
-
-```markdown
-See `${CLAUDE_PLUGIN_ROOT}/_shared/notes-md-protocol.md`.
-```
-
-```markdown
-See `${CLAUDE_PLUGIN_ROOT}/_shared/compaction-protocol.md`. Context editing first, sub-agents second, `/compact` last.
+See `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-rules.md` for questioning protocol.
 ```
 
 ## Persistent plugin data
 
-Use `${CLAUDE_PLUGIN_DATA}` to store cached state that survives across plugin updates and sessions. This resolves to `~/.claude/plugins/data/claude-workflow/` — a directory created automatically on first use. Common uses include caching fetched data, compiled indexes, or installed dependencies.
+Use `${CLAUDE_PLUGIN_DATA}` (`~/.claude/plugins/data/claude-workflow/`) for cached state surviving plugin updates and sessions.
 
-When your hook or MCP server needs to detect updates and reinstall dependencies, use the diff-then-install pattern. This example checks if either the bundled manifest or its lockfile has changed and reinstalls `node_modules` only when needed:
+Diff-then-install pattern for detecting updates:
 
 ```json
 {
   "hooks": {
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "(diff -q \"${CLAUDE_PLUGIN_ROOT}/package.json\" \"${CLAUDE_PLUGIN_DATA}/package.json\" >/dev/null 2>&1 && diff -q \"${CLAUDE_PLUGIN_ROOT}/package-lock.json\" \"${CLAUDE_PLUGIN_DATA}/package-lock.json\" >/dev/null 2>&1) || (cd \"${CLAUDE_PLUGIN_DATA}\" && cp \"${CLAUDE_PLUGIN_ROOT}/package.json\" \"${CLAUDE_PLUGIN_ROOT}/package-lock.json\" . && npm ci) || rm -f \"${CLAUDE_PLUGIN_DATA}/package.json\" \"${CLAUDE_PLUGIN_DATA}/package-lock.json\""
-          }
-        ]
-      }
-    ]
+    "SessionStart": [{
+      "type": "command",
+      "command": "(diff -q \"${CLAUDE_PLUGIN_ROOT}/package.json\" \"${CLAUDE_PLUGIN_DATA}/package.json\" >/dev/null 2>&1 && diff -q \"${CLAUDE_PLUGIN_ROOT}/package-lock.json\" \"${CLAUDE_PLUGIN_DATA}/package-lock.json\" >/dev/null 2>&1) || (cd \"${CLAUDE_PLUGIN_DATA}\" && cp \"${CLAUDE_PLUGIN_ROOT}/package.json\" \"${CLAUDE_PLUGIN_ROOT}/package-lock.json\" . && npm ci) || rm -f \"${CLAUDE_PLUGIN_DATA}/package.json\" \"${CLAUDE_PLUGIN_DATA}/package-lock.json\""
+    }]
   }
 }
 ```
 
-Track the lockfile alongside `package.json`: a transitive-dependency bump may change `package-lock.json` while `package.json` stays the same, and skipping reinstall in that case leaves `${CLAUDE_PLUGIN_DATA}/node_modules` stale. Use `npm ci` (not `npm install`) so the install is deterministic against the lockfile. For other ecosystems, swap in the appropriate manifest/lockfile pair (`pnpm-lock.yaml` + `pnpm install --frozen-lockfile`, `yarn.lock` + `yarn install --immutable`, `requirements.txt`/`uv.lock`, etc.).
-
-The `diff` chain exits nonzero when either stored copy is missing (first run) or differs from the bundled version (after an update), triggering reinstall. If installation fails, the trailing `rm` removes the stale manifests so the next session retries. Scripts can then reference the persisted `node_modules`:
-
-```json
-{
-  "mcpServers": {
-    "my-server": {
-      "command": "node",
-      "args": ["${CLAUDE_PLUGIN_ROOT}/server.js"],
-      "env": {
-        "NODE_PATH": "${CLAUDE_PLUGIN_DATA}/node_modules"
-      }
-    }
-  }
-}
-```
+Track lockfile alongside manifest. Use `npm ci` (not `npm install`). For other ecosystems: `pnpm-lock.yaml` + `pnpm install --frozen-lockfile`, `yarn.lock` + `yarn install --immutable`, etc.
 
 ## Parallelism decision
 
-When authoring an orchestrator or designing a multi-skill workflow, you must make an explicit parallelism choice. See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for the full rubric — it defines Scope Assessment (Lightweight / Standard / Deep), TeamCreate decision criteria, and cost models for different primitives.
+When authoring an orchestrator, make explicit parallelism choice per `composition.md` (Scope Assessment, TeamCreate criteria, cost models).
 
-**Key decision points:**
-
-- **Scope Assessment**: Classify before spawning. Lightweight runs inline; Standard/Deep trigger dispatch. See composition.md for heuristics and cost gradients.
-- **Primitive choice**: Default to inline → subagent → TeamCreate. Parallel adds coordination overhead — confirm genuine communication pivot, file disjointness, classifiable parallelism, and ≥3× wall-clock payoff before paying the ~7× token premium.
-- **Spawn justification**: Document your choice in the skill body. State which rubric factors apply and which don't. See the template below for the canonical shape.
+- **Scope Assessment** — classify before spawning. Lightweight inline; Standard/Deep trigger dispatch.
+- **Primitive choice** — default: inline → subagent → TeamCreate. Confirm communication pivot, file disjointness, parallelism, ≥3× payoff before paying ~7× token premium.
+- **Spawn justification** — document in skill body. State which rubric factors apply. See template below.
 
 ### Inline-overrun smell checklist
 
-When reviewing a new orchestrator or utility skill for delegation gaps, check each smell below. One or more smells present means the skill is a candidate for subagent delegation (see `_shared/composition.md` § "Main-thread overrun"):
+Check each smell. Presence means candidate for subagent delegation (see `composition.md` § "Main-thread overrun"):
 
-- [ ] **File-sweep smell** — the skill reads ≥5 files in a loop or enumerated list before synthesizing. Each file read echoes tool output into the lead's context.
-- [ ] **Fan-out smell** — the skill iterates over N independent items (threads, lanes, issues) and processes each one similarly. N × item-size grows the lead's context linearly with no synthesis benefit.
-- [ ] **Thin-synthesis smell** — the work is retrieval or formatting only (fetch → parse → format → return). The lead's role is to receive a summary, not to run the retrieval itself.
-- [ ] **Verbose-tool-output smell** — a single tool call (web fetch, CLI run, GraphQL query) returns verbose output that the skill then scans for a small set of fields. Most of the output is discarded after reading.
+- [ ] **File-sweep** — reads ≥5 files in loop before synthesizing.
+- [ ] **Fan-out** — iterates over N independent items; N × item-size grows context linearly.
+- [ ] **Thin-synthesis** — retrieval/formatting only; lead receives summary, doesn't run retrieval.
+- [ ] **Verbose-tool-output** — single call returns verbose output, skill scans for small field set.
 
-Remediation: assign the smelly work to a Task sub-agent with a bounded prompt; the sub-agent returns only the summary. Document the choice in the `### Spawn justification` block.
-
-New skills created via `/new-skill` will be guided through this decision during scaffolding.
+Remediation: assign smelly work to subagent with bounded prompt; return only summary. Document in `### Spawn justification` block.
 
 ### Spawn justification template
 
-Every orchestrator or specialist that dispatches a team or subagents includes a `### Spawn justification` block. Copy this structure — apply each rubric criterion explicitly. Vague references make the gate opaque to future authors.
+Every orchestrator/specialist dispatching team or subagents includes `### Spawn justification` block. Apply each rubric criterion explicitly.
 
 ```markdown
 ### Spawn justification
 
 Rubric: `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
 
-- **<team or session name>**: <shape — e.g. "2 parallel subagents", "TeamCreate at ≥3 splits", "researcher subagent → architect lead-inline → critic subagent">. Comm-pivot <✓|✗> (<one-clause why>), disjoint <✓|✗|n/a> (<why>), parallel <✓|✗> (<why>), payoff <≥3×|<3×> (<why>). Model: <model choice + one-clause rationale>. Fallback: <see options below>.
+- **<team/session>**: <shape — e.g. "2 parallel subagents", "TeamCreate at ≥3 splits">. Comm-pivot <✓|✗> (<why>), disjoint <✓|✗|n/a> (<why>), parallel <✓|✗> (<why>), payoff <≥3×|<3×> (<why>). Model: <choice + rationale>. Fallback: <option>.
 ```
 
-**`Fallback:` options** — each entry describes what runs when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is unset (the env-var prerequisite is documented once in composition.md, not per skill):
+**Fallback options** (when `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` unset):
+- `Fallback: sequential subagents` — degrade `TeamCreate` to one-at-a-time.
+- `Fallback: parallel subagents or sequential` — clarifies further degradation.
+- `Fallback: n/a — no flag dependency` — inline/interactive/single-subagent shapes. Use exact wording for grep.
 
-- `Fallback: sequential subagents` — degrade `TeamCreate` to one-at-a-time subagent dispatch.
-- `Fallback: parallel subagents or sequential` — when the gate already chooses subagents at low scale, this just clarifies the further degradation path.
-- `Fallback: n/a — no flag dependency` — for inline / interactive / single-subagent shapes that don't use `TeamCreate`. Use this exact wording so readers can grep for env-var-dependent skills.
-
-**What stays per-skill**: the rubric application — comm-pivot, disjoint, parallel, payoff judgments are role-specific and load-bearing. Don't compress them. The boilerplate "fallback applies when env var unset" sentence is redundant with composition.md's prerequisite line and should be omitted.
-
-See `skills/architecture/SKILL.md` and `skills/build/SKILL.md` for canonical examples.
+Comm-pivot, disjoint, parallel, payoff judgments are role-specific and load-bearing — don't compress. See `skills/architecture/SKILL.md` and `skills/build/SKILL.md` for examples.
 
 ## Naming conventions
 
@@ -191,20 +141,18 @@ See `skills/architecture/SKILL.md` and `skills/build/SKILL.md` for canonical exa
 
 ## Length guidance
 
-- Keep `SKILL.md` under 500 lines. If you're approaching this limit, split domain content into `references/` sub-files and link to them with clear "read when X" guidance.
-- The body is loaded into context on every invocation — keep it focused on instructions, not background narrative.
+- Keep `SKILL.md` <500 lines. Split domain content into `references/` sub-files with clear "read when X" guidance.
+- Body loads on every invocation — focus on instructions, not narrative.
 
 ### Progressive disclosure via `references/`
 
-Use `references/` when a section is **>~40 lines**, runs only in a specific execution branch, and removing it doesn't break the default path. The trade-off: the main skill loads faster, but the reference loads only when that branch executes. See `skills/find-skills/references/`, `skills/compound/references/` for examples.
+Use `references/` when section is >~40 lines, runs in specific branch, and removal doesn't break default path. Main skill loads fast; reference loads only on branch. See `skills/find-skills/references/`, `skills/compound/references/`.
 
 ## Writing style
 
-- Use imperative form: "Read the issue", "Spawn a team", not "You should read" or "The skill reads".
-- Explain the _why_ behind non-obvious constraints. A rule without rationale becomes cargo cult.
-- Avoid `ALWAYS` / `NEVER` in all-caps when a reasoned explanation works better — prefer "do X because Y" over "ALWAYS do X".
-- No multi-paragraph docstrings or comment blocks. One short comment line max.
+- Imperative: "Read the issue", "Spawn a team", not "You should read" or "The skill reads".
+- Explain _why_ behind constraints. Rule without rationale becomes cargo cult.
+- Avoid ALL-CAPS `ALWAYS`/`NEVER` — prefer "do X because Y".
+- One short comment line max.
 
-## Dogfooding this standard
-
-The `/new-skill` scaffolder is itself written to conform to this standard. When extending this plugin, run `/new-skill` rather than copying an existing skill by hand.
+The `/new-skill` scaffolder conforms to this standard. Use it when extending this plugin.
