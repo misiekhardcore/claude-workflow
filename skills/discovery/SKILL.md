@@ -25,12 +25,12 @@ Lead discovery phase. Goal: Transform vague ideas into well-specified GitHub iss
 ## Process
 
 ### Standard
-1. **Prior-Art Scout** (Parallel subagent): Gather institutional memory from $\text{Vault} \to \text{Issues/PRs} \to \text{Docs}$. Output: structured brief (Prior decisions, Attempts, Patterns).
+1. **Prior-Art Scout** (Parallel subagent): Gather institutional memory from Vault → Issues/PRs → Docs. Output: structured brief (Prior decisions, Attempts, Patterns).
 2. **Explore** (Lead-inline): Run `/describe`. Incorporate scout brief as seed context → skip internal prior-art research.
 3. **Specify** (Sequential subagent): After problem statement is approved, run `/specify` seeded with findings + scout brief.
 
 ### Deep
-1. **TeamCrate**: Describe, Specify, Flow Analyst, Prior-Art Scout, Adversarial Questioner.
+1. **TeamCreate**: Describe, Specify, Flow Analyst, Prior-Art Scout, Adversarial Questioner.
 2. **Execution**: Describe, Flow Analyst, and Scout run in parallel. Adversarial Questioner reviews combined findings → challenges conclusions. Specify specialist runs last, incorporating all concerns.
 3. **Sourcing**: Scout brief seeds `/describe` → skip internal prior-art exploration.
 
@@ -55,6 +55,6 @@ Run [Ref: repo-preflight] before `gh issue`.
 
 ## Rules
 - **Explicit Approval**: Partial feedback ≠ approval.
-- **Traceability**: Every feature must have one issue and >= 1$ closing PR.
+- **Traceability**: Every feature must have one issue and >= 1 closing PR.
 - **Persistence**: Prior-Art Scout findings must be persisted in Prior decisions/Evidence fields.
 - [Ref: interviewing-rules]

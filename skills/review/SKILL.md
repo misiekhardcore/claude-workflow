@@ -31,14 +31,14 @@ Lead review phase. Goal: Thoroughly review implementation and produce actionable
 ## Scope Assessment
 |Scope|Criteria|Action|
 |:-|:-|:-|
-|**Lightweight**|Diff <= 50$ lines, 1 module|Single reviewer, quick pass.|
+|**Lightweight**|Diff <= 50 lines, 1 module|Single reviewer, quick pass.|
 |**Standard**|Typical feature/multi-file|2 base reviewers + conditional specialists.|
 |**Deep**|Security, perf, cross-cutting, migration|All specialist reviewers. Veto power for Security/Perf.|
 
-**Decision**: <= 50$ lines + 1 module → Lightweight; Auth/Security/DB-migration/Perf → Deep; else → Standard.
+**Decision**: <= 50 lines + 1 module → Lightweight; Auth/Security/DB-migration/Perf → Deep; else → Standard.
 
 ### Spawn Rubric [Ref: composition]
-- **Standard**: `TeamCreate` at >= 3$ active personas, else 2 parallel subagents (`sonnet`).
+- **Standard**: `TeamCreate` at >= 3 active personas, else 2 parallel subagents (`sonnet`).
 - **Deep**: `TeamCreate` (`opus`). All 4 axes active.
 
 ## Personas [Ref: references/personas.md]
@@ -52,8 +52,8 @@ Lead review phase. Goal: Thoroughly review implementation and produce actionable
 4. **Findings Format**: `file:line | issue title | severity (P0-P3) | confidence (0.0-1.0)`.
 5. **Merge & Dedup**:
    - Group by `file` + `line_bucket` (3-line windows) + `normalized_title`.
-   - Boost confidence by 0.10 if $2+$ reviewers flag.
-   - Suppress if confidence $< 0.60$ (or $0.50$ for P0).
+   - Boost confidence by 0.10 if 2+ reviewers flag.
+   - Suppress if confidence < 0.60 (or 0.50 for P0).
 6. **Emit**: Per Dispatch Mode.
 
 ## PR Mode: Idempotent Posting

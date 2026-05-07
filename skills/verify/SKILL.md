@@ -22,14 +22,14 @@ Lead verification phase. Goal: Verify every AC from the issue is met with eviden
 ## Scope Assessment
 |Scope|Criteria|Action|
 |:-|:-|:-|
-|**Lightweight**|<= 3$ AC, simple repros, no security/perf|Lead verifies inline. No team.|
-|**Standard**|>= 4$ AC, or spans multiple areas/files|QA team with AC split across teammates.|
+|**Lightweight**|<= 3 AC, simple repros, no security/perf|Lead verifies inline. No team.|
+|**Standard**|>= 4 AC, or spans multiple areas/files|QA team with AC split across teammates.|
 |**Deep**|Security-sensitive, perf-critical, migration|QA team + specialist QA (Security or Performance).|
 
-**Decision**: <= 3$ AC + 1-module diff → Lightweight; Auth/Security/Migrations/Perf-paths → Deep; else → Standard.
+**Decision**: <= 3 AC + 1-module diff → Lightweight; Auth/Security/Migrations/Perf-paths → Deep; else → Standard.
 
 ### Spawn Rubric [Ref: composition]
-- **Standard/Deep**: `TeamCreate` at >= 4$ AC, else parallel subagents. Model: `haiku`.
+- **Standard/Deep**: `TeamCreate` at >= 4 AC, else parallel subagents. Model: `haiku`.
 
 ## Process
 
