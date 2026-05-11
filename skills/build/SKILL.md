@@ -99,9 +99,9 @@ A feature branch in a worktree with all acceptance criteria implemented, tests p
 - Use `superpowers:test-driven-development` for the TDD workflow.
 - Use `git worktree add` / `git worktree remove` for worktree management.
 - Pick the spawn primitive per the Scope Assessment. Lightweight codes inline.
-- Do not ask the user whether to use teams — pick the scope and go.
+- Do not ask the user whether to use teams — pick the scope and go. Pick inline / subagent / team based on the Scope Assessment table above.
 - Do not open a PR — that happens after /implement completes the full cycle.
 - Always run the 5-question verification check before marking a task done.
 - Consolidation scans are lightweight — spend seconds, not minutes.
-- Context hygiene is a build-time responsibility — trigger on concept shifts, not percentages, and never let auto-compact run unattended.
+- Context hygiene is a build-time responsibility — trigger on concept shifts, not percentages, and never let auto-compact run unattended. Trigger `/compact` automatically at concept shifts; delegate bulk I/O to sub-agents before context overruns.
 - `./.claude/NOTES.md` is authoritative for in-flight state; if your recall disagrees, trust the file.

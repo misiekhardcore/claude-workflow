@@ -1,7 +1,6 @@
 ---
 name: verify
 description: QA verification of implementation against AC. Reports pass/fail per criterion.
-when_to_use: Use to verify implementation against acceptance criteria. Reports pass/fail per criterion.
 argument-hint: "[issue#]"
 model: haiku
 effort: low
@@ -52,7 +51,7 @@ Lead verification phase. Goal: Verify every AC from the issue is met with eviden
 6. **Convergence**: Discuss edge cases → unified QA report.
 
 ## Rules
-- **Separation**: Never fix issues during verification.
+- **Separation**: Never fix issues during verification. Report failures in the verify output; fixes are a `/build` responsibility.
 - **Evidence-Based**: No "it works" — every criterion needs evidence.
 - **Feedback Loop**: Any failure → report goes back to `/build` for fixes.
-- **Isolation**: Never forward build-session history to QA teammates.
+- **Isolation**: Never forward build-session history to QA teammates. Pass only the seed brief and the issue AC to QA agents.

@@ -1,7 +1,6 @@
 ---
 name: prune
-description: Audit CLAUDE.md rules, authoring quality, and optionally the obsidian vault for staleness.
-when_to_use: Use to audit CLAUDE.md rules, skill authoring quality, or the wiki vault for staleness.
+description: Audit skill authoring quality and CLAUDE.md rule hygiene.
 model: haiku
 effort: low
 allowed-tools: Agent Bash Read

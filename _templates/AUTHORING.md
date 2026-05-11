@@ -16,29 +16,22 @@ All skills map to one of these five roles (extending the [Ref: composition] mode
 ## Structure & Density
 **Goal**: Maximize info-density. Replace narrative with constraints.
 
+### Modularity
+- **Entry-point cap**: Keep skill bodies ≤150 lines. Push stable reference material (schemas, syntax tables, field lists) into `skills/<name>/references/<file>.md`.
+- **`_shared/` promotion**: Promote a doc to `_shared/` when ≥3 skills reference it. Otherwise keep under `skills/<name>/references/`.
+- **On-demand loading**: Never preload `_shared/` files at skill start. Reference via `${CLAUDE_PLUGIN_ROOT}/_shared/<file>.md` only where needed in the Process steps.
+- **`[Ref: name]` shorthand**: In space-constrained bodies use `[Ref: name]` as shorthand for `${CLAUDE_PLUGIN_ROOT}/_shared/name.md`.
+
 ### Frontmatter
-Order: `name` → `description` → `scope` → `when_to_use` → `argument-hint` → `model` → `effort` → `allowed-tools` → `user-invocable` → `disable-model-invocation`.
+Order: `name` → `description` → `when_to_use` → `argument-hint` → `model` → `effort` → `allowed-tools` → `user-invocable` → `disable-model-invocation`.
 - `description`: <= 150 chars. Trigger-focused.
+- `when_to_use`: <= 1,536 chars combined with `description`. Include only when mis-routing is plausible: add explicit exclusions ("Does NOT X — use /Y"), sequence preconditions, or disambiguation from similar skills. Omit when `description` alone is unambiguous.
 - `model`: `haiku` (fast/retrieval), `sonnet` (standard/impl), `opus` (deep research/arch).
-
-#### Required: `scope:`
-Declares what the skill is allowed to operate on. Allowed values:
-
-| Value | Operates on |
-|-|-|
-| `plugin-authoring` | The plugin's own SKILL/template/`_shared` files. |
-| `user-codebase` | The user's project files. |
-| `cross-plugin` | Files in other installed plugins. |
-| `mixed` | Multiple lanes. **Requires** a `## Scope` section in the SKILL.md body enumerating scope per lane. Non-`mixed` skills do not need the body section. |
-
-- **Don't** omit `scope:` — without it, contributors mis-route checks across plugin boundaries (see claude-obsidian#105).
-- **Do** set `scope:` on every SKILL.md and a first-line hint on every `_shared/*.md`.
 
 #### Optional frontmatter fields
 
 | Field | Values | When to use |
 |-|-|-|
-| `when_to_use` | short routing hint | All skills. Primary dispatch signal for the harness. |
 | `argument-hint` | `"[arg]"` string | Skills that accept a positional argument from the user. |
 | `effort` | `low` / `high` | `high` for deep research/decision-making; `low` for maintenance/utility. Omit for standard. |
 | `allowed-tools` | space-separated tool names | Pre-approves a narrow tool surface (skips permission prompts). Does **not** restrict access — the agent can still call other tools if unlocked at runtime. `Agent` is a valid tool name and must be listed for all orchestrating skills. |
@@ -83,12 +76,6 @@ Do not preload. Reference on-demand via `${CLAUDE_PLUGIN_ROOT}/_shared/<file>.md
 
 `[Ref: name]` is shorthand for `${CLAUDE_PLUGIN_ROOT}/_shared/name.md`. Skills use it for compact inline references in space-constrained skill bodies.
 
-`_shared/*.md` files have no frontmatter. Declare scope as a first-line comment hint:
-```
-<!-- scope: plugin-authoring -->
-# interviewing-rules.md
-```
-
 ## Compaction Checklist
 Before declaring any compaction (density pass, context-hygiene trim) complete:
 - All gates and numeric thresholds preserved verbatim (no approximation).
@@ -111,3 +98,6 @@ Before declaring any compaction (density pass, context-hygiene trim) complete:
 - **Surgical**: One short comment line max.
 - **Dense**: No filler, no preamble, no "The skill does X".
 - **Rational**: Pair every "Don't" with a "Do" (Augment Code study).
+- **Numbered workflows**: Step-by-step processes outperform prose (+25% correctness per Augment study).
+- **Decision tables**: Resolve routing ambiguity before coding (+25% best-practices adherence).
+- **Code snippets**: 3–10 lines from real production use (+20% pattern reuse).
