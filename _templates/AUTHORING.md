@@ -17,9 +17,22 @@ All skills map to one of these five roles (extending the [Ref: composition] mode
 **Goal**: Maximize info-density. Replace narrative with constraints.
 
 ### Frontmatter
-Order: `name` → `description` → `when_to_use` → `argument-hint` → `model` → `effort` → `allowed-tools` → `user-invocable` → `disable-model-invocation`.
+Order: `name` → `description` → `scope` → `when_to_use` → `argument-hint` → `model` → `effort` → `allowed-tools` → `user-invocable` → `disable-model-invocation`.
 - `description`: <= 150 chars. Trigger-focused.
 - `model`: `haiku` (fast/retrieval), `sonnet` (standard/impl), `opus` (deep research/arch).
+
+#### Required: `scope:`
+Declares what the skill is allowed to operate on. Allowed values:
+
+| Value | Operates on |
+|-|-|
+| `plugin-authoring` | The plugin's own SKILL/template/`_shared` files. |
+| `user-codebase` | The user's project files. |
+| `cross-plugin` | Files in other installed plugins. |
+| `mixed` | Multiple lanes. **Requires** a `## Scope` section in the SKILL.md body enumerating scope per lane. Non-`mixed` skills do not need the body section. |
+
+- **Don't** omit `scope:` — without it, contributors mis-route checks across plugin boundaries (see claude-obsidian#105).
+- **Do** set `scope:` on every SKILL.md and a first-line hint on every `_shared/*.md`.
 
 #### Optional frontmatter fields
 
@@ -69,6 +82,12 @@ Do not preload. Reference on-demand via `${CLAUDE_PLUGIN_ROOT}/_shared/<file>.md
 - `composition.md`: Team/sub-agent cost and shape.
 
 `[Ref: name]` is shorthand for `${CLAUDE_PLUGIN_ROOT}/_shared/name.md`. Skills use it for compact inline references in space-constrained skill bodies.
+
+`_shared/*.md` files have no frontmatter. Declare scope as a first-line comment hint:
+```
+<!-- scope: plugin-authoring -->
+# interviewing-rules.md
+```
 
 ## Compaction Checklist
 Before declaring any compaction (density pass, context-hygiene trim) complete:
