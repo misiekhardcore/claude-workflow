@@ -1,6 +1,6 @@
 ---
 name: prune
-description: Audit skill authoring quality and CLAUDE.md rule hygiene.
+description: Audit CLAUDE.md rule hygiene, skill authoring quality, and optionally the Obsidian vault for stale content.
 model: haiku
 effort: low
 allowed-tools: Agent Bash Read
@@ -14,12 +14,22 @@ Audit project rules and docs for staleness and authoring quality.
 3. **Vault**: (Optional) Delegates to `claude-obsidian:wiki-lint`.
 
 ## Process
-**Dispatch**: Before spawning, enumerate files for each lane:
+
+**Lane selection**: Ask the user which lanes to run before doing any work:
+
+`AskUserQuestion` with `header: "Lanes"`, `multiSelect: true`, question: "Which audit lanes should I run?". Pre-select all three. Options:
+- **Rules** — audit `CLAUDE.md` files, imports, and auto-memory for staleness
+- **Authoring** — check `CLAUDE.md` / `AGENTS.md` / `SKILL.md` for structural quality
+- **Vault** — lint the Obsidian wiki for stale/orphaned content (requires claude-obsidian)
+
+**Vault dependency check**: If Vault is selected, check whether the `claude-obsidian` plugin is installed (look for `claude-obsidian:wiki-lint` skill availability). If not installed, note "claude-obsidian not installed, skipping vault lane" and proceed with the remaining selected lanes only.
+
+**Dispatch**: Enumerate files for each selected lane, then spawn one Task sub-agent per selected lane in parallel:
 - **Rules files**: global `~/.claude/CLAUDE.md`, all `@import`ed files, project `CLAUDE.md`, `MEMORY.md` and topic files.
 - **Authoring files**: all `CLAUDE.md`, `AGENTS.md`, `SKILL.md` files under the project root.
 - **Vault files**: none (vault lane uses claude-obsidian tools directly; pass empty list).
 
-Spawn 3 parallel Task sub-agents (one per lane). Each spawn prompt must include: `lane` (rules|authoring|vault), `cwd` (absolute project root path), `files` (pre-enumerated list above), `claude_obsidian_installed` (true/false; vault lane only). Each must start with `cd <cwd> && pwd`.
+Each spawn prompt must include: `lane` (rules|authoring|vault), `cwd` (absolute project root path), `files` (pre-enumerated list above), `claude_obsidian_installed` (true/false; vault lane only). Each must start with `cd <cwd> && pwd`.
 
 ### Rules Lane
 1. **Gather**: Global `CLAUDE.md` → `@imports` → Project `CLAUDE.md` → `MEMORY.md` + topic files.
@@ -35,8 +45,7 @@ Read each file in `files`. Run 5 checks (Cite Augment Code study):
 5. **Decision-Table**: Prose matching "Use X for A, use Y for B" (>= 3 branches) → recommend table conversion.
 
 ### Vault Lane
-- `claude-obsidian:wiki-lint` available → invoke it → flag obsolete concept/entity notes.
-- Otherwise → skip and note installation prompt.
+Invoke `claude-obsidian:wiki-lint` and flag obsolete/orphaned concept and entity notes.
 
 ## Classification & Output
 **Classify Rule items**: `Current` | `Stale` | `Superseded` | `Unclear`.
