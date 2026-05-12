@@ -24,10 +24,7 @@ Audit project rules and docs for staleness and authoring quality.
 
 **Vault dependency check**: If Vault is selected, check whether the `claude-obsidian` plugin is installed (look for `claude-obsidian:wiki-lint` skill availability). If not installed, note "claude-obsidian not installed, skipping vault lane" and proceed with the remaining selected lanes only.
 
-**Dispatch**: Use Bash to enumerate a concrete file list for each selected lane, then spawn one Task sub-agent per selected lane in parallel:
-- **Rules files**: global `~/.claude/CLAUDE.md`, all `@import`ed files, project `CLAUDE.md`, `MEMORY.md` and topic files.
-- **Authoring files**: run `bin/list-authoring-files` from the project root and pass its output as the `files` list.
-- **Vault files**: none (vault lane uses claude-obsidian tools directly; pass empty list).
+**Dispatch**: Run `bin/list-prune-files --<lane>` from the project root for each selected lane to get a concrete file list, then spawn one Task sub-agent per selected lane in parallel. `--vault` returns empty (vault lane uses claude-obsidian tools directly).
 
 Each spawn prompt must include: `lane` (rules|authoring|vault), `cwd` (absolute project root path), `files` (pre-enumerated list above), `claude_obsidian_installed` (true/false; vault lane only). Each must start with `cd <cwd> && pwd`.
 
