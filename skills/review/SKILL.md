@@ -1,7 +1,6 @@
 ---
 name: review
 description: Review implementation against requirements or PR. Posts inline GitHub review comments.
-when_to_use: Use to review a PR or implementation against requirements. Posts inline GitHub review comments.
 argument-hint: "[PR# or URL]"
 model: sonnet
 effort: high
@@ -67,7 +66,7 @@ Lead review phase. Goal: Thoroughly review implementation and produce actionable
 4. **Post**: Atomic REST call via `gh api repos/.../reviews`. `event: "COMMENT"`. Anchor to `headRefOid` (SHA).
 
 ## Rules
-- **Separation**: Never fix issues during review.
+- **Separation**: Never fix issues during review. Report findings in the review output; fixes happen in a subsequent `/build` cycle.
 - **Consensus**: All reviewers must agree before finalizing.
 - **Blocking**: Critical findings block. Deep mode: High-severity blocks for Security/Perf.
 - **Scope**: Flag changes outside issue scope.

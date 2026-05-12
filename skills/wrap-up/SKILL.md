@@ -79,5 +79,5 @@ NOTES.md removed with worktree (was present / was already absent)
 - Refuse outright (no proceed-anyway) when branch is the default branch or worktree path is not in `git worktree list --porcelain`.
 - Use `git branch -D` only when dirty-worktree override was explicitly confirmed by user.
 - Single confirmation covers all removals — do not ask separately for each artifact.
-- Do not write to GitHub issue body. This skill has no handoff artifact.
+- Do not write to GitHub issue body. Use `/compound` to capture learnings into the wiki instead.
 - Do not read or harvest NOTES.md — `/implement` harvests it at PR-creation time. NOTES.md removal here is incidental.
