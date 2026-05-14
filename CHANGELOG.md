@@ -8,6 +8,8 @@ GitHub Releases (with auto-generated notes and source tarballs) remain the canon
 
 ### Added
 
+- **`/ship` skill** — new single-issue end-to-end pipeline that chains `/define` → `/implement` → `/resolve-pr-feedback` (looped to zero unresolved threads) → `/compound` → `/wrap-up`. State-based resume on re-invocation: each `/ship <N>` call reads current issue/PR state and runs only the next applicable phase. Introduced as a new sibling skill rather than extending `/epic-autopilot` to keep the linear single-issue state machine separate from epic fanout logic. (#92)
+
 - **`agents/` directory** — new top-level directory for reusable agent definitions, mirroring the claude-obsidian pattern. Seeded with `agents/prune-lane.md`: a single-lane audit worker for `/prune` that documents the spawn-prompt contract (CWD verification, pre-enumerated file list, structured report output). (#76)
 
 ### Changed

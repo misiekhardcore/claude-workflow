@@ -43,6 +43,7 @@ flowchart TB
         subgraph Meta["Other tools"]
             direction LR
             EpicAutopilot["/epic-autopilot — autonomous epic→PR"]
+            Ship["/ship — single-issue end-to-end"]
             NewSkill["/new-skill"]
             FindSkills["/find-skills"]
             Prune["/prune — audit memory"]
@@ -77,7 +78,7 @@ flowchart TB
     class Canvas canvas
     class Discovery,Define,Implement orch
     class D_Describe,D_Specify,D_Scout,Df_Arch,Df_Design,I_Build,I_Review,I_Verify spec
-    class GrillMe,NewSkill,FindSkills,Prune,AuditIssues,WrapUp,Compound,ResolvePR,EpicAutopilot,Save,WikiQuery,WikiLint meta
+    class GrillMe,NewSkill,FindSkills,Prune,AuditIssues,WrapUp,Compound,ResolvePR,EpicAutopilot,Ship,Save,WikiQuery,WikiLint meta
     class Obsidian ext
 ```
 
@@ -124,6 +125,7 @@ Without this flag, `TeamCreate` is unavailable. Skills detect its absence and fa
 |`/audit-issues`|Drift-check open GitHub issues against the current repo state|
 |`/find-skills`|Discover and install skills from the ecosystem|
 |`/resolve-pr-feedback`|Process PR review feedback in bulk|
+|`/ship`|Single-issue end-to-end pipeline: `/define` → `/implement` → `/resolve-pr-feedback` → `/compound` → `/wrap-up`|
 |`/new-skill`|Scaffold a new skill conforming to this authoring standard|
 
 ## Optional: claude-obsidian integration
