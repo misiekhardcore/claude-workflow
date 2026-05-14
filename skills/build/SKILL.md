@@ -59,7 +59,7 @@ See `${CLAUDE_PLUGIN_ROOT}/_shared/scope-preflight.md` and run when Trigger cond
 
 1. Read the issue, all comments, and linked sub-issues to understand the full scope.
 
-2. **Create a git worktree** (`git worktree add`). Worktrees keep the main workspace clean and let teammates operate in isolation. Lightweight still uses a worktree.
+2. **Create a git worktree** (`wt switch --create`). Worktrees keep the main workspace clean and let teammates operate in isolation. Lightweight still uses a worktree.
 
    Before creating `./.claude/NOTES.md`, verify `/.claude/NOTES.md` is listed in `.gitignore` at repo root; add if missing. Create `./.claude/NOTES.md` with the initial task list harvested from the issue. This is the living worklog — it survives unexpected session close. See `${CLAUDE_PLUGIN_ROOT}/_shared/notes-md-protocol.md`.
 
@@ -97,7 +97,7 @@ A feature branch in a worktree with all acceptance criteria implemented, tests p
 ## Rules
 
 - Use `superpowers:test-driven-development` for the TDD workflow.
-- Use `git worktree add` / `git worktree remove` for worktree management.
+- Use `wt switch --create` / `wt remove` for worktree management.
 - Pick the spawn primitive per the Scope Assessment. Lightweight codes inline.
 - Do not ask the user whether to use teams — pick the scope and go. Pick inline / subagent / team based on the Scope Assessment table above.
 - Do not open a PR — that happens after /implement completes the full cycle.
