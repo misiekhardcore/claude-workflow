@@ -37,8 +37,8 @@ After sub-agents return:
 **Approval**: `AskUserQuestion` over candidates. Pre-select all `suggested-action: archive`.
 
 **Archive** (approved items only):
-- **Filesystem paths**: `mv` to `${HOME}/.claude/archive/$(date -I)/${rel}`.
-- **`scheduled_task:<cwd>` entries**: copy `scheduled_tasks.json` to archive, then edit original to remove entries.
+- **Filesystem paths**: Ensure parent directory exists via `mkdir -p "$(dirname "$dst")"`, then `mv` to `${HOME}/.claude/archive/$(date -I)/${rel}`.
+- **`scheduled_task:<cwd>` entries**: First copy `scheduled_tasks.json` to archive, then edit the original in place to remove entries. Print manifest: `removed entries: <cwd1>, <cwd2>, …`.
 
 Never use `rm`. Print manifest per item.
 
