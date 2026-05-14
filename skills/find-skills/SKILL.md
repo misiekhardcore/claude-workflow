@@ -17,15 +17,16 @@ Use this skill when the user:
 - Says "find a skill for X" or "is there a skill for X"
 - Asks "can you do X" where X is a specialized capability
 - Expresses interest in extending agent capabilities or mentions needing help with a specific domain
+- Searches for tools, templates, workflows, or examples to use
 
 ## The Skills CLI
 
 The Skills CLI (`npx skills`) is the package manager for the open agent skills ecosystem. Key commands:
 - `npx skills find [query]` — search for skills
 - `npx skills add <package>` — install a skill
-- `npx skills check` / `update` — check/update all skills
+- `npx skills check` / `npx skills update` — check/update all skills
 
-Browse at https://skills.sh/.
+Browse at https://skills.sh/
 
 ## How to Help Users Find Skills
 
