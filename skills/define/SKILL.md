@@ -42,5 +42,6 @@ Phase Lead. Goal: Transform an approved issue into a concrete implementation pla
 
 ## Rules
 - **Explicit Approval**: Partial feedback ≠ approval.
+- **Exploration**: Time-box codebase reading to 3–5 tool calls, then ask the user a focused question.
 - **Sourcing**: Use [Ref: repo-preflight] before updating issue.
 - [Ref: interviewing-rules]

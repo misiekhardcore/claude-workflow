@@ -56,6 +56,7 @@ Run [Ref: repo-preflight] before `gh issue`.
 
 ## Rules
 - **Explicit Approval**: Partial feedback ≠ approval.
-- **Traceability**: Every feature must have one issue and >= 1 closing PR.
+- **Exploration**: Time-box codebase reading to 3–5 tool calls, then ask the user a focused question.
 - **Persistence**: Prior-Art Scout findings must be persisted in Prior decisions/Evidence fields.
+- **Traceability**: Every feature must have one issue and >= 1 closing PR.
 - [Ref: interviewing-rules]
