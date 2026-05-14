@@ -20,7 +20,7 @@ A single positive integer — the GitHub issue number to ship.
 
 On every invocation:
 
-1. Run [Ref: repo-preflight]. Echo resolved `owner/repo` back to the user. Pause for confirmation.
+1. Run `_shared/repo-preflight`. Echo resolved `owner/repo` back to the user. Pause for confirmation.
 2. Detect current state using the commands in **State detection** below.
 3. Consult the **Resume state machine** to determine which stage to enter.
 
@@ -40,11 +40,11 @@ On every invocation:
 
 **Entry condition**: Issue has `## Implementation plan`, branch `feat/issue-<N>` does not exist, no open PR.
 
-1. Pull latest `main` and create worktree for branch `feat/issue-<N>` on base `main`. See [Ref: worktree-protocol].
+1. Pull latest `main` and create worktree for branch `feat/issue-<N>` on base `main`. See `_shared/worktree-protocol.md`.
 
 2. Determine `scope_class` from the plan body (look for size/scope hints; default to `Standard`).
 
-3. Run `/implement <N>` from within the worktree. See [Ref: specialist-mode — Autonomous Implement Invocation] with overrides:
+3. Run `/implement <N>` from within the worktree. See `_shared/specialist-mode.md#Autonomous Implement Invocation` with overrides:
    - `scope_class`: determined above
    - `branch`: `feat/issue-<N>`
    - `active_issue`: `<N>`
@@ -134,9 +134,9 @@ gh pr view <PR#> --json reviewThreads \
 
 ## Rules
 
-- **CWD verification**: Run [Ref: repo-preflight] at entry, echo `owner/repo`. Before every downstream cross-repo `gh` mutation, re-echo the resolved repo. Pass `preflight_verified: true` in seed briefs so sub-skills skip redundant preflights.
+- **CWD verification**: Run `_shared/repo-preflight.md` at entry, echo `owner/repo`. Before every downstream cross-repo `gh` mutation, re-echo the resolved repo. Pass `preflight_verified: true` in seed briefs so sub-skills skip redundant preflights.
 - **No duplicated logic**: Each stage delegates to the existing skill. No logic from `/implement`, `/resolve-pr-feedback`, `/compound`, or `/wrap-up` is reimplemented here.
 - **No autonomous merge**: Merging is always a human action; exit cleanly at Stage 4.
 - **Loop-break**: In Stage 3, if the unresolved thread count is non-zero and unchanged after one pass, break immediately with a needs-human summary.
 - **Compound placement**: `/implement` already invokes `/compound` at PR creation (implementation-time pass). `/ship` re-invokes `/compound` in Stage 5 after merge to capture review-time learnings — two passes, no deduplication needed.
-- **Seed-brief contract**: See [Ref: specialist-mode — Autonomous Implement Invocation].
+- **Seed-brief contract**: See `_shared/specialist-mode.md#Autonomous Implement Invocation`.
