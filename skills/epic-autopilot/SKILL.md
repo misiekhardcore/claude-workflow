@@ -72,7 +72,7 @@ Once every sub-issue has an approved `## Implementation plan`, proceed to **Stag
 
 ```
 git checkout main && git pull
-git checkout -b feat/epic-<N>
+wt switch --create feat/epic-<N>
 git commit --allow-empty -m "chore: open epic #<N>"
 git push -u origin feat/epic-<N>
 ```
