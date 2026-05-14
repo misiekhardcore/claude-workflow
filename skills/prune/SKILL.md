@@ -60,17 +60,22 @@ Regular plans appear in the table with `suggested-action: keep` and a snippet.
 **Approval gate**: Single `AskUserQuestion` over the full dead-state candidate table. Question: "Which items should be archived?". `multiSelect: true`. Pre-select all `suggested-action: archive` items. If the user excludes any, drop those paths before proceeding.
 
 **Archive step** (for approved items only):
-```bash
-archive_root="${HOME}/.claude/archive/$(date -I)"
-# for each approved path <src>:
-rel="${src#${HOME}/.claude/}"
-dst="${archive_root}/${rel}"
-mkdir -p "$(dirname "$dst")"
-mv "$src" "$dst"
-echo "${src} → ${dst}"
-```
 
-Never use `rm`. Print a manifest of moved paths (`src → dst` per line).
+Two item types need different treatment:
+
+- **Filesystem paths** (project dirs, agents, plugin caches, plan files): move with `mv`.
+  ```bash
+  archive_root="${HOME}/.claude/archive/$(date -I)"
+  rel="${src#${HOME}/.claude/}"
+  dst="${archive_root}/${rel}"
+  mkdir -p "$(dirname "$dst")"
+  mv "$src" "$dst"
+  echo "${src} → ${dst}"
+  ```
+
+- **`scheduled_task:<cwd>` entries**: not filesystem paths — edit `scheduled_tasks.json` in place, removing the entry whose `cwd` matches `<cwd>`. Report as `removed from scheduled_tasks.json: <cwd>`.
+
+Never use `rm`. Print a manifest (`src → dst` or `removed from ...: <cwd>` per item).
 
 ## Classification & Output
 **Classify Authoring items**: `Current` | `Stale` | `Superseded` | `Unclear`.
