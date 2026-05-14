@@ -37,7 +37,7 @@ Always audits global `~/.claude/` regardless of CWD. Flags the following classes
 - `~/.claude/projects/<encoded>/` dirs whose encoded CWD does not resolve to any directory on disk.
 - `.jsonl` transcripts inside those flagged directories.
 - `~/.claude/agents/*.md` files not referenced by any installed skill, `settings*.json`, or recent transcript.
-- `~/.claude/plugins/cache/<plugin>/<version>/` dirs whose version is not the currently installed one.
+- `~/.claude/plugins/cache/<marketplace>/<plugin>/<version>/` dirs whose version is not the currently installed one.
 - `~/.claude/scheduled_tasks.json` entries pointing at a CWD that no longer exists.
 - `~/.claude/plans/*-agent-<hex>.md` files (sub-agent spawn artifacts). Always candidates.
 
@@ -73,12 +73,11 @@ Two item types need different treatment:
   echo "${src} → ${dst}"
   ```
 
-- **`scheduled_task:<cwd>` entries**: not filesystem paths — edit `scheduled_tasks.json` in place, removing the entry whose `cwd` matches `<cwd>`. Report as `removed from scheduled_tasks.json: <cwd>`.
+- **`scheduled_task:<cwd>` entries**: not filesystem paths — first copy `~/.claude/scheduled_tasks.json` to `${archive_root}/scheduled_tasks.json` (preserves the original state), then edit the original in place to remove every approved entry. Report as `archived scheduled_tasks.json → ${archive_root}/scheduled_tasks.json; removed entries: <cwd1>, <cwd2>, …`.
 
 Never use `rm`. Print a manifest (`src → dst` or `removed from ...: <cwd>` per item).
 
 ## Classification & Output
-**Classify Authoring items**: `Current` | `Stale` | `Superseded` | `Unclear`.
 
 **Final Report**:
 - Authoring findings (grouped by file, cite source, specific issue).
@@ -87,7 +86,6 @@ Never use `rm`. Print a manifest (`src → dst` or `removed from ...: <cwd>` per
 
 ## Rules
 - **No Delete**: Archive only — never `rm` any file.
-- **Conservative**: "Unclear" >= "Stale".
 - **Aggregate Only**: Main thread synthesizes sub-agent output; no re-reading files.
 - **Surgical**: Only list authoring findings; do not rewrite files.
 - **Vault**: Vault health is out of scope. Direct users to run `/lint` separately.

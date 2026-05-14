@@ -47,7 +47,7 @@ Run **only** the lane specified in `lane`. Do not run the other lane.
    - Lines prefixed `scheduled_task:` are stale schedule entries — the suffix is the missing CWD.
    - All other lines are filesystem paths to dead items.
 2. For each item, gather metadata:
-   - Filesystem paths: `stat` for size and mtime; `head -1` for first H1 / first-line snippet (plans only).
+   - Filesystem paths: `stat` for size and mtime; for plans, grep for the first `# …` heading — if none, use the first non-empty line — as the snippet.
    - `scheduled_task:` entries: report the stale CWD string; no filesystem metadata.
 3. Determine `reason` for each item:
    - Path under `~/.claude/projects/<encoded>/`: `dead project directory` (encoded CWD does not resolve on disk)
