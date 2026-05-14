@@ -10,7 +10,7 @@ When a user asks for help with something, identify:
 
 ## Step 2: Dispatch a Discovery Sub-agent
 
-Delegate steps 3–4 (leaderboard check + CLI search) to a research sub-agent. Pass: query terms derived from step 1, the user's stated goal. The sub-agent returns a list of candidate skills with one-line summaries, install counts, and source reputations. The main thread handles install confirmation and execution.
+Delegate steps 3–5 (leaderboard check, CLI search, and quality verification) to a research sub-agent. Pass: query terms derived from step 1, the user's stated goal. The sub-agent returns a list of candidate skills with one-line summaries, install counts, source reputations, and GitHub star verification. The main thread handles install confirmation and execution.
 
 Sub-agent spawn prompt must start with:
 ```
