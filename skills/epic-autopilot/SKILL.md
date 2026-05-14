@@ -20,7 +20,7 @@ Always **Deep** — fanout orchestrator with sub-agent delegation. See `${CLAUDE
 
 ## Process
 
-Read `references/stages.md` for the full stage decision trees and resume logic.
+Read `references/gates.md` for resume detection, stage gates (Stages 1–3), exit (Stage 5), and resume logic. When entering Stage 4, Read `references/autonomous-phase.md` for branch creation, dependency-tier computation, parallel dispatch, settlement, and epic PR creation.
 
 Stage 0 detects resume point. Stages 1–3 require explicit user approval at gates. Stage 4 autonomous (no prompts). Stage 5 exits.
 
