@@ -29,6 +29,6 @@ Browse at https://skills.sh/.
 
 ## How to Help Users Find Skills
 
-[Ref: references/search-guide.md]
+Read `references/search-guide.md`.
 
-For search strategy tips, skill categories, and fallback guidance (when no skills are found), [Ref: references/categories.md].
+For search strategy tips, skill categories, and fallback guidance (when no skills are found), see `references/categories.md`.
