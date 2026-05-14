@@ -3,7 +3,7 @@
 Directives for creating/editing skills. Ensures consistency, token efficiency, and predictability.
 
 ## Skill Roles
-All skills map to one of these five roles (extending the [Ref: composition] model). Use the corresponding template.
+All skills map to one of these five roles (extending the team-composition model; read `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`). Use the corresponding template.
 
 |Role|Definition|Example|Model|Template|
 |-|-|-|-|-|
@@ -19,8 +19,7 @@ All skills map to one of these five roles (extending the [Ref: composition] mode
 ### Modularity
 - **Entry-point cap**: Keep skill bodies ≤150 lines. Push stable reference material (schemas, syntax tables, field lists) into `skills/<name>/references/<file>.md`.
 - **`_shared/` promotion**: Promote a doc to `_shared/` when ≥3 skills reference it. Otherwise keep under `skills/<name>/references/`.
-- **On-demand loading**: Never preload `_shared/` files at skill start. Reference via `${CLAUDE_PLUGIN_ROOT}/_shared/<file>.md` only where needed in the Process steps.
-- **`[Ref: name]` shorthand**: In space-constrained bodies use `[Ref: name]` as shorthand for `${CLAUDE_PLUGIN_ROOT}/_shared/name.md`.
+- **On-demand loading**: Never preload `_shared/` files at skill start. Reference via `Read \`${CLAUDE_PLUGIN_ROOT}/_shared/<file>.md\`` only where needed in the Process steps. Use inline read instructions: `Read \`${CLAUDE_PLUGIN_ROOT}/_shared/composition.md\`` not `[Ref: composition]`.
 
 ### Frontmatter
 Order: `name` → `description` → `when_to_use` → `argument-hint` → `model` → `effort` → `allowed-tools` → `user-invocable` → `disable-model-invocation`.
@@ -58,15 +57,15 @@ Agents dispatched inside a plugin context run with constrained tool access by de
 
 ### Body Layout
 1. **Role & Constraints**: Imperative directives. No "You are a...".
-2. **Specialist Mode**: [Ref: specialist-mode] seed-brief skip-list.
+2. **Specialist Mode**: Read `${CLAUDE_PLUGIN_ROOT}/_shared/specialist-mode.md` for seed-brief skip-list.
 3. **I/O**: Input → Output. No paragraphs.
 4. **Scope Assessment**: Table based on complexity → Action.
-5. **Spawn Justification**: [Ref: composition] rubric (Pivot, Disjoint, Parallel, Payoff).
+5. **Spawn Justification**: Read `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for team-composition rubric (Pivot, Disjoint, Parallel, Payoff).
 6. **Process**: Step-by-step imperative flow.
-7. **Rules**: Hard constraints + [Ref: interviewing-rules].
+7. **Rules**: Hard constraints plus interaction rules (read `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-rules.md`).
 
 ## `_shared/` Integration
-Do not preload. Reference on-demand via `${CLAUDE_PLUGIN_ROOT}/_shared/<file>.md`.
+Do not preload. Reference on-demand via `Read \`${CLAUDE_PLUGIN_ROOT}/_shared/<file>.md\`` within skill bodies:
 - `handoff-artifact.md`: Issue body state.
 - `interviewing-rules.md`: User interaction.
 - `notes-md-protocol.md`: `.claude/NOTES.md` state.
@@ -74,13 +73,13 @@ Do not preload. Reference on-demand via `${CLAUDE_PLUGIN_ROOT}/_shared/<file>.md
 - `compaction-protocol.md`: In-phase context management.
 - `composition.md`: Team/sub-agent cost and shape.
 
-`[Ref: name]` is shorthand for `${CLAUDE_PLUGIN_ROOT}/_shared/name.md`. Skills use it for compact inline references in space-constrained skill bodies.
+Use explicit read instructions inline: `Read \`${CLAUDE_PLUGIN_ROOT}/_shared/composition.md\`` instead of shorthand `[Ref: composition]`.
 
 ## Compaction Checklist
 Before declaring any compaction (density pass, context-hygiene trim) complete:
 - All gates and numeric thresholds preserved verbatim (no approximation).
 - All spawn rubrics, dispatch contracts, and payload specs intact.
-- All `[Ref:]` cross-references present — none silently removed.
+- All cross-references to `_shared/` files present with explicit `Read` instructions — none silently removed.
 - All verdict/mutation/resolution steps accounted for.
 - Output format spec and section headings unchanged.
 
