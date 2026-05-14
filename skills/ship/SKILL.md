@@ -40,33 +40,16 @@ On every invocation:
 
 **Entry condition**: Issue has `## Implementation plan`, branch `feat/issue-<N>` does not exist, no open PR.
 
-1. Pull latest `main` and create worktree:
-
-   ```bash
-   git checkout main && git pull
-   git worktree add .worktrees/feat/issue-<N> -b feat/issue-<N>
-   cd .worktrees/feat/issue-<N>
-   git branch --set-upstream-to=origin/main
-   ```
+1. Pull latest `main` and create worktree for branch `feat/issue-<N>` on base `main`. See [Ref: worktree-protocol].
 
 2. Determine `scope_class` from the plan body (look for size/scope hints; default to `Standard`).
 
-3. Run `/implement <N>` with seed-brief (from within the worktree):
-
-   ```
-   <seed-brief>
-   preflight_verified: true
-   scope_class: <determined above>
-   repo: <owner/repo>
-   branch: feat/issue-<N>
-   active_issue: <N>
-   autonomous: true
-   payload:
-     type: research
-     prior_art: "Issue #<N> ## Implementation plan (architecture and design decisions from /define)"
-     open_questions: "<Open questions from the plan, or empty>"
-   </seed-brief>
-   ```
+3. Run `/implement <N>` from within the worktree. See [Ref: specialist-mode — Autonomous Implement Invocation] with overrides:
+   - `scope_class`: determined above
+   - `branch`: `feat/issue-<N>`
+   - `active_issue`: `<N>`
+   - `payload.prior_art`: `"Issue #<N> ## Implementation plan (architecture and design decisions from /define)"`
+   - `payload.open_questions`: open questions from the plan, or empty
 
 4. `/implement` runs the full build → review → verify cycle and opens a draft PR (`autonomous: true` suppresses its exit prompt).
 
@@ -156,4 +139,4 @@ gh pr view <PR#> --json reviewThreads \
 - **No autonomous merge**: Merging is always a human action; exit cleanly at Stage 4.
 - **Loop-break**: In Stage 3, if the unresolved thread count is non-zero and unchanged after one pass, break immediately with a needs-human summary.
 - **Compound placement**: `/implement` already invokes `/compound` at PR creation (implementation-time pass). `/ship` re-invokes `/compound` in Stage 5 after merge to capture review-time learnings — two passes, no deduplication needed.
-- **Seed-brief contract**: See `${CLAUDE_PLUGIN_ROOT}/_shared/specialist-mode.md` for the `autonomous` field and full seed-brief format.
+- **Seed-brief contract**: See [Ref: specialist-mode — Autonomous Implement Invocation].
