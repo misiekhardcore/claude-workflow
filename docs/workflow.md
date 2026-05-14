@@ -12,7 +12,7 @@ Lifecycle walkthrough from discovery to closure.
 **State Management**:
 - **Inter-phase**: GitHub issue body (5-field structure in `_shared/handoff-artifact.md`).
 - **Intra-phase**: `./.claude/NOTES.md` (`_shared/notes-md-protocol.md`).
-- **Context Pressure**: [Ref: compaction-protocol] (Edit → Delegate → Compact).
+- **Context Pressure**: See compaction-protocol (read `${CLAUDE_PLUGIN_ROOT}/_shared/compaction-protocol.md`) for Edit → Delegate → Compact strategy.
 
 ## Phase Details
 

@@ -10,7 +10,9 @@
 
 **Decision**: 1 file + 1 sentence → Lightweight; Auth/Security/Arch → Deep; else → Standard.
 
-### Spawn Rubric [Ref: composition]
+### Spawn Rubric
+
+Read `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
 - **Standard**: Domain researcher (`sonnet`) → lead analyst (`opus`) via `/grill-me`.
 - **Deep**: Domain researcher + Failure-mode analyst (`sonnet`) → lead analyst (`opus`) via `/grill-me`.
 

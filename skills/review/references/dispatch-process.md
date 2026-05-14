@@ -18,7 +18,9 @@
 
 **Decision**: ≤ 50 lines + 1 module → Lightweight; Auth/Security/DB-migration/Perf → Deep; else → Standard.
 
-### Spawn Rubric [Ref: composition]
+### Spawn Rubric
+
+Read `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
 - **Standard**: `TeamCreate` at ≥ 3 active personas, else 2 parallel subagents (`sonnet`).
 - **Deep**: `TeamCreate` (`opus`). All 4 axes active.
 
