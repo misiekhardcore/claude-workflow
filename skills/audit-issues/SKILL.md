@@ -26,20 +26,7 @@ Audit open issues for drift. Product: Updated issues themselves (mutate on confi
 - Abort if issue is `closed`.
 
 ### Phase 2 — Per-Issue Audit (Subagent Fan-out)
-Spawn one subagent per issue (parallel for >= 3).
-**Subagent Contract**: 5 detectors → structured JSON.
-
-1. **Hybrid Extraction**:
-   - **Regex**: File paths, numeric claims, version refs.
-   - **LLM**: Cross-issue refs, open questions, premise statements.
-2. **Detectors**:
-   - `file-path-existence`: `git ls-tree -r <ref> -- <path>`. If missing → `git log --diff-filter=D`.
-   - `numeric-claim-drift`: Recompute count from `<ref>`.
-   - `version-reference-staleness`: Check tags and `CHANGELOG.md`.
-   - `resolved-open-question`: Search history for resolution language.
-   - `cross-issue-contradiction`: Scan sibling excerpts → detect negation.
-3. **Verdict**: Strongest wins: `unverifiable` > `premise-shifted` > `superseded by #N` > `contradicted` > `stale` > `valid`.
-4. **JSON Return**: `issue_number`, `verdict`, `findings` (quote, evidence, proposed_edit), `recommendation` (edit|close|skip).
+[Ref: detectors.md] for detector logic, verdict ranking, and JSON schema.
 
 ### Phase 3 — Aggregate & Print
 Concatenate JSON reports. Per-issue block: `─── #NN — <title> — verdict: <v> ───` → URL → findings → proposed edit.

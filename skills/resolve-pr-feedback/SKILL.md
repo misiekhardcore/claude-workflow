@@ -36,20 +36,8 @@ Group by category → Present triage summary to user.
 - **Regression**: Run full project test suite after all fix agents complete.
 
 ### Phase 4 — Reply
-**Delegate reply drafting**: One sub-agent per thread (reply text only — code fixes were grouped by file in Phase 3, and GitHub mutations stay in the main thread). Prompt: `cd <abs-path> && pwd`.
-**Verdict & Reply**:
-|Verdict|Meaning|Reply|
-|-|-|-|
-|`fixed`|Exact implementation|"Fixed in {commit_sha}."|
-|`fixed-differently`|Addressed via other approach|"Addressed differently: {explanation}. See {commit_sha}."|
-|`replied`|Disagree/Clarify|"{explanation}"|
-|`not-addressing`|Intentional skip|"Not addressing: {rationale}"|
-|`needs-human`|Confidence too low|"Needs human review: {context}"|
-
-**Mutation (main thread)**:
-1. Post each drafted reply via `gh api .../replies` (safe body passing).
-2. Resolve thread if verdict in {`fixed`, `fixed-differently`, `not-addressing`}.
-3. **Verify**: Run `gh pr view <N> --json reviewThreads` and confirm all threads are resolved before declaring work done.
+**Delegate reply drafting**: One sub-agent per thread (reply text only). Prompt: `cd <abs-path> && pwd`.
+[Ref: verdicts.md] for verdict/reply mapping and mutation logic.
 
 ## Output
 Summary: Total threads → counts per verdict → commits created → threads needing human attention.
