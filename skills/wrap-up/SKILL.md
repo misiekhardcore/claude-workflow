@@ -22,7 +22,7 @@ Gather:
 1. **Worktree path** — `git rev-parse --show-toplevel` from current directory, or use path user provides.
 2. **Branch name** — `git rev-parse --abbrev-ref HEAD`.
 3. **Default branch** — `git symbolic-ref refs/remotes/origin/HEAD --short` (strips `origin/`). Fall back to checking `['main', 'master', 'develop']` only when symbolic-ref lookup fails; log which method was used.
-4. **Worktree membership** — `git worktree list --porcelain`. Confirm worktree path appears in this list.
+4. **Worktree membership** — `wt list`. Confirm worktree path appears in this list.
 5. **Working-tree cleanliness** — `git status --short` and `git log @{u}..HEAD --oneline` (unpushed commits not in PR).
 6. **PR state** — if user provided PR number, run `gh pr view <N> --json state,headRefName` to confirm it is open and points to current branch.
 
@@ -31,7 +31,7 @@ Gather:
 |Condition|Outcome|
 |-|-|
 |Branch matches default branch|**Refuse outright.** No proceed-anyway prompt|
-|Worktree path not in `git worktree list --porcelain`|**Refuse outright.** Out-of-tree paths never managed by `/wrap-up`|
+|Worktree path not in `wt list`|**Refuse outright.** Out-of-tree paths never managed by `/wrap-up`|
 |Worktree dirty (uncommitted changes or unpushed commits not in PR)|**Show state + proceed-anyway prompt** (Step 3)|
 |Worktree clean, feature branch, worktree in-tree|**Single confirmation** (Step 4)|
 
@@ -49,8 +49,7 @@ Wait for explicit confirmation. Do not proceed on silence.
 Show the exact actions that will run:
 
 > I will:
-> - `git worktree remove <path>` (removes the worktree directory and its contents, including `.claude/NOTES.md` if present)
-> - `git branch -d <branch>` (or `-D` if commits would be lost)
+> - `wt remove <branch>` (removes the worktree directory, its contents including `.claude/NOTES.md` if present, and the branch)
 >
 > Proceed?
 
@@ -60,9 +59,8 @@ Wait for explicit confirmation. Do not proceed on silence.
 
 On confirm:
 
-1. `git worktree remove <path>` — removes worktree directory. NOTES.md, if still present inside it, is removed implicitly.
-2. `git branch -d <branch>` (or `git branch -D <branch>` when dirty-worktree path was confirmed and commits would be lost).
-3. Report what was removed: worktree path, branch name, whether NOTES.md was present.
+1. `wt remove <branch>` (or `wt remove --force-delete <branch>` when dirty-worktree override was confirmed and commits would be lost) — removes worktree directory and deletes the branch. NOTES.md, if still present inside it, is removed implicitly.
+2. Report what was removed: worktree path, branch name, whether NOTES.md was present.
 
 ## Output
 
@@ -76,8 +74,8 @@ NOTES.md removed with worktree (was present / was already absent)
 
 ## Rules
 
-- Refuse outright (no proceed-anyway) when branch is the default branch or worktree path is not in `git worktree list --porcelain`.
-- Use `git branch -D` only when dirty-worktree override was explicitly confirmed by user.
+- Refuse outright (no proceed-anyway) when branch is the default branch or worktree path is not in `wt list`.
+- Use `wt remove --force-delete` only when dirty-worktree override was explicitly confirmed by user.
 - Single confirmation covers all removals — do not ask separately for each artifact.
 - Do not write to GitHub issue body. Use `/compound` to capture learnings into the wiki instead.
 - Do not read or harvest NOTES.md — `/implement` harvests it at PR-creation time. NOTES.md removal here is incidental.

@@ -36,6 +36,27 @@ Confirmations verifying *state* are skipped; *discovery/rigor* gates remain.
 |`/design`|design-space research|interactive session|
 |`/implement`|(handled by orchestrator)|exhausted-exit prompt (unless `autonomous: true`)|
 
+## Autonomous Implement Invocation
+
+Canonical seed-brief for orchestrators that spawn `/implement` with `autonomous: true`:
+
+```
+<seed-brief>
+preflight_verified: true
+scope_class: <Lightweight | Standard | Deep>
+repo: <owner/repo>
+branch: <feat/slug>
+active_issue: <issue-number>
+autonomous: true
+payload:
+  type: research
+  prior_art: "<Issue #N ## Implementation plan (architecture and design decisions from /define)>"
+  open_questions: "<unresolved constraints from /define, or empty>"
+</seed-brief>
+```
+
+Override only the fields that differ per invocation; all other fields are required as-is.
+
 ## Orchestrator Duties
 1. Run repo/scope-preflight once at entry.
 2. Pass valid seed-brief (`preflight_verified: true`) to every specialist.

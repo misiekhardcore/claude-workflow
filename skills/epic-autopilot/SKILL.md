@@ -72,7 +72,7 @@ Once every sub-issue has an approved `## Implementation plan`, proceed to **Stag
 
 ```
 git checkout main && git pull
-git checkout -b feat/epic-<N>
+wt switch --create feat/epic-<N>
 git commit --allow-empty -m "chore: open epic #<N>"
 git push -u origin feat/epic-<N>
 ```
@@ -109,23 +109,13 @@ For each tier in ascending order:
 1. **Before dispatching tier T**, verify every tier-T−1 sub-task has settled (PR open or FAILED). Tier 1 has no prerequisite.
 2. Dispatch all sub-tasks in current tier as parallel `Task` sub-agents **in a single message**. For each sub-issue M:
    - Emit: `[sub-issue #<M>] dispatched (tier <T>)`
-   - Create worktree and branch: `git worktree add .worktrees/feat/epic-<N>-sub-<M> -b feat/epic-<N>-sub-<M> <base-branch>`, then `git branch --set-upstream-to=origin/<base-branch>`.
-   - Pass seed brief to sub-agent's `/implement` invocation:
-
-```
-<seed-brief>
-preflight_verified: true
-scope_class: Deep
-repo: <owner/repo>
-branch: feat/epic-<N>-sub-<M>
-active_issue: <M>
-autonomous: true
-payload:
-  type: research
-  prior_art: "Sub-issue #<M>'s ## Implementation plan (architecture and design decisions from /define)"
-  open_questions: "<any unresolved constraints surfaced during /define for sub-issue #<M>, or empty>"
-</seed-brief>
-```
+   - Create worktree for branch `feat/epic-<N>-sub-<M>` on base `<base-branch>`. See `${CLAUDE_PLUGIN_ROOT}/_shared/worktree-protocol.md`.
+   - Pass seed brief to sub-agent's `/implement` invocation. See `${CLAUDE_PLUGIN_ROOT}/_shared/specialist-mode.md` with overrides:
+     - `scope_class`: `Deep`
+     - `branch`: `feat/epic-<N>-sub-<M>`
+     - `active_issue`: `<M>`
+     - `payload.prior_art`: `"Sub-issue #<M>'s ## Implementation plan (architecture and design decisions from /define)"`
+     - `payload.open_questions`: unresolved constraints from /define for sub-issue #M, or empty
 
 PR base is communicated via git upstream, not the brief. `/implement` detects it with `git rev-parse --abbrev-ref --symbolic-full-name @{u}` and passes `--base <detected>` to `gh pr create`.
 
@@ -201,9 +191,10 @@ A permanently-FAILED sub-task (branch exists, no PR, two prior retries) will be 
 
 ## Rules
 
+See `${CLAUDE_PLUGIN_ROOT}/_shared/orchestrator-rules.md` for CWD verification, delegation, no-autonomous-merge, and seed-brief contract.
+
 - Require explicit user approval at each gate (Stage 1, Stage 2, each Stage 3 sub-issue). Silence is not approval.
 - The user must not modify the epic issue body or any sub-issue body during Stage 4. Sub-agents read at spawn time.
 - Sub-issue branch and worktree names follow `feat/epic-<N>-sub-<M>` exactly. M is the globally unique GitHub sub-issue number.
 - `autonomous: true` in the seed brief is reserved for sub-task spawns from this skill. Do not pass from other orchestrators.
 - `/compound` and `/wrap-up` are not run by epic-autopilot — they remain user-invoked utilities.
-- See `${CLAUDE_PLUGIN_ROOT}/_shared/specialist-mode.md` for the `autonomous` seed-brief field contract.

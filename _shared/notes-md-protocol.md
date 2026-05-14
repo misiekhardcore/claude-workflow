@@ -34,7 +34,7 @@ Do not mirror `TodoWrite` and `.claude/NOTES.md` — they serve different roles.
 ## Location and lifecycle
 
 - **Path:** `<worktree-root>/.claude/NOTES.md`.
-- **Created by `/build`** at phase start, immediately after `git worktree add`, with initial task list from issue.
+- **Created by `/build`** at phase start, immediately after `wt switch --create`, with initial task list from issue.
 - **Updated by `/build`** after each completed task, significant decision, and before `/compact`.
 - **Read on resume by `/build`** — before re-reading the issue.
 - **Harvested by `/implement`** at PR-creation time. `## Decisions made this session` and `## Open questions` flow into PR body's `## Notes` section.
