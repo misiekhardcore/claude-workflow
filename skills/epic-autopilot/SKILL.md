@@ -191,7 +191,7 @@ A permanently-FAILED sub-task (branch exists, no PR, two prior retries) will be 
 
 ## Rules
 
-See [Ref: orchestrator-rules] for CWD verification, delegation, no-autonomous-merge, and seed-brief contract.
+See `${CLAUDE_PLUGIN_ROOT}/_shared/orchestrator-rules.md` for CWD verification, delegation, no-autonomous-merge, and seed-brief contract.
 
 - Require explicit user approval at each gate (Stage 1, Stage 2, each Stage 3 sub-issue). Silence is not approval.
 - The user must not modify the epic issue body or any sub-issue body during Stage 4. Sub-agents read at spawn time.

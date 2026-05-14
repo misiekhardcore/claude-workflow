@@ -20,7 +20,7 @@ A single positive integer — the GitHub issue number to ship.
 
 On every invocation:
 
-1. Run [Ref: repo-preflight]. Echo resolved `owner/repo` back to the user. Pause for confirmation.
+1. Run `${CLAUDE_PLUGIN_ROOT}/_shared/repo-preflight.md`. Echo resolved `owner/repo` back to the user. Pause for confirmation.
 2. Detect current state using the commands in **State detection** below.
 3. Consult the **Resume state machine** to determine which stage to enter.
 
@@ -40,11 +40,11 @@ On every invocation:
 
 **Entry condition**: Issue has `## Implementation plan`, branch `feat/issue-<N>` does not exist, no open PR.
 
-1. Pull latest `main` and create worktree for branch `feat/issue-<N>` on base `main`. See [Ref: worktree-protocol].
+1. Pull latest `main` and create worktree for branch `feat/issue-<N>` on base `main`. See `${CLAUDE_PLUGIN_ROOT}/_shared/worktree-protocol.md`.
 
 2. Determine `scope_class` from the plan body (look for size/scope hints; default to `Standard`).
 
-3. Run `/implement <N>` from within the worktree. See [Ref: specialist-mode — Autonomous Implement Invocation] with overrides:
+3. Run `/implement <N>` from within the worktree. See `${CLAUDE_PLUGIN_ROOT}/_shared/specialist-mode.md` § Autonomous Implement Invocation with overrides:
    - `scope_class`: determined above
    - `branch`: `feat/issue-<N>`
    - `active_issue`: `<N>`
@@ -134,7 +134,7 @@ gh pr view <PR#> --json reviewThreads \
 
 ## Rules
 
-See [Ref: orchestrator-rules] for CWD verification, delegation, no-autonomous-merge, and seed-brief contract.
+See `${CLAUDE_PLUGIN_ROOT}/_shared/orchestrator-rules.md` for CWD verification, delegation, no-autonomous-merge, and seed-brief contract.
 
 - **Loop-break**: In Stage 3, if the unresolved thread count is non-zero and unchanged after one pass, break immediately with a needs-human summary.
 - **Compound placement**: `/implement` already invokes `/compound` at PR creation (implementation-time pass). `/issue-autopilot` re-invokes `/compound` in Stage 5 after merge to capture review-time learnings — two passes, no deduplication needed.

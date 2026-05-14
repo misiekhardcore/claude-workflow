@@ -4,7 +4,7 @@ Rules that apply to all pipeline orchestrators (`/issue-autopilot`, `/epic-autop
 
 ## CWD verification
 
-Run [Ref: repo-preflight] at entry. Echo resolved `owner/repo` before every downstream cross-repo `gh` mutation. Pass `preflight_verified: true` in seed briefs so sub-skills skip redundant preflights.
+Run `${CLAUDE_PLUGIN_ROOT}/_shared/repo-preflight.md` at entry. Echo resolved `owner/repo` before every downstream cross-repo `gh` mutation. Pass `preflight_verified: true` in seed briefs so sub-skills skip redundant preflights.
 
 ## Delegation
 
@@ -16,4 +16,4 @@ Merging is always a human action. Exit cleanly at the awaiting-merge stage; neve
 
 ## Seed-brief contract
 
-See [Ref: specialist-mode — Autonomous Implement Invocation].
+See `${CLAUDE_PLUGIN_ROOT}/_shared/specialist-mode.md` § Autonomous Implement Invocation.
