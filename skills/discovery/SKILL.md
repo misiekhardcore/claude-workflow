@@ -32,7 +32,7 @@ Spawn: Standard = describe + scout + specify; Deep = TeamCreate with all roles.
 
 ## Issue Creation
 
-Run `_shared/repo-preflight.md` before `gh issue`.
+Read `${CLAUDE_PLUGIN_ROOT}/_shared/repo-preflight.md` before `gh issue`.
 
 **Structure** (per `_shared/handoff-artifact.md`):
 - **Preamble**: What, Why, Who (from `/describe`).
