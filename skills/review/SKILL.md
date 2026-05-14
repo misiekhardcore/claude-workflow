@@ -19,9 +19,9 @@ Lead review phase. Goal: Thoroughly review implementation and produce actionable
 - **Review Package**: Diff (`git diff` or `gh pr diff`), AC (seed brief / issue / linked), reviewer preamble.
 - **Output**: Fix brief (for `/build`), Findings report (user), or Posted GitHub review (PR).
 
-[Ref: dispatch-process.md] for dispatch modes, scope assessment, spawn rubric, process steps, and PR posting logic.
+Read `references/dispatch-process.md` for dispatch modes, scope assessment, spawn rubric, process steps, and PR posting logic.
 
-## Personas [Ref: references/personas.md]
+## Personas (see `references/personas.md`)
 - **Always-on**: Correctness, Standards.
 - **Conditional**: Security, Performance, Migration, Docs Consistency, Architecture/Scope-creep. (Activate only if gate fires).
 
