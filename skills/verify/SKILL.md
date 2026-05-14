@@ -12,43 +12,30 @@ Lead verification phase. Goal: Verify every AC from the issue is met with eviden
 ## Specialist Mode
 - **Seeded**: Skip repo-preflight.
 - **Keep**: AC verification rigor (pass/fail evidence is never delegated).
-- [Ref: specialist-mode]
+- Read `_shared/specialist-mode.md`
 
 ## I/O
 - **Input**: Branch + GitHub issue number.
-- **Verification Package** (Sole input to teammates):
-  - Diff (`git diff main...HEAD`)
-  - AC (`gh issue view <number>`)
-  - Test commands (type-check, lint, unit, build, e2e)
-- **Output**: QA report (Pass/fail per AC with evidence, verification chain results, issues found).
+- **Verification Package**: Diff, AC, test commands (type-check, lint, unit, build, e2e).
+- **Output**: QA report (pass/fail per AC with evidence).
 
 ## Scope Assessment
+
 |Scope|Criteria|Action|
 |-|-|-|
-|**Lightweight**|<= 3 AC, simple repros, no security/perf|Lead verifies inline. No team.|
-|**Standard**|>= 4 AC, or spans multiple areas/files|QA team with AC split across teammates.|
-|**Deep**|Security-sensitive, perf-critical, migration|QA team + specialist QA (Security or Performance).|
+|**Lightweight**|≤ 3 AC, simple repros, no security/perf|Lead verifies inline|
+|**Standard**|≥ 4 AC, or multi-file|QA team, split AC|
+|**Deep**|Security/perf-critical, migration|QA team + specialist|
 
-**Decision**: <= 3 AC + 1-module diff → Lightweight; Auth/Security/Migrations/Perf-paths → Deep; else → Standard.
+**Decision**: ≤ 3 AC + 1-module → Lightweight; Auth/Security/Migrations/Perf → Deep; else → Standard.
 
-### Spawn Rubric [Ref: composition]
-- **Standard/Deep**: `TeamCreate` at >= 4 AC, else parallel subagents. Model: `haiku`.
+Spawn (Standard/Deep): `TeamCreate` at ≥ 4 AC, else subagents (`haiku`).
 
 ## Process
 
-### Lightweight
-1. Extract AC from issue.
-2. Run verification chain (step 4).
-3. Walk each AC → report pass/fail with evidence.
+**Lightweight**: Extract AC → run verification chain (type-check, lint, unit, build, e2e) → report pass/fail.
 
-### Standard / Deep
-1. Extract AC from issue.
-2. **Dispatch QA Verifiers**: Split AC across workers → each receives only the Verification Package.
-3. **Deep Only**: Add specialist worker matched to diff (Security/Perf).
-4. **Execution**: Teammates use `superpowers:verification-before-completion` → verify end-to-end → report pass/fail with evidence.
-5. **Verification Chain**:
-   - Type-check (`tsc --noEmit`) → Lint → Unit tests → Build → E2E/Browser tests.
-6. **Convergence**: Discuss edge cases → unified QA report.
+**Standard / Deep**: Split AC across QA team (Deep adds specialist) → each verifies independently → converge on unified report.
 
 ## Rules
 - **Separation**: Never fix issues during verification. Report failures in the verify output; fixes are a `/build` responsibility.
