@@ -109,8 +109,8 @@ For each tier in ascending order:
 1. **Before dispatching tier T**, verify every tier-T−1 sub-task has settled (PR open or FAILED). Tier 1 has no prerequisite.
 2. Dispatch all sub-tasks in current tier as parallel `Task` sub-agents **in a single message**. For each sub-issue M:
    - Emit: `[sub-issue #<M>] dispatched (tier <T>)`
-   - Create worktree for branch `feat/epic-<N>-sub-<M>` on base `<base-branch>`. See `_shared/worktree-protocol.md`.
-   - Pass seed brief to sub-agent's `/implement` invocation. See `_shared/specialist-mode.md` with overrides:
+   - Create worktree for branch `feat/epic-<N>-sub-<M>` on base `<base-branch>`. See `${CLAUDE_PLUGIN_ROOT}/_shared/worktree-protocol.md`.
+   - Pass seed brief to sub-agent's `/implement` invocation. See `${CLAUDE_PLUGIN_ROOT}/_shared/specialist-mode.md` with overrides:
      - `scope_class`: `Deep`
      - `branch`: `feat/epic-<N>-sub-<M>`
      - `active_issue`: `<M>`
@@ -196,4 +196,4 @@ A permanently-FAILED sub-task (branch exists, no PR, two prior retries) will be 
 - Sub-issue branch and worktree names follow `feat/epic-<N>-sub-<M>` exactly. M is the globally unique GitHub sub-issue number.
 - `autonomous: true` in the seed brief is reserved for sub-task spawns from this skill. Do not pass from other orchestrators.
 - `/compound` and `/wrap-up` are not run by epic-autopilot — they remain user-invoked utilities.
-- **Seed-brief contract**: See [Ref: specialist-mode — Autonomous Implement Invocation].
+- **Seed-brief contract**: See `${CLAUDE_PLUGIN_ROOT}/_shared/specialist-mode.md#Autonomous Implement Invocation`.
