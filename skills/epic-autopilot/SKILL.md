@@ -7,39 +7,36 @@ model: opus
 effort: high
 allowed-tools: Agent Bash Read TaskCreate TaskUpdate
 ---
-Orchestrate the autonomous epic-to-PR pipeline. Take an epic GitHub issue (or free-text description) and produce draft sub-PRs plus a top-level epic PR, with explicit user approval at gates.
+Autonomous epic-to-PR orchestrator. Takes an epic issue or description and produces draft sub-PRs + epic PR with human gates at Stages 1–3, then autonomous execution through Stage 5.
 
 ## Input
 
-- **Positive integer** → existing GitHub epic issue number.
-- **Any other string** → free-text description; `/discovery` will create the epic issue.
+- **Positive integer** → existing GitHub epic issue
+- **Any other string** → free-text description (triggers `/discovery` to create epic)
 
-## Scope & Spawn
+## Scope Assessment
 
-**Always Deep** — fanout orchestrator spawning sub-agents throughout.
+Always **Deep** — fanout orchestrator with sub-agent delegation. See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for spawn justification.
 
-- Per-sub-issue /define gate: sequential single-subagent per sub-issue (model: sonnet).
-- Autonomous phase: parallel Task sub-agents per tier (model: opus per sub-agent).
+## Process
 
-See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for spawn rubric.
+[Ref: references/stages.md]
 
-## Process [Ref: references/stages.md]
+Stage 0 detects resume point. Stages 1–3 require explicit user approval at gates. Stage 4 autonomous (no prompts). Stage 5 exits.
 
-- **Stage 0**: Resume detection — read epic and sub-issue bodies; consult Resume logic table.
-- **Stage 1**: Discovery gate — run /discovery if no Requirements section; wait for approval.
-- **Stage 2**: Epic-level /define gate — run /define; wait for approval; check sub-issue count.
-- **Stage 3**: Per-sub-issue /define gate — sequential /define per sub-issue; pause for approval after each.
-- **Stage 4**: Autonomous phase — branch creation, dependency tiers (Kahn's sort with cycle-break), parallel dispatch per tier, settle sub-tasks, open epic PR.
-- **Stage 5**: Exit — print summary.
-
-Full stage details, decision trees, tier computation, and failure handling: [Ref: references/stages.md]
+**Key behaviors:**
+- Skip /discovery if epic has ≥3 acceptance criteria
+- Skip /define if epic has implementation plan
+- Topologically sort sub-issues via Kahn's algorithm (with cycle breaking)
+- Dispatch tiers in parallel via Task sub-agents
+- Post epic PR with merge order instructions after all sub-tasks settle
 
 ## Rules
 
-See `${CLAUDE_PLUGIN_ROOT}/_shared/orchestrator-rules.md` for CWD, delegation, no-autonomous-merge, seed-brief contract.
+See `${CLAUDE_PLUGIN_ROOT}/_shared/orchestrator-rules.md` for CWD, delegation, and seed-brief contract.
 
-- Require explicit user approval at each gate. Silence is not approval.
-- User must not modify epic or sub-issue bodies during Stage 4. Sub-agents read at spawn time.
-- Sub-issue branch/worktree: `feat/epic-<N>-sub-<M>` (M is globally unique GitHub number).
-- `autonomous: true` reserved for sub-task spawns. Do not pass from other orchestrators.
-- `/compound` and `/wrap-up` remain user-invoked utilities.
+- Require explicit approval at each gate; silence is not approval
+- User must not modify epic/sub-issue bodies during Stage 4
+- Branch names follow `feat/epic-<N>-sub-<M>` exactly
+- `autonomous: true` reserved for sub-task spawns from this skill only
+- `/compound` and `/wrap-up` remain user-invoked utilities
