@@ -14,7 +14,7 @@ Current worktree path and branch. Optionally, an open PR number (used to verify 
 
 ## Process
 
-See `references/procedure.md` for the step-by-step removal procedure (Steps 1–5).
+Read `references/procedure.md` for the step-by-step removal procedure (Steps 1–5).
 
 ## Output
 
