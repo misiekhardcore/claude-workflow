@@ -20,7 +20,7 @@ Audit skill authoring quality and dead state in `~/.claude/`. Archive approved c
 - **Authoring** — check `CLAUDE.md` / `AGENTS.md` / `SKILL.md` for structural quality
 - **Dead-state** — flag dead project dirs, orphan agents, stale plugin caches, stale schedules, and sub-agent artifacts in `~/.claude/`
 
-**Dispatch**: Run `bin/list-prune-files --<lane>` from the project root for each selected lane to get a concrete file list, then spawn one Task sub-agent per selected lane in parallel.
+**Dispatch**: Run `${PLUGIN_ROOT}/bin/list-prune-files --<lane>` from the project root for each selected lane to get a concrete file list, then spawn one Task sub-agent per selected lane in parallel.
 
 Each spawn prompt must include: `lane` (authoring|dead-state), `cwd` (absolute project root path), `files` (pre-enumerated list above). Each must start with `cd <cwd> && pwd`.
 

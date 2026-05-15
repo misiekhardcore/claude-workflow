@@ -15,7 +15,7 @@ A spawn prompt from `/prune` containing:
 
 - `lane`: one of `authoring` or `dead-state`
 - `cwd`: absolute path to the project root
-- `files`: pre-enumerated list of paths from `bin/list-prune-files --<lane>`
+- `files`: pre-enumerated list of paths from `${PLUGIN_ROOT}/bin/list-prune-files --<lane>`
 
 ## Pre-flight
 
