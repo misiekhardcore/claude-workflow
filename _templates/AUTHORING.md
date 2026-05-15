@@ -27,7 +27,7 @@ All skills map to one of these five roles (extending the team-composition model;
 
 1. **Single responsibility**: One concern per reference file. Name reflects the phase or topic (e.g. `scope.md`, `process.md`, `gates.md`).
 2. **Lazy loading**: Each `Read` instruction appears at the point of need in `SKILL.md` — not unconditionally at the top. A skill with two phases loads each reference file when entering that phase.
-3. **DRY**: Promote a protocol to `_shared/` when ≥3 skills reference it. Keep under `skills/<name>/references/` below that threshold.
+3. **DRY**: Promote a protocol to `_shared/` when more than one skill references it. Keep under `skills/<name>/references/` below that threshold.
 4. **Composition**: Reference `_shared/` files on-demand via `Read \`${CLAUDE_PLUGIN_ROOT}/_shared/<file>.md\`` within skill bodies — never preload.
 
 ### Split heuristics
