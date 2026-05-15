@@ -19,10 +19,12 @@ Read `references/scope.md` for scope classification criteria and specialist mode
 
 ## Process Overview
 
+Read `references/process.md` for step-by-step process, TDD, context hygiene, and commit rules.
+
 1. Run pre-flight (repo/scope confirmation).
 2. Read the issue and linked sub-issues.
 3. Create worktree, init `./.claude/NOTES.md` with task list.
-4. Read `references/process.md` for step-by-step TDD flow, context hygiene, and commit rules.
+4. Spawn workers per scope assessment (Lightweight: inline; Standard: subagents; Deep: TeamCreate).
 
 ## Output
 
