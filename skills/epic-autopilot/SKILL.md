@@ -40,4 +40,4 @@ See `${CLAUDE_PLUGIN_ROOT}/_shared/orchestrator-rules.md` for CWD, delegation, a
 - User must not modify epic/sub-issue bodies during Stage 4
 - Branch names follow `feat/epic-<N>-sub-<M>` exactly
 - `autonomous: true` reserved for sub-task spawns from this skill only
-- `/compound` and `/wrap-up` remain user-invoked utilities
+- `/compound` runs automatically at end of Stage 4 (epic-level pass; sub-issue implementation passes are covered by `/implement`). `/wrap-up` remains user-invoked.
