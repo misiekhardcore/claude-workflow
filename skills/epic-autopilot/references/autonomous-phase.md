@@ -104,3 +104,4 @@ EOF
 ```
 
 3. Print epic PR URL and full sub-issue/sub-PR summary table to stdout.
+4. Run `/compound` — epic-level learnings pass (autonomous). Epic-scoped context (architecture decisions, decomposition trade-offs, cross-sub-issue insights from Stages 1–4) is warm at this point.
