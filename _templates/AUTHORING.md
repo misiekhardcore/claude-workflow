@@ -27,7 +27,7 @@ All skills map to one of these five roles (extending the team-composition model;
 
 1. **Single responsibility**: One concern per reference file. Name reflects the phase or topic (e.g. `scope.md`, `process.md`, `gates.md`).
 2. **Lazy loading**: Each `Read` instruction appears at the point of need in `SKILL.md` — not unconditionally at the top. A skill with two phases loads each reference file when entering that phase.
-3. **DRY**: Promote a protocol to `_shared/` when more than one skill references it. Keep under `skills/<name>/references/` below that threshold.
+3. **DRY**: Promote a protocol to `_shared/` when ≥3 skills reference it. Keep under `skills/<name>/references/` below that threshold.
 4. **Composition**: Reference `_shared/` files on-demand via `Read \`${CLAUDE_PLUGIN_ROOT}/_shared/<file>.md\`` within skill bodies — never preload.
 
 ### Split heuristics
@@ -58,7 +58,11 @@ Reference on-demand via `Read \`${CLAUDE_PLUGIN_ROOT}/_shared/<file>.md\``:
 - `handoff-artifact.md`: Issue body state.
 - `interviewing-rules.md`: User interaction.
 - `notes-md-protocol.md`: `.claude/NOTES.md` state.
+- `orchestrator-rules.md`: Pipeline orchestrator rules (CWD verification, delegation, no-merge contract).
+- `repo-preflight.md`: Repo/branch confirmation before `gh` or `git push`.
+- `scope-preflight.md`: File-list confirmation before bulk edits (≥3 files).
 - `specialist-mode.md`: Seed-brief logic.
+- `worktree-protocol.md`: `wt` CLI commands for creating and managing worktrees.
 
 Use explicit read instructions inline: `Read \`${CLAUDE_PLUGIN_ROOT}/_shared/composition.md\`` instead of shorthand `[Ref: composition]`.
 
