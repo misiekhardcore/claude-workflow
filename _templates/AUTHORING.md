@@ -91,6 +91,18 @@ Each skill maps to one of three templates. Use the corresponding template from `
 
 ---
 
+## Orchestrator Decomposition
+
+When an orchestrator must decide how to fan out work across agents, use `/scope-assessment` as the canonical decomposition step:
+
+1. Build a `work_units` list — one entry per issue, file group, or bounded task, each with an `id` and `resources` list.
+2. Invoke `/scope-assessment`; receive back a disjoint agent plan.
+3. Dispatch one agent per entry in the plan.
+
+Document the orchestrator's specific definition of "work unit" (what counts as an input, what its `resources` list must contain) in the orchestrator's own `references/scope.md`. The tier-3 skill encodes the algorithm only; per-caller variation lives at the call site.
+
+---
+
 ## `_shared/` File Catalogue
 
 Reference on-demand via `Read \`${CLAUDE_PLUGIN_ROOT}/_shared/<file>.md\``:
