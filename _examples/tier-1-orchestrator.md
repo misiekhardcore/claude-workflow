@@ -5,10 +5,10 @@ Orchestrators are high-level coordinators. They do not perform domain work; they
 ## Structural Blueprint
 
 ### SKILL.md (The Process Map)
-- **Length**: $\le 150$ lines.
+- **Length**: ≤ 150 lines.
 - **Focus**: The "What" and the "Order," not the "How."
 - **Key Components**:
-    - High-level phase definitions (e.g., Discovery $\rightarrow$ Define $\rightarrow$ Implement).
+    - High-level phase definitions (e.g., Discovery → Define → Implement).
     - Loop conditions and exit criteria.
     - Mapping of phases to Tier 2 skills or Worker Agents.
 
@@ -17,7 +17,7 @@ An orchestrator's main loop typically looks like this:
 1. **Initialize State**: Set `cycle = 0`.
 2. **Loop**:
     - Increment `cycle`.
-    - Check `cycle > max_cycles` $\rightarrow$ hard stop.
+    - Check `cycle > max_cycles` → hard stop.
     - **Delegate**: Call `Skill("tier-2-skill")` or `Agent(general-purpose)` with a **Seed-Brief**.
     - **Synthesize**: Aggregate the report from the worker.
     - **Update State**: Record progress in `NOTES.md`.
@@ -49,7 +49,7 @@ Agent({
     ## Output
     - Report implementation details and verification results to the main thread.
   `,
-  isolation: "worktree" // Used if file scope is not disjoint
+  isolation: "worktree"
 })
 ```
 

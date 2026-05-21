@@ -22,7 +22,7 @@ Skills are organized into three tiers based on their role and visibility.
 
 Orchestrators must remain "thin" to avoid context bloat and logic drift.
 
-- **SKILL.md Limit**: Must be $\le 150$ lines.
+- **SKILL.md Limit**: Must be ≤ 150 lines.
 - **No Inline Domain Work**: Orchestrators should not perform the actual task (e.g., writing code, auditing files).
 - **Delegation**: All domain work must be delegated via `Skill()` (for tier-2/3 skills) or `Agent()` (for workers).
 
@@ -63,9 +63,9 @@ Due to a bug where agent file bodies are occasionally ignored:
 
 ## Orchestrator Loop Pattern
 
-For tasks requiring iterative refinement (e.g., Build $\rightarrow$ Review $\rightarrow$ Verify):
+For tasks requiring iterative refinement (e.g., Build → Review → Verify):
 - **Cycle Counter**: Maintain an explicit counter of completed cycles.
-- **Hard Stop**: Implement a hard stop at $N$ iterations to prevent infinite loops.
+- **Hard Stop**: Implement a hard stop at N iterations to prevent infinite loops.
 - **Autonomy**: Use an `autonomous` flag in the seed-brief to signal that the agent should proceed through cycles back-to-back without user intervention.
 
 ---
@@ -76,3 +76,32 @@ The `/discovery` skill has been renamed to `/discover`.
 
 - **Breaking Change**: Existing `CLAUDE.md` references to `/discovery` will break.
 - **Action**: Users must manually update their references. No compatibility shim is provided to avoid technical debt.
+
+---
+
+## Skill Roles & Templates
+
+Each skill maps to one of three templates. Use the corresponding template from `_templates/`.
+
+|Role|Definition|Example|Model|Template|
+|-|-|-|-|-|
+|**Orchestrator**|Coordinates sub-skills and agents; manages loop and phase sequencing.|`/implement`, `/issue-autopilot`|`sonnet`/`opus`|`SKILL.orchestrator`|
+|**Specialist**|Bounded task with seed-brief input and findings report output.|`/build`, `/review`, `/verify`|`sonnet`|`SKILL.specialist`|
+|**Interactive Primitive**|Inline behavior; no delegation or handoff.|`/grill-me`|`sonnet`|`SKILL.primitive`|
+
+---
+
+## `_shared/` File Catalogue
+
+Reference on-demand via `Read \`${CLAUDE_PLUGIN_ROOT}/_shared/<file>.md\``:
+
+- `compaction-protocol.md` — in-phase context management
+- `composition.md` — team/sub-agent cost and shape
+- `handoff-artifact.md` — issue body state
+- `interviewing-rules.md` — user interaction
+- `notes-md-protocol.md` — `.claude/NOTES.md` state
+- `orchestrator-rules.md` — pipeline orchestrator rules (CWD verification, delegation, no-merge contract)
+- `repo-preflight.md` — repo/branch confirmation before `gh` or `git push`
+- `scope-preflight.md` — file-list confirmation before bulk edits (≥3 files)
+- `specialist-mode.md` — seed-brief logic
+- `worktree-protocol.md` — worktree creation, CWD verification, and cleanup
