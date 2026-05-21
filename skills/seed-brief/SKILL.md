@@ -147,7 +147,7 @@ When a specialist detects `<seed-brief>` in its prompt:
 4. **Keep gates:** Do NOT skip discovery, design rigor, or AC verification — these remain required
 5. **Handle `autonomous: true`:** If present, auto-advance to next stage on clean pass; suppress exit prompt
 
-**Execution delta (from `_shared/specialist-mode.md`):**
+**Execution delta (per `Skill("specialist-mode")`):**
 
 |Specialist|Skipped when Seeded|Always Kept|
 |-|-|-|
