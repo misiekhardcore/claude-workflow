@@ -67,7 +67,7 @@ Each conditional persona has a **gate** (when it activates) and **signals** (wha
 
 ### Architecture / scope-creep
 
-**Gate:** `scope_class == "Deep"` (the scope class set in `../SKILL.md`'s Scope Assessment) OR the captured diff in the review package totals > 300 changed lines OR the captured file list spans > 5 distinct top-level directories. Both signals are computed from the prepared review package — the captured `git diff main...HEAD` (branch mode) or `gh pr diff <n>` (PR mode) — so the gate behaves identically across modes and never re-shells out to `git`.
+**Gate:** The captured diff in the review package totals > 300 changed lines OR the captured file list spans > 5 distinct top-level directories. Both signals are computed from the prepared review package — the captured `git diff main...HEAD` (branch mode) or `gh pr diff <n>` (PR mode) — so the gate behaves identically across modes and never re-shells out to `git`.
 
 **Focus:** premature abstraction, out-of-scope changes, speculative features.
 
