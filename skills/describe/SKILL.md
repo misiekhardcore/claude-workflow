@@ -20,7 +20,7 @@ Read `/references/scope-ppt.md` for scope classification, spawn rubric, and PPT 
 
 ## Process
 
-### Standard / Deep
+### Multi-area or complex problem
 1. **Elicitation**: Ask user for problem/goal.
 2. **Exploration**: Dispatch agents → Lead analyst runs interactively via `/grill-me`.
 3. **PPT**: Run Product Pressure Test (see `/references/scope-ppt.md`) before synthesizing.
@@ -28,7 +28,7 @@ Read `/references/scope-ppt.md` for scope classification, spawn rubric, and PPT 
 5. **Validation**: Confirm understanding of each visual.
 6. **Synthesis**: Create structured problem statement.
 
-### Lightweight
+### Narrow, single-area problem
 1. Confirm problem/outcome.
 2. Brief codebase validation.
 3. Direct problem statement production.
