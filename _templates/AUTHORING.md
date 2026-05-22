@@ -141,6 +141,27 @@ Document the orchestrator's specific definition of "work unit" (what counts as a
 
 ---
 
+## Specialist Activation Pattern
+
+When an orchestrator or sub-skill needs to invoke domain experts, use the two-mechanism pattern:
+
+| Concern | Mechanism |
+|---|---|
+| **Team shape** — how many agents, which spawn primitive | `scope-assessment` (shared tier-3); define work units in caller's `references/scope.md` |
+| **Specialist activation** — which domain experts join | Per-skill `*-specialist-assessment` (tier-3, new) — one per sub-skill |
+
+### `scope-assessment` (team shape)
+
+Shared tier-3 skill. Takes `work_units` (each with `id` and `resources`), groups by shared resources, outputs one agent entry per conflict-free group. Per-caller variation is only the work-unit definition — document it in the caller's `references/scope.md`.
+
+### `*-specialist-assessment` (specialist activation)
+
+Each sub-skill gets its own tier-3 assessment skill. It reads plan/diff/AC from the caller's context and emits a flat `specialists:` list. Per-skill logic is load-bearing: the diff that warrants a security reviewer in `/review` does not drive any specialist decision in `/build`. A shared parameterized skill would lose this per-skill signal.
+
+**Do not** pass specialist lists in seed briefs or have orchestrators decide specialists. Each sub-skill is responsible for its own specialist assessment, whether invoked standalone or seeded.
+
+---
+
 ## `_shared/` File Catalogue
 
 Reference on-demand via `Read \`${CLAUDE_PLUGIN_ROOT}/_shared/<file>.md\``:
