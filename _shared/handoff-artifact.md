@@ -1,5 +1,3 @@
-# Handoff Artifact — Shared Template
-
 Phase-boundary skills (`/discovery`, `/define`) hand off state by updating the GitHub issue body. Read on-demand at handoff steps; do not preload.
 
 `/implement` is terminal — its output is the PR, not an issue body update.

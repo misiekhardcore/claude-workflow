@@ -1,5 +1,3 @@
-# NOTES.md — In-Phase Memory Tier
-
 `.claude/NOTES.md` is rot-immune external memory for in-phase state. Read on-demand when creating, updating, or harvesting; do not preload.
 
 ## Where it sits in the memory hierarchy

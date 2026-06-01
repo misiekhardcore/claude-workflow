@@ -12,7 +12,7 @@ Lead architecture team. Goal: Converge on a technical approach via research, ite
 ## Specialist Mode
 - **Seeded**: Skip codebase and patterns research subagent dispatches.
 - **Keep**: Full architecture session (grill-me + devil's advocate).
-- Read `_shared/specialist-mode.md`
+- Invoke `Skill("specialist-mode")`
 
 ## I/O
 - **Input**: GitHub issue with problem statement and AC (from /discovery).
@@ -43,4 +43,4 @@ Lead architecture team. Goal: Converge on a technical approach via research, ite
 - **Code-First**: Never propose architecture without reading existing code.
 - **Pattern Adherence**: Respect existing patterns unless justifying deviation.
 - **Concrete Only**: No vague placeholders; every section must be decisive.
-- Read `_shared/interviewing-rules.md`
+- Invoke `Skill("interviewing-rules")`

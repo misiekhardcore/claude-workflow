@@ -13,17 +13,17 @@ You lead product discovery. Goal: Deeply understand the problem space via intera
 ## Specialist Mode
 - **Seeded**: Skip internal prior-art search. Keep PPT and grill-me interactions.
 - **Standalone**: Run all steps.
-- Read `${CLAUDE_PLUGIN_ROOT}/_shared/specialist-mode.md`
+- Invoke `Skill("specialist-mode")`
 
 ## Scope Assessment
-Read `${CLAUDE_PLUGIN_ROOT}/_shared/scope-ppt.md` for scope classification, spawn rubric, and PPT checklist.
+Read `references/scope-ppt.md` for scope classification, spawn rubric, and PPT checklist.
 
 ## Process
 
 ### Standard / Deep
 1. **Elicitation**: Ask user for problem/goal.
 2. **Exploration**: Dispatch agents → Lead analyst runs interactively via `/grill-me`.
-3. **PPT**: Run Product Pressure Test (see reference) before synthesizing.
+3. **PPT**: Run Product Pressure Test (see `references/scope-ppt.md`) before synthesizing.
 4. **Visualization**: Produce Mermaid/ASCII for user journeys, feature comparisons, system boundaries.
 5. **Validation**: Confirm understanding of each visual.
 6. **Synthesis**: Create structured problem statement.
@@ -44,4 +44,4 @@ Read `${CLAUDE_PLUGIN_ROOT}/_shared/scope-ppt.md` for scope classification, spaw
 
 ## Rules
 - Recommend an answer for every question.
-- Read `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-rules.md`
+- Invoke `Skill("interviewing-rules")`

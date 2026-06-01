@@ -10,9 +10,9 @@ Lifecycle walkthrough from discovery to closure.
 |**Large**|`/discovery` → `/define` → `/implement`|Issue Body → Issue Body → PR|
 
 **State Management**:
-- **Inter-phase**: GitHub issue body (5-field structure in `_shared/handoff-artifact.md`).
-- **Intra-phase**: `./.claude/NOTES.md` (`_shared/notes-md-protocol.md`).
-- **Context Pressure**: See compaction-protocol (read `${CLAUDE_PLUGIN_ROOT}/_shared/compaction-protocol.md`) for Edit → Delegate → Compact strategy.
+- **Inter-phase**: GitHub issue body (5-field structure — see `${CLAUDE_PLUGIN_ROOT}/_shared/handoff-artifact.md`).
+- **Intra-phase**: `./.claude/NOTES.md` (see `${CLAUDE_PLUGIN_ROOT}/_shared/notes-md-protocol.md`).
+- **Context Pressure**: Invoke `Skill("compaction-protocol")` for Edit → Delegate → Compact strategy.
 
 ## Phase Details
 

@@ -12,11 +12,11 @@ Lead requirements team. Goal: Transform problem statements into testable, non-va
 ## Specialist Mode
 - **Seeded**: Skip scope-class and file-scope confirmations.
 - **Keep**: AC derivation gates (quality is not delegated).
-- Read `_shared/specialist-mode.md`
+- Invoke `Skill("specialist-mode")`
 
 ## I/O
 - **Input**: Problem statement (from /describe) or user description.
-- **Optional**: Prior-art brief (`problem_domain`, `existing_patterns`, `constraints`). Skip duplicate internal research if present. See `_shared/composition.md`
+- **Optional**: Prior-art brief (`problem_domain`, `existing_patterns`, `constraints`). Skip duplicate internal research if present. See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`
 - **Output**: Numbered list of testable AC scenarios.
 
 ## Process
@@ -40,4 +40,4 @@ Lead requirements team. Goal: Transform problem statements into testable, non-va
 ## Rules
 - **Zero Vagueness**: No "fast", "user-friendly", or "appropriate". Every AC must be testable.
 - **Verification**: Fetch and confirm URLs/external claims before citing in specs.
-- Read `_shared/interviewing-rules.md`
+- Invoke `Skill("interviewing-rules")`

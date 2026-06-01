@@ -12,7 +12,7 @@ Lead verification phase. Goal: Verify every AC from the issue is met with eviden
 ## Specialist Mode
 - **Seeded**: Skip repo-preflight.
 - **Keep**: AC verification rigor (pass/fail evidence is never delegated).
-- Read `_shared/specialist-mode.md`
+- Invoke `Skill("specialist-mode")`
 
 ## I/O
 - **Input**: Branch + GitHub issue number.

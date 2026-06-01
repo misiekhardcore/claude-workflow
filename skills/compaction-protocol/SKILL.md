@@ -1,5 +1,9 @@
-# In-Phase Compaction Protocol — Shared
-
+---
+name: compaction-protocol
+description: Context management protocol for rot reduction using editing, delegation, and summarization.
+user-invocable: false
+layer: 3
+---
 Used by `/build` to manage context rot. Read on-demand at compaction steps; do not preload.
 
 ## Tool order

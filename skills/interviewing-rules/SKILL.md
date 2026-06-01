@@ -1,8 +1,13 @@
-# Interviewing Rules — Shared Protocol
-
+---
+name: interviewing-rules
+description: Directives for rigorous user-interactive discovery and approval.
+user-invocable: false
+layer: 3
+---
 Directives for user-interactive discovery and approval.
 
 ## Constraints
+
 - **Atomic Questions**: One question at a time (max 4 via `AskUserQuestion`).
 - **Rigor**: Grill until clear. No vague/partial answers.
 - **Structured Choice**: Prefer `AskUserQuestion` over open-text.
