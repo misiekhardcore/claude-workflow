@@ -2,14 +2,13 @@
 name: orchestrator-rules
 description: Standard directives for pipeline orchestrators coordinating specialist sub-skills.
 user-invocable: false
-tier: 3
+layer: 3
 ---
-
-Rules that apply to all pipeline orchestrators (`/issue-autopilot`, `/epic-autopilot`).
+Rules that apply to all pipeline orchestrators.
 
 ## CWD verification
 
-Run the repository pre-flight protocol at entry. Echo resolved `owner/repo` before every downstream cross-repo `gh` mutation. Pass `preflight_verified: true` in seed briefs so sub-skills skip redundant preflights.
+Invoke `Skill("preflight")` at entry. Echo resolved `owner/repo` before every downstream cross-repo `gh` mutation. Pass `preflight_verified: true` in seed briefs so sub-skills skip redundant preflights.
 
 ## Delegation
 
@@ -21,4 +20,4 @@ Merging is always a human action. Exit cleanly at the awaiting-merge stage; neve
 
 ## Seed-brief contract
 
-See the specialist-mode protocol § Autonomous Implement Invocation for seed-brief shape and field requirements.
+See `Skill("specialist-mode")` § Autonomous Implement Invocation for seed-brief shape and field requirements.

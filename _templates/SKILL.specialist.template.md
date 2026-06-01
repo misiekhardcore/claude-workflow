@@ -34,4 +34,4 @@ If specialist spawns sub-agents/teams, state choice explicitly: inline, parallel
 
 - <Rule 1 — non-negotiable constraint>
 - <Rule 2>
-- See `Invoke Skill("interviewing-rules")` for questioning protocol (when interviewing user).
+- Invoke `Skill("interviewing-rules")` for questioning protocol (when interviewing user).

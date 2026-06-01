@@ -37,5 +37,6 @@ See `_shared/composition.md` for spawn cost models.
 ## Rules
 - **Explicit Approval**: Partial feedback ≠ approval.
 - **Exploration**: Time-box codebase reading to 3–5 tool calls, then ask the user a focused question.
-- **Sourcing**: Use `Invoke Skill("preflight")` before updating issue.
+- **Sourcing**: Invoke `Skill("preflight")` before updating issue.
+  Suppress branch line: true
 - Invoke `Skill("interviewing-rules")`

@@ -16,7 +16,7 @@ Lead requirements team. Goal: Transform problem statements into testable, non-va
 
 ## I/O
 - **Input**: Problem statement (from /describe) or user description.
-- **Optional**: Prior-art brief (`problem_domain`, `existing_patterns`, `constraints`). Skip duplicate internal research if present. See `_shared/composition.md`
+- **Optional**: Prior-art brief (`problem_domain`, `existing_patterns`, `constraints`). Skip duplicate internal research if present. See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`
 - **Output**: Numbered list of testable AC scenarios.
 
 ## Process

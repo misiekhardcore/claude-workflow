@@ -29,6 +29,7 @@ Per scope-assessment output:
 ## Issue Creation
 
 Invoke `Skill("preflight")` before `gh issue`.
+Suppress branch line: true
 
 **Structure** — invoke `Skill("handoff-artifact")` for field list:
 - **Preamble**: What, Why, Who (from `/describe`).
