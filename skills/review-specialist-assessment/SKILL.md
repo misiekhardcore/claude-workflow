@@ -4,7 +4,6 @@ description: Assess which specialist agents to activate for a /review invocation
 user-invocable: false
 tier: 3
 ---
-
 Assess which specialist agents are needed for the current review task. Called by `/review` at entry, whether seeded or standalone.
 
 ## Input
@@ -22,11 +21,11 @@ Always activate:
 
 Activate conditionally:
 
-| Specialist | Gate |
-|---|---|
-| `reviewer-security` | Diff contains 2+ of: `auth`, `token`, `session`, `permission`, `password`, `cookie`, `csrf`, `cors` co-occurring in the same file — OR — file paths match `**/auth/**`, `**/security/**`, `**/middleware/**` |
-| `reviewer-perf` | Diff touches database queries, loops over collections > 100 items, caching logic, or file paths match `**/db/**`, `**/repository/**`, `**/query/**` |
-| `reviewer-migration` | Diff contains migration files, schema changes, or `ALTER TABLE` / `CREATE TABLE` / column add/drop statements |
+|Specialist|Gate|
+|-|-|
+|`reviewer-security`|Diff contains 2+ of: `auth`, `token`, `session`, `permission`, `password`, `cookie`, `csrf`, `cors` co-occurring in the same file — OR — file paths match `**/auth/**`, `**/security/**`, `**/middleware/**`|
+|`reviewer-perf`|Diff touches database queries, loops over collections > 100 items, caching logic, or file paths match `**/db/**`, `**/repository/**`, `**/query/**`|
+|`reviewer-migration`|Diff contains migration files, schema changes, or `ALTER TABLE` / `CREATE TABLE` / column add/drop statements|
 
 ## Output
 

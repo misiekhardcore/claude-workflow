@@ -4,7 +4,6 @@ description: Assess which specialist agents to activate for a /build invocation.
 user-invocable: false
 tier: 3
 ---
-
 Assess which specialist agents are needed for the current build task. Called by `/build` at entry, whether seeded or standalone.
 
 ## Input
@@ -18,9 +17,9 @@ Read from caller context:
 
 Evaluate each specialist against the plan, AC, and diff:
 
-| Specialist | Activate when |
-|---|---|
-| `reviewer-migration` | Plan mentions schema changes, migrations, DB column add/drop, or backwards-compatibility constraints |
+|Specialist|Activate when|
+|-|-|
+|`reviewer-migration`|Plan mentions schema changes, migrations, DB column add/drop, or backwards-compatibility constraints|
 
 **No other specialists are activated for `/build`.** Security, perf, correctness, and standards reviewers belong to `/review`, not `/build`. Build's job is to produce the code; review's job is to judge it.
 

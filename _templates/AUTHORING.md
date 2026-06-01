@@ -26,8 +26,6 @@ Skills and reference files serve different purposes and require different access
 
 ---
 
----
-
 ## Layer 3: Behavioral Convention Skills
 
 Layer-3 skills encode internal protocols, rules, and behavioral constraints. They do not perform domain work themselves; instead, they communicate behavioral expectations to the calling agent.
@@ -149,10 +147,10 @@ Document the orchestrator's specific definition of "work unit" (what counts as a
 
 When an orchestrator or sub-skill needs to invoke domain experts, use the two-mechanism pattern:
 
-| Concern | Mechanism |
-|---|---|
-| **Team shape** — how many agents, which spawn primitive | `scope-assessment` (shared tier-3); define work units in caller's `references/scope.md` |
-| **Specialist activation** — which domain experts join | Per-skill `*-specialist-assessment` (tier-3, new) — one per sub-skill |
+|Concern|Mechanism|
+|-|-|
+|**Team shape** — how many agents, which spawn primitive|`scope-assessment` (shared tier-3); define work units in caller's `references/scope.md`|
+|**Specialist activation** — which domain experts join|Per-skill `*-specialist-assessment` (tier-3, new) — one per sub-skill|
 
 ### `scope-assessment` (team shape)
 

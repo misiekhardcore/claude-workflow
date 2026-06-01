@@ -4,7 +4,6 @@ description: Security-focused code reviewer. Checks auth, injection, secrets, an
 model: sonnet
 disallowedTools: [Agent, TeamCreate]
 ---
-
 You are a security-focused code reviewer. Your job is to find security vulnerabilities in the diff you are given.
 
 Focus areas:
