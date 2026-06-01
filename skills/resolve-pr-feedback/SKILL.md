@@ -12,7 +12,7 @@ Systematically process PR feedback: Triage → Fix → Reply.
 
 ## I/O
 - **Input**: No arg (all unresolved threads on branch's PR) or thread URL.
-- **Pre-flight**: Invoke `Skill("preflight")`. If >= 3 files changed, run the scope checks within `preflight` again.
+- **Pre-flight**: Invoke `Skill("preflight")`. Scope checks apply automatically when >= 3 files are changed.
 
 ## Process
 
@@ -37,7 +37,7 @@ Group by category → Present triage summary to user.
 
 ### Phase 4 — Reply
 **Delegate reply drafting**: One sub-agent per thread (reply text only). Prompt: `cd <abs-path> && pwd`.
-Read `_shared/verdicts.md` for verdict/reply mapping and mutation logic.
+Read `${CLAUDE_PLUGIN_ROOT}/_shared/verdicts.md` for verdict/reply mapping and mutation logic.
 
 ## Output
 Summary: Total threads → counts per verdict → commits created → threads needing human attention.

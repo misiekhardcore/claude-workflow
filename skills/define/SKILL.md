@@ -19,7 +19,7 @@ Phase Lead. Goal: Transform an approved issue into a concrete implementation pla
 
 **Decision**: 1 module + pattern match → Lightweight; Security/Payments/Arch-change → Deep; else → Standard.
 
-### Spawn Rubric (see `_shared/composition.md`)
+### Spawn Rubric (see `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`)
 - **Research Team**: 2 parallel `sonnet` agents (Codebase + Patterns).
 - **Standard Team**: Sequential specialists (Architecture → Design).
 - **Deep Team**: Standard + `TeamCreate` critique team (only for high-risk plans).
@@ -43,5 +43,6 @@ Phase Lead. Goal: Transform an approved issue into a concrete implementation pla
 ## Rules
 - **Explicit Approval**: Partial feedback ≠ approval.
 - **Exploration**: Time-box codebase reading to 3–5 tool calls, then ask the user a focused question.
-- **Sourcing**: Use `Invoke Skill("preflight")` before updating issue.
+- **Sourcing**: Invoke `Skill("preflight")` before updating issue.
+  Suppress branch line: true
 - Invoke `Skill("interviewing-rules")`

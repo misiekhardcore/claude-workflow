@@ -33,6 +33,7 @@ Spawn: Standard = describe + scout + specify; Deep = TeamCreate with all roles.
 ## Issue Creation
 
 Invoke `Skill("preflight")` before `gh issue`.
+Suppress branch line: true
 
 **Structure** — Read `${CLAUDE_PLUGIN_ROOT}/_shared/handoff-artifact.md` for field list:
 - **Preamble**: What, Why, Who (from `/describe`).
