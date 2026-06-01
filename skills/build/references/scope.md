@@ -18,7 +18,7 @@ Classify the build per criteria below:
 
 ### Spawn Justification
 
-See `_shared/composition.md` for spawn cost models.
+Read `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for spawn cost models.
 
 - **Standard**: TeamCreate at ≥3 splits, else parallel subagents.
 - **Deep**: TeamCreate.
