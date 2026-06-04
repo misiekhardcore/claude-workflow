@@ -21,7 +21,7 @@ Tally total token usage as ~N × single-session baseline.
 |-|-|-|
 |Inline single agent|Single file, no unknowns|~1×|
 |2–3 sequential subagents|Multi-file, typical feature|2–4×|
-|All specialists (parallel subagents)|Cross-module, security, arch|Up to ~6×|
+|All specialists (parallel subagents)|Cross-module, security, arch|~(N+1)× where N = activated specialists|
 
 ### Decision Ladder
 Escalate only when the lower tier is insufficient:
