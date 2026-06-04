@@ -17,7 +17,7 @@ Read `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
 
 ## Product Pressure Test (PPT)
 
-Run between exploration and synthesis for multi-area or complex problems. Grill user on:
+Run between exploration and synthesis for multi-area or complex problems. Invoke `Skill('grill-me')` with the user on:
 
 1. **Right Problem?** → Is this a symptom? Is there a deeper root cause?
 2. **Cost of Inaction?** → Who is affected? How badly? Is it worth building?

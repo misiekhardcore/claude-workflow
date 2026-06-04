@@ -24,8 +24,6 @@ Skills and reference files serve different purposes and require different access
 
 **Decision rule**: If the file encodes a behavioral constraint agents must actively operate under → layer-3 skill. If the file contains format tables, field lists, or read-only lookup context → `_shared/` doc.
 
----
-
 ## Layer 3: Behavioral Convention Skills
 
 Layer-3 skills encode internal protocols, rules, and behavioral constraints. They do not perform domain work themselves; instead, they communicate behavioral expectations to the calling agent.
@@ -56,8 +54,6 @@ layer: 3
 
 The current layer-3 skill catalog lives in `skills/`. Consult `ls skills/` for a list of available protocols. Each skill directory contains a `SKILL.md` with the authoritative protocol definition.
 
----
-
 ## Layer 1: Orchestrator Constraints
 
 Orchestrators must remain "thin" to avoid context bloat and logic drift.
@@ -65,8 +61,6 @@ Orchestrators must remain "thin" to avoid context bloat and logic drift.
 - **SKILL.md Limit**: Must be ≤ 150 lines.
 - **No Inline Domain Work**: Orchestrators should not perform the actual task (e.g., writing code, auditing files).
 - **Delegation**: All domain work must be delegated via `Skill()` (for layer-2/3 skills) or `Agent()` (for workers).
-
----
 
 ## Worker-Agent Dispatch Pattern
 
@@ -83,8 +77,6 @@ To prevent race conditions and "last-write-wins" conflicts:
 ### 3. Defensive Frontmatter
 Worker agents should include `disallowedTools: [Agent]` in their frontmatter to prevent recursive agent spawning.
 
----
-
 ## Custom Agent Authoring
 
 ### When to use a Custom Agent File
@@ -99,8 +91,6 @@ Due to a bug where agent file bodies are occasionally ignored:
 - **Constraint**: All critical rules and personas must be embedded directly in the `prompt` argument of the `Agent()` call, not just in the agent file.
 - `TODO: remove this workaround when GitHub #13627 is resolved`.
 
----
-
 ## Orchestrator Loop Pattern
 
 For tasks requiring iterative refinement (e.g., Build → Review → Verify):
@@ -108,16 +98,12 @@ For tasks requiring iterative refinement (e.g., Build → Review → Verify):
 - **Hard Stop**: Implement a hard stop at N iterations to prevent infinite loops.
 - **Autonomy**: Use an `autonomous` flag in the seed-brief to signal that the agent should proceed through cycles back-to-back without user intervention.
 
----
-
 ## Rename Migration
 
 The `/discovery` skill has been renamed to `/discover`.
 
 - **Breaking Change**: Existing `CLAUDE.md` references to `/discovery` will break.
 - **Action**: Users must manually update their references. No compatibility shim is provided to avoid technical debt.
-
----
 
 ## Skill Roles & Templates
 
@@ -129,8 +115,6 @@ Each skill maps to one of three templates. Use the corresponding template from `
 |**Specialist** (Layer 2)|Bounded task with seed-brief input and findings report output.|`/build`, `/review`, `/verify`|`sonnet`|`SKILL.specialist`|
 |**Interactive Primitive** (Layer 2)|Inline behavior; no delegation or handoff.|`/grill-me`|`sonnet`|`SKILL.primitive`|
 
----
-
 ## Orchestrator Decomposition
 
 When an orchestrator must decide how to fan out work across agents, use `/scope-assessment` as the canonical decomposition step:
@@ -140,8 +124,6 @@ When an orchestrator must decide how to fan out work across agents, use `/scope-
 3. Dispatch one agent per entry in the plan.
 
 Document the orchestrator's specific definition of "work unit" (what counts as an input, what its `resources` list must contain) in a dedicated `references/` doc. That doc must also cite `/scope-assessment` as the canonical decomposition algorithm. The layer-3 skill encodes the algorithm only; per-caller variation lives at the call site.
-
----
 
 ## Specialist Activation Pattern
 
@@ -161,8 +143,6 @@ Shared layer-3 skill. Takes `work_units` (each with `id` and `resources`), group
 Each sub-skill gets its own layer-3 assessment skill. It reads plan/diff/AC from the caller's context and emits a flat `specialists:` list. Per-skill logic is load-bearing: the diff that warrants a security reviewer in `/review` does not drive any specialist decision in `/build`. A shared parameterized skill would lose this per-skill signal.
 
 **Do not** pass specialist lists in seed briefs or have orchestrators decide specialists. Each sub-skill is responsible for its own specialist assessment, whether invoked standalone or seeded.
-
----
 
 ## `_shared/` File Catalogue
 

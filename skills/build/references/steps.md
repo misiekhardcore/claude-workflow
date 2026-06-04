@@ -12,7 +12,7 @@ Classify the build per criteria below:
 
 ### Decision Tree
 
-Use `Skill("scope-assessment")` with work units derived from sub-issues and file groups. The output determines agent count and spawn primitive.
+Invoke `Skill("scope-assessment")` with work units derived from sub-issues and file groups. The output determines agent count and spawn primitive.
 
 ### Spawn Justification
 

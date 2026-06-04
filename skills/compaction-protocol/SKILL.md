@@ -24,7 +24,7 @@ Trigger on concept shifts, not percentages:
 
 ## Context editing — the default
 
-Use context editing to clear superseded tool outputs (reads after edits, old test runs, stale doc lookups). Reports 84% reduction vs. summarization; no paraphrase artifacts. Default tool — reach for `/compact` only when context editing can't fix the root pressure.
+Use [context editing](https://platform.claude.com/docs/en/build-with-claude/context-editing) to clear superseded tool outputs (reads after edits, old test runs, stale doc lookups). Reports 84% reduction vs. summarization; no paraphrase artifacts. Default tool — reach for `/compact` only when context editing can't fix the root pressure.
 
 ## Summarization-based `/compact` — last resort
 

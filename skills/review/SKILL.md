@@ -29,7 +29,7 @@ Read `references/dispatch-process.md` for dispatch modes, process steps, and PR 
 
 ## Personas (see `references/personas.md`)
 - **Always-on**: Correctness, Standards.
-- **Conditional**: Security, Performance, Migration. (Activate only if gate fires).
+- **Conditional**: Security, Performance, Migration, Docs Consistency, Architecture/Scope-creep. (Activate only if gate fires).
 
 ## Rules
 - **Separation**: Never fix issues during review. Report findings in the review output; fixes happen in a subsequent `/build` cycle.

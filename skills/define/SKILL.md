@@ -22,8 +22,8 @@ See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for spawn cost models.
 1. **Ingestion**: Read issue (problem statement + AC).
 2. **Research** (multi-area only): Dispatch parallel agents to produce a research brief (seeds specialists).
 3. **Execution**:
-   - **Narrow scope**: Write architecture summary inline.
-   - **Multi-area**: Architecture → Design (if visual).
+   - Write architecture summary inline.
+   - Architecture → Design (if visual).
    - **High-risk domain**: Architecture → Design → Critique Team.
 4. **Sourcing**: Respect sequence: Architecture decisions first → Design works within those constraints.
 5. **Handoff**: Update GitHub issue body (single source of truth). Invoke `Skill("handoff-artifact")` for field list.
