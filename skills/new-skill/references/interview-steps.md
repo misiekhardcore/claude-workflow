@@ -93,11 +93,10 @@ If the author picks **Restricted subset**, ask one free-text follow-up: "Which t
 **`AskUserQuestion`** with `header: "Parallelism"`, question: "Does this skill spawn sub-agents or teams? If yes, which primitive?".
 
 **Options:**
-- **No parallelism** — skill runs inline; no sub-agents or teams
-- **Parallel subagents** — skill spawns 2–3 independent subagents (applies to all roles)
-- **TeamCreate** — skill spawns a team (orchestrators / specialists only)
+- **No parallelism** — skill runs inline; no sub-agents
+- **Parallel subagents** — skill spawns independent subagents; lead merges results (applies to all roles)
 
-If the author picks **Parallel subagents** or **TeamCreate**, ask a follow-up free-text: "Which conditions gate the spawn decision? (reference the rubric in `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` — e.g., scope class, file count, communication pivot)".
+If the author picks **Parallel subagents**, ask a follow-up free-text: "Which conditions gate the spawn decision? (reference the rubric in `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` — e.g., scope class, file count, main-thread overrun)".
 
 - Store the answer as a "Spawn justification" block in the skill body.
 
