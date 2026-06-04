@@ -28,10 +28,10 @@ See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for spawn cost models.
 ## Process
 
 1. Read input; build work-unit list for `scope-assessment`.
-2. **Research team** (TeamCreate; multi-area only):
+2. **Research** (parallel subagents; multi-area only):
    - **Codebase research** — tech stack, modules, patterns. Outputs research brief.
    - **Prior art** — vault, project docs, external sources.
-3. **Main team** (TeamCreate), seeded with research. Width = scope. Include only needed specialists:
+3. **Specialists** (parallel subagents), seeded with research. Width = scope. Include only needed specialists:
    - **Specialist A** — `/<skill>` to <do thing>. Seeded; skips research.
    - **Specialist B** — `/<skill>` to <do thing>.
 4. <Serialization rule — which specialist first and why.>

@@ -18,7 +18,7 @@ Lead review phase. Goal: Thoroughly review implementation and produce actionable
 
 Invoke `Skill("review-specialist-assessment")` at entry. It reads diff/AC from context and emits a `specialists:` list (always includes `reviewer-correctness` and `reviewer-standards`; conditionally adds `reviewer-security`, `reviewer-perf`, `reviewer-migration`).
 
-Spawn one agent per specialist in the list. Use `TeamCreate` when the list has ≥ 3 entries; otherwise parallel `Agent()` calls (see `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`). Pass diff and AC to each. Collect findings and merge per `references/dispatch-process.md § Merge & Dedup`.
+Spawn one agent per specialist in the list using parallel `Agent()` calls (see `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`). Pass diff and AC to each. Collect findings and merge per `references/dispatch-process.md § Merge & Dedup`.
 
 ## I/O
 - **Input**: Branch (+ seed brief), Branch (standalone + issue#), or PR argument (PR# or URL).

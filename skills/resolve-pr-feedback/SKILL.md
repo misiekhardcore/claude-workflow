@@ -30,7 +30,7 @@ Group by category → Present triage summary to user.
 ### Phase 3 — Fix
 **Conflict Avoidance**: Map threads to files. No two agents on same file in parallel.
 **Dispatch**:
-- **Fix Agents**: TeamCreate (>= 3 file groups) or parallel subagents (>= 2 groups).
+- **Fix Agents**: Parallel subagents — one per file group.
 - **Execution**: Read comment → read context → implement fix → verify → determine verdict.
 - **Retry**: <= 2 cycles per thread → else `needs-human`.
 - **Regression**: Run full project test suite after all fix agents complete.

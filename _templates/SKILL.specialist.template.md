@@ -17,7 +17,7 @@ Optional: <research | prior-art | fix> brief from <source skill>. When present, 
 
 ### Spawn justification
 
-If specialist spawns sub-agents/teams, state choice explicitly: inline, parallel subagents, or TeamCreate. Document gates from `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` — include cost-based payoff AND inline overrun triggers (multi-file sweep, N-way fan-out, verbose I/O). See AUTHORING.md § "Inline-overrun smell checklist" and `/resolve-pr-feedback`, `/compound`, `/prune` examples.
+If specialist spawns sub-agents, state choice explicitly: inline or parallel subagents. Document gates from `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` — include cost-based payoff AND inline overrun triggers (multi-file sweep, N-way fan-out, verbose I/O). See AUTHORING.md § "Inline-overrun smell checklist" and `/resolve-pr-feedback`, `/compound`, `/prune` examples.
 
 ## Process
 

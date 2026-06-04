@@ -12,7 +12,7 @@ Framework for orchestrating specialists and managing token/context budgets.
 - **Linear**: A → B → C (Strict dependency).
 - **Branch**: A → (B or C) (Conditional).
 - **Loop**: A → B → A (Iterative refinement).
-- **Parallel**: A → (B ∥ C) → merge (Independent streams; requires `TeamCreate`).
+- **Parallel**: A → (B ∥ C) → merge (Independent streams; lead collects and merges reports).
 
 ## Team Sizing & Cost
 Tally total token usage as ~N × single-session baseline.
@@ -21,7 +21,7 @@ Tally total token usage as ~N × single-session baseline.
 |-|-|-|-|
 |**Lightweight**|Single file, no unknowns|Inline single agent|~1×|
 |**Standard**|Multi-file, typical feature|2-3 sequential subagents|2–4×|
-|**Deep**|Cross-module, security, arch|All specialists + `TeamCreate`|Up to ~7×|
+|**Deep**|Cross-module, security, arch|All specialists (parallel subagents)|Up to ~7×|
 
 ### Decision Ladder
 Escalate only when the lower tier is insufficient:
@@ -30,14 +30,6 @@ Escalate only when the lower tier is insufficient:
 |-|-|-|
 |**Inline**|1-4 items, fit in lead context|Audit 2 open issues|
 |**Sub-agent**|>= 5 items or verbose I/O (overrun boundary)|Fan-out across 8 issues|
-|**`TeamCreate`**|>= 3 disjoint file groups + mid-task comm needed|3 reviewers with cross-thread findings|
-
-### `TeamCreate` Rubric (All 4 must hold)
-1. **Communication Pivot**: Workers must share findings mid-task.
-2. **File Disjointness**: Non-overlapping file sets.
-3. **Parallel Shape**: Sequential reasoning is not required.
-4. **Payoff**: Expected wall-clock speedup >= 3×.
-
 ### Main-Thread Overrun (Delegate when:)
 - **Read Sweep**: >= 5 independent files saturate lead context.
 - **N-way Fan-out**: N × item_size > context_budget.

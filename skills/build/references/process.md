@@ -21,9 +21,9 @@ Reference: Invoke `Skill("notes-md")`.
 
 ### Step 3 — Spawn Workers
 
-Spawn workers per scope-assessment output (single unit: inline; multi-unit: subagents or TeamCreate).
+Spawn workers per scope-assessment output (single unit: inline; multi-unit: parallel subagents).
 
-With TeamCreate, teammates communicate peer-to-peer; with subagents, the lead merges results. Coordinate via the shared task list.
+The lead merges results from all subagents. Coordinate via the shared task list.
 
 ### Step 4 — Test-Driven Development
 
@@ -62,7 +62,7 @@ A feature branch in a worktree with all acceptance criteria implemented, tests p
 - Use `superpowers:test-driven-development` for the TDD workflow.
 - Use `wt switch --create` / `wt remove` for worktree management.
 - Pick the spawn primitive per scope-assessment output. Single-unit builds code inline.
-- Do not ask the user whether to use teams — pick the scope and go. Pick inline / subagent / team based on the scope-assessment output.
+- Do not ask the user whether to use parallel agents — pick the scope and go. Pick inline / subagents based on the scope-assessment output.
 - Do not open a PR — that happens after /implement completes the full cycle.
 - Always run the 5-question verification check before marking a task done.
 - Consolidation scans are lightweight — spend seconds, not minutes.

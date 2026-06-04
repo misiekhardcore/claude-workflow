@@ -8,7 +8,7 @@ Classify the build per criteria below:
 |-|-|-|
 |Single work unit|Single-file or tightly scoped; AC fits one module; no sub-issues|Code inline, no team|
 |Few work units|2–3 natural work splits (sub-issues or distinct file groups)|Implementation team, one agent per split|
-|Many work units|Many sub-issues, cross-module work, or architecture-changing scope|Larger implementation team; peer coordination|
+|Many work units|Many sub-issues, cross-module work, or architecture-changing scope|Parallel subagents; lead coordinates and merges results|
 
 ### Decision Tree
 
@@ -19,7 +19,7 @@ Use `Skill("scope-assessment")` with work units derived from sub-issues and file
 Read `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for spawn cost models.
 
 - **Few work units** (2–3): parallel subagents, one per unit.
-- **Many work units** (4+): TeamCreate.
+- **Many work units** (4+): parallel subagents; lead coordinates and merges results.
 
 ## Specialist Mode
 
@@ -52,9 +52,9 @@ Reference: Invoke `Skill("notes-md")`.
 
 ### Step 3 — Spawn Workers
 
-Spawn workers per scope-assessment output (single unit: inline; multi-unit: subagents or TeamCreate).
+Spawn workers per scope-assessment output (single unit: inline; multi-unit: parallel subagents).
 
-With TeamCreate, teammates communicate peer-to-peer; with subagents, the lead merges results. Coordinate via the shared task list.
+The lead merges results from all subagents. Coordinate via the shared task list.
 
 ### Step 4 — Test-Driven Development
 
@@ -95,7 +95,7 @@ A feature branch in a worktree with all acceptance criteria implemented, tests p
 - Use `superpowers:test-driven-development` for the TDD workflow.
 - Use `wt switch --create` / `wt remove` for worktree management.
 - Pick the spawn primitive per scope-assessment output. Single-unit builds code inline.
-- Do not ask the user whether to use teams — pick the scope and go. Pick inline / subagent / team based on the scope-assessment output.
+- Do not ask the user whether to use parallel agents — pick the scope and go. Pick inline / subagents based on the scope-assessment output.
 - Do not open a PR — that happens after /implement completes the full cycle.
 - Always run the 5-question verification check before marking a task done.
 - Consolidation scans are lightweight — spend seconds, not minutes.

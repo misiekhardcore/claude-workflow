@@ -20,7 +20,7 @@ For the full lifecycle — prerequisites, outcomes, handoffs — see `${CLAUDE_P
 
 ## Implementation Rules
 
-- **Default to single-agent.** Use `TeamCreate` only for parallelizable work across 3+ independent files or sub-issues. Below that threshold, delegate bulk I/O work to Task sub-agents to prevent main-thread context overrun (see `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` § "Main-thread overrun").
+- **Default to single-agent.** Use parallel sub-agents for parallelizable work with 2+ independent file groups or sub-issues. Below that threshold, delegate bulk I/O work to a single sub-agent to prevent main-thread context overrun (see `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` § "Main-thread overrun").
 - **Respond concisely.** No filler, no preamble.
 - **Use the cheapest viable model.** Skills set their own `model:` and `effort:` — trust them.
 - During `/define` or `/discovery` exploration: time-box codebase reading to 3–5 tool calls, then ask the user a focused question.

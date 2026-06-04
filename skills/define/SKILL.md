@@ -14,7 +14,7 @@ Phase Lead. Goal: Transform an approved issue into a concrete implementation pla
 
 Invoke `Skill("scope-assessment")` with work units — one per distinct module or sub-issue in the issue body. Receive agent plan; dispatch one research/architecture agent per disjoint group.
 
-For high-risk plans (security, payments, arch-changing scope): add a critique pass after `/architecture` → `/design` using a `TeamCreate` critique team. Determine risk from issue AC and scope — not from a label.
+For high-risk plans (security, payments, arch-changing scope): add a parallel critique pass after `/architecture` → `/design` using two independent critique subagents whose findings the lead merges. Determine risk from issue AC and scope — not from a label.
 
 See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for spawn cost models.
 

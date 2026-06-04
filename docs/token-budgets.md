@@ -117,7 +117,7 @@ Fix: read the issue body or NOTES.md instead. The skill body has nothing to add 
 - [`cross-plugin.md`](cross-plugin.md) — MCP-server sizing.
 - Invoke `Skill("notes-md")` — `.claude/NOTES.md` shape and update cadence.
 - Invoke `Skill("handoff-artifact")` — five-field issue-body structure.
-- Read `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` — sub-agent vs `TeamCreate` cost rubric.
+- Read `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` — spawn cost models and parallel sub-agent rubric.
 
 ## Sources
 

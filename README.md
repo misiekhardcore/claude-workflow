@@ -101,7 +101,7 @@ Skills that spawn parallel sub-agents require:
 export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
 ```
 
-Without this flag, `TeamCreate` is unavailable. Skills detect its absence and fall back to spawning sub-agents individually with a note.
+Without this flag, parallel sub-agent spawning is unavailable. Skills detect its absence and fall back to single-agent execution with a note.
 
 ## Skills
 

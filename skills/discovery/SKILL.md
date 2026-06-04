@@ -15,7 +15,7 @@ Lead discovery phase. Goal: Transform vague ideas into well-specified GitHub iss
 Invoke `Skill("scope-assessment")` with work units derived from the problem statement. Dispatch agents based on the result:
 - **1-agent result**: `/describe` only.
 - **Multi-agent result**: Prior-Art Scout (parallel) + `/describe` (with scout brief) + `/specify`.
-- **High-risk domain** (auth/security/payments/arch): `TeamCreate` with flow analyst and adversarial questioner roles.
+- **High-risk domain** (auth/security/payments/arch): parallel subagents — flow analyst and adversarial questioner in parallel.
 
 Determine scope from the problem domain and complexity — not a label.
 
@@ -24,7 +24,7 @@ Determine scope from the problem domain and complexity — not a label.
 Per scope-assessment output:
 - **1-agent**: `/describe` → extract AC → issue.
 - **Multi-agent**: Prior-Art Scout (parallel) → `/describe` (with scout brief) → `/specify` → issue.
-- **High-risk domain**: `TeamCreate` (Describe + Flow-Analyst + Scout in parallel → Adversarial Questioner → Specify last) → issue.
+- **High-risk domain**: parallel subagents (Describe + Flow-Analyst + Scout in parallel → Adversarial Questioner → Specify last) → issue.
 
 ## Issue Creation
 

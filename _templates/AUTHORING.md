@@ -81,7 +81,7 @@ To prevent race conditions and "last-write-wins" conflicts:
 - **Isolation Escape Hatch**: If disjoint scope cannot be guaranteed, use `isolation: "worktree"` to provide each agent with its own git worktree.
 
 ### 3. Defensive Frontmatter
-Worker agents should include `disallowedTools: [TeamCreate, Agent]` in their frontmatter to prevent recursive agent spawning.
+Worker agents should include `disallowedTools: [Agent]` in their frontmatter to prevent recursive agent spawning.
 
 ---
 
