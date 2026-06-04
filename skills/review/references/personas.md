@@ -43,7 +43,7 @@ Each conditional persona has a **gate** (when it activates) and **signals** (wha
 
 ### Performance
 
-**Gate:** diff touches database queries or data access patterns — content matching `query`, `findAll`, `SELECT`, `JOIN`, `index`, OR file paths matching `**/db/**`, `**/queries/**`. Do **not** trigger on generic JS iteration (`forEach`, `map`, `filter`).
+**Gate:** diff touches database queries, loops over collections > 100 items, caching logic, or file paths matching `**/db/**`, `**/repository/**`, `**/query/**`.
 
 **Focus:** N+1 queries, unbounded loops, missing pagination, cache misses, unindexed lookups.
 
@@ -56,21 +56,3 @@ Each conditional persona has a **gate** (when it activates) and **signals** (wha
 **Focus:** backward compatibility, rollback safety, data loss risk, migration ordering.
 
 **Signals:** non-reversible changes, missing default for a new `NOT NULL` column, schema change without a corresponding code path for old rows, ordering hazards between migration and deploy.
-
-### Docs consistency
-
-**Gate:** diff touches markdown — any `**/*.md` change — OR adds/removes a skill (`skills/*/SKILL.md`, `_shared/**/*.md`).
-
-**Focus:** cross-references, stale mentions, duplication across `**/*.md`, `docs/**`, `_shared/**`.
-
-**Signals:** broken or stale links between skill files, contradictions between a renamed/moved file and references that still point at the old name, duplicated rule blocks that should be extracted into `_shared/`, skill catalogs that drift from the actual `skills/` directory.
-
-### Architecture / scope-creep
-
-**Gate:** The captured diff in the review package totals > 300 changed lines OR the captured file list spans > 5 distinct top-level directories. Both signals are computed from the prepared review package — the captured `git diff main...HEAD` (branch mode) or `gh pr diff <n>` (PR mode) — so the gate behaves identically across modes and never re-shells out to `git`.
-
-**Focus:** premature abstraction, out-of-scope changes, speculative features.
-
-**Signals:** new abstractions with a single caller, generalization for a hypothetical second use case, edits to files outside the issue's stated scope, refactors bundled into a feature PR without justification, configuration knobs added "just in case".
-
-**Degraded mode:** when the orchestrator passes `no_linked_issue: true` (set when `gh pr view --json closingIssuesReferences` returns empty), the persona cannot evaluate "out-of-scope" against an authoritative AC list. In that case, restrict findings to the **premature-abstraction signals** above (single-caller abstractions, hypothetical-second-use generalization, speculative configuration knobs) and skip the out-of-scope and edits-outside-issue-scope signals. Prepend a single note to the persona's section: `_No linked issue — out-of-scope check skipped._`

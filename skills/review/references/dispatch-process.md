@@ -11,7 +11,7 @@
 ## Process
 
 1. **Acquire Review Package** (Context Isolation).
-2. **Triage**: Analyze diff → activate conditional personas → record why gates fired.
+2. **Triage**: Analyze diff → invoke `Skill("review-specialist-assessment")` → build `specialists:` list; record which gates fired.
 3. **Review**: Reviewers work in parallel → use `superpowers:requesting-code-review`.
 4. **Findings Format**: `file:line | issue title | severity (P0-P3) | confidence (0.0-1.0)`.
 5. **Merge & Dedup**:
