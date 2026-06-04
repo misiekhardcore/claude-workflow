@@ -16,7 +16,7 @@ Use `Skill("scope-assessment")` with work units derived from sub-issues and file
 
 ### Spawn Justification
 
-See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for spawn cost models.
+Read `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for spawn cost models.
 
 - **Few work units** (2–3): parallel subagents, one per unit.
 - **Many work units** (4+): TeamCreate.

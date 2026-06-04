@@ -13,7 +13,7 @@ model: <haiku | sonnet | opus>
 
 <!-- What specialist receives — issue, problem statement, diff, etc. -->
 
-Optional: <research | prior-art | fix> brief from <source skill>. When present, skip research; use brief as context. See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for field list.
+Optional: <research | prior-art | fix> brief from <source skill>. When present, skip research; use brief as context. Read `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for field list.
 
 ### Spawn justification
 
