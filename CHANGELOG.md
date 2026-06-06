@@ -8,10 +8,12 @@ GitHub Releases (with auto-generated notes and source tarballs) remain the canon
 
 ### Changed
 
-- **Layer-3 boundary realignment** - three skills demoted from layer-3 (`Skill()` invocation) to `_shared/` reference docs (`Read`):
+- **Layer-3 boundary realignment** - five skills demoted from layer-3 (`Skill()` invocation) to `_shared/` reference docs (`Read`):
   - `seed-brief` -> `_shared/seed-brief.md` - spawn-time context packaging format (data structure spec, not behavioral protocol)
   - `worktree` -> `_shared/worktree-protocol.md` - `wt` CLI command reference (command cheat sheet, not behavioral protocol)
   - `interviewing-rules` -> `_shared/interviewing-rules.md` - one-question-at-a-time user-interaction rules (interaction pattern, not cross-skill behavioral contract)
+  - `handoff-artifact` -> `_shared/handoff-artifact.md` - cross-phase handoff protocol for GitHub issue body (reference doc, not invoked skill)
+  - `notes-md` -> `_shared/notes-md-protocol.md` - in-phase memory tier lifecycle and structure (reference doc, not invoked skill)
   - All callers updated from `Invoke \`Skill("name")\`` to `Read \`${CLAUDE_PLUGIN_ROOT}/_shared/<name>.md\``.
   - `_templates/AUTHORING.md` decision rule refined with concrete examples; `_shared/` catalogue expanded.
   - `skills/scope-assessment/SKILL.md` gained missing `layer: 3` frontmatter.
