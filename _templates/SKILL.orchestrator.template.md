@@ -17,25 +17,21 @@ You are leading the <phase name> phase. Your goal is to <objective>.
 
 <!-- What the orchestrator receives — issue number, handoff block, or problem statement. -->
 
-## Scope Assessment
+## Team Shape
 
-Classify before dispatching per `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` (cost models).
+Invoke `Skill("scope-assessment")` with work units (one per sub-issue, module, or bounded task). Receive agent plan; dispatch one agent per disjoint group.
 
-- **Lightweight** — <heuristic>. Lead inline; no team; skip step 2.
-- **Standard** — <heuristic>. Core specialists; optional dormant.
-- **Deep** — <heuristic>. Full team + critique/adversarial.
+For high-risk domains (auth/security/payments/arch-changing): add a critique pass after the main team. Determine risk from AC — not from a label.
 
-### Spawn justification
-
-Document choice explicitly. State which rubric factors apply (comm pivot, disjoint, parallel, payoff) and which gates trigger dispatch. Triggers: parallelism payoff AND/OR inline overrun (multi-file sweep, N-way fan-out, verbose I/O). See `/discovery`, `/define`, `/implement` patterns.
+See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for spawn cost models.
 
 ## Process
 
-1. Read input; confirm scope classification.
-2. **Research team** (TeamCreate; Standard/Deep only):
+1. Read input; build work-unit list for `scope-assessment`.
+2. **Research** (parallel subagents; multi-area only):
    - **Codebase research** — tech stack, modules, patterns. Outputs research brief.
    - **Prior art** — vault, project docs, external sources.
-3. **Main team** (TeamCreate), seeded with research. Width = scope. Include only needed specialists:
+3. **Specialists** (parallel subagents), seeded with research. Width = scope. Include only needed specialists:
    - **Specialist A** — `/<skill>` to <do thing>. Seeded; skips research.
    - **Specialist B** — `/<skill>` to <do thing>.
 4. <Serialization rule — which specialist first and why.>

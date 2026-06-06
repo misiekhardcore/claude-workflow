@@ -5,7 +5,6 @@ model: haiku
 user-invocable: false
 layer: 3
 ---
-
 ## Input
 
 Caller sets `work_units` in context before invoking. Each unit must have:

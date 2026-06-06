@@ -8,26 +8,10 @@
 |Branch Standalone|`git diff`|`gh issue view`|Findings report → User|
 |PR Argument|`gh pr diff`|Linked issue|Posted GitHub review|
 
-## Scope Assessment
-
-|Scope|Criteria|Action|
-|-|-|-|
-|**Lightweight**|Diff ≤ 50 lines, 1 module|Single reviewer, quick pass.|
-|**Standard**|Typical feature/multi-file|2 base reviewers + conditional specialists.|
-|**Deep**|Security, perf, cross-cutting, migration|All specialist reviewers. Veto power for Security/Perf.|
-
-**Decision**: ≤ 50 lines + 1 module → Lightweight; Auth/Security/DB-migration/Perf → Deep; else → Standard.
-
-### Spawn Rubric
-
-Read `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.
-- **Standard**: `TeamCreate` at ≥ 3 active personas, else 2 parallel subagents (`sonnet`).
-- **Deep**: `TeamCreate` (`opus`). All 4 axes active.
-
 ## Process
 
 1. **Acquire Review Package** (Context Isolation).
-2. **Triage**: Analyze diff → activate conditional personas → record why gates fired.
+2. **Triage**: Analyze diff → invoke `Skill("review-specialist-assessment")` → build `specialists:` list; record which gates fired.
 3. **Review**: Reviewers work in parallel → use `superpowers:requesting-code-review`.
 4. **Findings Format**: `file:line | issue title | severity (P0-P3) | confidence (0.0-1.0)`.
 5. **Merge & Dedup**:

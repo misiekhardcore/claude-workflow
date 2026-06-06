@@ -19,7 +19,6 @@ Logic for standalone vs. orchestrator-invoked (seeded) execution.
 |Field|Type|Req|Notes|
 |-|-|-|-|
 |`preflight_verified`|bool|Yes|Must be `true`|
-|`scope_class`|string|Yes|`Lightweight`, `Standard`, or `Deep`|
 |`repo`|string|Yes|`owner/repo` (verified vs `git remote -v`)|
 |`branch`|string|Yes|`feat/<slug>` (verified vs `git rev-parse`)|
 |`active_issue`|int|Yes|GitHub issue ID|
@@ -50,7 +49,6 @@ Canonical seed-brief for orchestrators that spawn `/implement` with `autonomous:
 ```
 <seed-brief>
 preflight_verified: true
-scope_class: <Lightweight | Standard | Deep>
 repo: <owner/repo>
 branch: <feat/slug>
 active_issue: <issue-number>

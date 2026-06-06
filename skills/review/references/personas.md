@@ -43,7 +43,7 @@ Each conditional persona has a **gate** (when it activates) and **signals** (wha
 
 ### Performance
 
-**Gate:** diff touches database queries or data access patterns — content matching `query`, `findAll`, `SELECT`, `JOIN`, `index`, OR file paths matching `**/db/**`, `**/queries/**`. Do **not** trigger on generic JS iteration (`forEach`, `map`, `filter`).
+**Gate:** diff touches database queries, loops over collections > 100 items, caching logic, or file paths matching `**/db/**`, `**/repository/**`, `**/query/**`.
 
 **Focus:** N+1 queries, unbounded loops, missing pagination, cache misses, unindexed lookups.
 
@@ -63,11 +63,11 @@ Each conditional persona has a **gate** (when it activates) and **signals** (wha
 
 **Focus:** cross-references, stale mentions, duplication across `**/*.md`, `docs/**`, `_shared/**`.
 
-**Signals:** broken or stale links between skill files, contradictions between a renamed/moved file and references that still point at the old name, duplicated rule blocks that should be extracted into `_shared/`, skill catalogs that drift from the actual `skills/` directory.
+**Signals:** broken or stale links between skill files, contradictions between a renamed/moved file and references that still point at the old name, duplicated rule blocks that should be extracted into references or shared docs, skill catalogs that drift from the actual `skills/` directory.
 
 ### Architecture / scope-creep
 
-**Gate:** `scope_class == "Deep"` (the scope class set in `../SKILL.md`'s Scope Assessment) OR the captured diff in the review package totals > 300 changed lines OR the captured file list spans > 5 distinct top-level directories. Both signals are computed from the prepared review package — the captured `git diff main...HEAD` (branch mode) or `gh pr diff <n>` (PR mode) — so the gate behaves identically across modes and never re-shells out to `git`.
+**Gate:** Scope Assessment OR the captured diff in the review package totals > 300 changed lines OR the captured file list spans > 5 distinct top-level directories. Both signals are computed from the prepared review package — the captured `git diff main...HEAD` (branch mode) or `gh pr diff <n>` (PR mode) — so the gate behaves identically across modes and never re-shells out to `git`.
 
 **Focus:** premature abstraction, out-of-scope changes, speculative features.
 

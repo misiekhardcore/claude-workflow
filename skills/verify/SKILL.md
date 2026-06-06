@@ -19,23 +19,17 @@ Lead verification phase. Goal: Verify every AC from the issue is met with eviden
 - **Verification Package**: Diff, AC, test commands (type-check, lint, unit, build, e2e).
 - **Output**: QA report (pass/fail per AC with evidence).
 
-## Scope Assessment
+## Specialist Assessment
 
-|Scope|Criteria|Action|
-|-|-|-|
-|**Lightweight**|≤ 3 AC, simple repros, no security/perf|Lead verifies inline|
-|**Standard**|≥ 4 AC, or multi-file|QA team, split AC|
-|**Deep**|Security/perf-critical, migration|QA team + specialist|
+Invoke `Skill("verify-specialist-assessment")` at entry. It reads AC and diff from context and emits a `specialists:` list.
 
-**Decision**: ≤ 3 AC + 1-module → Lightweight; Auth/Security/Migrations/Perf → Deep; else → Standard.
+## Team Shape
 
-Spawn (Standard/Deep): `TeamCreate` at ≥ 4 AC, else subagents (`haiku`).
+Invoke `Skill("scope-assessment")` with work units — one per AC group. Receive agent plan; spawn one QA agent per disjoint group. Add any activated specialists to their relevant groups.
 
 ## Process
 
-**Lightweight**: Extract AC → run verification chain (type-check, lint, unit, build, e2e) → report pass/fail.
-
-**Standard / Deep**: Split AC across QA team (Deep adds specialist) → each verifies independently → converge on unified report.
+Split AC across QA agents per `scope-assessment` output → each verifies independently → converge on unified report. Any activated specialists verify their domain-specific AC alongside the QA agents.
 
 ## Rules
 - **Separation**: Never fix issues during verification. Report failures in the verify output; fixes are a `/build` responsibility.

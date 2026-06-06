@@ -12,7 +12,7 @@ Systematically process PR feedback: Triage → Fix → Reply.
 
 ## I/O
 - **Input**: No arg (all unresolved threads on branch's PR) or thread URL.
-- **Pre-flight**: Invoke `Skill("preflight")`. Scope checks apply automatically when >= 3 files are changed.
+- **Pre-flight**: Invoke `Skill("preflight")`. If >= 3 files changed, run the scope checks within `preflight` again.
 
 ## Process
 
@@ -30,7 +30,7 @@ Group by category → Present triage summary to user.
 ### Phase 3 — Fix
 **Conflict Avoidance**: Map threads to files. No two agents on same file in parallel.
 **Dispatch**:
-- **Fix Agents**: TeamCreate (>= 3 file groups) or parallel subagents (>= 2 groups).
+- **Fix Agents**: Parallel subagents — one per file group.
 - **Execution**: Read comment → read context → implement fix → verify → determine verdict.
 - **Retry**: <= 2 cycles per thread → else `needs-human`.
 - **Regression**: Run full project test suite after all fix agents complete.

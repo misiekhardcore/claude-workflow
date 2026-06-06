@@ -93,16 +93,6 @@ claude plugin install claude-workflow@claude-workflow
 
 Then enable it in your project or globally in Claude Code settings.
 
-## Prerequisites
-
-Skills that spawn parallel sub-agents require:
-
-```bash
-export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
-```
-
-Without this flag, `TeamCreate` is unavailable. Skills detect its absence and fall back to spawning sub-agents individually with a note.
-
 ## Skills
 
 |Skill|Description|

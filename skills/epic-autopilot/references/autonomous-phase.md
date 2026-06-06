@@ -47,7 +47,6 @@ For each tier in ascending order:
    - Emit: `[sub-issue #<M>] dispatched (tier <T>)`
    - Create worktree for branch `feat/epic-<N>-sub-<M>` on base `<base-branch>`. Invoke the worktree protocol (`Read ${CLAUDE_PLUGIN_ROOT}/_shared/worktree-protocol.md`).
    - Pass seed brief to sub-agent's `/implement` invocation. Invoke `Skill("specialist-mode")` with overrides:
-     - `scope_class`: `Deep`
      - `branch`: `feat/epic-<N>-sub-<M>`
      - `active_issue`: `<M>`
      - `payload.prior_art`: `"Sub-issue #<M>'s ## Implementation plan (architecture and design decisions from /define)"`
