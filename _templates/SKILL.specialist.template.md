@@ -34,4 +34,4 @@ If specialist spawns sub-agents, state choice explicitly: inline or parallel sub
 
 - <Rule 1 — non-negotiable constraint>
 - <Rule 2>
-- Invoke `Skill("interviewing-rules")` for questioning protocol (when interviewing user).
+- Read `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-rules.md` for questioning protocol (when interviewing user).

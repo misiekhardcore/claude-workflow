@@ -40,4 +40,4 @@ Lead requirements team. Goal: Transform problem statements into testable, non-va
 ## Rules
 - **Zero Vagueness**: No "fast", "user-friendly", or "appropriate". Every AC must be testable.
 - **Verification**: Fetch and confirm URLs/external claims before citing in specs.
-- Invoke `Skill("interviewing-rules")`
+- Read `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-rules.md`

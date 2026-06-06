@@ -36,4 +36,4 @@ Read `references/dispatch-process.md` for dispatch modes, process steps, and PR 
 - **Consensus**: All reviewers must agree before finalizing.
 - **Blocking**: Critical findings block. High-severity blocks for Security/Perf are non-waivable.
 - **Scope**: Flag changes outside issue scope.
-- Invoke `Skill("interviewing-rules")`
+- Read `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-rules.md`

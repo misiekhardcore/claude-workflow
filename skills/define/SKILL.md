@@ -26,7 +26,7 @@ See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for spawn cost models.
    - Architecture → Design (if visual).
    - **High-risk domain**: Architecture → Design → Critique Team.
 4. **Sourcing**: Respect sequence: Architecture decisions first → Design works within those constraints.
-5. **Handoff**: Update GitHub issue body (single source of truth). Invoke `Skill("handoff-artifact")` for field list.
+5. **Handoff**: Update GitHub issue body (single source of truth). Invoke `Read ${CLAUDE_PLUGIN_ROOT}/_shared/handoff-artifact.md` for field list.
    - Edit/Append `## Implementation plan` section.
    - Record decisions, visuals, and sub-issues with relationships.
    - Define dependency graph for parallelization.
@@ -39,4 +39,4 @@ See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for spawn cost models.
 - **Exploration**: Time-box codebase reading to 3–5 tool calls, then ask the user a focused question.
 - **Sourcing**: Invoke `Skill("preflight")` before updating issue.
   Suppress branch line: true
-- Invoke `Skill("interviewing-rules")`
+- Read `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-rules.md`

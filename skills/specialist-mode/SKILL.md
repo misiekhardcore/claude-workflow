@@ -22,7 +22,7 @@ Logic for standalone vs. orchestrator-invoked (seeded) execution.
 |`repo`|string|Yes|`owner/repo` (verified vs `git remote -v`)|
 |`branch`|string|Yes|`feat/<slug>` (verified vs `git rev-parse`)|
 |`active_issue`|int|Yes|GitHub issue ID|
-|`payload`|object|Yes|`{ type: fix\|research\|prior-art, ... }` (per composition rules)|
+|`payload`|object|Yes|`{ type: fix\|research\|prior-art, ... }` (see `${CLAUDE_PLUGIN_ROOT}/_shared/seed-brief.md` for payload types)|
 |`autonomous`|bool|No|Default `false`. If `true`, suppresses `/implement` exit prompt|
 
 **Failure**: Invalid brief → Fallback to standalone + log failure.

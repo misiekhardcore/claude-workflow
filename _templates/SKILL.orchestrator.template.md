@@ -45,6 +45,6 @@ See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for spawn cost models.
 ## Rules
 
 - Require explicit approval. Silence is NOT approval.
-- Research team before main team for multi-area work. Never skip seed-brief gate.
-- Single work unit: code inline. Never pay overhead for <1 min work.
-- Invoke `Skill("handoff-artifact")` and `Skill("interviewing-rules")`.
+- Research team before main team in Standard/Deep. Never skip seed-brief gate.
+- Lightweight inline. Never pay overhead for <1 min work.
+- See `${CLAUDE_PLUGIN_ROOT}/_shared/handoff-artifact.md` and Read `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-rules.md`.

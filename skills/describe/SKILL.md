@@ -44,4 +44,4 @@ Read `references/scope-ppt.md` for scope classification, spawn rubric, and PPT c
 
 ## Rules
 - Recommend an answer for every question.
-- Invoke `Skill("interviewing-rules")`
+- Read `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-rules.md`

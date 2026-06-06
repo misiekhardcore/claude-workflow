@@ -1,9 +1,5 @@
----
-name: interviewing-rules
-description: Directives for rigorous user-interactive discovery and approval.
-user-invocable: false
-layer: 3
----
+# Interviewing Rules — User-Interactive Discovery Protocol
+
 Directives for user-interactive discovery and approval.
 
 ## Constraints

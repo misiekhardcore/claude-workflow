@@ -22,7 +22,7 @@ Skills and reference files serve different purposes and require different access
 |Per-skill reference doc|Static tables, checklists, or context scoped to one skill|`Read \`references/<file>.md\``|
 |Shared reference doc|Static tables, checklists, or context shared across skills|`Read \`${CLAUDE_PLUGIN_ROOT}/_shared/<file>.md\``|
 
-**Decision rule**: If the file encodes a behavioral constraint agents must actively operate under → layer-3 skill. If the file contains format tables, field lists, or read-only lookup context → `_shared/` doc.
+**Decision rule**: If the file encodes a behavioral constraint agents must actively operate under → layer-3 skill. If the file contains format tables, field lists, CLI command references, or read-only lookup context → `_shared/` doc. The instruction "agents must do X" is a layer-3 skill; "here is the YAML format for field Z" is a shared reference doc.
 
 ## Layer 3: Behavioral Convention Skills
 
@@ -149,6 +149,11 @@ Each sub-skill gets its own layer-3 assessment skill. It reads plan/diff/AC from
 Reference on-demand via `Read \`${CLAUDE_PLUGIN_ROOT}/_shared/<file>.md\``:
 
 - `composition.md` — team/sub-agent cost and shape
+- `handoff-artifact.md` — five-field issue-body structure for phase handoffs
+- `interviewing-rules.md` — one-question-at-a-time interviewing protocol for user-interactive discovery
+- `notes-md-protocol.md` — `.claude/NOTES.md` lifecycle, shape, and update cadence
+- `seed-brief.md` — spawn-time context packaging format for fan-out to sub-skills and worker agents
+- `worktree-protocol.md` — `wt` CLI command protocol for creating and managing feature worktrees
 
 ## Agent Catalogue
 
