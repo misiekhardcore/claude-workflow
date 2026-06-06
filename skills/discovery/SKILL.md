@@ -46,4 +46,4 @@ Present for approval → sign-off → instruct: "Start `/define` in a fresh sess
 - **Exploration**: Time-box codebase reading to 3–5 tool calls, then ask the user a focused question.
 - **Persistence**: Prior-Art Scout findings must be persisted in Prior decisions/Evidence fields.
 - **Traceability**: Every feature must have one issue and >= 1 closing PR.
-- Invoke `Skill("interviewing-rules")`
+- Read `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-rules.md`

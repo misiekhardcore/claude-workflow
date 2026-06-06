@@ -45,4 +45,4 @@ Phase Lead. Goal: Transform an approved issue into a concrete implementation pla
 - **Exploration**: Time-box codebase reading to 3–5 tool calls, then ask the user a focused question.
 - **Sourcing**: Invoke `Skill("preflight")` before updating issue.
   Suppress branch line: true
-- Invoke `Skill("interviewing-rules")`
+- Read `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-rules.md`

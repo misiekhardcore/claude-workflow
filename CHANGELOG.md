@@ -6,13 +6,23 @@ GitHub Releases (with auto-generated notes and source tarballs) remain the canon
 
 ## [Unreleased]
 
+### Changed
+
+- **Layer-3 boundary realignment** - three skills demoted from layer-3 (`Skill()` invocation) to `_shared/` reference docs (`Read`):
+  - `seed-brief` -> `_shared/seed-brief.md` - spawn-time context packaging format (data structure spec, not behavioral protocol)
+  - `worktree` -> `_shared/worktree-protocol.md` - `wt` CLI command reference (command cheat sheet, not behavioral protocol)
+  - `interviewing-rules` -> `_shared/interviewing-rules.md` - one-question-at-a-time user-interaction rules (interaction pattern, not cross-skill behavioral contract)
+  - All callers updated from `Invoke \`Skill("name")\`` to `Read \`${CLAUDE_PLUGIN_ROOT}/_shared/<name>.md\``.
+  - `_templates/AUTHORING.md` decision rule refined with concrete examples; `_shared/` catalogue expanded.
+  - `skills/scope-assessment/SKILL.md` gained missing `layer: 3` frontmatter.
+
 ### Added
 
-- **`_shared/orchestrator-rules.md`** — new shared protocol extracting rules common to all pipeline orchestrators: CWD verification, delegation (no reimplemented sub-skill logic), no-autonomous-merge, and seed-brief contract. Replaces duplicated rules in `/issue-autopilot` and `/epic-autopilot`.
+- **`_shared/orchestrator-rules.md`** - new shared protocol extracting rules common to all pipeline orchestrators: CWD verification, delegation (no reimplemented sub-skill logic), no-autonomous-merge, and seed-brief contract. Replaces duplicated rules in `/issue-autopilot` and `/epic-autopilot`.
 
-- **`/issue-autopilot` skill** — new single-issue end-to-end pipeline that chains `/define` → `/implement` → `/resolve-pr-feedback` (looped to zero unresolved threads) → `/compound` → `/wrap-up`. State-based resume on re-invocation: each `/issue-autopilot <N>` call reads current issue/PR state and runs only the next applicable phase. Introduced as a new sibling skill rather than extending `/epic-autopilot` to keep the linear single-issue state machine separate from epic fanout logic. (#92)
+- **`/issue-autopilot` skill** - new single-issue end-to-end pipeline that chains `/define` -> `/implement` -> `/resolve-pr-feedback` (looped to zero unresolved threads) -> `/compound` -> `/wrap-up`. State-based resume on re-invocation: each `/issue-autopilot <N>` call reads current issue/PR state and runs only the next applicable phase. Introduced as a new sibling skill rather than extending `/epic-autopilot` to keep the linear single-issue state machine separate from epic fanout logic. (#92)
 
-- **`agents/` directory** — new top-level directory for reusable agent definitions, mirroring the claude-obsidian pattern. Seeded with `agents/prune-lane.md`: a single-lane audit worker for `/prune` that documents the spawn-prompt contract (CWD verification, pre-enumerated file list, structured report output). (#76)
+- **`agents/` directory** - new top-level directory for reusable agent definitions, mirroring the claude-obsidian pattern. Seeded with `agents/prune-lane.md`: a single-lane audit worker for `/prune` that documents the spawn-prompt contract (CWD verification, pre-enumerated file list, structured report output). (#76)
 
 ### Renamed
 

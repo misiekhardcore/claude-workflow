@@ -43,4 +43,4 @@ Lead architecture team. Goal: Converge on a technical approach via research, ite
 - **Code-First**: Never propose architecture without reading existing code.
 - **Pattern Adherence**: Respect existing patterns unless justifying deviation.
 - **Concrete Only**: No vague placeholders; every section must be decisive.
-- Invoke `Skill("interviewing-rules")`
+- Read `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-rules.md`

@@ -41,4 +41,4 @@ Lead design team. Goal: Converge on visual and interaction design that fits exis
 
 ## Rules
 - **Consistency**: Follow existing design system/component patterns unless diverging.
-- Invoke `Skill("interviewing-rules")`
+- Read `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-rules.md`

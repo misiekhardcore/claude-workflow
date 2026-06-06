@@ -30,4 +30,4 @@ Read `references/dispatch-process.md` for dispatch modes, scope assessment, spaw
 - **Consensus**: All reviewers must agree before finalizing.
 - **Blocking**: Critical findings block. Deep mode: High-severity blocks for Security/Perf.
 - **Scope**: Flag changes outside issue scope.
-- Invoke `Skill("interviewing-rules")`
+- Read `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-rules.md`
