@@ -95,7 +95,7 @@ A standalone L2 skill (e.g. `/build` invoked directly by the user, not by an orc
 
 1. **Create** — On entry, create NOTES.md with `## Task list`, `## Decisions made this session`, and `## Next action on resume`.
 2. **Update** — Flip checkboxes as tasks complete, log decisions, update `## Current task` and `## Next action on resume` at each natural breakpoint.
-3. **Leave** — On exit, leave NOTES.md in place for `/implement` to harvest. Do not delete.
+3. **Leave** — On exit, leave NOTES.md in place. Do not delete.
 
 No checkpoint-before-spawn is needed — standalone skills do not spawn sub-agents. The pattern is create → update → leave.
 
