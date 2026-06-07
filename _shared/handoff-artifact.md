@@ -1,13 +1,13 @@
 # Handoff Artifact — Shared Template
 
-Phase-boundary skills (`/discovery`, `/define`) hand off state by updating the GitHub issue body. Read on-demand at handoff steps; do not preload.
+Phase-boundary skills hand off state by updating the GitHub issue body. Read on-demand at handoff steps; do not preload.
 
-`/implement` is terminal — its output is the PR, not an issue body update.
+The terminal phase-ending skill outputs the PR, not an issue body update.
 
 ## The five fields
 
-1. **Acceptance criteria** — testable scenarios from `/discovery`, unchanged. One line each. **Mandatory.**
-2. **Constraints** — files in scope/out of scope, non-negotiable decisions from `/define`. **Mandatory.**
+1. **Acceptance criteria** — testable scenarios from the discovery phase, unchanged. One line each. **Mandatory.**
+2. **Constraints** — files in scope/out of scope, non-negotiable decisions from the definition phase. **Mandatory.**
 3. **Prior decisions** — "chose X over Y because Z" entries with links to conversation/code. One line each. *(Optional — omit when empty.)*
 4. **Evidence** — links to commits, PRs, benchmarks, reviews, or approvals justifying decisions. *(Optional — omit when empty.)*
 5. **Open questions** — things next phase must resolve. Explicit, no "obviously will figure out later". *(Optional — omit when empty.)*
@@ -21,7 +21,7 @@ Fields in order: Acceptance criteria, Constraints, Prior decisions, Evidence, Op
 ```markdown
 ## Implementation plan
 
-**Acceptance criteria** (from /discovery, unchanged)
+**Acceptance criteria** (from discovery, unchanged)
 - AC1: ...
 - AC2: ...
 
@@ -49,12 +49,9 @@ When a phase ends, in-flight state from NOTES.md that the next phase needs is pr
 
 ## Rules
 
-|Phase|Section heading|
-|-|-|
-|`/discovery`|`## Requirements`|
-|`/define`|`## Implementation plan`|
-
-- Name sections by content, not command.
+Name the section heading by phase content, not by command name:
+- **Discovery phase** → `## Requirements`
+- **Definition phase** → `## Implementation plan`
 - Update the body in place, not a comment.
 - After updating, tell user to start next phase in fresh session. Do not call next skill from within.
 - Issue body wins over in-context recall.

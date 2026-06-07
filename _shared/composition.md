@@ -6,7 +6,7 @@ Framework for orchestrating specialists and managing token/context budgets.
 - **Orchestrator**: Phase lead. Spawns specialists, coordinates, writes handoff. Model: `opus`.
 - **Specialist**: Bounded task. Receives seed-brief, reports findings. Model: `sonnet`.
 - **Interactive Primitive**: Inline behavior (e.g., `/grill-me`). No team/handoff. Model: `sonnet`.
-- **Utility**: Maintenance (e.g., `/compound`, `/prune`). No seed-brief contract.
+- **Utility**: Maintenance (e.g., compound, prune). No seed-brief contract.
 
 ## Composition Patterns
 - **Linear**: A → B → C (Strict dependency).
