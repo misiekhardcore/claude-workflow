@@ -1,19 +1,19 @@
-# NOTES.md — In-Phase Memory Tier
+# NOTES.md — In-Phase Memory Layer
 
 `.claude/NOTES.md` is rot-immune external memory for in-phase state. Read on-demand when creating, updating, or harvesting; do not preload.
 
 ## Where it sits in the memory hierarchy
 
-Four tiers:
+Four layers:
 
-|Tier|Where|Lifetime|Authoritative for|
+|Layer|Where|Lifetime|Authoritative for|
 |-|-|-|-|
 |`TodoWrite`|In-context|This session|Throwaway scratchpad|
 |`.claude/NOTES.md`|Worktree-local, gitignored|This phase, across sessions|In-flight decisions, task progress, current task, open questions|
 |GitHub issue|Remote|Cross-phase|Acceptance criteria, prior-phase decisions, handoff state|
 |Durable vault|claude-obsidian vault (git-tracked)|Durable, cross-feature|Patterns, bug-fix history, architectural insights|
 
-Do not mirror `TodoWrite` and `.claude/NOTES.md` — they serve different roles. The vault tier materializes when `claude-obsidian` is installed; without it, skills that would write degrade gracefully.
+Do not mirror `TodoWrite` and `.claude/NOTES.md` — they serve different roles. The vault layer materializes when `claude-obsidian` is installed; without it, skills that would write degrade gracefully.
 
 ## NOTES.md vs the vault's recency channels
 
