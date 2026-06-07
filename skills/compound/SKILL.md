@@ -9,6 +9,16 @@ allowed-tools: Agent Bash Read
 ## Role & Constraints
 Lead knowledge compounding. Goal: Extract fixes, insights, or patterns into reusable artifacts.
 
+## Assessment
+Before selecting a mode, evaluate the session against these value buckets:
+- **Novel decisions** — design, architecture, or tradeoff choices made during this session.
+- **Non-obvious fixes** — subtle bugs or root causes others will hit again.
+- **Reusable patterns** — generalizable techniques or preventive measures.
+
+Skip if the work was routine edits, mechanical refactors, or changes already captured in existing notes.
+If none of the buckets yield content → print `Nothing to compound.` and exit.
+Otherwise → proceed to Mode Selection.
+
 ## Mode Selection
 |Mode|Criteria|Action|
 |-|-|-|
