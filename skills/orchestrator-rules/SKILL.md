@@ -12,7 +12,7 @@ Invoke `Skill("preflight")` at entry. Echo resolved `owner/repo` before every do
 
 ## Delegation
 
-Each stage delegates to the designated sub-skill. Do not reimplement logic owned by `/implement`, `/resolve-pr-feedback`, `/compound`, `/wrap-up`, or any other sub-skill.
+Each stage delegates to the designated sub-skill. Do not reimplement logic owned by phase-ending or sub-skills — each has a defined scope; respect it.
 
 ## No autonomous merge
 
@@ -20,7 +20,7 @@ Merging is always a human action. Exit cleanly at the awaiting-merge stage; neve
 
 ## Seed-brief contract
 
-See `Skill("specialist-mode")` § Autonomous Implement Invocation for seed-brief shape and field requirements.
+See `Skill("specialist-mode")` for Seed-brief shape and field requirements. Each sub-skill documents its expected seed-brief fields in its own file.
 
 ## Progress tracking via NOTES.md
 
@@ -47,7 +47,7 @@ After preflight, create NOTES.md with:
 
 ### On exit
 
-- **Clean exit**: Leave NOTES.md in place for `/implement` to harvest.
+- **Clean exit**: Leave NOTES.md in place for the phase-ending skill to harvest.
 - **Abnormal exit**: NOTES.md preserves resume state — do not delete.
 
 ### Rules

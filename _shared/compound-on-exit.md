@@ -1,6 +1,6 @@
 # Compound on Exit — Protocol
 
-Orchestrators (`/discover`, `/define`, `/implement`, `/resolve-pr-feedback`) invoke `/compound` once upon clean completion to capture session learnings into persistent wiki.
+Phase-ending orchestrators invoke `/compound` once upon clean completion to capture session learnings into persistent wiki.
 
 ## Directive
 
@@ -14,7 +14,7 @@ Skill("compound")
 
 - **Condition**: Clean completion only. No invocation on abort, refusal, or early exit.
 - **Frequency**: Exactly once per orchestrator run.
-- **Exclusion**: `/wrap-up` (post-session utility) does not invoke `/compound`.
+- **Exclusion**: Post-session utility skills do not invoke `/compound`.
 
 ## Assessment Gate
 

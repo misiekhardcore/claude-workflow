@@ -19,4 +19,4 @@ wt list
 
 ## Remove
 
-Handled by `/wrap-up`. Do not remove manually unless instructed.
+Handled by the phase-ending skill. Do not remove manually unless instructed.
