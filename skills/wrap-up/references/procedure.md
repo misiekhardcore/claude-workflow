@@ -1,5 +1,7 @@
 # Cleanup Procedure for wrap-up
 
+Steps 2–4 (state machine + confirmations) apply only in **standalone mode**. When invoked via seed-brief with `confirmed: true`, skip directly to Step 5 after Step 1.
+
 ## Step 1 — Detect state
 
 Gather via:
