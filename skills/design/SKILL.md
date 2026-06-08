@@ -13,10 +13,10 @@ Lead design team. Goal: Converge on visual and interaction design that fits exis
 ## Specialist Mode
 Invoke `Skill("specialist-mode")` at entry.
 - **Seeded**: Architecture decisions + AC from seed-brief. Run research, design session, and proposal refinement.
-- **Keep**: Prompt user for context. Run research, design session, and proposal refinement.
+- **Keep**: Prompt user for context. Run research, design session, and proposal refinement (grill-me + a11y review).
 
 ## I/O
-- **Input**: GitHub issue with architecture decisions (from /define).
+- **Input**: GitHub issue with architecture decisions.
 - **Output**: Decisions as issue comments:
   - Visual mockups/prototypes.
   - Component hierarchy.
