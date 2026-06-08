@@ -12,10 +12,6 @@ Discover and install skills from the open agent ecosystem.
 
 Discovery sub-agent (haiku) for search + leaderboard fetch (payoff ≥3×; retrieval-only). Main thread: confirmation + install. Spawn prompt: `cd <cwd> && pwd`.
 
-## Caller Contract
-
-User-invocable standalone skill. Not called by any orchestrator. Discovers and installs skills from the registry.
-
 ## When to Use This Skill
 
 Use this skill when the user:

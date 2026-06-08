@@ -9,7 +9,7 @@ layer: 2
 user-invocable: true
 ---
 ## Role & Constraints
-Lead architecture team. Goal: Converge on a technical approach via research, iterative analysis, and critique.
+Lead architecture team. Goal: Converge on a technical approach via research, iterative analysis, and critique. Produces architectural decisions (components, data flow, APIs, dependencies). Hands off via GitHub issue body under `## Implementation plan`.
 
 ## Specialist Mode
 - **Seeded**: Skip codebase and patterns research subagent dispatches.
@@ -40,10 +40,6 @@ Invoke `Skill("specialist-mode")` at entry.
    - Code structure preview (dirs/interfaces).
    - Rationale for recommendation.
 4. **Deepening**: Scan for vague language or thin sections → dispatch focused deepening agents (<= 2 rounds).
-
-## Caller Contract
-
-Called by `/define` during the Definition phase. Can run standalone. Produces architectural decisions (components, data flow, APIs, dependencies). Hands off to `/design` via GitHub issue body under `## Implementation plan`.
 
 ## Rules
 - **Code-First**: Never propose architecture without reading existing code.

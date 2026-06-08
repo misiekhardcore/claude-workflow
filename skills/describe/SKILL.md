@@ -10,7 +10,7 @@ layer: 2
 user-invocable: true
 ---
 ## Role & Constraints
-You lead product discovery. Goal: Deeply understand the problem space via interactive exploration and validation.
+You lead product discovery. Goal: Deeply understand the problem space via interactive exploration and validation. Produces a shared understanding of the problem (user stories, visualizations). Hands off via GitHub issue body under `## Requirements`.
 
 ## Specialist Mode
 - **Seeded**: Skip internal prior-art search.
@@ -43,10 +43,6 @@ Read `references/scope-ppt.md` for scope classification, spawn rubric, and PPT c
 - **Boundaries**: In-scope vs Out-of-scope.
 
 → Handoff to `/specify` for requirements.
-
-## Caller Contract
-
-Called by `/discovery` during the Discovery phase. Can also run standalone before `/specify`. Produces a shared understanding of the problem (user stories, visualizations). Hands off to `/define` via GitHub issue body under `## Requirements`.
 
 ## Rules
 - Recommend an answer for every question.

@@ -8,7 +8,7 @@ layer: 2
 user-invocable: true
 ---
 ## Role & Constraints
-Lead design team. Goal: Converge on visual and interaction design that fits existing systems.
+Lead design team. Goal: Converge on visual and interaction design that fits existing systems. Produces UI/UX design decisions. Hands off to via GitHub issue body under `## Implementation plan`.
 
 ## Specialist Mode
 - **Seeded**: Skip design-space research subagent.
@@ -40,10 +40,6 @@ Invoke `Skill("specialist-mode")` at entry.
 ## Applicability
 - **Apply**: Visual aspects (UI, frontend, webview).
 - **Skip**: Purely backend/infra work (use `/architecture` instead).
-
-## Caller Contract
-
-Called by `/define` after `/architecture`. Can run standalone. Produces UI/UX design decisions. Hands off to `/implement` via GitHub issue body under `## Implementation plan`.
 
 ## Rules
 - **Consistency**: Follow existing design system/component patterns unless diverging.
