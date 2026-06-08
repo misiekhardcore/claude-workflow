@@ -8,16 +8,16 @@ layer: 2
 user-invocable: true
 ---
 ## Role & Constraints
-Lead design team. Goal: Converge on visual and interaction design that fits existing systems. Produces UI/UX design decisions. Hands off via GitHub issue body under `## Implementation plan`. Read `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-rules.md` for interviewing constraints.
+Lead UI/UX design decisions. Goal: Produce visual and interaction design that fits existing systems. Hands off via GitHub issue body under `## Implementation plan`.
 
 ## Specialist Mode
 Invoke `Skill("specialist-mode")` at entry.
-- **Seeded**: Architecture decisions + AC from seed-brief. Run research, design session, and proposal refinement.
-- **Keep**: Prompt user for context. Run research, design session, and proposal refinement (grill-me + a11y review).
+- **Seeded (spawned by orchestrator)**: Fully autonomous. No user interaction. Produce design decisions and return.
+- **Keep (standalone)**: Interactive. Prompt user for context. Run research, design session (grill-me + a11y review), and proposal presentation.
 
 ## I/O
 - **Input**: GitHub issue with architecture decisions.
-- **Output**: Decisions as issue comments:
+- **Output**: Design decisions under `## Implementation plan`:
   - Visual mockups/prototypes.
   - Component hierarchy.
   - Interaction flow diagrams.
@@ -25,16 +25,14 @@ Invoke `Skill("specialist-mode")` at entry.
 
 ## Process
 1. **Constraints Review**: Analyze issue and architecture decisions.
-2. **Design Session** (Sequential):
-   - **UX Researcher** (`haiku`): Explore existing UI patterns, a11y requirements, design system.
-   - **Design Proposer** (`sonnet`): Lead interactively via `/grill-me`.
-   - **A11y Reviewer** (`haiku`): Evaluate proposals for compliance, keyboard nav, screen readers.
-3. **Visual Proposals**: Present 2-3 approaches:
+2. **Research**: Explore existing UI patterns, a11y requirements, design system.
+3. **Design**: For each component, propose 2-3 visual/interaction approaches:
    - Prototypes (screenshots/code).
    - Wireframes (ASCII/Mermaid).
    - Interaction flows (state machines/sequence).
    - Component hierarchy trees.
-4. **Selection**: User picks approach → design becomes an implementation constraint.
+4. **Evaluate**: Review proposals for a11y compliance, keyboard nav, screen readers.
+5. **Output**: Write design decisions to issue body under `## Implementation plan`.
 
 ## Applicability
 - **Apply**: Visual aspects (UI, frontend, webview).

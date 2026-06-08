@@ -9,16 +9,16 @@ layer: 2
 user-invocable: true
 ---
 ## Role & Constraints
-Lead architecture team. Goal: Converge on a technical approach via research, iterative analysis, and critique. Produces architectural decisions (components, data flow, APIs, dependencies). Hands off via GitHub issue body under `## Implementation plan`. Read `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-rules.md` for interviewing constraints.
+Lead architecture decisions. Goal: Produce architectural decisions (components, data flow, APIs, dependencies). Hands off via GitHub issue body under `## Implementation plan`.
 
 ## Specialist Mode
 Invoke `Skill("specialist-mode")` at entry.
-- **Seeded**: Issue + AC from seed-brief. Run research, architecture session, and deepening.
-- **Keep**: Prompt user for issue. Run research, architecture session, and deepening (grill-me + devil's advocate).
+- **Seeded (spawned by orchestrator)**: Fully autonomous. No user interaction. Produce decisions and return.
+- **Keep (standalone)**: Interactive. Prompt user for issue. Run research, architecture session (grill-me + devil's advocate), and decision presentation.
 
 ## I/O
 - **Input**: GitHub issue with problem statement and AC(s).
-- **Output**: Decisions as issue comments:
+- **Output**: Architecture decisions under `## Implementation plan`:
   - Component diagram (Mermaid).
   - Key interfaces and data flow.
   - Sub-issues with GitHub relationships.
@@ -30,16 +30,10 @@ Invoke `Skill("specialist-mode")` at entry.
    - **Codebase Agent**: Scan tech stack, modules, related patterns.
    - **Patterns Agent**: Query `claude-obsidian` → Project docs → Context7/Web.
    - **Gate**: Skip external research if >= 3 internal patterns found (unless security/payments/privacy).
-2. **Architecture Session** (Sequential):
-   - **Analyst** (`sonnet`): Explore constraints (boundaries, topology, integration).
-   - **Architect** (`opus`): Lead interactively via `/grill-me`.
-   - **Devil's Advocate** (`sonnet`): Challenge proposed approach (risks, edge cases, scale).
-3. **Decision Presentation**: For each major point, provide 2-3 approaches:
-   - Architecture diagram (Mermaid).
-   - Trade-off table (Pros/Cons/Complexity/Risk).
-   - Code structure preview (dirs/interfaces).
-   - Rationale for recommendation.
-4. **Deepening**: Scan for vague language or thin sections → dispatch focused deepening agents (<= 2 rounds).
+2. **Analyze**: Explore constraints (boundaries, topology, integration). Challenge assumptions (risks, edge cases, scale).
+3. **Decide**: For each major point, evaluate 2-3 approaches with trade-offs, diagrams, and code structure previews. Pick the recommendation.
+4. **Deepen**: Scan for vague language or thin sections → dispatch focused deepening agents (<= 2 rounds).
+5. **Output**: Write decisions to issue body under `## Implementation plan`.
 
 ## Rules
 - **Code-First**: Never propose architecture without reading existing code.
