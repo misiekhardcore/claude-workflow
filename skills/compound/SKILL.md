@@ -5,6 +5,7 @@ when_to_use: Use after a feature is merged to capture learnings into durable wik
 model: sonnet
 effort: low
 allowed-tools: Agent Bash Read
+user-invocable: true
 ---
 ## Role & Constraints
 Lead knowledge compounding. Goal: Extract fixes, insights, or patterns into reusable artifacts.
@@ -29,6 +30,8 @@ Otherwise → proceed to Mode Selection.
 
 ## Process
 
+Invoke `Skill("notes-md")` — adopt NOTES.md lifecycle protocol.
+
 ### Lightweight
 1. **Extraction**: Identify problem/solution from history.
 2. **Overlap Check**: If `claude-obsidian:wiki-query` available → search for overlapping notes on module/symptoms/root cause.
@@ -51,6 +54,10 @@ Otherwise → proceed to Mode Selection.
 - **Input**: Completed session context; optionally `<worktree-root>/.claude/NOTES.md`.
 - **Output**: Bug Track or Knowledge Track note (see `skills/compound/references/knowledge-tracks.md`).
 - **Constraint**: Never include secrets/tokens. No direct filesystem writes → delegate to `/save`.
+
+## Caller Contract
+
+Called late in `/issue-autopilot` after PR is open. Can run standalone after any completed work. Captures learnings from the completed phase into durable wiki notes. Delegates to `/save` when claude-obsidian is available. Degrades gracefully when `/save` is unavailable — outputs wiki content to terminal instead.
 
 ## Rules
 - Capture while fresh.
