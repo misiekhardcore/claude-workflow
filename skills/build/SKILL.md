@@ -1,7 +1,7 @@
 ---
 name: build
 description: Build a feature from a GitHub issue. Creates a git worktree and codes against acceptance criteria using TDD.
-when_to_use: Use after /define has produced approved architecture decisions. Invoked automatically by /implement.
+when_to_use: Use to implement approved architecture decisions.
 argument-hint: "[issue#]"
 model: sonnet
 effort: high
@@ -13,8 +13,8 @@ allowed-tools: Agent Bash Read TaskCreate TaskUpdate
 Lead build phase. Goal: Take a fully specified GitHub issue and produce working code. Builds a feature using TDD. Produces implementation code in a worktree. Hands off via the worktree for review.
 
 ## I/O
-- **Input**: A GitHub issue number (with architecture/design decisions from /define) and any additional resources.
-- **Output**: A feature branch in a worktree with all acceptance criteria implemented, tests passing, and clean incremental commits. Ready for /review.
+- **Input**: A GitHub issue number (with architecture/design decisions) and any additional resources.
+- **Output**: A feature branch in a worktree with all acceptance criteria implemented, tests passing, and clean incremental commits. Ready for review.
 
 ## Specialist Assessment
 Invoke `Skill("build-specialist-assessment")` at entry (before spawning workers). It reads plan/AC from context and emits a `specialists:` list.
