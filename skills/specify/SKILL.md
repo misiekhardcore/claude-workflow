@@ -3,6 +3,8 @@ name: specify
 description: Turn a problem statement into precise, testable acceptance criteria.
 when_to_use: Use after /describe. Invoked by /discovery; can run standalone.
 model: sonnet
+layer: 2
+user-invocable: true
 ---
 <!-- Stays inline: interactive — requires back-and-forth with user. -->
 
@@ -36,6 +38,10 @@ Invoke `Skill("specialist-mode")` at entry.
    - Requirement matrices (feature × scenario).
    - State diagrams for stateful behavior.
 6. **Prioritization**: Categorize as must-have vs. nice-to-have.
+
+## Caller Contract
+
+Called by `/discovery` after `/describe`. Can run standalone after a problem statement exists. Produces testable acceptance criteria. Hands off to `/define` via GitHub issue body under `## Requirements`.
 
 ## Rules
 - **Zero Vagueness**: No "fast", "user-friendly", or "appropriate". Every AC must be testable.

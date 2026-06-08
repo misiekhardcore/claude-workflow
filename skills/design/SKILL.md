@@ -4,6 +4,8 @@ description: Explore visual and UX design (UI layouts, interaction flows, compon
 when_to_use: Use to produce UI/UX design decisions. Invoked by /define; can run standalone.
 model: sonnet
 allowed-tools: Agent Bash Read
+layer: 2
+user-invocable: true
 ---
 ## Role & Constraints
 Lead design team. Goal: Converge on visual and interaction design that fits existing systems.
@@ -38,6 +40,10 @@ Invoke `Skill("specialist-mode")` at entry.
 ## Applicability
 - **Apply**: Visual aspects (UI, frontend, webview).
 - **Skip**: Purely backend/infra work (use `/architecture` instead).
+
+## Caller Contract
+
+Called by `/define` after `/architecture`. Can run standalone. Produces UI/UX design decisions. Hands off to `/implement` via GitHub issue body under `## Implementation plan`.
 
 ## Rules
 - **Consistency**: Follow existing design system/component patterns unless diverging.
