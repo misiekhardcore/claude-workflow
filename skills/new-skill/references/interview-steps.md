@@ -45,11 +45,19 @@ Only generate `when_to_use` frontmatter when the author answers Yes; omit otherw
 
 This answer determines which template to use in step 3 and pre-fills the model/effort defaults (which the author can still override in steps e/f).
 
-**If Specialist or Primitive:** Ask one follow-up `AskUserQuestion` with `header: "Visibility"`, question: "Should this skill be hidden from the slash-command menu?"
+**If Specialist or Primitive:** Ask one follow-up `AskUserQuestion` with `header: "Contract"`, question: "Does this skill require user interaction during execution (deliberation, decisions, grill-me), or is it fully autonomous (research, verification, code work)?"
 
 **Options:**
-- **No (Recommended)** — omit `user-invocable` (skill appears in menu; default)
-- **Yes** — add `user-invocable: false` (hides from menu; use for orchestrator-internal specialists not meant for direct user invocation)
+- **Interactive (Recommended)** — user must be present; invoked via `Skill()`; set `layer: 2`
+- **Autonomous** — no user interaction; invoked via `Agent()`; set `layer: 3` and `user-invocable: false`
+
+> **If the skill needs BOTH research and user interaction**: it must be split into two skills — an autonomous research skill (layer 3, `Agent()`-only) and an interactive skill (layer 2, `Skill()`-only). Name the research skill `<name>-research`. See `_shared/composition.md` § Consumption Contracts.
+
+Then ask one follow-up `AskUserQuestion` with `header: "Visibility"`, question: "Should this skill be hidden from the slash-command menu?"
+
+**Options:**
+- **No (Recommended)** — omit `user-invocable` (skill appears in menu; default). Not applicable if Autonomous was selected above.
+- **Yes** — add `user-invocable: false` (hides from menu; required for Autonomous contract; also use for any orchestrator-internal specialist)
 
 ## Step (e): Model
 

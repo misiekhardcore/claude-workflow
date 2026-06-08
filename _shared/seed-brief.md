@@ -81,7 +81,7 @@ When a specialist detects `<seed-brief>` in its prompt:
 4. **Keep gates:** Do NOT skip discovery, design rigor, or AC verification — these remain required
 5. **Handle `autonomous: true`:** If present, auto-advance to next stage on clean pass; suppress exit prompt
 
-Per-specialist skip/keep details live in each skill's own reference file. See `Skill("specialist-mode")` → Execution Delta for the full table.
+Per-specialist skip/keep details live in each skill's own reference file.
 
 ## Failure Mode
 

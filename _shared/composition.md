@@ -37,6 +37,24 @@ Escalate only when the lower level is insufficient:
 
 **Spawn Prompt Essentials**: `cd <abs-path> && pwd`, absolute paths, load-bearing findings.
 
+## Consumption Contracts
+
+Every skill has a primary consumption contract. Callers must use the correct invocation mechanism.
+
+| Contract | Invocation | Session | User Interaction | Examples |
+|---|---|---|---|---|
+| **Autonomous** | `Agent()` | Isolated | None | `build`, `verify` |
+| **Interactive** | `Skill()` | Caller's session | Full | `architecture`, `design`, `describe`, `specify`, `discovery` |
+
+> **Layer 3 skills** (`user-invocable: false`) are exclusively Autonomous — never `Skill()`-invoked. Layer 2 autonomous skills (`build`, `verify`) are primarily orchestrated via `Agent()` but also user-invocable standalone.
+
+### Rules
+
+- **If a skill needs both research and interaction: split it.** Do not add mode-switching inside a single skill. The interactive phases are run in main context, while the research phases or other non-interactive tasks are handled by autonomous sub-agents. Either create sub-skills or spawn agents internally from the interactive skill as needed.
+- **Orchestrators call both contracts in sequence**: `Agent("x-research")` → `Skill("x")`.
+- **Interactive skills may internally spawn autonomous Agents.** This is an implementation detail invisible to the caller.
+- **Never spawn an interactive skill as `Agent()`** — the user must be present for deliberation.
+
 ## Seed-Brief Contracts
 Passed as raw YAML in `<seed-brief>` tag. Specialist skips research if present.
 

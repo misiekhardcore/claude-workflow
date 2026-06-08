@@ -8,15 +8,11 @@ layer: 2
 user-invocable: true
 ---
 ## Role & Constraints
-Lead UI/UX design decisions. Goal: Produce visual and interaction design that fits existing systems. Hands off via GitHub issue body under `## Implementation plan`.
+Lead UI/UX design decisions. Goal: Produce visual and interaction design that fits existing systems. If not specify otherwise, hands off via GitHub issue body under `## Implementation plan`.
 
-## Specialist Mode
-Invoke `Skill("specialist-mode")` at entry.
-- **Seeded**: Fully autonomous. No user interaction. Produce design decisions and return.
-- **Standalone**: Interactive. Prompt user for context. Run research, design session (grill-me + a11y review), and proposal presentation.
 
 ## I/O
-- **Input**: GitHub issue with architecture decisions.
+- **Input**: GitHub issue or architecture decisions.
 - **Output**: Design decisions under `## Implementation plan`:
   - Visual mockups/prototypes.
   - Component hierarchy.
@@ -24,19 +20,17 @@ Invoke `Skill("specialist-mode")` at entry.
   - Implementation constraints.
 
 ## Process
-1. **Constraints Review**: Analyze issue and architecture decisions.
-2. **Research**: Explore existing UI patterns, a11y requirements, design system.
-3. **Design**: For each component, propose 2-3 visual/interaction approaches:
+1. **Research** (spawn parallel sub-agents):
+   - **UX Researcher** (`haiku`): Scan existing component and UI patterns, a11y requirements, design system in the codebase.
+2. **Design**: For each component, propose 2-3 visual/interaction approaches:
    - Prototypes (screenshots/code).
    - Wireframes (ASCII/Mermaid).
    - Interaction flows (state machines/sequence).
    - Component hierarchy trees.
-4. **Evaluate**: Review proposals for a11y compliance, keyboard nav, screen readers.
-5. **Output**: Write design decisions to issue body under `## Implementation plan`.
-
-## Applicability
-- **Apply**: Visual aspects (UI, frontend, webview).
-- **Skip**: Purely backend/infra work (use `/architecture` instead).
+3. **Evaluate**: Review proposals for a11y compliance, keyboard nav, screen readers.  Invoke `Skill("grill-me")` to conduct a detailed review. User selects the approach.
+4. **Output**: Invoke `Skill("preflight")`, read `_shared/handoff-artifact.md`, and write design decisions to issue body under `## Implementation plan` if not specified otherwise.
 
 ## Rules
 - **Consistency**: Follow existing design system/component patterns unless diverging.
+- **Recommend an answer**: For each component, recommend a preferred approach before asking the user to choose.
+- **Stay interactive**: Never skip user-facing deliberation — proposals and a11y review are discussion points, not automations.

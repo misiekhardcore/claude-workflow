@@ -1,6 +1,6 @@
 ---
 name: define
-description: Lead definition phase. Spawns /architecture and /design to produce technical decisions.
+description: Lead definition phase. Resolves architecture and design technical decisions.
 when_to_use: Use after /discovery produces an approved issue with AC. Precedes /implement.
 argument-hint: "[issue#]"
 model: opus
@@ -12,24 +12,27 @@ Phase Lead. Goal: Transform an approved issue into a concrete implementation pla
 
 ## Team Shape
 
-Invoke `Skill("scope-assessment")` with work units — one per distinct module or sub-issue in the issue body. Receive agent plan; dispatch one architecture agent per disjoint group (each spawns `/architecture` as Seeded, then `/design` if visual as Seeded).
+Invoke `Skill("scope-assessment")` with work units — one per distinct module or sub-issue in the issue body. Receive grouping plan.
 
 For high-risk plans (security, payments, arch-changing scope): add a parallel critique pass after `/architecture` → `/design` using two independent critique subagents whose findings the lead merges. Determine risk from issue AC and scope — not from a label.
 
-See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for spawn cost models.
+See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for spawn cost models and consumption contract rules.
 
 ## Process
 1. **Ingestion**: Read issue (problem statement + AC).
-2. **Delegation**: For each work group, spawn `/architecture` with issue + AC. Sub-agents run autonomously — they produce decisions without user interaction. If visual work, spawn `/design` with architecture decisions.
-3. **Review & Discuss**: Present architecture and design decisions to the user. Use `/grill-me` to challenge assumptions. Iterate if needed by respawning sub-agents with updated context.
-4. **Synthesize**: Collect final decisions into a cohesive implementation plan.
-5. **Handoff**: Update GitHub issue body (single source of truth). Invoke `Read ${CLAUDE_PLUGIN_ROOT}/_shared/handoff-artifact.md` for field list.
+2. **Scoping**: Each work unit from the scope assessment is a candidate (group) for delegation to architecture or design.
+3. **Delegation** (sequentially, per work, group one by one):
+   - **3a**: Invoke `Skill("architecture")` with issue + AC. Get the response in chat, not in GitHub issue.
+   - **3b**: If visual work, invoke `Skill("design")` with architecture decisions. Get the response in chat, not in GitHub issue.
+4. **Review & Discuss**: Verify all ACs are covered by the collected decisions. Identify conflicts or gaps between architecture and design outputs. If a gap exists,move back to **Delegation** with updated context. Present architecture and design decisions to the user. Invoke `Skill("grill-me")` to challenge assumptions. Re-iterate until the user approves the plan. For high-risk plans, run parallel critique agents and merge findings.
+5. **Synthesize**: Collect final decisions into a cohesive implementation plan.
+6. **Handoff**: Update GitHub issue body (single source of truth). Invoke `Read ${CLAUDE_PLUGIN_ROOT}/_shared/handoff-artifact.md` for field list.
    - Edit/Append `## Implementation plan` section.
    - Record decisions, visuals, and sub-issues with relationships.
    - Define dependency graph for parallelization.
    - **Mandatory**: AC and Constraints.
-6. **Sign-off**: Require explicit user approval.
-7. **Closure**: Instruct user: "Start `/implement` in a fresh session."
+7. **Sign-off**: Require explicit user approval.
+8. **Closure**: Invoke `Skill("compound")` with current issue to trigger follow-ups. Then instruct user: "Start `/implement` in a fresh session."
 
 ## Rules
 - **Delegate, don't duplicate**: Sub-skills own their domain work. Do not research or produce architecture/design output yourself.

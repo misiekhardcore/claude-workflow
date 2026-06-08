@@ -9,15 +9,11 @@ layer: 2
 user-invocable: true
 ---
 ## Role & Constraints
-Lead architecture decisions. Goal: Produce architectural decisions (components, data flow, APIs, dependencies). Hands off via GitHub issue body under `## Implementation plan`.
+Lead architecture decisions. Goal: Produce architectural decisions (components, data flow, APIs, dependencies). If not specify otherwise, hands off via GitHub issue body under `## Implementation plan`.
 
-## Specialist Mode
-Invoke `Skill("specialist-mode")` at entry.
-- **Seeded**: Fully autonomous. No user interaction. Produce decisions and return.
-- **Standalone**: Interactive. Prompt user for issue. Run research, architecture session (grill-me + devil's advocate), and decision presentation.
 
 ## I/O
-- **Input**: GitHub issue with problem statement and AC(s).
+- **Input**: GitHub issue or problem statement and AC(s).
 - **Output**: Architecture decisions under `## Implementation plan`:
   - Component diagram (Mermaid).
   - Key interfaces and data flow.
@@ -26,16 +22,18 @@ Invoke `Skill("specialist-mode")` at entry.
   - Research summary (informed patterns).
 
 ## Process
-1. **Research** (Parallel, `sonnet`):
-   - **Codebase Agent**: Scan tech stack, modules, related patterns.
-   - **Patterns Agent**: Query `claude-obsidian` → Project docs → Context7/Web.
+1. **Research** (spawn parallel sub-agents):
+   - **Codebase Agent** (`sonnet`): Scan tech stack, modules, related patterns in the repo.
+   - **Patterns Agent** (`sonnet`): Query `claude-obsidian` → project docs → Context7/Web for external patterns.
    - **Gate**: Skip external research if >= 3 internal patterns found (unless security/payments/privacy).
 2. **Analyze**: Explore constraints (boundaries, topology, integration). Challenge assumptions (risks, edge cases, scale).
-3. **Decide**: For each major point, evaluate 2-3 approaches with trade-offs, diagrams, and code structure previews. Pick the recommendation.
-4. **Deepen**: Scan for vague language or thin sections → dispatch focused deepening agents (<= 2 rounds).
-5. **Output**: Write decisions to issue body under `## Implementation plan`.
+3. **Decide**: Invoke `Skill("grill-me")` with devil's advocate. For each major point, evaluate 2-3 approaches with trade-offs, diagrams, and code structure previews. User selects the recommendation.
+4. **Deepen**: Scan for vague language or thin sections → dispatch focused deepening agents (<= 2 rounds, user approves before dispatch).
+5. **Output**: Invoke `Skill("preflight")`, read `_shared/handoff-artifact.md`, and write decisions to issue body under `## Implementation plan` if not specified otherwise.
 
 ## Rules
 - **Code-First**: Never propose architecture without reading existing code.
 - **Pattern Adherence**: Respect existing patterns unless justifying deviation.
 - **Concrete Only**: No vague placeholders; every section must be decisive.
+- **Recommend an answer**: For each component, recommend a preferred approach before asking the user to choose.
+- **Stay interactive**: Never skip user-facing deliberation — the research phase is pre-work, not a replacement for discussion.
