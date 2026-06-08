@@ -13,11 +13,6 @@ Lead requirements team. Transforms problem statements into testable, non-vague a
 ## Role & Constraints
 Goal: Transform problem statements into testable, non-vague acceptance criteria. Produces testable AC. Hands off via GitHub issue body under `## Requirements`.
 
-## Specialist Mode
-- **Seeded**: Skip scope/file confirmations.
-- **Keep**: AC derivation gates (quality not delegated).
-Invoke `Skill("specialist-mode")` at entry.
-
 ## I/O
 - **Input**: Problem statement (from /describe) or user description.
 - **Optional**: Prior-art brief (`problem_domain`, `existing_patterns`, `constraints`). Skip duplicate internal research if present. See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md`.

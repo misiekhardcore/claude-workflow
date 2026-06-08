@@ -4,13 +4,16 @@
 
 **Entry condition**: Issue has `## Implementation plan`, branch `feat/issue-<N>` does not exist, no open PR.
 
-1. Run `/implement <N>` from current directory. Invoke `Skill("specialist-mode")` § Autonomous Implement Invocation with overrides:
-   - `branch`: `feat/issue-<N>`
-   - `active_issue`: `<N>`
-   - `payload.prior_art`: `"Issue #<N> ## Implementation plan (architecture and design decisions from /define)"`
-   - `payload.open_questions`: open questions from the plan, or empty
+1. Spawn `Agent("implement/agents/implement-runner.md")` from current directory:
+   ```
+   repo: <owner/repo>
+   branch: feat/issue-<N>
+   issue: <N>
+   max_cycles: 3
+   ```
+   Runner creates the worktree, runs the full build → review → verify cycle, and opens a draft PR autonomously.
 
-2. `/implement` creates the worktree internally via `/build`, runs the full build → review → verify cycle, and opens a draft PR (`autonomous: true` suppresses its exit prompt).
+2. Runner opens a draft PR and returns the PR URL.
 
 3. After `/implement` exits, print:
 

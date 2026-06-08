@@ -2,8 +2,6 @@
 
 ## Autonomous Cycle (Multi-unit)
 
-**Seed Brief**: Raw YAML in `<seed-brief>` tag per specialist-mode. `payload: { type: research, ... }`.
-
 1. **`/build`**: Implementation team → codes against issue.
 2. **`/review`**: Review team → multi-unit scope triggers detailed review.
 3. **`/verify`**: QA team → verifies every AC.
@@ -29,6 +27,5 @@ Run from worktree root.
 
 - **Clean exit** → present PR URL.
 - **Exhausted exit** (3 cycles, findings remain):
-  - `autonomous: true` → Accept/close unconditionally → status line.
-  - `autonomous: false` → PR URL + findings → binary question: "Continue loop, or accept and close?"
+  - PR URL + findings → binary question: "Continue loop, or accept and close?"
     - **Continue** → One more cycle → log escalation in PR `## Notes` → return to Finalize.

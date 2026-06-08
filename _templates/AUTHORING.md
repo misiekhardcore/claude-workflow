@@ -67,7 +67,7 @@ Orchestrators must remain "thin" to avoid context bloat and logic drift.
 When spawning agents to perform work, follow these requirements:
 
 ### 1. Seed-Briefs
-Agents start fresh. The orchestrator must construct a complete, self-contained "seed-brief" in the `prompt` argument. Do not assume the agent has context from previous turns unless explicitly passed.
+The caller must pass all needed context in the `prompt` argument. For single inputs, use one-line inline. For multiple inputs, use a structured YAML block. See `_shared/seed-brief.md` for the packaging convention.
 
 ### 2. Parallel Dispatch & Scope
 To prevent race conditions and "last-write-wins" conflicts:
@@ -80,7 +80,7 @@ Worker agents should include `disallowedTools: [Agent]` in their frontmatter to 
 ## Custom Agent Authoring
 
 ### When to use a Custom Agent File
-Prefer `Agent(general-purpose)` by default. Use a dedicated file in the `agents/` directory (at plugin root) ONLY when:
+Use a dedicated file in the skill's `agents/` directory when:
 - Specific tool restrictions are required.
 - A specific model override is needed.
 - `disallowedTools` guardrails must be enforced.
@@ -140,25 +140,6 @@ When an orchestrator must decide how to fan out work across agents, use `/scope-
 
 Document the orchestrator's specific definition of "work unit" (what counts as an input, what its `resources` list must contain) in a dedicated `references/` doc. That doc must also cite `/scope-assessment` as the canonical decomposition algorithm. The layer-3 skill encodes the algorithm only; per-caller variation lives at the call site.
 
-## Specialist Activation Pattern
-
-When an orchestrator or sub-skill needs to invoke domain experts, use the two-mechanism pattern:
-
-|Concern|Mechanism|
-|-|-|
-|**Team shape** — how many agents, which spawn primitive|`scope-assessment` (shared layer-3); define work units in a caller `references/` doc|
-|**Specialist activation** — which domain experts join|Per-skill `*-specialist-assessment` (layer-3, new) — one per sub-skill|
-
-### `scope-assessment` (team shape)
-
-Shared layer-3 skill. Takes `work_units` (each with `id` and `resources`), groups by shared resources, outputs one agent entry per conflict-free group. Per-caller variation is only the work-unit definition — document it in a caller `references/` doc.
-
-### `*-specialist-assessment` (specialist activation)
-
-Each sub-skill gets its own layer-3 assessment skill. It reads plan/diff/AC from the caller's context and emits a flat `specialists:` list. Per-skill logic is load-bearing: the diff that warrants a security reviewer in `/review` does not drive any specialist decision in `/build`. A shared parameterized skill would lose this per-skill signal.
-
-**Do not** pass specialist lists in seed briefs or have orchestrators decide specialists. Each sub-skill is responsible for its own specialist assessment, whether invoked standalone or seeded.
-
 ## `_shared/` File Catalogue
 
 Reference on-demand via `Read \`${CLAUDE_PLUGIN_ROOT}/_shared/<file>.md\``:
@@ -167,9 +148,47 @@ Reference on-demand via `Read \`${CLAUDE_PLUGIN_ROOT}/_shared/<file>.md\``:
 - `handoff-artifact.md` — five-field issue-body structure for phase handoffs
 - `interviewing-rules.md` — one-question-at-a-time interviewing protocol for user-interactive discovery
 - `notes-md-protocol.md` — `.claude/NOTES.md` lifecycle, shape, and update cadence
-- `seed-brief.md` — spawn-time context packaging format for fan-out to sub-skills and worker agents
+- `seed-brief.md` — spawn-time context packaging (caller-side YAML convention)
 - `worktree-protocol.md` — `wt` CLI command protocol for creating and managing feature worktrees
+
+## Agent File Template
+
+Agent files live in `skills/<skill-name>/agents/<agent-name>.md`. Use this template:
+
+```yaml
+---
+name: <agent-name>
+description: <one sentence — what it does and when it's spawned>
+model: <sonnet|haiku|opus>
+user-invocable: false
+disallowedTools: [Agent, AskUserQuestion]
+---
+<Role sentence. Input source. No user interaction.>
+
+## Input (from spawn prompt)
+
+- `field`: description
+
+## Process
+
+1. `cd <cwd> && pwd` — always verify CWD first.
+2. ...
+
+## Output
+
+```
+structured output block
+```
+
+## Rules
+
+- No user interaction.
+- Read only unless explicitly writing code/files.
+```
 
 ## Agent Catalogue
 
-- `agents/prune-lane.md` — pruning logic (dispatched by `/prune`)
+Agent files live under `skills/<name>/agents/`. See each skill's `agents/` directory for its agent files. Common patterns:
+- `<skill>/agents/<skill>-runner.md` — autonomous core (Tier 2 shell + runner split)
+- `<skill>/agents/<role>-agent.md` — parallel worker (spawned by runner)
+- `<skill>/agents/reviewer-<domain>.md` — domain reviewer (spawned by review-runner)

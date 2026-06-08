@@ -16,9 +16,6 @@ Lead build phase. Goal: Take a fully specified GitHub issue and produce working 
 - **Input**: A GitHub issue number (with architecture/design decisions) and any additional resources.
 - **Output**: A feature branch in a worktree with all acceptance criteria implemented, tests passing, and clean incremental commits. Ready for review.
 
-## Specialist Assessment
-Invoke `Skill("build-specialist-assessment")` at entry (before spawning workers). It reads plan/AC from context and emits a `specialists:` list.
-
 ## Scope Assessment
 
 |Scope|Criteria|Team|
@@ -35,7 +32,9 @@ Read `references/process.md` for step-by-step process, TDD, context hygiene, and
 1. Run pre-flight (repo/scope confirmation).
 2. Read the issue and linked sub-issues.
 3. Create worktree, init `./.claude/NOTES.md` with task list.
-4. Invoke `Skill("scope-assessment")` with work units derived from sub-issues and file groups → receive agent plan → spawn one agent per entry.
+4. Invoke `Skill("scope-assessment")` with work units derived from sub-issues and file groups → receive agent plan:
+   - **Single-unit**: spawn `Agent("build/agents/build-runner.md")` with issue and implementation_plan.
+   - **Multi-unit**: spawn parallel `Agent("build/agents/build-worker.md")` — one per work unit.
 5. Consider invoking `Skill("compaction-protocol")` for context management during long build sessions.
 
 ## Output
