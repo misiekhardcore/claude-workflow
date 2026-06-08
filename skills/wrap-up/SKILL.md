@@ -7,11 +7,7 @@ user-invocable: true
 layer: 2
 allowed-tools: Bash Read
 ---
-Safely remove the feature worktree, delete the branch, and clear any remaining NOTES.md. In standalone mode, confirms before destructive actions and refuses when the operation would destroy protected state. In orchestrated mode, accepts `confirmed: true` from an orchestrator seed-brief and executes directly.
-
-## Caller Contract
-
-Called at the end of `/issue-autopilot` after PR is merged or draft-open. Can run standalone. Cleans up local state: removes worktree, deletes branch, clears NOTES.md. Expects PR to be in a terminal state. Refuses destructive actions on dirty state in standalone mode.
+Safely remove the feature worktree, delete the branch, and clear any remaining NOTES.md. In standalone mode, confirms before destructive actions and refuses when the operation would destroy protected state. In orchestrated mode, accepts `confirmed: true` from an orchestrator seed-brief and executes directly. Cleans up local state: removes worktree, deletes branch, clears NOTES.md. Expects PR to be in a terminal state. Refuses destructive actions on dirty state in standalone mode.
 
 ## Input
 
