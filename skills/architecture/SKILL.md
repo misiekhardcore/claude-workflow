@@ -9,12 +9,12 @@ layer: 2
 user-invocable: true
 ---
 ## Role & Constraints
-Lead architecture team. Goal: Converge on a technical approach via research, iterative analysis, and critique. Produces architectural decisions (components, data flow, APIs, dependencies). Hands off via GitHub issue body under `## Implementation plan`.
+Lead architecture team. Goal: Converge on a technical approach via research, iterative analysis, and critique. Produces architectural decisions (components, data flow, APIs, dependencies). Hands off via GitHub issue body under `## Implementation plan`. Read `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-rules.md` for interviewing constraints.
 
 ## Specialist Mode
-- **Seeded**: Skip codebase and patterns research subagent dispatches.
-- **Keep**: Full architecture session (grill-me + devil's advocate).
 Invoke `Skill("specialist-mode")` at entry.
+- **Seeded**: Skip codebase and patterns research subagent dispatches. Proceed directly to architecture session.
+- **Keep**: Full architecture session (grill-me + devil's advocate). Run research, architecture session, and deepening.
 
 ## I/O
 - **Input**: GitHub issue with problem statement and AC (from /discovery).
@@ -45,4 +45,3 @@ Invoke `Skill("specialist-mode")` at entry.
 - **Code-First**: Never propose architecture without reading existing code.
 - **Pattern Adherence**: Respect existing patterns unless justifying deviation.
 - **Concrete Only**: No vague placeholders; every section must be decisive.
-- Read `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-rules.md`

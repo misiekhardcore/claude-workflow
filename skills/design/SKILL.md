@@ -8,12 +8,12 @@ layer: 2
 user-invocable: true
 ---
 ## Role & Constraints
-Lead design team. Goal: Converge on visual and interaction design that fits existing systems. Produces UI/UX design decisions. Hands off to via GitHub issue body under `## Implementation plan`.
+Lead design team. Goal: Converge on visual and interaction design that fits existing systems. Produces UI/UX design decisions. Hands off via GitHub issue body under `## Implementation plan`. Read `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-rules.md` for interviewing constraints.
 
 ## Specialist Mode
-- **Seeded**: Skip design-space research subagent.
-- **Keep**: Interactive session (grill-me + a11y review).
 Invoke `Skill("specialist-mode")` at entry.
+- **Seeded**: Skip design-space research subagent. Proceed directly to design session.
+- **Keep**: Interactive session (grill-me + a11y review). Run research, design session, and proposal refinement.
 
 ## I/O
 - **Input**: GitHub issue with architecture decisions (from /define).
@@ -43,4 +43,3 @@ Invoke `Skill("specialist-mode")` at entry.
 
 ## Rules
 - **Consistency**: Follow existing design system/component patterns unless diverging.
-- Read `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-rules.md`
