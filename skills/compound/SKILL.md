@@ -38,7 +38,7 @@ Invoke `Skill("notes-md")` — adopt NOTES.md lifecycle protocol.
 2. **Overlap Check**: If `claude-obsidian:wiki-query` available → search for overlapping notes on module/symptoms/root cause.
 3. **Draft**: Use appropriate Knowledge Track.
 4. **Filing**:
-   - `claude-obsidian:save` available → invoke `/save` with drafted content.
+   - `claude-obsidian:save` available → invoke `/save` with drafted content. Make sure that all the steps are executed.
    - Otherwise → emit inline fenced Markdown + install prompt.
 5. **Staleness**: Flag contradictions with existing notes for user consolidation.
 
