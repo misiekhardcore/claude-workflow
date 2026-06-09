@@ -1,7 +1,6 @@
 ---
 name: critique-agent
 description: Architecture and design critique agent for /define. Independently reviews architecture/design decisions for high-risk plans and identifies gaps, risks, and trade-offs.
-model: sonnet
 user-invocable: false
 disallowedTools: [Agent]
 background: true
