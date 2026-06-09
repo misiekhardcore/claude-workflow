@@ -8,39 +8,30 @@ layer: 2
 user-invocable: true
 ---
 ## Role & Constraints
-Lead design team. Goal: Converge on visual and interaction design that fits existing systems. Produces UI/UX design decisions. Hands off to via GitHub issue body under `## Implementation plan`.
-
-## Specialist Mode
-- **Seeded**: Skip design-space research subagent.
-- **Keep**: Interactive session (grill-me + a11y review).
-Invoke `Skill("specialist-mode")` at entry.
+Lead UI/UX design decisions. Goal: Produce visual and interaction design that fits existing systems. If not specify otherwise, hands off via GitHub issue body under `## Implementation plan`.
 
 ## I/O
-- **Input**: GitHub issue with architecture decisions (from /define).
-- **Optional**: Research brief (`tech_stack`, `module_map`, `patterns`, etc.). UX researcher skips patterns already covered.
-- **Output**: Decisions as issue comments:
+- **Input**: GitHub issue or architecture decisions.
+- **Output**: Design decisions:
   - Visual mockups/prototypes.
   - Component hierarchy.
   - Interaction flow diagrams.
   - Implementation constraints.
 
 ## Process
-1. **Constraints Review**: Analyze issue and architecture decisions.
-2. **Design Session** (Sequential):
-   - **UX Researcher** (`haiku`): Explore existing UI patterns, a11y requirements, design system.
-   - **Design Proposer** (`sonnet`): Lead interactively via `/grill-me`.
-   - **A11y Reviewer** (`haiku`): Evaluate proposals for compliance, keyboard nav, screen readers.
-3. **Visual Proposals**: Present 2-3 approaches:
+1. **Research** (spawn `Agent("design/agents/ux-researcher.md")`):
+   - Pass `component` (target UI component or flow) and `context` (product context and target users).
+2. **Design**: For each component, propose 2-3 visual/interaction approaches:
    - Prototypes (screenshots/code).
    - Wireframes (ASCII/Mermaid).
    - Interaction flows (state machines/sequence).
    - Component hierarchy trees.
-4. **Selection**: User picks approach → design becomes an implementation constraint.
-
-## Applicability
-- **Apply**: Visual aspects (UI, frontend, webview).
-- **Skip**: Purely backend/infra work (use `/architecture` instead).
+3. **Evaluate** (spawn `Agent("design/agents/reviewer-a11y.md")`):
+   - Pass `component` and `proposals` (list of approach names and descriptions).
+   - Present a11y findings alongside proposals. Invoke `Skill("grill-me")` for deliberation. User selects approach.
+4. **Output**: Invoke `Skill("preflight")`, read `_shared/handoff-artifact.md`, and write design decisions to issue body under `## Implementation plan` if not specified otherwise.
 
 ## Rules
 - **Consistency**: Follow existing design system/component patterns unless diverging.
-- Read `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-rules.md`
+- **Recommend an answer**: For each component, recommend a preferred approach before asking the user to choose.
+- **Stay interactive**: Never skip user-facing deliberation — proposals and a11y review are discussion points, not automations.

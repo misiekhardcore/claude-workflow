@@ -7,36 +7,26 @@ user-invocable: true
 layer: 2
 allowed-tools: Bash Read
 ---
-Safely remove the feature worktree, delete the branch, and clear any remaining NOTES.md. In standalone mode, confirms before destructive actions and refuses when the operation would destroy protected state. In orchestrated mode, accepts `confirmed: true` from an orchestrator seed-brief and executes directly. Cleans up local state: removes worktree, deletes branch, clears NOTES.md. Expects PR to be in a terminal state. Refuses destructive actions on dirty state in standalone mode.
+Safely remove the feature worktree, delete the branch, and clear any remaining NOTES.md. In standalone mode, confirms before destructive actions and refuses when the operation would destroy protected state. When invoked with `confirmed` as skill arg (e.g., `/wrap-up confirmed`), executes directly without user prompts. Orchestrators spawn `Agent('wrap-up/agents/wrap-up-runner.md')` for fully autonomous cleanup. Cleans up local state: removes worktree, deletes branch, clears NOTES.md. Expects PR to be in a terminal state. Refuses destructive actions on dirty state in standalone mode.
 
 ## Input
 
 - Current worktree path and branch.
-- Optional: seed-brief from orchestrator with `confirmed: true`. When present, skip user confirmations and proceed directly to removal.
-
-  ```
-  <seed-brief>
-  preflight_verified: true
-  repo: owner/repo
-  branch: feat/my-branch
-  confirmed: true
-  </seed-brief>
-  ```
-
-  Read `${CLAUDE_PLUGIN_ROOT}/_shared/seed-brief.md` for the full seed-brief format.
-
+- Optional: `confirmed` skill arg — when present, skips user confirmations.
 - Optional: PR number (used to verify unpushed-commit safety in standalone mode).
 
 ## Process
 
-1. Check for seed-brief with `confirmed: true`.
+1. Check for `confirmed` in skill args.
 2. Invoke `Skill("worktree")` — adopt worktree lifecycle protocol.
 3. Invoke `Skill("notes-md")` — adopt NOTES.md lifecycle protocol.
 4. Read `references/procedure.md` for the step-by-step removal procedure.
 5. Run step 1 (detect state) in all cases.
-6. If seed-brief has `confirmed: true`: skip to step 5 (execute removal). If worktree is dirty in this mode, **refuse**.
+6. If `confirmed` arg present: skip to step 5 (execute removal). If worktree is dirty in this mode, **refuse**.
 7. Otherwise (standalone mode): run steps 2–4 (state machine + user confirmations), then step 5.
 8. Report what was removed.
+
+**Orchestrator mode**: orchestrators should spawn `Agent('wrap-up/agents/wrap-up-runner.md')` directly instead of calling this skill — the runner is fully autonomous.
 
 ## Output
 

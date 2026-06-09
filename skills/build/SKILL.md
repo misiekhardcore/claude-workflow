@@ -1,7 +1,7 @@
 ---
 name: build
 description: Build a feature from a GitHub issue. Creates a git worktree and codes against acceptance criteria using TDD.
-when_to_use: Use to implement approved architecture decisions.
+when_to_use: Use to implement approved architecture decisions/implementation plans.
 argument-hint: "[issue#]"
 model: sonnet
 effort: high
@@ -16,8 +16,11 @@ Lead build phase. Goal: Take a fully specified GitHub issue and produce working 
 - **Input**: A GitHub issue number (with architecture/design decisions) and any additional resources.
 - **Output**: A feature branch in a worktree with all acceptance criteria implemented, tests passing, and clean incremental commits. Ready for review.
 
-## Specialist Assessment
-Invoke `Skill("build-specialist-assessment")` at entry (before spawning workers). It reads plan/AC from context and emits a `specialists:` list.
+## Scope Assessment
+
+Divide the issue into work units (sub-issues or file groups) which can be worked on in parallel by multiple build workers. Consider complexity, collision avoidance, dependencies, and risk when defining work units.
+
+See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for spawn cost models.
 
 ## Process
 Read `references/process.md` for step-by-step process, TDD, context hygiene, and commit rules.
@@ -25,7 +28,7 @@ Read `references/process.md` for step-by-step process, TDD, context hygiene, and
 1. Run pre-flight (repo/scope confirmation).
 2. Read the issue and linked sub-issues.
 3. Create worktree, init `./.claude/NOTES.md` with task list.
-4. Invoke `Skill("scope-assessment")` with work units derived from sub-issues and file groups → receive agent plan → spawn one agent per entry.
+4. Invoke `Skill("scope-assessment")` with work units derived from sub-issues and file groups → receive agent plan: spawn parallel `Agent("build/agents/build-worker.md")` — one per work unit.
 5. Consider invoking `Skill("compaction-protocol")` for context management during long build sessions.
 
 ## Output

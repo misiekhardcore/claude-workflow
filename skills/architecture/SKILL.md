@@ -9,16 +9,11 @@ layer: 2
 user-invocable: true
 ---
 ## Role & Constraints
-Lead architecture team. Goal: Converge on a technical approach via research, iterative analysis, and critique. Produces architectural decisions (components, data flow, APIs, dependencies). Hands off via GitHub issue body under `## Implementation plan`.
-
-## Specialist Mode
-- **Seeded**: Skip codebase and patterns research subagent dispatches.
-- **Keep**: Full architecture session (grill-me + devil's advocate).
-Invoke `Skill("specialist-mode")` at entry.
+Lead architecture decisions. Goal: Produce architectural decisions (components, data flow, APIs, dependencies). If not specify otherwise, hands off via GitHub issue body under `## Implementation plan`.
 
 ## I/O
-- **Input**: GitHub issue with problem statement and AC (from /discovery).
-- **Output**: Decisions as issue comments:
+- **Input**: GitHub issue or problem statement and AC(s).
+- **Output**: Architecture decisions under `## Implementation plan`:
   - Component diagram (Mermaid).
   - Key interfaces and data flow.
   - Sub-issues with GitHub relationships.
@@ -26,23 +21,18 @@ Invoke `Skill("specialist-mode")` at entry.
   - Research summary (informed patterns).
 
 ## Process
-1. **Research** (Parallel, `sonnet`):
-   - **Codebase Agent**: Scan tech stack, modules, related patterns.
-   - **Patterns Agent**: Query `claude-obsidian` → Project docs → Context7/Web.
-   - **Gate**: Skip external research if >= 3 internal patterns found (unless security/payments/privacy).
-2. **Architecture Session** (Sequential):
-   - **Analyst** (`sonnet`): Explore constraints (boundaries, topology, integration).
-   - **Architect** (`opus`): Lead interactively via `/grill-me`.
-   - **Devil's Advocate** (`sonnet`): Challenge proposed approach (risks, edge cases, scale).
-3. **Decision Presentation**: For each major point, provide 2-3 approaches:
-   - Architecture diagram (Mermaid).
-   - Trade-off table (Pros/Cons/Complexity/Risk).
-   - Code structure preview (dirs/interfaces).
-   - Rationale for recommendation.
-4. **Deepening**: Scan for vague language or thin sections → dispatch focused deepening agents (<= 2 rounds).
+1. **Research** (spawn in parallel):
+   - `Agent("architecture/agents/codebase-scanner.md")` — pass `cwd` and `scope` (feature area or module list).
+   - `Agent("architecture/agents/patterns-researcher.md")` — pass `problem` and `tech_stack`. **Gate**: skip if codebase-scanner returns >= 3 internal patterns (unless security/payments/privacy domain).
+2. **Analyze** (spawn `Agent("architecture/agents/constraint-analyzer.md")`):
+   - Pass `problem`, `cwd`, `codebase_findings` and `patterns_findings` from step 1 outputs.
+3. **Decide**: Invoke `Skill("grill-me")` with devil's advocate. For each major point, evaluate 2-3 approaches with trade-offs, diagrams, and code structure previews. User selects the recommendation.
+4. **Deepen**: Scan for vague language or thin sections → spawn `Agent("architecture/agents/deepening-agent.md")` per gap — pass `gap`, `cwd`, and `context` (summary of prior research). Max 2 rounds; user approves before each dispatch.
+5. **Output**: Invoke `Skill("preflight")`, read `_shared/handoff-artifact.md`, and write decisions to issue body under `## Implementation plan` if not specified otherwise.
 
 ## Rules
 - **Code-First**: Never propose architecture without reading existing code.
 - **Pattern Adherence**: Respect existing patterns unless justifying deviation.
 - **Concrete Only**: No vague placeholders; every section must be decisive.
-- Read `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-rules.md`
+- **Recommend an answer**: For each component, recommend a preferred approach before asking the user to choose.
+- **Stay interactive**: Never skip user-facing deliberation — the research phase is pre-work, not a replacement for discussion.

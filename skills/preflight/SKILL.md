@@ -20,7 +20,7 @@ Used for skills that create/edit issues, comments, PRs, or push code. Invoke bef
 
 ### Orchestrator pattern
 
-Orchestrators (e.g., `/implement`) run this at entry and pass `preflight_verified: true` in seed briefs to specialists. Specialists skip this when valid brief is present.
+Orchestrators (e.g., `/implement`) run this once at entry. Worker agents spawned by the orchestrator do not re-run preflight — callers run it once and trust their own verification.
 
 ## Scope Pre-flight
 
@@ -46,7 +46,3 @@ If the user does not confirm, do not edit any of the listed files. Reply:
 > Holding off — please clarify which files are in scope.
 
 Re-prompt with a narrowed list when the user provides scope.
-
-### Orchestrator pattern
-
-Orchestrators run this at entry and pass `preflight_verified: true` in seed briefs. Specialists skip scope confirmation when a valid brief is present.

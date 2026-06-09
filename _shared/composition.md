@@ -3,8 +3,8 @@
 Framework for orchestrating specialists and managing token/context budgets.
 
 ## Roles
-- **Orchestrator**: Phase lead. Spawns specialists, coordinates, writes handoff. Model: `opus`.
-- **Specialist**: Bounded task. Receives seed-brief, reports findings. Model: `sonnet`.
+- **Orchestrator**: Phase lead. Spawns workers, coordinates, writes handoff. Model: `opus`.
+- **Runner**: Autonomous core of a Tier 2 skill. Receives input in spawn prompt, does the work, reports findings. Model: `sonnet`.
 - **Interactive Primitive**: Inline behavior (e.g., `/grill-me`). No team/handoff. Model: `sonnet`.
 - **Utility**: Maintenance (e.g., compound, prune). No seed-brief contract.
 
@@ -37,14 +37,29 @@ Escalate only when the lower level is insufficient:
 
 **Spawn Prompt Essentials**: `cd <abs-path> && pwd`, absolute paths, load-bearing findings.
 
-## Seed-Brief Contracts
-Passed as raw YAML in `<seed-brief>` tag. Specialist skips research if present.
+## Consumption Contracts
 
-|Brief Type|Core Fields|
-|-|-|
-|**Research**|`tech_stack`, `module_map`, `patterns`, `prior_art`, `open_questions`|
-|**Prior-Art**|`problem_domain`, `existing_patterns`, `constraints`|
-|**Fix**|`failing_ac`, `findings` (`file:line`), `prior_decisions`|
+Every skill has a primary consumption contract. Callers must use the correct invocation mechanism.
+
+|Contract|Invocation|Session|User Interaction|Examples|
+|-|-|-|-|-|
+|**Runner (autonomous)**|`Agent("skill/agents/runner.md")`|Isolated|None|`implement-runner`, `review-runner`|
+|**Worker (autonomous)**|`Agent("skill/agents/worker.md")`|Isolated|Parallel|`build-worker`, `reviewer-correctness`|
+|**Shell (interactive)**|`Skill("name")`|Caller's session|Full|`implement`, `build`, `review`|
+|**Forked (autonomous)**|`Skill("name")` + `context: fork`|Isolated|None|`compound`, `audit-issues`|
+
+> **Layer 3 skills** (`user-invocable: false`) are exclusively Autonomous — never `Skill()`-invoked.
+
+### Rules
+
+- **If a skill needs both research and interaction: split it.** Do not add mode-switching inside a single skill. The interactive phases are run in main context, while the research phases or other non-interactive tasks are handled by autonomous sub-agents. Either create sub-skills or spawn agents internally from the interactive skill as needed.
+- **Interactive skills may internally spawn autonomous Agents.** This is an implementation detail invisible to the caller.
+- **Never spawn an interactive skill as `Agent()`** — the user must be present for deliberation.
+
+## Input Contracts
+Spawn-time context is passed directly in the Agent() prompt. See `_shared/seed-brief.md` for the YAML packaging convention.
+- **Single input** → one-line inline in spawn prompt.
+- **Multiple inputs** → structured YAML block in spawn prompt.
 
 ## Handoff vs Seed-Brief
 |Feature|Handoff Artifact|Seed Brief|

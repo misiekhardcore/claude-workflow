@@ -1,21 +1,6 @@
-# Scope Assessment and Cycle Details for implement
-
-## Team Shape
-
-Invoke `Skill("scope-assessment")` with work units (one per sub-issue or distinct file group from `## Implementation plan`). Receive agent plan; spawn one `/build` invocation per disjoint group.
-
-For trivial changes (≤ 50 lines, no logic change): pass a single work unit → 1 `/build` agent → inline AC check → PR (no `/review`/`/verify` teams needed).
-
-### Design Gate (Multi-unit only)
-
-Verify `## Implementation plan` in issue body. If absent:
-- **Pause** → Prompt: "Run `/define` first, or confirm this is trivial."
-- If trivial → proceed as single-unit.
-- Otherwise → Wait for `/define`.
+# Cycle Details for implement
 
 ## Autonomous Cycle (Multi-unit)
-
-**Seed Brief**: Raw YAML in `<seed-brief>` tag per specialist-mode. `payload: { type: research, ... }`.
 
 1. **`/build`**: Implementation team → codes against issue.
 2. **`/review`**: Review team → multi-unit scope triggers detailed review.
@@ -42,6 +27,5 @@ Run from worktree root.
 
 - **Clean exit** → present PR URL.
 - **Exhausted exit** (3 cycles, findings remain):
-  - `autonomous: true` → Accept/close unconditionally → status line.
-  - `autonomous: false` → PR URL + findings → binary question: "Continue loop, or accept and close?"
+  - PR URL + findings → binary question: "Continue loop, or accept and close?"
     - **Continue** → One more cycle → log escalation in PR `## Notes` → return to Finalize.

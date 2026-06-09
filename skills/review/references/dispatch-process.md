@@ -4,14 +4,14 @@
 
 |Trigger|Diff Source|AC Source|Output|
 |-|-|-|-|
-|Branch + Seed|`git diff`|Seed brief|Fix brief → `/build`|
 |Branch Standalone|`git diff`|`gh issue view`|Findings report → User|
 |PR Argument|`gh pr diff`|Linked issue|Posted GitHub review|
+|Implement cycle|`git diff`|Caller-provided|Fix brief → caller|
 
 ## Process
 
 1. **Acquire Review Package** (Context Isolation).
-2. **Triage**: Analyze diff → invoke `Skill("review-specialist-assessment")` → build `specialists:` list; record which gates fired.
+2. **Triage**: Gate evaluation is handled by `review-runner` agent — it reads diff and file paths, activates reviewers, and returns merged findings.
 3. **Review**: Reviewers work in parallel → use `superpowers:requesting-code-review`.
 4. **Findings Format**: `file:line | issue title | severity (P0-P3) | confidence (0.0-1.0)`.
 5. **Merge & Dedup**:

@@ -12,34 +12,36 @@ Lead discovery phase. Goal: Transform vague ideas into well-specified GitHub iss
 
 ## Team Shape
 
-Invoke `Skill("scope-assessment")` with work units derived from the problem statement. Dispatch agents based on the result:
-- **1-agent result**: `/describe` only.
-- **Multi-agent result**: Prior-Art Scout (parallel) + `/describe` (with scout brief) + `/specify`.
-- **High-risk domain** (auth/security/payments/arch): parallel subagents — flow analyst and adversarial questioner in parallel.
+Invoke `Skill("scope-assessment")` with work units derived from the problem statement.
+
+For high-risk plans (security, payments, arch-changing scope): parallel subagents — flow analyst and adversarial questioner in parallel.
 
 Determine scope from the problem domain and complexity — not a label.
 
 ## Process
 
-Per scope-assessment output:
-- **1-agent**: `/describe` → extract AC → issue.
-- **Multi-agent**: Prior-Art Scout (parallel) → `/describe` (with scout brief) → `/specify` → issue.
-- **High-risk domain**: parallel subagents (Describe + Flow-Analyst + Scout in parallel → Adversarial Questioner → Specify last) → issue.
+1. **Ingestion**: Read issue (problem statement + AC). If no issue exists, elicit a problem statement from the user.
+2. **Scoping**: Each work unit from the scope assessment is a candidate (group) for delegation to
+3. **Delegation** (sequentially, per work, group one by one):
+   - **3a**: Dispatch Prior-Art Scout (parallel sub-agents) with work unit context → receive prior art findings. Summarize  findings for next step.
+   - **3b**: Invoke `Skill("describe")` with the research brief in payload. User interaction — PPT, visualization, problem statement validation. Get the response in chat, not in GitHub issue.
+    - **3c**: For complex work units, invoke `Skill("specify")` to derive acceptance criteria from the problem statement. Get the response in chat, not in GitHub issue.
+4. **Review and decision**: Verify all work units have a problem statement and AC. If multiple approaches exist for a work unit, present them to the user for selection. Re-iterate until you fully understand the problem and receive user approval.
+5. **Synthesize**: Combine all work unit outputs into a cohesive GitHub issue body. Ensure the problem statement is clear and concise, and that AC are specific and testable.
+6. **Handoff**: Invoke `Skill("preflight")`. Create the issue using `gh issue`.
+   Suppress branch line: true
 
-## Issue Creation
-
-Invoke `Skill("preflight")` before `gh issue`.
-Suppress branch line: true
-
-**Structure** — use the `## Requirements` section heading. Invoke `Read ${CLAUDE_PLUGIN_ROOT}/_shared/handoff-artifact.md` for field list:
-- **Preamble**: What, Why, Who (from `/describe`).
-- Section heading: `## Requirements` — Acceptance criteria → Constraints → Prior decisions (optional) → Evidence (optional) → Open questions (optional).
-
-Present for approval → sign-off → instruct: "Start `/define` in a fresh session."
+   **Structure** — use `## Requirements` heading. Read `${CLAUDE_PLUGIN_ROOT}/_shared/handoff-artifact.md` for field list:
+   - **Preamble**: What, Why, Who (from `/describe`).
+   - `## Requirements`: Acceptance criteria → Constraints → Prior decisions (optional) → Evidence (optional) → Open questions (optional).
+7. **Sign-off**: Require explicit user approval.
+8. **Closure**: Invoke `Skill("compound")` with current issue to trigger follow-ups. Then instruct user: "Start `/implement` in a fresh session."
 
 ## Rules
+- **Delegate, don't duplicate**: Sub-skills own their domain work. Do not research or produce describe/specify output yourself.
 - **Explicit Approval**: Partial feedback ≠ approval.
 - **Exploration**: Time-box codebase reading to 3–5 tool calls, then ask the user a focused question.
 - **Persistence**: Prior-Art Scout findings must be persisted in Prior decisions/Evidence fields.
-- **Traceability**: Every feature must have one issue and >= 1 closing PR.
+- **Traceability**: Every feature must have one issue and can have multiple sub-issues with proper relationships set on github.
+- **Sourcing**: Invoke `Skill("preflight")` before creating issue.
 - Read `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-rules.md`

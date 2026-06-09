@@ -5,6 +5,7 @@ when_to_use: Use when auditing a GitHub repo's open issues for drift, broken ref
 argument-hint: "[owner/repo | #NN | owner/repo#NN]"
 model: sonnet
 allowed-tools: Bash Read
+context: fork
 ---
 ## Role & Constraints
 Audit open issues for drift. Product: Updated issues themselves (mutate on confirm).
@@ -26,7 +27,7 @@ Audit open issues for drift. Product: Updated issues themselves (mutate on confi
 - Abort if issue is `closed`.
 
 ### Phase 2 — Per-Issue Audit (Subagent Fan-out)
-Read `references/detectors.md` for detector logic, verdict ranking, and JSON schema.
+Spawn one `Agent("audit-issues/agents/issue-auditor.md")` per issue in parallel. Pass `cwd`, `issue_number`, `repo`, and `default_branch_ref` to each. Read `references/detectors.md` for detector logic, verdict ranking, and JSON schema.
 
 ### Phase 3 — Aggregate & Print
 Concatenate JSON reports. Per-issue block: `─── #NN — <title> — verdict: <v> ───` → URL → findings → proposed edit.

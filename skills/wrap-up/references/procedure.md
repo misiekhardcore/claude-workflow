@@ -1,6 +1,6 @@
 # Cleanup Procedure for wrap-up
 
-Steps 2–4 (state machine + confirmations) apply only in **standalone mode**. When invoked via seed-brief with `confirmed: true`, skip directly to Step 5 after Step 1.
+Steps 2–4 (state machine + confirmations) apply only in **standalone mode**. When `confirmed` is passed as a skill arg (or wrap-up-runner is spawned directly), skip directly to Step 5 after Step 1.
 
 ## Step 1 — Detect state
 

@@ -8,7 +8,7 @@ Rules that apply to all pipeline orchestrators.
 
 ## CWD verification
 
-Invoke `Skill("preflight")` at entry. Echo resolved `owner/repo` before every downstream cross-repo `gh` mutation. Pass `preflight_verified: true` in seed briefs so sub-skills skip redundant preflights.
+Invoke `Skill("preflight")` at entry. Echo resolved `owner/repo` before every downstream cross-repo `gh` mutation.
 
 ## Delegation
 
@@ -20,7 +20,7 @@ Merging is always a human action. Exit cleanly at the awaiting-merge stage; neve
 
 ## Seed-brief contract
 
-See `Skill("specialist-mode")` for Seed-brief shape and field requirements. Each sub-skill documents its expected seed-brief fields in its own file.
+See `_shared/seed-brief.md` for the YAML packaging convention. Each agent spawn includes all needed context in the prompt — callers define the input contract; receivers do not detect or switch modes.
 
 ## Progress tracking via NOTES.md
 
@@ -42,30 +42,27 @@ After preflight, create NOTES.md with:
 
 1. Write `## Current task` with what the sub-agent will do.
 2. Write `## Next action on resume` with the exact command that would reconstruct state.
-3. Include a NOTES.md slice in the seed-brief payload (`progress:` field) so the agent arrives with progress context:
+3. Include a NOTES.md slice in the agent's spawn prompt so it arrives with progress context:
 
 ```
-<seed-brief>
-...
-payload:
-  type: research
-  progress: |
-    ## Task list (relevant)
-    - [x] Scope assessment → 3 work units
-    - [ ] Build specialist (current)
-    - [ ] Review specialist
+repo: owner/repo
+branch: feat/my-feature
+issue: 123
+progress: |
+  ## Task list (relevant)
+  - [x] Scope assessment → 3 work units
+  - [ ] Build work unit 1 (current)
+  - [ ] Review
 
-    ## Decisions made this session
-    - Split auth into own work unit (why: security isolation)
-  open_questions: ""
-</seed-brief>
+  ## Decisions made this session
+  - Split auth into own work unit (why: security isolation)
 ```
 
 Slice rules:
 - Include only the subset of `## Task list` relevant to the spawned agent's scope.
 - Include `## Decisions made this session` in full (decisions are global to the phase).
 - Omit `## Current task` (the agent will set its own).
-- Cap at 15 lines — the brief is not a state dump.
+- Cap at 15 lines — the spawn prompt is not a state dump.
 
 ### After sub-agent returns
 
