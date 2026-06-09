@@ -15,8 +15,8 @@ Phase Lead. Goal: Transform an approved issue into a concrete implementation pla
 Invoke `Skill("scope-assessment")` with work units — one per distinct module or sub-issue in the issue body. Receive grouping plan.
 
 For high-risk plans (security, payments, arch-changing scope): after architecture + design, spawn in parallel:
-  - `Agent("define/agents/critique-agent.md")` — pass `issue`, `architecture_decisions`, `design_decisions`, `scope`
-  - `Agent("define/agents/critique-agent.md")` — second independent pass with same input (two perspectives)
+  - `Agent("define/agents/critique-agent.md")` — pass `issue`, `architecture_decisions`, `design_decisions`, `scope`, model: `sonnet`
+  - `Agent("define/agents/critique-agent.md")` — second independent pass with same input (two perspectives), but model: `haiku`
 Merge findings from both critique agents before presenting to user.
 
 See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for spawn cost models and consumption contract rules.
