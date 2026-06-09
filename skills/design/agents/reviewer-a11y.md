@@ -5,6 +5,7 @@ model: haiku
 user-invocable: false
 disallowedTools: [Agent]
 background: true
+memory: project
 ---
 A11y compliance reviewer for the `/design` phase. Evaluate proposed UI designs for accessibility compliance against WCAG 2.1 AA, keyboard navigation, and screen reader support.
 
