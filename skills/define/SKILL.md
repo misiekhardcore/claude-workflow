@@ -8,7 +8,7 @@ effort: high
 allowed-tools: Agent Bash Read
 ---
 ## Role & Constraints
-Phase Lead. Transform an approved issue into a concrete implementation plan (architecture + design). Orchestrate sub-skills, discuss with user — delegate domain work, never duplicate it.
+Phase Lead. Goal: Transform an approved issue into a concrete implementation plan (architecture + design). Orchestrate sub-skills, discuss with user — delegate domain work, never duplicate it.
 
 Adopt `Skill("orchestrator-rules")` for checkpoint, NOTES.md, and seed-brief conventions.
 
@@ -22,14 +22,17 @@ Dispatch workers sequentially per group:
 - **`Skill("architecture")`** (layer 2) — per group with issue + AC. Response in chat.
 - **`Skill("design")`** (layer 2) — per group with arch decisions, if visual work. Response in chat.
 
-For high-risk plans (security, payments, arch-changing scope): spawn `Agent("define/agents/critique-agent.md")` with seed-brief containing `issue`, `architecture_decisions`, `design_decisions`, and `scope`. One pass; critique-agent defines its own depth. Merge findings before presenting to user.
+For high-risk plans (security, payments, arch-changing scope): after architecture + design, spawn in parallel:
+  - `Agent("define/agents/critique-agent.md")` with sonnet
+  - `Agent("define/agents/critique-agent.md")` with haiku (second independent pass, two perspectives)
+Each with seed-brief containing `issue`, `architecture_decisions`, `design_decisions`, and `scope`. Merge findings from both before presenting to user.
 
 Each `Agent()` spawn includes a `<seed-brief>` YAML block per `_shared/seed-brief.md`.
 
 ### Critique-agent I/O contract
 - **Input (seed-brief)**: `issue`, `architecture_decisions`, `design_decisions`, `scope`
 - **Output**: Structured report — `Decisions reviewed`, `Gaps found`, `Risks` (severity), `Trade-offs not discussed`, `Recommendations` (prioritized)
-- **Contract**: Read-only. One independent pass. Spawned for high-risk plans only.
+- **Contract**: Read-only. One independent pass per spawn. Spawned for high-risk plans only.
 
 See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for spawn cost models.
 
@@ -38,15 +41,16 @@ See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for spawn cost models.
 2. **Init NOTES.md** — Create `.claude/NOTES.md` with task list, decisions log, next-action per `Skill("orchestrator-rules")`.
 3. **Scope** — Invoke `Skill("scope-assessment")` with work units. Receive agent plan.
 4. **Delegate** — Sequentially per group:
-   - **(a)** `Skill("architecture")` with issue + AC.
-   - **(b)** `Skill("design")` with architecture decisions (if visual work).
+   - **(a)** `Skill("architecture")` with issue + AC. Response in chat.
+   - **(b)** `Skill("design")` with architecture decisions (if visual work). Response in chat.
    - Checkpoint NOTES.md before each spawn; update on return.
-5. **Review** — Verify all ACs covered. Check for gaps; re-delegate if needed. Present to user. Invoke `Skill("grill-me")` to challenge assumptions. Iterate until explicit approval.
-6. **Critique** — If high-risk: spawn critique-agent with seed-brief. Merge findings, present, get approval.
+5. **Review & Discuss** — Verify all ACs covered. Identify conflicts or gaps between architecture and design. If a gap exists, move back to **Delegate** with updated context. Present to user. Invoke `Skill("grill-me")` to challenge assumptions. Iterate until explicit approval.
+6. **Critique** — If high-risk: spawn critique-agent (×2, parallel, two models). Merge findings, present, get approval.
 7. **Synthesize** — Collect final decisions into a cohesive implementation plan.
 8. **Handoff** — Invoke `Skill("preflight")`. Read `_shared/handoff-artifact.md`. Update issue body with `## Implementation plan` section:
    - Acceptance criteria (unchanged), Constraints, Prior decisions, Evidence, Open questions.
-   - Dependency graph for parallelization.
+   - Record decisions, visuals, and sub-issues with relationships.
+   - Define dependency graph for parallelization.
 9. **Sign-off** — Require explicit user approval.
 10. **Compound-on-exit** — Read `_shared/compound-on-exit.md`. Invoke `Skill("compound")` once on clean completion. Then instruct user: "Start `/implement` in a fresh session."
 
@@ -59,5 +63,4 @@ Issue body `## Implementation plan` section per `_shared/handoff-artifact.md` (f
 - **Point-of-need reads**: Read `_shared/handoff-artifact.md` at step 8, `_shared/interviewing-rules.md` at step 5, `_shared/compound-on-exit.md` at step 10. Do not preload.
 - **Explicit approval**: Silence ≠ approval. Require direct confirmation.
 - **Exploration**: Time-box codebase reading to 3–5 tool calls, then ask focused question.
-
 - **NOTES.md**: Checkpoint before every spawn. See `Skill("orchestrator-rules")` § Progress tracking.
