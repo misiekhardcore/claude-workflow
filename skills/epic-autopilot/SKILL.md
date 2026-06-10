@@ -7,7 +7,7 @@ model: opus
 effort: high
 allowed-tools: Agent Bash Read TaskCreate TaskUpdate
 ---
-Autonomous epic-to-PR pipeline. Takes an epic issue or description and produces draft sub-PRs + epic PR with human gates at Stages 1–3, then autonomous execution through Stage 5.
+Autonomous epic-to-PR orchestrator. Takes an epic issue or description and produces draft sub-PRs + epic PR with human gates at Stages 1–3, then autonomous execution through Stage 5.
 
 ## Input
 
@@ -29,6 +29,13 @@ Invoke `Skill("notes-md")` for NOTES.md lifecycle (create → checkpoint → upd
 4. **Stage 3 — Per-sub-issue /define gate**: Read `references/gates.md` § Stage 3 at point of need. For each sub-issue without `## Implementation plan`, invoke `Skill("define")` with seed-brief. Require explicit user approval per sub-issue.
 5. **Stage 4 — Autonomous phase**: Read `references/autonomous-phase.md` at point of need. Create epic branch, compute dependency tiers (Kahn's algorithm, cycle breaking), dispatch per tier. For each sub-issue M, spawn `Agent("skills/implement/agents/implement-runner.md")` with comprehensive seed-brief (see § Worker Agents). Wait for tier settlement. After all tiers settle, create epic PR.
 6. **Stage 5 — Exit**: Print summary table to stdout. Invoke `Skill("compound")` for epic-level learnings (compound-on-exit). Merging is left to humans.
+
+**Key behaviors:**
+- Skip /discovery if epic has ≥3 acceptance criteria
+- Skip /define if epic already has implementation plan
+- Topologically sort sub-issues via Kahn's algorithm (with cycle breaking)
+- Dispatch tiers in parallel via Task sub-agents
+- Post epic PR with merge order instructions after all sub-tasks settle
 
 ## Worker Agents
 
@@ -56,7 +63,6 @@ Invoke `Skill("notes-md")` for NOTES.md lifecycle (create → checkpoint → upd
 | Autonomous Phase | Domain — sub-issue dispatch and epic PR flow | `references/autonomous-phase.md` |
 
 ## Rules
-
 - Require explicit approval at each stage gate; silence is not approval
 - User must not modify epic/sub-issue bodies during Stage 4
 - Branch names follow `feat/epic-<N>-sub-<M>` exactly
