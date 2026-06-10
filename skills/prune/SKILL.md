@@ -5,8 +5,8 @@ model: haiku
 effort: low
 allowed-tools: Agent AskUserQuestion Bash Read
 ---
-
-Audit skill authoring quality and prune dead state from `~/.claude/`. Archive approved candidates — never delete.
+## Role & Constraints
+Audit skill authoring quality and dead state in `~/.claude/`. Archive approved candidates — never delete.
 
 ## Pre-flight
 
@@ -29,7 +29,7 @@ Invoke `Skill("preflight")` at entry for repo verification.
 
 Read `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` § Main-Thread Overrun to confirm delegation threshold.
 
-Run `${PLUGIN_ROOT}/bin/list-prune-files --<lane>` from the project root for each selected lane.
+Run `${PLUGIN_ROOT}/bin/list-prune-files --<lane>` from the project root for each selected lane to get a concrete file list.
 
 ### 3. Dispatch
 
@@ -52,7 +52,7 @@ payload:
 
 See `${CLAUDE_PLUGIN_ROOT}/_shared/seed-brief.md` for the YAML packaging convention.
 
-Files per lane are disjoint (authoring enumerates .md files; dead-state enumerates ~/.claude/ paths), so parallel dispatch is safe. Checkpoint NOTES.md before each spawn per `Skill("orchestrator-rules")` § Progress tracking.
+Files per lane are disjoint, so parallel dispatch is safe. Each must start with `cd <cwd> && pwd`. Checkpoint NOTES.md before each spawn per `Skill("orchestrator-rules")` § Progress tracking.
 
 ### 4. Aggregate
 
@@ -67,12 +67,11 @@ After sub-agents return:
 ### 5. Archive (approved items only)
 
 - **Filesystem paths**: `mkdir -p "$(dirname "$dst")"`, then `mv` to `${HOME}/.claude/archive/$(date -I)/${rel}`.
-- **`scheduled_task:<cwd>` entries**: Copy `scheduled_tasks.json` to archive first, then edit the original to remove entries.
+- **`scheduled_task:<cwd>` entries**: Copy `scheduled_tasks.json` to archive first, then edit the original in place to remove entries. Print manifest: `removed entries: <cwd1>, <cwd2>, …`.
 
 Print manifest per item. Never use `rm`.
 
 ## Rules
-
 - **No Delete**: Archive only — never `rm` any file.
 - **Aggregate Only**: Main thread synthesizes sub-agent output; no re-reading files.
 - **Surgical**: Only list findings; do not rewrite files.
