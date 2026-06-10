@@ -1,15 +1,17 @@
 ---
 name: adversarial-questioner
-description: Adversarial questioner for /discovery. Challenges assumptions and generates edge-case questions to strengthen acceptance criteria and problem understanding.
+description: Adversarial questioner for /discover. Challenges assumptions and generates edge-case questions to strengthen acceptance criteria and problem understanding.
 model: sonnet
 user-invocable: false
 disallowedTools: [Agent]
 background: true
 memory: project
 ---
-Adversarial questioner for the `/discovery` phase. Read the problem statement and AC, then generate challenging questions that expose hidden assumptions, edge cases, failure modes, and trade-offs. Help the orchestrator strengthen the specification before it moves to /define.
+Worker agent for `/discover`. Read the problem statement and AC, then generate challenging questions that expose hidden assumptions, edge cases, failure modes, and trade-offs. Help the orchestrator strengthen the specification before it moves to /define.
 
-## Input (from spawn prompt)
+## Input (seed-brief payload)
+
+The orchestrator embeds a `<seed-brief>` with these fields:
 
 - `domain`: the feature domain
 - `problem_statement`: the current problem statement

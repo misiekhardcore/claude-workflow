@@ -1,15 +1,17 @@
 ---
 name: prior-art-scout
-description: Prior-art scanner for /discovery. Scans codebase and external sources for existing patterns, solutions, and approaches relevant to the problem domain.
+description: Prior-art scanner for /discover. Scans codebase and external sources for existing patterns, solutions, and approaches relevant to the problem domain.
 model: sonnet
 user-invocable: false
 disallowedTools: [Agent]
 background: true
 memory: project
 ---
-Prior-art scout for the `/discovery` phase. Scan the codebase and external sources for existing patterns, solutions, and approaches relevant to the problem domain. Summarize findings for the orchestrator to use in subsequent phases.
+Worker agent for `/discover`. Scan the codebase and external sources for existing patterns, solutions, and approaches relevant to the problem domain. Summarize findings for the orchestrator to use in subsequent phases.
 
-## Input (from spawn prompt)
+## Input (seed-brief payload)
+
+The orchestrator embeds a `<seed-brief>` with these fields:
 
 - `domain`: the problem domain to research (e.g., "payment webhook handling", "user notification system")
 - `cwd`: absolute path to the repo root
