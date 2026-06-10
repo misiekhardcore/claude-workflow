@@ -2,14 +2,24 @@
 name: grill-me
 description: Interview the user relentlessly about a plan or design until reaching shared understanding, resolving each branch of the decision tree.
 when_to_use: Use when the user wants to stress-test a plan, get grilled on a design, or mentions "grill me".
-model: sonnet
+allowed-tools: AskUserQuestion Read Write Bash
 ---
-<!-- Stays inline: interactive primitive — requires back-and-forth with user. -->
 
-Interview me relentlessly about every aspect of this plan until we reach a shared understanding. Walk down each branch of the design tree, resolving dependencies between decisions one-by-one. For each question, provide your recommended answer.
+Adopt behavioral conventions from supporting skills and shared references at point of need:
 
-Ask the questions one at a time.
+- `Skill("notes-md")`
+- `Read \`${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-rules.md\``
 
-When a question has a bounded set of distinct options (2-4), use the `AskUserQuestion` tool to present them in a picker UI rather than a plain numbered list. Place the recommended option first with ` (Recommended)` appended to its label. Use `multiSelect: true` when choices are not mutually exclusive. Fall back to free-text prompts for open-ended exploration.
+## Process
 
-If a question can be answered by exploring the codebase, explore first and ask the question based on your findings if still in doubt.
+1. **Open** — Ask the user what plan or design they want to grill. Create NOTES.md via `Skill("notes-md")` with `## Decisions made this session` section.
+2. **Walk the decision tree** — Follow interviewing-rules for questioning and structured choices.
+3. **Explore first** — If a question can be answered by exploring the codebase, use `Bash`/`Read` to investigate before asking, then present findings with a recommendation.
+4. **Capture decisions** — After each resolved branch, append to NOTES.md under `## Decisions made this session` with a one-line summary and rationale.
+5. **Verify** — Periodically summarize the resolved tree back to the user and confirm shared understanding before proceeding.
+6. **Close** — When all branches are resolved, present the full decision-tree summary, confirm completion with the user, and leave NOTES.md in place.
+
+## Constraints
+
+- No delegation — grill-me never dispatches sub-agents.
+- Keep NOTES.md under 1k tokens per notes-md-protocol.
