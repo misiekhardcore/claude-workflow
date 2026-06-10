@@ -4,6 +4,8 @@ description: Given a list of work units (each with an id and resource list), gro
 model: haiku
 user-invocable: false
 layer: 3
+context: fork
+agent: Explore
 ---
 ## Input
 

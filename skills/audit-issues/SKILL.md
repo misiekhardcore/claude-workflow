@@ -6,7 +6,6 @@ when_to_use: Use when auditing a GitHub repo's open issues for drift, broken ref
 argument-hint: "[owner/repo | #NN | owner/repo#NN]"
 model: sonnet
 allowed-tools: Bash Read
-context: fork
 ---
 ## Role & Constraints
 Audit open issues for drift. Product: Updated issues themselves (mutate on confirm).

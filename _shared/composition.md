@@ -4,9 +4,9 @@ Framework for orchestrating specialists and managing token/context budgets.
 
 ## Roles
 - **Orchestrator**: Phase lead. Spawns workers, coordinates, writes handoff. Model: `opus`.
-- **Runner**: Autonomous core of a Tier 2 skill. Receives input in spawn prompt, does the work, reports findings. Model: `sonnet`.
-- **Interactive Primitive**: Inline behavior (e.g., `/grill-me`). No team/handoff. Model: `sonnet`.
-- **Utility**: Maintenance (e.g., compound, prune). No seed-brief contract.
+- **Worker**: Background/isolated task execution. Receives input in spawn prompt, does the work, reports findings. Model: `sonnet` or `haiku`.
+- **Interaction**: Inline user-interaction behavior (e.g., `/grill-me`). No delegation. Model: `sonnet`.
+- **Protocol**: Behavioral rules adopted by calling agent, not spawned. No seed-brief contract.
 
 ## Composition Patterns
 - **Linear**: A → B → C (Strict dependency).
@@ -45,10 +45,10 @@ Every skill has a primary consumption contract. Callers must use the correct inv
 |-|-|-|-|-|
 |**Runner (autonomous)**|`Agent("skill/agents/runner.md")`|Isolated|None|`implement-runner`, `review-runner`|
 |**Worker (autonomous)**|`Agent("skill/agents/worker.md")`|Isolated|Parallel|`build-worker`, `reviewer-correctness`|
-|**Shell (interactive)**|`Skill("name")`|Caller's session|Full|`implement`, `build`, `review`|
-|**Forked (autonomous)**|`Skill("name")` + `context: fork`|Isolated|None|`compound`, `audit-issues`|
+|**Shell (interactive)**|`Skill("name")`|Caller's session|Full|`implement`, `build`, `review`, `audit-issues`, `find-skills`|
+|**Worker Skill**|`Skill("name")` + `context: fork`|Isolated|Task confirmations only|`compound`, `verify`, `scope-assessment`|
 
-> **Layer 3 skills** (`user-invocable: false`) are exclusively Autonomous — never `Skill()`-invoked.
+> **Protocol skills** (`user-invocable: false`) are adopted by the calling agent — never `Skill()`-invoked.
 
 ### Rules
 
