@@ -21,7 +21,6 @@ Received as `<seed-brief>` YAML at spawn time:
 |`scope`|string|Work units being planned|
 
 ### Output
-
 Structured report emitted to main thread:
 
 ```
