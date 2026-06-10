@@ -9,15 +9,17 @@ allowed-tools: Agent Bash Read TaskCreate TaskUpdate
 ---
 Orchestrate the single-issue ship pipeline. Take a GitHub issue number and drive it to a merged PR with clean local state — pausing only where human action is required (review, merge).
 
-## Input
+## Overview
 
-A single positive integer — the GitHub issue number to ship.
+**Input**: A single positive integer — the GitHub issue number to ship.
 
-## Team Shape
+**Output**:
+- Stage 0: Confirm repo and detect current state.
+- Stages 1–5: Read `references/stage-<stage>.md` for the active stage logic, pausing at human decision points (after define, after impl, after review, before merge, complete).
 
-Linear pipeline — sequential phases, no fan-out. See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for spawn cost models.
+**State machine**: Resume state machine in `references/detection.md` determines which stage to enter on each invocation based on issue/PR/branch state.
 
-## Process
+## Process Flow
 
 ### 0 — Detection
 
@@ -51,10 +53,11 @@ If PR merged: read `references/stage-5.md` at point of need. Invoke `Skill("comp
 |`wrap-up-runner`|`repo`, `branch`, `worktree_path`|Removal summary|
 
 ## Rules
-
 - Invoke `Skill("orchestrator-rules")` for CWD, delegation, no-autonomous-merge, seed-brief, and NOTES.md tracking.
 - All `Agent()` spawns include a comprehensive `<seed-brief>` block with `repo`, `branch`, `issue`, and `payload`.
 - `Skill()` calls to phase orchestrators include seed-brief handoff in spawn context.
 - Reference reads are point-of-need — per-stage, not preloaded.
 - Compound-on-exit: `Skill("compound")` on clean completion only. No invocation on abort or early exit.
+- **Loop-break**: In Stage 3, break if unresolved thread count non-zero and unchanged after one pass.
+- **Compound**: `/implement` invokes `/compound` at PR creation (implementation-time pass). Stage 3 re-invokes when all threads resolve for review-time learnings — two passes, no dedup needed.
 - No autonomous merge. Merging is always human.
