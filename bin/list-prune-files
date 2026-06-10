@@ -30,7 +30,7 @@ emit_authoring() {
   # Enumerate SKILL.md files annotated with their user-invocable status
   while IFS= read -r skill_file; do
     ui=$(grep -m1 '^user-invocable:' "$skill_file" | sed 's/^user-invocable: *//' | tr -d ' ')
-    echo "user-invocable:${ui}:${skill_file}"
+    echo "user-invocable:${ui:-not_present}:${skill_file}"
   done < <(find . -name "SKILL.md" -not -path "*/.git/*" -not -path "*/node_modules/*")
 
   find _shared -name "*.md" 2>/dev/null || true
