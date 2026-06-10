@@ -7,7 +7,7 @@ model: opus
 effort: high
 allowed-tools: Agent Bash Read TaskCreate TaskUpdate
 ---
-Autonomous epic-to-PR pipeline. Takes an epic issue or description and produces draft sub-PRs + epic PR with human gates at Stages 1–3, then autonomous execution through Stage 5.
+Autonomous epic-to-PR orchestrator. Takes an epic issue or description and produces draft sub-PRs + epic PR with human gates at Stages 1–3, then autonomous execution through Stage 5.
 
 ## Input
 
@@ -53,7 +53,6 @@ Invoke `Skill("notes-md")` for NOTES.md lifecycle (create → checkpoint → upd
 |Autonomous Phase|Domain — sub-issue dispatch and epic PR flow|`references/autonomous-phase.md`|
 
 ## Rules
-
 - Require explicit approval at each stage gate; silence is not approval
 - User must not modify epic/sub-issue bodies during Stage 4
 - Branch names follow `feat/epic-<N>-sub-<M>` exactly
