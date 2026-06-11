@@ -29,12 +29,6 @@ payload:
       category: <category>
 ```
 
-| Field | Description |
-|-------|-------------|
-| `cwd` | Absolute path to the worktree root |
-| `pr_number` | GitHub PR number |
-| `threads` | List of review thread objects: `{ id, file, line, comment, category }` |
-
 ## Process
 
 1. `cd <cwd> && pwd` — verify CWD before touching files.

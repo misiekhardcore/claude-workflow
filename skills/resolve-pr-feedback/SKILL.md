@@ -4,26 +4,17 @@ description: Process PR review feedback in bulk — triage, fix in parallel, and
 when_to_use: PR has review comments or given thread URL.
 argument-hint: "[thread-URL]"
 model: sonnet
-effort: high
 allowed-tools: Agent Bash Read
 ---
 Process PR feedback end-to-end: Triage → Fix (parallel) → Reply → Compound.
 
-Adopt `Skill("orchestrator-rules")` — use NOTES.md as progress ledger, checkpoint before every spawn,
-seed-brief every agent, and no autonomous merge. Read `${CLAUDE_PLUGIN_ROOT}/_shared/seed-brief.md`
-for seed-brief format and `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for parallel-dispatch cost model.
+Adopt `Skill("orchestrator-rules")` — use NOTES.md as progress ledger, checkpoint before every spawn, seed-brief every agent, and no autonomous merge. Read `${CLAUDE_PLUGIN_ROOT}/_shared/seed-brief.md` for seed-brief format and `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for parallel-dispatch cost model.
 
 ## Input
 
 - No argument: walk all unresolved threads on the current branch's PR via `gh pr view`.
 - PR URL: walk all unresolved threads on the PR via `gh pr view`.
 - Thread URL: extract `owner/repo/number` and filter to matching `databaseId`.
-
-## Worker Agent Inventory
-
-### fix-agent
-**File**: `agents/fix-agent.md`
-**Spawn**: `Agent("skills/resolve-pr-feedback/agents/fix-agent.md")` — one per disjoint file group, in parallel. See agent file for seed-brief I/O contract.
 
 ## Process
 
@@ -36,28 +27,24 @@ for seed-brief format and `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for par
 1. Classify each thread:
    - **Status**: `new` | `already-handled` (check diff).
    - **Category**: `error-handling` | `validation` | `type-safety` | `naming` | `performance` | `testing` | `security` | `docs` | `style` | `architecture`.
-2. Group by category → present triage summary to user; allow override.
-3. Map threads to files for conflict avoidance (no two agents on same file).
+2. Map threads to files and group by category → present triage summary to user; allow override.
 
 ### Phase 3 — Fix (Parallel per file group)
-1. Build seed-brief per file group from triage mapping.
-2. Checkpoint NOTES.md.
-3. Spawn one `Agent("skills/resolve-pr-feedback/agents/fix-agent.md")` per file group with seed-brief (see Worker Agent I/O contract above).
-4. Each fix-agent: read context → apply fix → verify → commit → report verdict.
+1. Group affected files into non-overlapping sets.
+2. Build seed-brief per file group from triage mapping.
+3. Checkpoint NOTES.md.
+4. Spawn one `Agent("skills/resolve-pr-feedback/agents/fix-agent.md")` per file group with seed-brief (see Worker Agent I/O contract above).
 5. After all return: run full test suite for regression check.
 6. Collect verdicts; update NOTES.md.
 
-### Phase 4 — Reply (main thread)
-1. Read `references/verdicts.md` for verdict/reply mapping and mutation rules.
-2. For each thread, draft reply based on verdict and commit SHA.
-3. Post replies via `gh api .../replies`.
-4. Resolve threads where verdict in `{fixed, fixed-differently, not-addressing}`.
-5. Verify: `gh pr view <N> --json reviewThreads` — confirm all resolved.
+### Phase 4 — Reply
+1. For each thread, draft reply based on verdict and commit SHA.
+2. Post replies via `gh api .../replies`.
+3. Resolve threads where verdict in `{fixed, fixed-differently, not-addressing}`.
+4. Verify: `gh pr view <N> --json reviewThreads` — confirm all resolved.
 
 ### Phase 5 — Compound
-After all phases complete cleanly: invoke `Skill("compound")` to capture session
-learnings. See `${CLAUDE_PLUGIN_ROOT}/_shared/compound-on-exit.md` — exactly once,
-clean completion only.
+After all phases complete cleanly: invoke `Skill("compound")` to capture session learnings. See `${CLAUDE_PLUGIN_ROOT}/_shared/compound-on-exit.md` — exactly once, clean completion only.
 
 ## Output
 Summary: total threads → counts per verdict → commits created → threads needing human attention.
@@ -67,5 +54,3 @@ Summary: total threads → counts per verdict → commits created → threads ne
 - Read full thread, not just last comment.
 - Flag fixes outside PR scope.
 - Each logical fix as separate commit referencing thread.
-- Checkpoint NOTES.md before every `Agent()` spawn (see orchestrator-rules § Progress tracking).
-- No `context: fork` — worker agents run as `Agent()` in isolated background sessions.
