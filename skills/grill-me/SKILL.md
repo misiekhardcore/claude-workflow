@@ -7,7 +7,7 @@ allowed-tools: AskUserQuestion Read Write Bash
 ---
 <!-- Interactive primitive — requires back-and-forth with user. -->
 
-Interview me relentlessly about every aspect of this plan until we reach a shared understanding. For each question, provide your recommended answer.
+Interview me relentlessly about every aspect of this plan until we reach a shared understanding, and there is no ambiguity. For each question, provide your recommended answer.
 
 Adopt `Skill("notes-md")` and read `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-rules.md` at point of need.
 
@@ -22,7 +22,6 @@ Adopt `Skill("notes-md")` and read `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-r
 
 ## Constraints
 
-- One question at a time.
 - No delegation — never dispatch sub-agents.
 - Require explicit user approval — never infer from silence.
 - Keep NOTES.md under 1k tokens; summarize stable decisions if it grows.
