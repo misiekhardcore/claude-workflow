@@ -22,12 +22,12 @@ default_branch_ref: abc123def
 </seed-brief>
 ```
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `repo` | string | GitHub `owner/repo` identifier. |
-| `issue_number` | string | GitHub issue number (quoted to preserve as string). |
-| `cwd` | string | Absolute path to local repo clone. Pre-verified by orchestrator. |
-| `default_branch_ref` | string | Commit SHA of the default branch (pre-fetched by orchestrator via `git fetch origin`). |
+|Field|Type|Description|
+|-|-|-|
+|`repo`|string|GitHub `owner/repo` identifier.|
+|`issue_number`|string|GitHub issue number (quoted to preserve as string).|
+|`cwd`|string|Absolute path to local repo clone. Pre-verified by orchestrator.|
+|`default_branch_ref`|string|Commit SHA of the default branch (pre-fetched by orchestrator via `git fetch origin`).|
 
 ## Process
 
