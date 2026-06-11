@@ -14,16 +14,16 @@ Invoke `Skill("preflight")` at entry for repo verification.
 
 ## Lanes
 
-1. **Authoring** — Checks CLAUDE.md / AGENTS.md / SKILL.md for structural quality.
-2. **Dead-state** — Audits global ~/.claude/ for dead project dirs, orphan agents, stale plugin caches, stale scheduled tasks, and sub-agent plan artifacts.
+1. **Authoring** — Checks `CLAUDE.md` / `AGENTS.md` / `SKILL.md` for structural quality.
+2. **Dead-state** — Audits global `~/.claude/` for dead project dirs, orphan agents, stale plugin caches, stale scheduled tasks, and sub-agent plan artifacts.
 
 ## Process
 
 ### 1. Lane selection
 
 `AskUserQuestion` with `header: "Lanes"`, `multiSelect: true`, question: "Which audit lanes should I run?". Pre-select both. Options:
-- **Authoring** — check CLAUDE.md / AGENTS.md / SKILL.md for structural quality
-- **Dead-state** — flag dead project dirs, orphan agents, stale plugin caches, stale schedules, and sub-agent artifacts in ~/.claude/
+- **Authoring** — check `CLAUDE.md` / `AGENTS.md` / `SKILL.md` for structural quality
+- **Dead-state** — flag dead project dirs, orphan agents, stale plugin caches, stale schedules, and sub-agent artifacts in `~/.claude/`
 
 ### 2. Enumerate
 
@@ -72,7 +72,6 @@ After sub-agents return:
 Print manifest per item.
 
 ## Rules
-
 - **No Delete**: Archive only — never `rm` any file.
 - **Aggregate Only**: Main thread synthesizes sub-agent output; no re-reading files.
 - **Surgical**: Only list findings; do not rewrite files.
