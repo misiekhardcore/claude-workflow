@@ -19,39 +19,11 @@ for seed-brief format and `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for par
 - PR URL: walk all unresolved threads on the PR via `gh pr view`.
 - Thread URL: extract `owner/repo/number` and filter to matching `databaseId`.
 
-## Worker Agent
+## Worker Agent Inventory
 
 ### fix-agent
 **File**: `agents/fix-agent.md`
-**Role**: Reads one file-group of review threads, applies fixes, verifies, commits, emits verdicts.
-**Spawn**: `Agent("skills/resolve-pr-feedback/agents/fix-agent.md")` — one per disjoint file group, in parallel.
-**Input (seed-brief)**:
-```yaml
-<seed-brief>
-repo: <owner/repo>
-branch: <branch-name>
-payload:
-  task: "fix-review-threads"
-  cwd: <absolute-worktree-path>
-  pr_number: <N>
-  threads:
-    - id: <thread-id>
-      file: <path>
-      line: <N>
-      comment: "<comment text>"
-      category: <category>
-</seed-brief>
-```
-**Output** (YAML block printed to stdout):
-```yaml
-threads:
-  - id: <thread-id>
-    verdict: fixed | already-handled | needs-human
-    file: <path>
-    line: <N>
-    commit: <sha or null>
-    note: <reason if needs-human>
-```
+**Spawn**: `Agent("skills/resolve-pr-feedback/agents/fix-agent.md")` — one per disjoint file group, in parallel. See agent file for seed-brief I/O contract.
 
 ## Process
 
