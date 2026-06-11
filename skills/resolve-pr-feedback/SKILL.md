@@ -68,10 +68,11 @@ threads:
 
 ### Phase 3 — Fix (Parallel per file group)
 1. Build seed-brief per file group from triage mapping.
-2. Checkpoint NOTES.md; spawn fix-agents in parallel.
-3. Each fix-agent: read context → apply fix → verify → commit → report verdict.
-4. After all return: run full test suite for regression check.
-5. Collect verdicts; update NOTES.md.
+2. Checkpoint NOTES.md.
+3. Spawn one `Agent("skills/resolve-pr-feedback/agents/fix-agent.md")` per file group with seed-brief (see Worker Agent I/O contract above).
+4. Each fix-agent: read context → apply fix → verify → commit → report verdict.
+5. After all return: run full test suite for regression check.
+6. Collect verdicts; update NOTES.md.
 
 ### Phase 4 — Reply (main thread)
 1. Read `references/verdicts.md` for verdict/reply mapping and mutation rules.
