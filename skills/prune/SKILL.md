@@ -5,7 +5,6 @@ model: haiku
 effort: low
 allowed-tools: Agent AskUserQuestion Bash Read
 ---
-
 Audit skill authoring quality and prune dead state from `~/.claude/`. Archive approved candidates — never delete.
 
 ## Pre-flight
@@ -69,7 +68,7 @@ After sub-agents return:
 - **Filesystem paths**: `mkdir -p "$(dirname "$dst")"`, then `mv` to `${HOME}/.claude/archive/$(date -I)/${rel}`.
 - **`scheduled_task:<cwd>` entries**: Copy `scheduled_tasks.json` to archive first, then edit the original in place to remove entries. Print manifest: `removed entries: <cwd1>, <cwd2>, …`.
 
-Print manifest per item. Never use `rm`.
+Print manifest per item.
 
 ## Rules
 

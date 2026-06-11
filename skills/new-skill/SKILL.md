@@ -6,7 +6,6 @@ model: sonnet
 effort: low
 allowed-tools: Read Write Bash
 ---
-
 Maintenance skill that interviews the author to produce a conformant SKILL.md. Runs entirely in main context; never uses `context: fork`. One question at a time.
 
 ## Protocol skills
