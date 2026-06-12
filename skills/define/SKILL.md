@@ -7,8 +7,7 @@ model: opus
 effort: high
 allowed-tools: Agent Bash Read
 ---
-## Role & Constraints
-Phase Lead. Goal: Transform an approved issue into a concrete implementation plan (architecture + design). Orchestrate sub-skills, discuss with user — delegate domain work, never duplicate it.
+Lead definition phase. Transform an approved issue into a concrete implementation plan (architecture + design).
 
 Adopt `Skill("orchestrator-rules")` for checkpoint, NOTES.md, and seed-brief conventions.
 
@@ -23,8 +22,8 @@ Dispatch workers sequentially per group:
 - **`Skill("design")`** (layer 2, sub-issue TBD) — per group with arch decisions, if visual work. Response in chat.
 
 For high-risk plans (security, payments, arch-changing scope): after architecture + design, spawn in parallel:
-  - `Agent("define/agents/critique-agent.md")` with sonnet
-  - `Agent("define/agents/critique-agent.md")` with haiku (second independent pass, two perspectives)
+  - `Agent("define/agents/critique-agent.md")` with `sonnet`
+  - `Agent("define/agents/critique-agent.md")` with `haiku` (second independent pass, two perspectives)
 Each with seed-brief containing `issue`, `architecture_decisions`, `design_decisions`, and `scope`. Merge findings from both before presenting to user.
 
 Each `Agent()` spawn includes a `<seed-brief>` YAML block per `_shared/seed-brief.md`. See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for spawn cost models.
@@ -52,8 +51,5 @@ Issue body `## Implementation plan` section per `_shared/handoff-artifact.md` (f
 
 ## Rules
 - **Delegate, don't duplicate**: Sub-skills own their domain work. Do not produce architecture/design output yourself.
-- **Seed-brief every Agent()**: All agent spawns include a `<seed-brief>` YAML block per `_shared/seed-brief.md`.
-- **Point-of-need reads**: Read `_shared/handoff-artifact.md` at step 8, `_shared/interviewing-rules.md` at step 5, `_shared/compound-on-exit.md` at step 10. Do not preload.
 - **Explicit approval**: Silence ≠ approval. Require direct confirmation.
 - **Exploration**: Time-box codebase reading to 3–5 tool calls, then ask focused question.
-- **NOTES.md**: Checkpoint before every spawn. See `Skill("orchestrator-rules")` § Progress tracking.

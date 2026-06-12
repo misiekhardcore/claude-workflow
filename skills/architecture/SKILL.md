@@ -7,7 +7,6 @@ effort: high
 allowed-tools: Agent Bash Read WebSearch WebFetch
 user-invocable: true
 ---
-## Role & Constraints
 Lead architecture decisions. Goal: Produce architectural decisions (components, data flow, APIs, dependencies). If not specify otherwise, hands off via GitHub issue body under `## Implementation plan`.
 
 ## I/O

@@ -7,10 +7,7 @@ user-invocable: true
 ---
 <!-- Stays inline: interactive — requires back-and-forth with user. -->
 
-Lead requirements team. Transforms problem statements into testable, non-vague acceptance criteria. Hands off via GitHub issue body under `## Requirements`.
-
-## Role & Constraints
-Goal: Transform problem statements into testable, non-vague acceptance criteria. Produces testable AC. Hands off via GitHub issue body under `## Requirements`.
+Lead requirements team. Transforms problem statements into testable, non-vague acceptance criteria. Produces testable AC. Hands off via GitHub issue body under `## Requirements`.
 
 ## I/O
 - **Input**: Problem statement (from /describe) or user description.

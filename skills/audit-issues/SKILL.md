@@ -6,7 +6,6 @@ argument-hint: "[owner/repo | #NN | owner/repo#NN]"
 model: sonnet
 allowed-tools: Agent Bash Read
 ---
-## Role & Constraints
 Audit open issues for drift. Product: Updated issues themselves (mutate on confirm).
 Read-only default: mutate only after explicit per-issue confirmation.
 

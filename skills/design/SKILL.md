@@ -6,7 +6,6 @@ model: sonnet
 allowed-tools: Agent Bash Read
 user-invocable: true
 ---
-## Role & Constraints
 Lead UI/UX design decisions. Goal: Produce visual and interaction design that fits existing systems. If not specify otherwise, hands off via GitHub issue body under `## Implementation plan`.
 
 ## I/O
