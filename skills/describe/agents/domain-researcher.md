@@ -8,7 +8,9 @@ background: true
 ---
 Domain researcher for the `/describe` phase. Scan the codebase to extract architecture patterns, data models, API contracts, and existing conventions relevant to the target domain.
 
-## Input (from spawn prompt)
+## Seed-Brief I/O Contract
+
+### Input
 
 - `domain`: the feature domain or component to research (e.g., "auth system", "payment service")
 - `cwd`: absolute path to the repo root

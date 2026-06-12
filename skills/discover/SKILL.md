@@ -9,7 +9,7 @@ allowed-tools: Agent Bash Read
 ---
 ## Role & Constraints
 
-Transform vague ideas into well-specified GitHub issues ready for architecture and implementation.
+Lead discovery phase. Transform vague ideas into well-specified GitHub issues ready for architecture and implementation. Pure orchestrator — delegates all domain work to sub-skills.
 
 Invoke `Skill("orchestrator-rules")` — adopt CWD verification, delegation, seed-brief contract, NOTES.md progress tracking.
 
@@ -17,85 +17,59 @@ Invoke `Skill("orchestrator-rules")` — adopt CWD verification, delegation, see
 
 ### 1. Ingestion
 
-Read issue (problem statement + AC). If no issue exists, elicit a problem statement from the user.
+Read issue (problem statement + AC). If no issue exists, elicit a one-sentence problem summary from the user.
 
 Read `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-rules.md` — adopt atomic questions, rigor, visual-first, explicit approval.
 
-### 2. Scope decomposition
+### 2. Init NOTES.md
 
-Derive work units from the problem statement. Invoke `Skill("scope-assessment")` with the work units list. No preset agent count — scope-assessment outputs N agents based on resource conflicts. Each output agent entry becomes a work group.
+Create `.claude/NOTES.md` with task list, and next-action per `Skill("orchestrator-rules")`.
 
-### 3. Per-group delegation (sequential by group)
+### 3. Problem exploration
 
-For each group from step 2, run 3a–3c before moving to the next group.
+Invoke `Skill("describe")` with seed-brief containing the problem statement. Describe owns the full user conversation — research, PPT grilling, visualization, problem statement. Returns structured understanding (What, Why, Who, Boundaries, Prior art).
 
-**3a — Prior-art research**: Dispatch `Agent("discover/agents/prior-art-scout.md")` with a seed-brief containing the work unit context, repo, branch, and `cwd`. Spawn parallel sub-agents if multiple work units are disjoint. Collect findings.
+### 4. Acceptance criteria
 
-**3a-bis — Risk analysis** (high-risk domains only: security, payments, arch-changing): Spawn in parallel:
-  - `Agent("discover/agents/flow-analyst.md")` with seed-brief containing domain, problem_statement, AC, cwd
-  - `Agent("discover/agents/adversarial-questioner.md")` with seed-brief containing domain, problem_statement, AC
-Collect findings before proceeding to 3b.
+Invoke `Skill("specify")` with seed-brief containing the problem statement and prior-art findings from describe. Specify derives testable AC via grill-me passes. Returns GIVEN/WHEN/THEN scenarios.
 
-**3b — Problem exploration**: Invoke `Skill("describe")` with the research brief in payload. Interactive — PPT, visualization, problem statement validation. Response in chat, not in GitHub issue.
+### 5. Review
 
-**3c — Acceptance criteria** (complex groups only): Invoke `Skill("specify")` to derive AC from the problem statement. Response in chat, not in GitHub issue.
+Verify describe and specify covered all AC. If gaps found, re-delegate. Iterate until explicit user approval.
 
-### 4. Review & decision
+### 6. Synthesize
 
-Verify all groups have a problem statement and AC. If multiple approaches exist, present to user for selection. Re-iterate until the problem is fully understood and the user explicitly approves.
+Combine output into a cohesive GitHub issue body:
+- **Preamble**: What, Why, Who (from describe).
+- **`## Requirements`**: Acceptance criteria (from specify) → Constraints → Prior decisions → Evidence → Open questions.
 
-### 5. Synthesize
-
-Combine all group outputs into a cohesive GitHub issue body. Problem statement concise; AC specific and testable.
-
-### 6. Handoff
+### 7. Handoff
 
 Invoke `Skill("preflight")`. Suppress branch line: true.
 
 Read `${CLAUDE_PLUGIN_ROOT}/_shared/handoff-artifact.md` at this point (point-of-need) — do not preload.
 
-Create the issue via `gh issue`. Structure:
-- **Preamble**: What, Why, Who (from `/describe`).
-- **`## Requirements`**: Acceptance criteria → Constraints → Prior decisions (optional) → Evidence (optional) → Open questions (optional).
+If issue exists, update the body. Otherwise create via `gh issue`.
 
-### 7. Sign-off
+### 8. Sign-off
 
 Require explicit user approval.
 
-### 8. Compound on exit
+### 9. Compound on exit
 
 Read `${CLAUDE_PLUGIN_ROOT}/_shared/compound-on-exit.md`. Invoke `Skill("compound")` exactly once on clean completion. Then instruct user: "Start `/implement` in a fresh session."
-
-## Worker Agent Inventory
-
-### `prior-art-scout`
-[`agents/prior-art-scout.md`](agents/prior-art-scout.md)
-- **Role**: Scan codebase + external sources for existing patterns.
-- **I/O contract**: `## Seed-Brief I/O Contract` in agent file.
-
-### `flow-analyst`
-[`agents/flow-analyst.md`](agents/flow-analyst.md)
-- **Role**: Data-flow, security, auth analysis for high-risk domains.
-- **I/O contract**: `## Seed-Brief I/O Contract` in agent file.
-
-### `adversarial-questioner`
-[`agents/adversarial-questioner.md`](agents/adversarial-questioner.md)
-- **Role**: Challenge assumptions, generate edge-case questions.
-- **I/O contract**: `## Seed-Brief I/O Contract` in agent file.
-
-All Agent() spawns include a `<seed-brief>` with `repo`, `branch`, and `payload` per `_shared/seed-brief.md`.
 
 ## Sub-skill classification
 
 |Skill|Contract|Invocation|Classification|
 |-|-|-|-|
-|`/describe`|Shell (interactive) — user must be present for PPT, visualization, validation|`Skill("describe")`|Layer 2|
-|`/specify`|Shell (interactive) — user must be present for grill-me passes|`Skill("specify")`|Layer 2|
+|`/describe`|Shell (interactive) — user conversation lead: research, PPT, visualization, problem statement|`Skill("describe")`|Layer 2|
+|`/specify`|Shell (interactive) — AC derivation via grill-me passes|`Skill("specify")`|Layer 2|
 
 ## Rules
 
-- **Delegate, don't duplicate**: Sub-skills own their domain. Do not research or produce describe/specify output yourself.
+- **Delegate, don't duplicate**: Sub-skills own their domain. Do not research, grill, or produce describe/specify output yourself.
 - **Explicit approval**: Partial feedback ≠ approval. Require direct "Yes/Approved".
 - **Persistence**: Prior-art findings persisted in Prior decisions / Evidence fields.
 - **Traceability**: Every feature gets one issue; sub-issues use proper GitHub relationships.
-- **Point-of-need reads**: Load `_shared/handoff-artifact.md` at step 6, `_shared/compound-on-exit.md` at step 8. Do not preload.
+- **Point-of-need reads**: Load `_shared/handoff-artifact.md` at step 7, `_shared/compound-on-exit.md` at step 9. Do not preload.

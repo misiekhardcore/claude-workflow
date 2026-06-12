@@ -8,7 +8,9 @@ background: true
 ---
 Flow analyst for the `/describe` phase. Map control flow, error paths, and failure modes for the target domain. Activated only for high-risk domains (payment, auth, data migration).
 
-## Input (from spawn prompt)
+## Seed-Brief I/O Contract
+
+### Input
 
 - `domain`: the feature domain to analyze
 - `cwd`: absolute path to the repo root
