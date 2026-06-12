@@ -25,7 +25,7 @@ Invoke `Skill("notes-md")` for NOTES.md lifecycle (create → checkpoint → upd
 
 1. **Stage 0 — Resume detection**: Read `references/detection.md` at point of need to detect prior state and determine entry stage.
 2. **Stage 1 — Discovery gate**: Read `references/gates.md` § Stage 1 at point of need. If epic has ≥3 AC, skip to Stage 2. Otherwise invoke `Skill("discovery")` with seed-brief containing the description. Require explicit user approval.
-3. **Stage 2 — Epic-level /define gate**: Read `references/gates.md` § Stage 2 at point of need. Invoke `Skill("define")` with seed-brief containing epic issue and AC. Require explicit user approval. If ≤1 sub-issue, invoke `Skill("implement")` directly and exit.
+3. **Stage 2 — Epic-level /define gate**: Read `references/gates.md` § Stage 2 at point of need. If `## Implementation plan` exists in epic issue body, skip to Stage 3. Otherwise invoke `Skill("define")` with seed-brief containing epic issue and AC. Require explicit user approval. If ≤1 sub-issue, invoke `Skill("implement")` directly and exit.
 4. **Stage 3 — Per-sub-issue /define gate**: Read `references/gates.md` § Stage 3 at point of need. For each sub-issue without `## Implementation plan`, invoke `Skill("define")` with seed-brief. Require explicit user approval per sub-issue.
 5. **Stage 4 — Autonomous phase**: Read `references/autonomous-phase.md` at point of need. Create epic branch, compute dependency tiers (Kahn's algorithm, cycle breaking), dispatch per tier. For each sub-issue M, spawn `Agent("skills/implement/agents/implement-runner.md")` with comprehensive seed-brief (see § Worker Agents). Wait for tier settlement. After all tiers settle, create epic PR.
 6. **Stage 5 — Exit**: Print summary table to stdout. Invoke `Skill("compound")` for epic-level learnings (compound-on-exit). Merging is left to humans.
@@ -37,21 +37,11 @@ Invoke `Skill("notes-md")` for NOTES.md lifecycle (create → checkpoint → upd
 - Dispatch tiers in parallel via Task sub-agents
 - Post epic PR with merge order instructions after all sub-tasks settle
 
-## Worker Agents
+## Worker Agent Inventory
 
 ### implement-runner
 - **File**: `skills/implement/agents/implement-runner.md`
-- **Input** (seed-brief passed at spawn):
-  ```
-  <seed-brief>
-  repo: owner/repo
-  branch: feat/epic-<N>-sub-<M>
-  issue: <M>
-  payload:
-    prior_art: "Sub-issue #<M>'s ## Implementation plan (architecture and design decisions from /define)"
-    open_questions: "<unresolved constraints from /define or empty>"
-  </seed-brief>
-  ```
+- **Contract**: See `## Seed-Brief I/O Contract` in the agent file.
 - **Output**: Draft PR on branch `feat/epic-<N>-sub-<M>` (clean or exhausted-accepted), or FAILED after 2 retries.
 
 ## Sub-skills (epic-autopilot owned)
