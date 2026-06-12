@@ -9,7 +9,7 @@ memory: project
 ---
 Worker agent for `/discover`. Scan the codebase and external sources for existing patterns, solutions, and approaches relevant to the problem domain. Summarize findings for the orchestrator to use in subsequent phases.
 
-## Input (seed-brief payload)
+## Seed-Brief I/O Contract
 
 The orchestrator embeds a `<seed-brief>` with these fields:
 

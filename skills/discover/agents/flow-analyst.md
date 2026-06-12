@@ -9,7 +9,7 @@ memory: project
 ---
 Worker agent for `/discover`. Analyze data flow, security pathways, authentication patterns, and payment/information flows for the target domain. Identify security boundaries, trust zones, and potential vulnerabilities.
 
-## Input (seed-brief payload)
+## Seed-Brief I/O Contract
 
 The orchestrator embeds a `<seed-brief>` with these fields:
 

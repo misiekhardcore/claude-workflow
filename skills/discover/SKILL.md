@@ -31,6 +31,11 @@ For each group from step 2, run 3a–3c before moving to the next group.
 
 **3a — Prior-art research**: Dispatch `Agent("discover/agents/prior-art-scout.md")` with a seed-brief containing the work unit context, repo, branch, and `cwd`. Spawn parallel sub-agents if multiple work units are disjoint. Collect findings.
 
+**3a-bis — Risk analysis** (high-risk domains only: security, payments, arch-changing): Spawn in parallel:
+  - `Agent("discover/agents/flow-analyst.md")` with seed-brief containing domain, problem_statement, AC, cwd
+  - `Agent("discover/agents/adversarial-questioner.md")` with seed-brief containing domain, problem_statement, AC
+Collect findings before proceeding to 3b.
+
 **3b — Problem exploration**: Invoke `Skill("describe")` with the research brief in payload. Interactive — PPT, visualization, problem statement validation. Response in chat, not in GitHub issue.
 
 **3c — Acceptance criteria** (complex groups only): Invoke `Skill("specify")` to derive AC from the problem statement. Response in chat, not in GitHub issue.
@@ -61,22 +66,31 @@ Require explicit user approval.
 
 Read `${CLAUDE_PLUGIN_ROOT}/_shared/compound-on-exit.md`. Invoke `Skill("compound")` exactly once on clean completion. Then instruct user: "Start `/implement` in a fresh session."
 
-## Worker agents
+## Worker Agent Inventory
 
-|Agent|Role|I/O contract|
-|-|-|-|
-|`prior-art-scout`|Scan codebase + external sources for existing patterns|`agents/prior-art-scout.md`|
-|`flow-analyst`|Data-flow, security, auth analysis for high-risk domains|`agents/flow-analyst.md`|
-|`adversarial-questioner`|Challenge assumptions, generate edge-case questions|`agents/adversarial-questioner.md`|
+### `prior-art-scout`
+[`agents/prior-art-scout.md`](agents/prior-art-scout.md)
+- **Role**: Scan codebase + external sources for existing patterns.
+- **I/O contract**: `## Seed-Brief I/O Contract` in agent file.
+
+### `flow-analyst`
+[`agents/flow-analyst.md`](agents/flow-analyst.md)
+- **Role**: Data-flow, security, auth analysis for high-risk domains.
+- **I/O contract**: `## Seed-Brief I/O Contract` in agent file.
+
+### `adversarial-questioner`
+[`agents/adversarial-questioner.md`](agents/adversarial-questioner.md)
+- **Role**: Challenge assumptions, generate edge-case questions.
+- **I/O contract**: `## Seed-Brief I/O Contract` in agent file.
 
 All Agent() spawns include a `<seed-brief>` with `repo`, `branch`, and `payload` per `_shared/seed-brief.md`.
 
 ## Sub-skill classification
 
-|Skill|Contract|Invocation|
-|-|-|-|
-|`/describe`|Shell (interactive) — user must be present for PPT, visualization, validation|`Skill("describe")`|
-|`/specify`|Shell (interactive) — user must be present for grill-me passes|`Skill("specify")`|
+|Skill|Contract|Invocation|Classification|
+|-|-|-|-|
+|`/describe`|Shell (interactive) — user must be present for PPT, visualization, validation|`Skill("describe")`|Layer 2|
+|`/specify`|Shell (interactive) — user must be present for grill-me passes|`Skill("specify")`|Layer 2|
 
 ## Rules
 

@@ -9,7 +9,7 @@ memory: project
 ---
 Worker agent for `/discover`. Read the problem statement and AC, then generate challenging questions that expose hidden assumptions, edge cases, failure modes, and trade-offs. Help the orchestrator strengthen the specification before it moves to /define.
 
-## Input (seed-brief payload)
+## Seed-Brief I/O Contract
 
 The orchestrator embeds a `<seed-brief>` with these fields:
 
