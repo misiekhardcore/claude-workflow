@@ -17,7 +17,7 @@ Read `references/scope.md` for work-unit types.
 
 ### 1. Ingestion
 
-Read issue body with acceptance criteria from /discover. Build work-unit list for scope-assessment. Reference-read issue on demand throughout.
+Read issue body with acceptance criteria. Build work-unit list for scope-assessment. Reference-read issue on demand throughout.
 
 ### 2. Init NOTES.md
 
@@ -30,8 +30,8 @@ Invoke `Skill("scope-assessment")` with work units (one per distinct module or s
 ### 4. Architecture & Design
 
 Dispatch workers sequentially per group:
-- **`Skill("architecture")`** (layer 2, sub-issue TBD) — per group with issue + AC. Response in chat.
-- **`Skill("design")`** (layer 2, sub-issue TBD) — per group with arch decisions, if visual work. Response in chat.
+- **`Skill("architecture")`** (`sonnet`) — per group with issue + AC. Response in chat.
+- **`Skill("design")`** (`sonnet`) — per group with arch decisions, if visual work. Response in chat.
 
 Checkpoint NOTES.md before each spawn; update on return. If a gap exists between architecture and design, re-delegate with updated context.
 

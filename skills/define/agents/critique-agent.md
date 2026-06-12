@@ -36,8 +36,6 @@ Recommendations: <prioritized list>
 
 ## Rules
 
-- Read only. No writes to issue, files, or git.
-- One independent pass per spawn. Orchestrator may spawn multiple instances in parallel for diverse model perspectives.
-- Spawned by orchestrator for high-risk plans only.
+- Read only.
 - Be constructive — identify problems AND suggest solutions.
 - Focus on structural issues, not style preferences.

@@ -3,7 +3,7 @@ name: issue-auditor
 description: Single-issue auditor for /audit-issues. Runs detectors against one GitHub issue and returns a structured findings report. Spawned in parallel — one per issue.
 model: sonnet
 user-invocable: false
-disallowedTools: [Agent, AskUserQuestion]
+disallowedTools: Agent AskUserQuestion Write Edit
 background: true
 memory: project
 ---
@@ -59,7 +59,7 @@ default_branch_ref: abc123def
 
 ## Rules
 
-- Read only — no mutations.
+- Read only.
 - No counter = `unverifiable`, not `stale`. Never invent evidence.
 - One LLM extraction pass per issue — do not re-read files for additional checks.
 - Return findings even if verdict is `valid` (empty `findings` array).
