@@ -28,12 +28,12 @@ Pick the lightest path that fits the task:
 |Size|Path|
 |-|-|
 |Trivial fix|`/implement` directly|
-|Medium feature|`/discovery` → `/implement`|
-|Large feature / epic|`/discovery` → `/define` → `/implement`|
+|Medium feature|`/discover` → `/implement`|
+|Large feature / epic|`/discover` → `/define` → `/implement`|
 
 Building blocks: `/describe`, `/specify`, `/architecture`, `/design`, `/build`, `/review`, `/verify`, `/grill-me`, `/wrap-up`, `/prune`, `/compound`. For the full lifecycle see `${CLAUDE_PLUGIN_ROOT}/docs/workflow.md`.
 
-During `/define` or `/discovery` exploration: time-box codebase reading to 3–5 tool calls, then ask the user a focused question.
+During `/define` or `/discover` exploration: time-box codebase reading to 3–5 tool calls, then ask the user a focused question.
 
 ## Architecture
 
