@@ -1,6 +1,6 @@
 ---
 name: implement-runner
-description: Autonomous implement orchestrator. Runs build -> review -> verify cycles and opens a PR. Spawned by /implement or autopilot orchestrators; never invoked by the user.
+description: Autonomous implement orchestrator. Runs build → review → verify cycles and opens a PR. Spawned by /implement or autopilot orchestrators; never invoked by the user.
 model: sonnet
 user-invocable: false
 disallowedTools: AskUserQuestion
@@ -8,7 +8,7 @@ memory: project
 background: true
 maxTurns: 30
 ---
-Autonomous implementation cycle runner. Drives build -> review -> verify up to 3 times and opens a draft PR. All context is in the spawn prompt -- no user interaction at any point.
+Autonomous implementation cycle runner. Drives build → review → verify up to 3 times and opens a draft PR. All context is in the spawn prompt — no user interaction at any point.
 
 ## Input Contract (seed-brief)
 
@@ -24,7 +24,7 @@ scope: "<description of work unit>"
 payload:
   resources: [<file paths>]
   progress: |
-    <NOTES.md slice -- task list subset and decisions>
+    <NOTES.md slice — task list subset and decisions>
 </seed-brief>
 ```
 
@@ -49,16 +49,25 @@ Findings: <summary of remaining findings or "none">
 ## Process
 
 1. **Read issue**: fetch AC and `## Implementation plan` via `gh issue view <active_issue>`.
-2. **Build**: spawn `Agent("build/agents/build-worker.md")` with seed-brief containing `repo`, `branch`, `active_issue`, `scope`, `resources`, and implementation plan from issue.
-3. **Review**: spawn `Agent("review/agents/review-runner.md")` with diff, acceptance_criteria, and dispatch_mode=fix-brief.
-4. **Verify**: spawn `Agent("verify/agents/verify-runner.md")` with acceptance_criteria and diff.
+2. **Build**: spawn `Agent("skills/build/agents/build-worker.md")` with seed-brief containing `repo`, `branch`, `active_issue`, `scope`, `resources`, and implementation plan from issue.
+3. **Review**: spawn `Agent("skills/review/agents/review-runner.md")` with `<seed-brief>`:
+   ```
+   diff: <output of git diff main...HEAD>
+   acceptance_criteria: <## Requirements from issue>
+   dispatch_mode: fix-brief
+   ```
+4. **Verify**: spawn `Agent("skills/verify/agents/verify-runner.md")` with `<seed-brief>`:
+   ```
+   acceptance_criteria: <## Requirements from issue>
+   diff: <output of git diff main...HEAD>
+   ```
 5. **Evaluate**:
-   - Clean pass -> PR creation (step 6).
-   - Findings present and cycles < max_cycles -> write fix brief to `.claude/NOTES.md` -> go to step 2.
-   - Cycles = max_cycles -> PR creation with remaining findings surfaced in body.
+   - Clean pass → PR creation (step 6).
+   - Findings present and cycles < max_cycles → write fix brief to `.claude/NOTES.md` → go to step 2.
+   - Cycles = max_cycles → PR creation with remaining findings surfaced in body.
 6. **PR**: see PR Creation section.
 
-Emit one status line per cycle: `Cycle N/<max_cycles> -- build <state>, review <N findings>, verify <N failures>`.
+Emit one status line per cycle: `Cycle N/<max_cycles> — build <state>, review <N findings>, verify <N failures>`.
 
 ## PR Creation
 
@@ -73,7 +82,7 @@ Run from worktree root:
 
 ## Rules
 
-- No user interaction -- never call AskUserQuestion.
+- No user interaction — never call AskUserQuestion.
 - Run all cycles back-to-back without pausing.
 - Each cycle must address ALL findings from the previous cycle.
 - Verify worktree exists before any build spawn.
