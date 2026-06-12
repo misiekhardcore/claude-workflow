@@ -19,8 +19,8 @@ Issue number with acceptance criteria from /discover. Read body at entry; refere
 Invoke `Skill("scope-assessment")` with work units (one per distinct module or sub-issue). Receive agent plan — one agent per disjoint group. No preset agent count; width matches scope.
 
 Dispatch workers sequentially per group:
-- **`Skill("architecture")`** (layer 2) — per group with issue + AC. Response in chat.
-- **`Skill("design")`** (layer 2) — per group with arch decisions, if visual work. Response in chat.
+- **`Skill("architecture")`** (layer 2, sub-issue TBD) — per group with issue + AC. Response in chat.
+- **`Skill("design")`** (layer 2, sub-issue TBD) — per group with arch decisions, if visual work. Response in chat.
 
 For high-risk plans (security, payments, arch-changing scope): after architecture + design, spawn in parallel:
   - `Agent("define/agents/critique-agent.md")` with sonnet
@@ -59,7 +59,7 @@ Issue body `## Implementation plan` section per `_shared/handoff-artifact.md` (f
 
 ## Rules
 - **Delegate, don't duplicate**: Sub-skills own their domain work. Do not produce architecture/design output yourself.
-- **Seed-brief every Agent()**: All agent spawns include `<seed-brief>` with repo, branch, payload. See `_shared/seed-brief.md`.
+- **Seed-brief every Agent()**: All agent spawns include a \`<seed-brief>\` YAML block per \`_shared/seed-brief.md\`.
 - **Point-of-need reads**: Read `_shared/handoff-artifact.md` at step 8, `_shared/interviewing-rules.md` at step 5, `_shared/compound-on-exit.md` at step 10. Do not preload.
 - **Explicit approval**: Silence ≠ approval. Require direct confirmation.
 - **Exploration**: Time-box codebase reading to 3–5 tool calls, then ask focused question.

@@ -34,7 +34,7 @@ Recommendations: <prioritized list>
 ### Contract
 
 - **Read-only**: No writes to issue, files, or git.
-- **One pass**: Single spawn per orchestration run; critique-agent defines its own depth.
+- **One independent pass per spawn**. Orchestrator may spawn multiple instances in parallel for diverse model perspectives.
 - **Trigger**: Spawned by orchestrator for high-risk plans only.
 
 ## Process
