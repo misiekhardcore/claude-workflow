@@ -27,14 +27,7 @@ For high-risk plans (security, payments, arch-changing scope): after architectur
   - `Agent("define/agents/critique-agent.md")` with haiku (second independent pass, two perspectives)
 Each with seed-brief containing `issue`, `architecture_decisions`, `design_decisions`, and `scope`. Merge findings from both before presenting to user.
 
-Each `Agent()` spawn includes a `<seed-brief>` YAML block per `_shared/seed-brief.md`.
-
-### Critique-agent I/O contract
-- **Input (seed-brief)**: `issue`, `architecture_decisions`, `design_decisions`, `scope`
-- **Output**: Structured report — `Decisions reviewed`, `Gaps found`, `Risks` (severity), `Trade-offs not discussed`, `Recommendations` (prioritized)
-- **Contract**: Read-only. One independent pass per spawn. Spawned for high-risk plans only.
-
-See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for spawn cost models.
+Each `Agent()` spawn includes a `<seed-brief>` YAML block per `_shared/seed-brief.md`. See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for spawn cost models.
 
 ## Process
 1. **Ingestion** — Read issue body; build work-unit list for scope-assessment.
@@ -59,7 +52,7 @@ Issue body `## Implementation plan` section per `_shared/handoff-artifact.md` (f
 
 ## Rules
 - **Delegate, don't duplicate**: Sub-skills own their domain work. Do not produce architecture/design output yourself.
-- **Seed-brief every Agent()**: All agent spawns include a \`<seed-brief>\` YAML block per \`_shared/seed-brief.md\`.
+- **Seed-brief every Agent()**: All agent spawns include a `<seed-brief>` YAML block per `_shared/seed-brief.md`.
 - **Point-of-need reads**: Read `_shared/handoff-artifact.md` at step 8, `_shared/interviewing-rules.md` at step 5, `_shared/compound-on-exit.md` at step 10. Do not preload.
 - **Explicit approval**: Silence ≠ approval. Require direct confirmation.
 - **Exploration**: Time-box codebase reading to 3–5 tool calls, then ask focused question.
