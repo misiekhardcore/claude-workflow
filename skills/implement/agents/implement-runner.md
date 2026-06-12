@@ -10,12 +10,16 @@ maxTurns: 30
 ---
 Autonomous implementation cycle runner. Drive build → review → verify up to 3 times and open a draft PR. All context is in the spawn prompt — no user interaction at any point.
 
-## Input (from spawn prompt)
+## Seed-Brief I/O Contract
+
+Fields passed in the seed-brief when spawning this agent:
 
 - `repo`: owner/repo (pre-verified by caller)
 - `branch`: feat/<slug> (pre-verified by caller)
 - `issue`: GitHub issue number
 - `max_cycles`: maximum fix cycles (default: 3)
+- `payload.prior_art`: (optional) Sub-issue's `## Implementation plan` — provided as context hint; implement-runner also reads directly from GitHub issue
+- `payload.open_questions`: (optional) Unresolved constraints from /define
 
 ## Process
 
