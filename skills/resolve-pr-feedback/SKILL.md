@@ -38,10 +38,14 @@ Adopt `Skill("orchestrator-rules")` — use NOTES.md as progress ledger, checkpo
 6. Collect verdicts; update NOTES.md.
 
 ### Phase 4 — Reply
-1. For each thread, draft reply based on verdict and commit SHA.
-2. Post replies via `gh api .../replies`.
-3. Resolve threads where verdict in `{fixed, fixed-differently, not-addressing}`.
-4. Verify: `gh pr view <N> --json reviewThreads` — confirm all resolved.
+1. For each thread, draft reply based on verdict and commit SHA:
+   - `fixed`: draft a reply citing the fix and commit SHA.
+   - `already-handled`: draft a reply explaining the existing behavior addresses the comment.
+   - `needs-human`: draft a reply explaining what was attempted and why it needs human review.
+2. Keep the reply concise and factual (2-4 sentences).
+3. Post replies via `gh api .../replies`.
+4. Resolve threads where verdict in `{fixed, fixed-differently, not-addressing}`.
+5. Verify: `gh pr view <N> --json reviewThreads` — confirm all resolved.
 
 ### Phase 5 — Compound
 After all phases complete cleanly: invoke `Skill("compound")` to capture session learnings. See `${CLAUDE_PLUGIN_ROOT}/_shared/compound-on-exit.md` — exactly once, clean completion only.

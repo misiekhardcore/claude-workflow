@@ -2,7 +2,8 @@
 name: reviewer-docs
 description: Docs consistency reviewer. Checks cross-references, stale mentions, and contradictions in markdown and skill files. Activated when any *.md is changed or skill files are touched.
 model: sonnet
-disallowedTools: [Agent]
+disallowedTools: Agent Write Edit
+user-invocable: false
 background: true
 memory: project
 ---

@@ -38,6 +38,6 @@ Key files: <list of most relevant paths>
 
 ## Rules
 
-- Read only. No writes.
+- Read only.
 - Limit to files relevant to `domain` — avoid reading the entire codebase.
 - Report findings as concrete facts, not guesses.

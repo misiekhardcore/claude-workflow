@@ -3,7 +3,7 @@ name: fix-agent
 description: PR feedback fix agent. Reads one review thread, applies the fix, verifies it, and returns a verdict. Spawned in parallel by /resolve-pr-feedback — one per file group.
 model: sonnet
 user-invocable: false
-disallowedTools: [Agent, AskUserQuestion]
+disallowedTools: Agent AskUserQuestion
 maxTurns: 15
 background: true
 memory: project

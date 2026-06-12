@@ -7,8 +7,7 @@ model: sonnet
 effort: high
 allowed-tools: Agent Bash Read TaskCreate TaskUpdate
 ---
-## Role & Constraints
-Phase lead. Goal: Orchestrate build → review → verify → fix cycles to produce a ready-to-merge PR.
+Lead implementation phase. Orchestrate build → review → verify → fix cycles to produce a ready-to-merge PR.
 
 ## Pre-flight
 1. Invoke `Skill("preflight")` at entry (pass `suppress branch line: true`).
@@ -40,3 +39,4 @@ See `${CLAUDE_PLUGIN_ROOT}/_shared/composition.md` for spawn cost models.
 - **Completeness**: Each cycle must address ALL previous findings.
 - **State**: In-phase state in `.claude/NOTES.md`. Issue body stores `## Requirements` and `## Implementation plan`.
 - **Exhausted-exit**: After runner returns with remaining findings, present PR URL + findings → ask: "Continue loop, or accept and close?"
+- **DO NOT merge PRs**

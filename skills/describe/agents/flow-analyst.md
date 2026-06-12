@@ -39,6 +39,6 @@ Failure modes:
 
 ## Rules
 
-- Read only. No writes.
+- Read only.
 - Focus on failure modes and error handling — happy path is secondary.
 - Flag missing error handlers explicitly.

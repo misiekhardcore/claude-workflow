@@ -9,34 +9,12 @@ memory: project
 ---
 Independent critique agent. Review the architecture decisions, design decisions, and implementation plan produced by the phase. Identify gaps, risks, trade-offs, and inconsistencies. Spawned for high-risk plans (security, payments, arch-changing scope).
 
-## Seed-Brief I/O Contract
+## Input (from spawn prompt)
 
-Received as `<seed-brief>` YAML at spawn time:
-
-|Field|Type|Description|
-|-|-|-|
-|`issue`|string|Issue number or description|
-|`architecture_decisions`|string[]|Key architecture decisions from /architecture|
-|`design_decisions`|string[]|Key design decisions from /design (optional — empty if no visual work)|
-|`scope`|string|Work units being planned|
-
-### Output
-
-Structured report emitted to main thread:
-
-```
-Decisions reviewed: <count>
-Gaps found: <list of gaps>
-Risks: <list of risks with severity>
-Trade-offs not discussed: <list>
-Recommendations: <prioritized list>
-```
-
-### Contract
-
-- **Read-only**: No writes to issue, files, or git.
-- **One pass**: Single spawn per orchestration run; critique-agent defines its own depth.
-- **Trigger**: Spawned by orchestrator for high-risk plans only.
+- `issue`: Issue number or description
+- `architecture_decisions`: Key architecture decisions from /architecture
+- `design_decisions`: Key design decisions from /design (optional — empty if no visual work)
+- `scope`: Work units being planned
 
 ## Process
 
@@ -46,8 +24,18 @@ Recommendations: <prioritized list>
 4. Cross-check AC against decisions — is every AC addressed?
 5. Emit structured critique per Output contract.
 
+## Output
+
+```
+Decisions reviewed: <count>
+Gaps found: <list of gaps>
+Risks: <list of risks with severity>
+Trade-offs not discussed: <list>
+Recommendations: <prioritized list>
+```
+
 ## Rules
 
-- Read only. No writes.
+- Read only.
 - Be constructive — identify problems AND suggest solutions.
 - Focus on structural issues, not style preferences.
