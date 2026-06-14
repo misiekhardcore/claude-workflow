@@ -59,7 +59,7 @@ During `/define` or `/discover` exploration: time-box codebase reading to 3–5 
 
 ## Authoring new skills
 
-Run `/new-skill` to scaffold a conformant `SKILL.md`. For the full authoring standard see `${CLAUDE_PLUGIN_ROOT}/_templates/AUTHORING.md`.
+Run `/new-skill` to scaffold a conformant `SKILL.md`. For the full authoring standard see `${CLAUDE_PLUGIN_ROOT}/_shared/AUTHORING.md`.
 
 Token budgets per artifact/phase, CLAUDE.md placement rules, `@`-imports: `${CLAUDE_PLUGIN_ROOT}/docs/token-budgets.md`.
 
