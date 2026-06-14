@@ -2,14 +2,14 @@
 
 This file details the 13-step interview sequence that new-skill conducts with the author, one question at a time.
 
-## Step (a): Name
+## Step 1: Name
 
 **Plain prompt**: "What's the skill called?"
 
 - Must be lowercase kebab-case (e.g. `deploy-to-vercel`).
 - Matches the directory name under `skills/`.
 
-## Step (b): Description
+## Step 2: Description
 
 **Plain prompt**: "In one or two sentences: what does this skill do, and when should it trigger?"
 
@@ -17,7 +17,7 @@ This file details the 13-step interview sequence that new-skill conducts with th
 - This is the primary trigger mechanism — specificity matters more than elegance.
 - If the author's draft is vague, grill for concrete trigger phrases (what would the user type?).
 
-## Step (c): Mis-routing
+## Step 3: Mis-routing
 
 **`AskUserQuestion`** with `header: "Mis-routing"`, question: "Could another skill be invoked instead of this one?"
 
@@ -27,7 +27,7 @@ This file details the 13-step interview sequence that new-skill conducts with th
 
 Only generate `when_to_use` frontmatter when the author answers Yes; omit otherwise.
 
-## Step (d): Role
+## Step 4: Role
 
 **`AskUserQuestion`** with `header: "Role"`, question: "Which role does this skill fill?"
 
@@ -58,9 +58,9 @@ Then ask one follow-up `AskUserQuestion` with `header: "Visibility"`, question: 
 - **No (Recommended)** — omit `user-invocable` (skill appears in menu; default). Not applicable if Autonomous was selected above.
 - **Yes** — add `user-invocable: false` (hides from menu; required for Autonomous contract; also use for any orchestrator-internal specialist)
 
-## Step (e): Tier Classification
+## Step 5: Tier Classification
 
-Derive tier from the role selected in step (d):
+Derive tier from the role selected in step 4:
 
 |Role|Tier|Criteria|
 |-|-|-|
@@ -74,11 +74,11 @@ Derive tier from the role selected in step (d):
 
 **Options:**
 - **Confirm (Recommended)** — use tier `<N>`
-- **Change role** — return to step (d) role selection
+- **Change role** — return to step 4 role selection
 
 If confirmed, the tier determines `user-invocable` frontmatter: `true` for tiers 1-2, `false` for tier 3.
 
-## Step (f): Model
+## Step 6: Model
 
 **`AskUserQuestion`** with `header: "Model"`, question: "Which model fits?"
 
@@ -87,7 +87,7 @@ If confirmed, the tier determines `user-invocable` frontmatter: `true` for tiers
 - **haiku** — fast lookup, formatting, retrieval, light verification
 - **opus** — deep research, architecture, high-stakes decisions
 
-## Step (g): Effort
+## Step 7: Effort
 
 **`AskUserQuestion`** with `header: "Effort"`, question: "Does this skill run long-form multi-turn research or decision-making?"
 
@@ -95,14 +95,14 @@ If confirmed, the tier determines `user-invocable` frontmatter: `true` for tiers
 - **Standard** — omit `effort` (default)
 - **High** — add `effort: high` to frontmatter
 
-## Step (h): Argument hint
+## Step 8: Argument hint
 
 **Plain prompt**: "Does this skill accept a positional argument from the user? If yes, enter the hint text (e.g. `[issue#]`, `[PR# or URL]`). Type 'no' to skip."
 
 - Store as `argument-hint` when provided.
 - Omit when skipped.
 
-## Step (i): Allowed tools
+## Step 9: Allowed tools
 
 **`AskUserQuestion`** with `header: "Tools"`, question: "Should the skill have access to all tools, or a restricted subset?".
 
@@ -115,7 +115,7 @@ If the author picks **Restricted subset**, ask one free-text follow-up: "Which t
 - Validate that each entry is a real Claude Code tool name (reject unknown names and re-ask).
 - Use the answer verbatim as the value of `allowed-tools:`.
 
-## Step (j): Parallelism
+## Step 10: Parallelism
 
 **`AskUserQuestion`** with `header: "Parallelism"`, question: "Does this skill spawn sub-agents or teams? If yes, which primitive?".
 
@@ -127,7 +127,7 @@ If the author picks **Parallel subagents**, ask a follow-up free-text: "Which co
 
 - Store the answer as a "Spawn justification" block in the skill body.
 
-## Step (k): Shared protocols
+## Step 11: Shared protocols
 
 **`AskUserQuestion`** with `header: "Protocols"`, `multiSelect: true`, question: "Which shared protocols does this skill need?"
 
@@ -145,7 +145,7 @@ Then a second `AskUserQuestion` call: `header: "Composition"`, question: "Does t
 - **No** — skip `composition.md`
 - **Yes** — include `composition.md`
 
-## Step (l): Target location
+## Step 12: Target location
 
 **`AskUserQuestion`** with `header: "Target"`, question: "Where should the skill be written?"
 
@@ -154,7 +154,7 @@ Then a second `AskUserQuestion` call: `header: "Composition"`, question: "Does t
 - **Project** — `<cwd>/.claude/skills/<name>/SKILL.md` (committed to the current repo)
 - **Plugin** — `${CLAUDE_PLUGIN_ROOT}/skills/<name>/SKILL.md` (contributing to this plugin; dogfooding)
 
-## Step (m): Reference file loading phases
+## Step 13: Reference file loading phases
 
 **Plain prompt**: "Does this skill load reference files at different execution points? If yes, describe the natural phases (e.g. 'pre-flight assesses scope, then execution begins'). Type 'no' or 'single phase' to skip."
 
