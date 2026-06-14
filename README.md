@@ -148,7 +148,7 @@ Multi-plugin coordination: MCP scope, inter-plugin dependencies, optional `claud
 ## Authoring standard
 
 - **Templates**: role-specific skeletons in `_templates/`
-- **Convention doc**: `_templates/AUTHORING.md` — skill types, frontmatter, `_shared/` references
+- **Convention doc**: `_shared/AUTHORING.md` — skill types, frontmatter, `_shared/` references
 - **Scaffolder**: `/new-skill` — interactive generator
 
 Shared protocols at `_shared/`:
