@@ -54,13 +54,6 @@ Print summary table to stdout. Invoke `Skill("compound")` for epic-level learnin
 - Dispatch tiers in parallel via Task sub-agents
 - Post epic PR with merge order instructions after all sub-tasks settle
 
-## Worker Agent Inventory
-
-### implement-runner
-- **File**: `skills/implement/agents/implement-runner.md`
-- **Contract**: See `## Input (from spawn prompt)` in the agent file.
-- **Output**: Draft PR on branch `feat/epic-<N>-sub-<M>` (clean or exhausted-accepted), or FAILED after 2 retries.
-
 ## Sub-skills (epic-autopilot owned)
 
 |Skill|Classification|Reference|
