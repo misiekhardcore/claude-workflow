@@ -24,6 +24,14 @@ jobs:
         with:
           fetch-depth: 0
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
       - name: Configure git identity
         run: |
           git config user.name "github-actions[bot]"
@@ -58,14 +66,26 @@ jobs:
           jq --arg v "$v" '.metadata.version = $v | .plugins[0].version = $v' .claude-plugin/marketplace.json > "$tmp"
           mv "$tmp" .claude-plugin/marketplace.json
 
+      - name: Update CHANGELOG
+        run: |
+          set -euo pipefail
+          tag="${{ steps.bump.outputs.tag }}"
+          sed -i '/^## \[Unreleased\]/,/^## \[/{/^## \[Unreleased\]/d;/^## \[/!d}' CHANGELOG.md
+          npx git-cliff --tag "$tag" --prepend CHANGELOG.md
+
       - name: Commit, tag, push
         run: |
           set -euo pipefail
-          git add .claude-plugin/plugin.json .claude-plugin/marketplace.json
+          git add .claude-plugin/plugin.json .claude-plugin/marketplace.json CHANGELOG.md
           git commit -m "chore: release ${{ steps.bump.outputs.tag }}"
           git tag -a "${{ steps.bump.outputs.tag }}" -m "${{ steps.bump.outputs.tag }}"
           git push origin HEAD
           git push origin "${{ steps.bump.outputs.tag }}"
+
+      - name: Generate release body
+        run: |
+          set -euo pipefail
+          npx git-cliff --latest --strip header --output /tmp/release-body.md
 
       - name: Package source tarball
         run: |
@@ -86,5 +106,5 @@ jobs:
         run: |
           gh release create "${{ steps.bump.outputs.tag }}" \
             --title "${{ steps.bump.outputs.tag }}" \
-            --generate-notes \
-            "$artifact"
+            --notes-file /tmp/release-body.md \
+            "${{ env.artifact }}"
