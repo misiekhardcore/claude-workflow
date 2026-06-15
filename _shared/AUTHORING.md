@@ -1,6 +1,6 @@
-# Skill Authoring Guide (v2)
+# Skill Authoring Guide
 
-This document defines the structural and behavioral conventions for building skills in `claude-workflow` v2.
+This document defines the structural and behavioral conventions for building skills in `claude-workflow`.
 
 ## Role Taxonomy
 
