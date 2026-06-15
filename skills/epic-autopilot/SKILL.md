@@ -23,12 +23,29 @@ Always multi-layer fan-out — dispatches one sub-agent per topological layer of
 Invoke `Skill("orchestrator-rules")` for CWD, delegation, and seed-brief contract.
 Invoke `Skill("notes-md")` for NOTES.md lifecycle (create → checkpoint → update → leave).
 
-1. **Stage 0 — Resume detection**: Read `references/detection.md` at point of need to detect prior state and determine entry stage.
-2. **Stage 1 — Discovery gate**: Read `references/gates.md` § Stage 1 at point of need. If epic has ≥3 AC, skip to Stage 2. Otherwise invoke `Skill("discover")` with seed-brief containing the description. Require explicit user approval.
-3. **Stage 2 — Epic-level /define gate**: Read `references/gates.md` § Stage 2 at point of need. If `## Implementation plan` exists in epic issue body, skip to Stage 3. Otherwise invoke `Skill("define")` with seed-brief containing epic issue and AC. Require explicit user approval. If ≤1 sub-issue, invoke `Skill("implement")` directly and exit.
-4. **Stage 3 — Per-sub-issue /define gate**: Read `references/gates.md` § Stage 3 at point of need. For each sub-issue without `## Implementation plan`, invoke `Skill("define")` with seed-brief. Require explicit user approval per sub-issue.
-5. **Stage 4 — Autonomous phase**: Read `references/autonomous-phase.md` at point of need. Create epic branch, compute dependency tiers (Kahn's algorithm, cycle breaking), dispatch per tier. For each sub-issue M, spawn `Agent("skills/implement/agents/implement-runner.md")` with comprehensive seed-brief (see § Worker Agent Inventory). Wait for tier settlement. After all tiers settle, create epic PR.
-6. **Stage 5 — Exit**: Print summary table to stdout. Invoke `Skill("compound")` for epic-level learnings (compound-on-exit). Merging is left to humans.
+### 1. Detection (Stage 0)
+
+Invoke `Skill("preflight")`. Echo resolved `owner/repo`. Read `references/detection.md` at point of need to detect prior state and determine entry stage. Create `.claude/NOTES.md` with task list and next action.
+
+### 2. Discovery gate (Stage 1)
+
+Read `references/gates.md` § Stage 1 at point of need. If epic has ≥3 AC, skip to Stage 2. Otherwise invoke `Skill("discover")` with seed-brief handoff. Require explicit user approval.
+
+### 3. Epic-level define gate (Stage 2)
+
+Read `references/gates.md` § Stage 2 at point of need. If `## Implementation plan` exists in epic issue body, skip to Stage 3. Otherwise invoke `Skill("define")` with seed-brief handoff. Require explicit user approval. If ≤1 sub-issue, invoke `Skill("implement")` directly and exit.
+
+### 4. Per-sub-issue define gate (Stage 3)
+
+Read `references/gates.md` § Stage 3 at point of need. For each sub-issue without `## Implementation plan`, invoke `Skill("define")` with seed-brief handoff. Require explicit user approval per sub-issue.
+
+### 5. Autonomous phase (Stage 4)
+
+Read `references/autonomous-phase.md` at point of need. Checkpoint NOTES.md. Create epic branch, compute dependency tiers (Kahn's algorithm, cycle breaking), dispatch per tier. For each sub-issue M, checkpoint NOTES.md then spawn `Agent("skills/implement/agents/implement-runner.md")` with seed-brief per `references/autonomous-phase.md` § seed brief. Wait for tier settlement. After all tiers settle, create epic PR.
+
+### 6. Exit (Stage 5)
+
+Print summary table to stdout. Invoke `Skill("compound")` for epic-level learnings (compound-on-exit). Merging is left to humans.
 
 ## Key behaviors
 - Skip /discover if epic has ≥3 acceptance criteria
