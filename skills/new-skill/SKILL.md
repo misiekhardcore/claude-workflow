@@ -6,49 +6,38 @@ model: sonnet
 effort: low
 allowed-tools: Read Write Bash
 ---
-Maintenance skill that interviews the author to produce a conformant SKILL.md. Runs entirely in main context; never uses `context: fork`. One question at a time.
+Maintenance orchestrator that interviews the author to produce a conformant SKILL.md. Runs entirely in main context; no agents. One question at a time.
 
 ## Protocol skills
 
+Adopt `Skill("orchestrator-rules")`.
 Adopt `Skill("interviewing-rules")`.
 
 ## Process
 
-1. **Read authoring guide** — Read `${CLAUDE_PLUGIN_ROOT}/_templates/AUTHORING.md` for skill-types table, `_shared/` files decision table, and frontmatter guide.
+1. **Init NOTES.md** — Create `.claude/NOTES.md` with initial state: skill name, role, tier.
 
-2. **Interview the author** — Follow the sequence in `references/interview-steps.md`. Ask one question at a time per `Skill("interviewing-rules")`. Use `AskUserQuestion` for bounded option sets; plain prompt for free-text.
+2. **Read AUTHORING.md** — Read `${CLAUDE_PLUGIN_ROOT}/_shared/AUTHORING.md` for body-pattern composition, tier mapping, frontmatter defaults, and protocol-skill catalog. Skip `_shared/interviewing-rules.md` at this point (point-of-need — invoked implicitly by `Skill("interviewing-rules")`).
 
-3. **Select template** — Read `${CLAUDE_PLUGIN_ROOT}/docs/dispatch-primitives.md` for the role taxonomy and dispatch rules.
+3. **Interview author** — Follow `references/interview-steps.md` sequence. Ask one question at a time per `Skill("interviewing-rules")`. Use `AskUserQuestion` for bounded option sets; plain prompt for free-text. Checkpoint NOTES.md before each question with current state and next step.
 
-   From the description, assess which role fits. Present the likely role with rationale. `AskUserQuestion` `header: "Role"`: "Does `<role>` match your intent?"
+   Derive tier from role after step (d). Present derived tier with criteria. Ask author to confirm or override.
 
-   Options: **Yes (Recommended)**, **No, let me choose**. If No, show the role table from dispatch-primitives and let them pick.
-
-   **Role follow-ups:**
-   - **Orchestrator** — `AskUserQuestion` `header: "Orchestrator type"`: "Research-leading (deep reasoning, `opus`, `effort: high`) or Coordinator (sequences sub-skills, `sonnet`)?"
-   - **Worker** — Plain prompt: "What input does it expect and what does it produce?"
-   - **Interaction** — "Does it need a research sub-agent?" If yes, split: autonomous research agent + interactive skill.
-   - **Protocol** — Plain prompt: "Which behavioral convention does it encode?"
-
-   Based on the determined role: Orchestrator → `SKILL.orchestrator.template.md`; Specialist/Utility → `SKILL.specialist.template.md`; Primitive → `SKILL.primitive.template.md`.
-
-4. **Generate SKILL.md** — Fill template with interview answers: frontmatter, skeleton sections, spawn-justification if parallelism selected, `_shared/` reference lines per AUTHORING.md.
+4. **Assemble SKILL.md** — Read `_templates/SKILL.template.md`. Fill frontmatter with interview answers (name, description, model, effort, allowed-tools, user-invocable per tier). Compose body sections from AUTHORING.md § Body Assembly by Role/Tier per derived role. Include only sections the role needs.
 
 5. **Show draft** — Fenced code block. Ask: "Shall I write it to `<target-path>`? (y/n)". Require explicit yes.
 
-6. **On yes** — Create directory if needed, write file. Report path and advise filling placeholder sections.
+6. **On yes** — Create directory if needed, write file. Report path.
 
-7. **On no** — Ask which step to revise, loop back, regenerate.
+7. **On no** — Ask which step to revise. Loop back from that step. Regenerate.
 
-## Output
-
-Single SKILL.md at target path, shown for approval before writing.
+8. **Compound** — Invoke `Skill("compound")` to capture learnings.
 
 ## Rules
 
-- Require explicit yes before writing.
+- Require explicit yes before writing. Silence is NOT approval.
 - Do not invent domain content — locks in guesses.
-- All reference-file reads are point-of-need, not unconditional at top.
+- Point-of-need reads only; nothing loaded at skill entry except protocol skills.
 - Defaults (if skipped): `model: sonnet`; `effort`, `argument-hint`, `allowed-tools`, `user-invocable`: omit; target: personal.
 - Generated `Agent()` calls must include a seed-brief per `${CLAUDE_PLUGIN_ROOT}/_shared/seed-brief.md`.
 - If target `SKILL.md` exists, ask before overwriting.
