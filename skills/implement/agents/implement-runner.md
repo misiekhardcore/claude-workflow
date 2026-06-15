@@ -63,10 +63,11 @@ Findings: <summary of remaining findings or "none">
    diff: <output of git diff main...HEAD>
    ```
 6. **Evaluate**:
-   - Clean pass → PR creation (step 7).
-   - Findings present and cycles < max_cycles → write fix brief to `.claude/NOTES.md` → go to step 2 (re-scope, rebuild).
-   - Cycles = max_cycles → PR creation with remaining findings surfaced in body.
-7. **PR**: see PR Creation section.
+   - Clean pass → compound (step 7), then PR creation (step 8).
+   - Findings present and cycles < max_cycles → write fix brief to `.claude/NOTES.md` → go to step 3.
+   - Cycles = max_cycles → compound (step 7), then PR creation with remaining findings surfaced in body (step 8).
+7. **Compound**: Invoke `Skill("compound")` exactly once to capture implementation learnings (novel bugs, fixes, patterns). Compound self-assesses — exits silently if no novel learnings.
+8. **PR**: see § PR Creation.
 
 Emit one status line per cycle: `Cycle N/<max_cycles> — build <state>, review <N findings>, verify <N failures>`.
 

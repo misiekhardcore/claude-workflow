@@ -5,13 +5,14 @@
 **Entry condition**: PR for `feat/issue-<N>` is merged.
 
 1. Echo resolved repo `owner/repo`.
-2. Spawn `Agent("wrap-up/agents/wrap-up-runner.md")` from the worktree root:
+2. Checkpoint NOTES.md. Read `${CLAUDE_PLUGIN_ROOT}/_shared/compound-on-exit.md`. Invoke `Skill("compound")` exactly once on clean completion to capture final learnings.
+3. Spawn `Agent("wrap-up/agents/wrap-up-runner.md")` from the worktree root:
    ```
    repo: <owner/repo>
    branch: feat/issue-<N>
    worktree_path: <absolute path to worktree>
    ```
-3. Print:
+4. Print:
 
    > Ship complete: PR merged, worktree cleaned.
 

@@ -4,7 +4,7 @@
 
 **Entry condition**: Issue has `## Implementation plan`, branch `feat/issue-<N>` does not exist, no open PR.
 
-1. Spawn `Agent("implement/agents/implement-runner.md")` from current directory:
+1. Checkpoint NOTES.md. Spawn `Agent("implement/agents/implement-runner.md")` from current directory:
    ```
    repo: <owner/repo>
    branch: feat/issue-<N>
@@ -15,7 +15,7 @@
 
 2. Runner opens a draft PR and returns the PR URL.
 
-3. After `/implement` exits, print:
+3. After implement-runner exits, print:
 
    > Draft PR opened. Invite human review, then re-invoke `/issue-autopilot <N>`.
 
