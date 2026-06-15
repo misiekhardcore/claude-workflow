@@ -47,8 +47,13 @@ For each tier in ascending order:
    - Emit: `[sub-issue #<M>] dispatched (tier <T>)`
    - Create worktree for branch `feat/epic-<N>-sub-<M>` on base `<base-branch>`. Invoke the worktree protocol (`Read ${CLAUDE_PLUGIN_ROOT}/_shared/worktree-protocol.md`).
    - Dispatch `Agent("skills/implement/agents/implement-runner.md")` with seed brief:
+     - `repo`: owner/repo
      - `branch`: `feat/epic-<N>-sub-<M>`
      - `active_issue`: `<M>`
+     - `max_cycles`: 3
+     - `scope`: `"Sub-issue #<M> of epic #<N> — <title>"`
+     - `payload.resources`: `[]`
+     - `payload.progress`: NOTES.md slice with task list subset and decisions
      - `payload.prior_art`: `"Sub-issue #<M>'s ## Implementation plan (architecture and design decisions from /define)"`
      - `payload.open_questions`: unresolved constraints from /define for sub-issue #M, or empty
 
