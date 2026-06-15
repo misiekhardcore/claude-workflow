@@ -8,18 +8,17 @@ GitHub Releases (with auto-generated notes and source tarballs) remain the canon
 
 ### Changed
 
-- **Shared docs refactored (v2/shared-refactor)** -- per-skill details moved out of `_shared/` protocol docs into the skills that own them:
+- **Shared docs refactored** -- per-skill details moved out of `_shared/` protocol docs into the skills that own them:
 
-  - **`_shared/handoff-artifact.md`** trimmed to the general five-field protocol (purpose, shape, precedence, rules). Section-heading names (`## Requirements` for `/discovery`, `## Implementation plan` for `/define`) and the final-pass checklist inlined into their respective skill files. (#v2/shared-refactor)
+  - **`_shared/handoff-artifact.md`** trimmed to the general five-field protocol (purpose, shape, precedence, rules). Section-heading names (`## Requirements` for `/discovery`, `## Implementation plan` for `/define`) and the final-pass checklist inlined into their respective skill files.
 
-  - **`_shared/seed-brief.md`** trimmed to the universal protocol spec (purpose, format, required fields, orchestrator duties, specialist behavior, failure mode). Payload type definitions (`type: research`, `type: fix`, `type: prior-art`) and the canonical example moved to `skills/specialist-mode/SKILL.md`. (#v2/shared-refactor)
+  - **`_shared/seed-brief.md`** trimmed to the universal protocol spec (purpose, format, required fields, orchestrator duties, specialist behavior, failure mode). Payload type definitions (`type: research`, `type: fix`, `type: prior-art`) and the canonical example moved to `skills/specialist-mode/SKILL.md`.
 
-  - **Per-skill handoff instructions added**: `/discovery` now declares its `## Requirements` section heading and final-pass checklist inline; `/define` declares its `## Implementation plan` heading and field requirements. (#v2/shared-refactor)
+  - **Per-skill handoff instructions added**: `/discovery` now declares its `## Requirements` section heading and final-pass checklist inline; `/define` declares its `## Implementation plan` heading and field requirements.
 
   - **README**: Added `seed-brief.md` to the `_shared/` protocol table; updated `handoff-artifact.md` description to reflect the protocol-only scope.
 
-- **NOTES.md protocol broadened** -- ownership model shifted from "orchestrator-only" to ownership-transfer (orchestrator owns before spawn / after return, sub-skill owns during execution). Standalone L2 skills now use NOTES.md for their own multi-step tracking. Adds Orchestrator Checkpoint pattern (create on entry, checkpoint before spawn, update on return) and Seed-brief Slice pattern (progress field in seed-brief payload). (#v2/orchestrator-progress-ledger)
-
+- **NOTES.md protocol broadened** -- ownership model shifted from "orchestrator-only" to ownership-transfer (orchestrator owns before spawn / after return, sub-skill owns during execution). Standalone L2 skills now use NOTES.md for their own multi-step tracking. Adds Orchestrator Checkpoint pattern (create on entry, checkpoint before spawn, update on return) and Seed-brief Slice pattern (progress field in seed-brief payload).
 - **Terminology standardized** -- all "tier" references in shared docs renamed to "layer" for consistency with the three-layer taxonomy. Affected files: _shared/notes-md-protocol.md (memory tier -> memory layer), README.md.
 
 - **Shared docs decoupled from skill names** -- removed hardcoded /build, /review, /verify, /implement, etc. references from 7 shared/protocol files. Skills are now referenced generically by role rather than by command name.
@@ -31,7 +30,7 @@ GitHub Releases (with auto-generated notes and source tarballs) remain the canon
   - `handoff-artifact` -> `_shared/handoff-artifact.md` - cross-phase handoff protocol for GitHub issue body (reference doc, not invoked skill)
   - `notes-md` -> `_shared/notes-md-protocol.md` - in-phase memory layer lifecycle and structure (reference doc, not invoked skill)
   - All callers updated from `Invoke \`Skill("name")\`` to `Read \`${CLAUDE_PLUGIN_ROOT}/_shared/<name>.md\``.
-  - `_templates/AUTHORING.md` decision rule refined with concrete examples; `_shared/` catalogue expanded.
+  - `_shared/AUTHORING.md` decision rule refined with concrete examples; `_shared/` catalogue expanded.
   - `skills/scope-assessment/SKILL.md` gained missing `layer: 3` frontmatter.
 
 ### Added

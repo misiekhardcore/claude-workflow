@@ -8,7 +8,6 @@ effort: high
 user-invocable: true
 allowed-tools: Agent Bash Read
 ---
-## Role & Constraints
 Lead review phase. Goal: Thoroughly review implementation against requirements and produce actionable findings. Produce inline GitHub review comments.
 
 ## I/O

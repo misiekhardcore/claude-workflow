@@ -1,9 +1,9 @@
 ---
 name: wrap-up-runner
-description: Autonomous cleanup runner. Removes worktree, deletes branch, and clears NOTES.md after PR merge. Spawned by /wrap-up or issue-autopilot stage 5.
+description: Autonomous cleanup runner. Removes worktree, deletes branch, and clears NOTES.md after PR merge.
 model: haiku
 user-invocable: false
-disallowedTools: [AskUserQuestion]
+disallowedTools: AskUserQuestion
 background: true
 memory: project
 ---

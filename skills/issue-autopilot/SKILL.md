@@ -9,25 +9,51 @@ allowed-tools: Agent Bash Read TaskCreate TaskUpdate
 ---
 Orchestrate the single-issue ship pipeline. Take a GitHub issue number and drive it to a merged PR with clean local state — pausing only where human action is required (review, merge).
 
-## Overview
+Invoke `Skill("orchestrator-rules")` for CWD verification, delegation, NOTES.md lifecycle, no-autonomous-merge, and seed-brief contract.
 
-**Input**: A single positive integer — the GitHub issue number to ship.
+## Process
 
-**Output**:
-- Stage 0: Confirm repo and detect current state.
-- Stages 1–5: Read `references/stage-<stage>.md` for the active stage logic, pausing at human decision points (after define, after impl, after review, before merge, complete).
+### 1. Detection
 
-**State machine**: Resume state machine in `references/detection.md` determines which stage to enter on each invocation based on issue/PR/branch state.
+Invoke `Skill("preflight")`. Echo resolved `owner/repo`. Read `references/detection.md` at point of need to determine entry stage from issue/PR/branch state. Create `.claude/NOTES.md` with task list and next-action per `Skill("orchestrator-rules")`.
 
-## Process Flow
+### 2. Define (Stage 1)
 
-1. Read `references/detection.md` (Stage 0) to run preflight, confirm repo, detect current state, and determine which stage to enter.
-2. Read `references/stage-<stage>.md` for the active stage's logic, where `<stage>` is the determined stage number.
-3. Execute stage logic; print stage-exit message and exit (or proceed to next stage if heuristic allows).
+If issue lacks `## Implementation plan`: read `references/stage-1.md` at point of need. Invoke `Skill("define")` with seed-brief handoff (`issue: <N>`). Print pause message. **Exit.** User re-invokes after reviewing the plan.
+
+### 3. Implement (Stage 2)
+
+If plan present, branch absent, no open PR: read `references/stage-2.md` at point of need. Checkpoint NOTES.md. Spawn `Agent("implement/agents/implement-runner.md")` with `<seed-brief>` YAML block per `_shared/seed-brief.md`:
+```
+repo: <owner/repo>
+branch: feat/issue-<N>
+issue: <N>
+max_cycles: 3
+```
+Print pause message. **Exit.** User re-invokes after review.
+
+### 4. Resolve PR feedback (Stage 3)
+
+If open PR with unresolved threads: read `references/stage-3.md` at point of need. Invoke `Skill("resolve-pr-feedback")` with seed-brief handoff. Apply loop-break heuristic per stage-3.md. On zero unresolved → invoke `Skill("compound")` (review-time pass) and proceed to Stage 4 in same invocation.
+
+### 5. Awaiting merge (Stage 4)
+
+If clean PR awaiting merge: read `references/stage-4.md` at point of need. Print PR status and prompt user to merge. **Exit.** Merging is human-only.
+
+### 6. Post-merge cleanup (Stage 5)
+
+If PR merged: read `references/stage-5.md` at point of need. Checkpoint NOTES.md. Read `${CLAUDE_PLUGIN_ROOT}/_shared/compound-on-exit.md`. Invoke `Skill("compound")` exactly once on clean completion. Spawn `Agent("wrap-up/agents/wrap-up-runner.md")` with `<seed-brief>` YAML block per `_shared/seed-brief.md`:
+```
+repo: <owner/repo>
+branch: feat/issue-<N>
+worktree_path: <absolute path to worktree>
+```
+Print ship-complete summary. **Exit.**
 
 ## Rules
 
-Invoke `Skill("orchestrator-rules")` for CWD verification, delegation, no-autonomous-merge, and seed-brief contract.
-
-- **Loop-break**: In Stage 3, break if unresolved thread count non-zero and unchanged after one pass.
-- **Compound**: `/implement` invokes `/compound` at PR creation (implementation-time pass). Stage 3 re-invokes when all threads resolve for review-time learnings — two passes, no dedup needed.
+- **Loop-break**: Stage 3 — break if unresolved thread count non-zero and unchanged after one pass.
+- **Compound-on-exit**: `Skill("compound")` on clean completion only (Stage 3, Stage 5). No invocation on abort or early exit.
+- **No autonomous merge**: Merging is always human.
+- **Point-of-need reads**: Read `references/stage-<N>.md` before step N only. Read `_shared/seed-brief.md` before first spawn. Read `_shared/compound-on-exit.md` before compound step.
+- **NOTES.md**: Checkpoint before every spawn per `Skill("orchestrator-rules")` § Progress tracking.
