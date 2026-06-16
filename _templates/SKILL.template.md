@@ -5,7 +5,8 @@ description: <Does X. Use when Y.>
 # argument-hint: "[arg]"  # Uncomment if skill accepts a positional argument
 model: <haiku | sonnet | opus>
 # effort: high  # Uncomment for research-leading or multi-turn skills
-# allowed-tools: Agent Bash Read  # Uncomment to restrict tool surface
-# user-invocable: false  # Uncomment to hide from slash-command menu
+# --- metadata ---
+# allowed-tools: Agent Bash Read  # Uncomment to restrict tool surface (Claude Code / opencode)
+# user-invocable: false  # Uncomment to hide from command menu
 ---
-<!-- Body sections assembled by role/tier per _shared/AUTHORING.md § Body Assembly by Role/Tier -->
+<!-- Body sections assembled by role/tier per shared authoring guide (§ Body Assembly by Role/Tier). -->

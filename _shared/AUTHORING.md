@@ -4,7 +4,7 @@ This document defines the structural and behavioral conventions for building ski
 
 ## Role Taxonomy
 
-Skills are classified by execution context and responsibility. See `${CLAUDE_PLUGIN_ROOT}/docs/dispatch-primitives.md` for the canonical taxonomy and `${CLAUDE_PLUGIN_ROOT}/_shared/dispatch-decision.md` for the condensed runtime reference.
+Skills are classified by execution context and responsibility. See `docs/dispatch-primitives.md` for the canonical taxonomy and `_shared/dispatch-decision.md` for the condensed runtime reference.
 
 ### Skill vs. Reference File
 
@@ -14,7 +14,7 @@ Skills and reference files serve different purposes and require different access
 |-|-|-|
 |Protocol or Worker skill|Runtime behavior agents must adopt or execute|`Invoke \`Skill("<name>")\``|
 |Per-skill reference doc|Static tables, checklists, or context scoped to one skill|`Read \`references/<file>.md\``|
-|Shared reference doc|Static tables, checklists, or context shared across skills|`Read \`${CLAUDE_PLUGIN_ROOT}/_shared/<file>.md\``|
+|Shared reference doc|Static tables, checklists, or context shared across skills|`Read \`_shared/<file>.md\``|
 
 **Decision rule**: If the file encodes a behavioral constraint agents must actively operate under → Protocol skill. If the file contains format tables, field lists, CLI command references, or read-only lookup context → `_shared/` doc. The instruction "agents must do X" is a Protocol skill; "here is the YAML format for field Z" is a shared reference doc.
 
@@ -110,7 +110,7 @@ See `_shared/notes-md-protocol.md` for the full protocol.
 
 The `/discovery` skill has been renamed to `/discover`.
 
-- **Breaking Change**: Existing `CLAUDE.md` references to `/discovery` will break.
+- **Breaking Change**: Existing `AGENTS.md` references to `/discovery` will break.
 - **Action**: Users must manually update their references. No compatibility shim is provided to avoid technical debt.
 
 ## Body Assembly by Role/Tier
@@ -191,7 +191,7 @@ Document the orchestrator's specific definition of "work unit" (what counts as a
 
 ## `_shared/` File Catalogue
 
-Reference on-demand via `Read \`${CLAUDE_PLUGIN_ROOT}/_shared/<file>.md\``:
+Reference on-demand via `Read \`_shared/<file>.md\``:
 
 - `composition.md` — team/sub-agent cost and shape
 - `dispatch-decision.md` — condensed role taxonomy and `context: fork` decision table

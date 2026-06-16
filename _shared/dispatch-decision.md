@@ -1,6 +1,6 @@
 # Dispatch Decision Reference
 
-Condensed tables for dispatch decisions at authoring time and runtime. Full framework: `${CLAUDE_PLUGIN_ROOT}/docs/dispatch-primitives.md`.
+Condensed tables for dispatch decisions at authoring time and runtime. Full framework: `docs/dispatch-primitives.md`.
 
 ## Role taxonomy
 
@@ -23,8 +23,8 @@ Never use on Orchestrators, Interactions, or Protocols.
 
 |Task type|`agent:`|
 |-|-|
-|Read-only, computation, pure reasoning over prompt input|`Explore` — Haiku model, no CLAUDE.md|
-|Read-only: planning-phase analysis|`Plan` — no CLAUDE.md|
+|Read-only, computation, pure reasoning over prompt input|`Explore` — Haiku model, no AGENTS.md|
+|Read-only: planning-phase analysis|`Plan` — no AGENTS.md|
 |Agent dispatch required, writes required, or `gh` mutations|`general-purpose`|
 
 Always specify `agent:` explicitly — never rely on the silent `general-purpose` default.
