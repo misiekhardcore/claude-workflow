@@ -1,5 +1,5 @@
 ---
-name: overlap-scanner
+name: workflow-overlap-scanner
 description: Wiki overlap scanner for /compound. Searches for existing notes that overlap with this session's findings and recommends Update vs New filing strategy.
 model: sonnet
 user-invocable: false

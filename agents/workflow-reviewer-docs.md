@@ -1,5 +1,5 @@
 ---
-name: reviewer-docs
+name: workflow-reviewer-docs
 description: Docs consistency reviewer. Checks cross-references, stale mentions, and contradictions in markdown and skill files. Activated when any *.md is changed or skill files are touched.
 model: sonnet
 disallowedTools: Agent AskUserQuestion Write Edit

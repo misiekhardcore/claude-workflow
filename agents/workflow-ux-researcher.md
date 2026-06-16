@@ -1,5 +1,5 @@
 ---
-name: ux-researcher
+name: workflow-ux-researcher
 description: UX pattern researcher for /design. Finds established UX patterns, interaction models, and accessibility guidelines for the target UI component or flow.
 model: haiku
 user-invocable: false

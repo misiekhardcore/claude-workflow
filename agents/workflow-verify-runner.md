@@ -1,5 +1,5 @@
 ---
-name: verify-runner
+name: workflow-verify-runner
 description: Autonomous verification orchestrator. Groups AC, spawns qa-agents in parallel, merges pass/fail report.
 model: sonnet
 user-invocable: false
@@ -23,9 +23,9 @@ Autonomous verification orchestrator. Group acceptance criteria by domain, spawn
 ## Process
 
 1. **Group AC**: cluster acceptance criteria into disjoint groups by domain (e.g., API, UI, DB, auth). Each group becomes one qa-agent assignment.
-2. **Evaluate migration gate**: if gate fires, plan to spawn `Agent("agents/reviewer-migration.md")` alongside qa-agents.
+2. **Evaluate migration gate**: if gate fires, plan to spawn `Agent("agents/workflow-reviewer-migration.md")` alongside qa-agents.
 3. **Spawn in parallel**:
-   - One `Agent("agents/qa-agent.md")` per AC group. Pass `ac_group` and `diff`.
+   - One `Agent("agents/workflow-qa-agent.md")` per AC group. Pass `ac_group` and `diff`.
    - Migration reviewer if gate fired. Pass `acceptance_criteria` and `diff`.
 4. **Collect reports** from all agents.
 5. **Merge**: combine into unified report ordered by AC number.

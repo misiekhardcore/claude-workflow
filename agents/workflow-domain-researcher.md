@@ -1,5 +1,5 @@
 ---
-name: domain-researcher
+name: workflow-domain-researcher
 description: Domain pattern scanner. Reads codebase to extract architecture patterns, data models, and API contracts relevant to the target domain.
 model: sonnet
 user-invocable: false

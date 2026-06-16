@@ -1,5 +1,5 @@
 ---
-name: patterns-researcher
+name: workflow-patterns-researcher
 description: External patterns researcher. Searches for established architectural patterns, libraries, and best practices relevant to the design problem.
 model: sonnet
 user-invocable: false

@@ -1,5 +1,5 @@
 ---
-name: flow-analyst
+name: workflow-flow-analyst
 description: High-risk flow mapper. Maps control flow, error paths, and failure modes for the target domain. Activated when high-risk signals are detected.
 model: sonnet
 user-invocable: false

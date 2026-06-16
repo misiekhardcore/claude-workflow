@@ -1,5 +1,5 @@
 ---
-name: critique-agent
+name: workflow-critique-agent
 description: Architecture and design critique agent. Independently reviews architecture/design decisions for high-risk plans and identifies gaps, risks, and trade-offs.
 user-invocable: false
 disallowedTools: Agent AskUserQuestion Write Edit

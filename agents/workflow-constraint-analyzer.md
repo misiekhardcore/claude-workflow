@@ -1,5 +1,5 @@
 ---
-name: constraint-analyzer
+name: workflow-constraint-analyzer
 description: Architecture constraint analyzer for /architecture. Reads codebase-scanner and patterns-researcher outputs and maps system constraints, topology, integration risks, and assumption challenges.
 model: sonnet
 user-invocable: false

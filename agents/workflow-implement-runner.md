@@ -1,5 +1,5 @@
 ---
-name: implement-runner
+name: workflow-implement-runner
 description: Autonomous implement orchestrator. Runs build → review → verify cycles and opens a PR. Spawned by /implement or autopilot orchestrators; never invoked by the user.
 model: sonnet
 user-invocable: false
@@ -50,14 +50,14 @@ Findings: <summary of remaining findings or "none">
 
 1. **Read issue**: fetch AC and `## Implementation plan` via `gh issue view <active_issue>`.
 2. **Scope**: enumerate sub-issues (`gh issue list --search "parent:<active_issue>" --json number`). Each sub-issue is one build group. If no sub-issues, the issue itself is one group.
-3. **Build**: spawn one `Agent("agents/build-worker.md")` per group with seed-brief containing `repo`, `branch`, group issue or `active_issue`, relevant scope slice, and file subset from `resources`. Use `background: true` agents for parallelism.
-4. **Review**: spawn `Agent("agents/review-runner.md")` with `<seed-brief>`:
+3. **Build**: spawn one `Agent("agents/workflow-build-worker.md")` per group with seed-brief containing `repo`, `branch`, group issue or `active_issue`, relevant scope slice, and file subset from `resources`. Use `background: true` agents for parallelism.
+4. **Review**: spawn `Agent("agents/workflow-review-runner.md")` with `<seed-brief>`:
    ```
    diff: <output of git diff main...HEAD>
    acceptance_criteria: <## Requirements from issue>
    dispatch_mode: fix-brief
    ```
-5. **Verify**: spawn `Agent("agents/verify-runner.md")` with `<seed-brief>`:
+5. **Verify**: spawn `Agent("agents/workflow-verify-runner.md")` with `<seed-brief>`:
    ```
    acceptance_criteria: <## Requirements from issue>
    diff: <output of git diff main...HEAD>

@@ -1,5 +1,5 @@
 ---
-name: codebase-scanner
+name: workflow-codebase-scanner
 description: Codebase architecture scanner for /architecture. Reads existing patterns, module boundaries, and dependency graph to inform architecture decisions.
 model: sonnet
 user-invocable: false

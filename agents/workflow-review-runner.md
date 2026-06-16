@@ -1,5 +1,5 @@
 ---
-name: review-runner
+name: workflow-review-runner
 description: Autonomous review orchestrator. Evaluates gates, spawns reviewer agents in parallel, and merges findings.
 model: sonnet
 user-invocable: false

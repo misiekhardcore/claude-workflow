@@ -1,5 +1,5 @@
 ---
-name: verify-reviewer-migration
+name: workflow-verify-reviewer-migration
 description: Migration verifier. Confirms migration ACs are met: rollback tested, data preserved, old-version compatibility confirmed. Different from review's migration reviewer.
 model: sonnet
 user-invocable: false

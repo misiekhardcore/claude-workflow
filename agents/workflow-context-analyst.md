@@ -1,5 +1,5 @@
 ---
-name: context-analyst
+name: workflow-context-analyst
 description: Compound context analyst. Reviews session history and diff to extract what broke, what was tried, what worked, and why. One of three parallel compound extraction agents.
 model: sonnet
 user-invocable: false

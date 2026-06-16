@@ -1,5 +1,5 @@
 ---
-name: wrap-up-runner
+name: workflow-wrap-up-runner
 description: Autonomous cleanup runner. Removes worktree, deletes branch, and clears NOTES.md after PR merge.
 model: haiku
 user-invocable: false

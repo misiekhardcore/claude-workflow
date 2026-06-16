@@ -1,5 +1,5 @@
 ---
-name: reviewer-architecture
+name: workflow-reviewer-architecture
 description: Architecture and scope-creep reviewer. Flags premature abstractions, out-of-scope changes, and speculative features. Activated when diff >300 lines or spans >5 top-level dirs.
 model: sonnet
 disallowedTools: Agent AskUserQuestion Write Edit

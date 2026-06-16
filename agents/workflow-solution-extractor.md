@@ -1,5 +1,5 @@
 ---
-name: solution-extractor
+name: workflow-solution-extractor
 description: Solution pattern extractor for /compound. Distills root cause, solution, and prevention into a reusable knowledge artifact. One of three parallel compound extraction agents.
 model: sonnet
 user-invocable: false

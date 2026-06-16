@@ -1,5 +1,5 @@
 ---
-name: reviewer-standards
+name: workflow-reviewer-standards
 description: Standards-focused code reviewer. Checks code conventions, naming, and test quality.
 model: haiku
 disallowedTools: Agent AskUserQuestion Write Edit

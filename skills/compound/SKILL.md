@@ -44,9 +44,9 @@ Invoke `Skill("notes-md")` — adopt NOTES.md lifecycle protocol.
 
 ### Full
 1. **Parallel Extraction** (3 sub-agents):
-   - `Agent("agents/context-analyst.md")` — what broke, tried, worked, and why.
-   - `Agent("agents/solution-extractor.md")` — reusable pattern (root cause, solution, prevention).
-   - `Agent("agents/overlap-scanner.md")` — overlap check; recommend Update or New.
+   - `Agent("agents/workflow-context-analyst.md")` — what broke, tried, worked, and why.
+   - `Agent("agents/workflow-solution-extractor.md")` — reusable pattern (root cause, solution, prevention).
+   - `Agent("agents/workflow-overlap-scanner.md")` — overlap check; recommend Update or New.
 2. **Synthesis**: Synthesize findings into a single drafted note.
 3. **Filing**: Same as Lightweight. If overlap scanner recommended Update → pass target identifier to `/save`.
 4. **Staleness**: Present contradicting/superseded notes to user → recommend `wiki-lint`.
