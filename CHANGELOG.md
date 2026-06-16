@@ -1,12 +1,11 @@
 # Changelog
 
-All notable changes to the **claude-workflow** plugin are recorded here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/).
+All notable changes to the **claude-workflow** plugin are recorded here. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/).
 
-GitHub Releases (with auto-generated notes and source tarballs) remain the canonical artifact: <https://github.com/misiekhardcore/claude-workflow/releases>. This file mirrors them in repo so changes are visible without leaving the source tree.
-
-## [Unreleased]
+## [2.0.0] - 2026-06-16
 ### Added
 
+- Add git-cliff changelog handling
 - Rebuild define
 - Clarify SKILL.md and agent file responsibilities, and document knowledge persistence in AGENTS.md
 - Add formatter test workflow and minify markdown tests
@@ -34,6 +33,7 @@ GitHub Releases (with auto-generated notes and source tarballs) remain the canon
 
 ### Changed
 
+- Consolidate all agent files to root agents/ directory with workflow- prefix
 - Remove outdated version references from AUTHORING.md
 - Rebuild epic-autopilot
 - Rebuild issue-autopilot
@@ -61,12 +61,20 @@ GitHub Releases (with auto-generated notes and source tarballs) remain the canon
 
 ### Fixed
 
+- Add --unreleased flag to git-cliff in release workflow
+- Remove stale specialist-mode reference in README protocol table
 - Update argument-hint in SKILL.md to include PR-URL option
 - Correct AGENTS.md path in CLAUDE.md
 - Update skill count in marketplace.json description
 - Clarify filing step in compound skill process
 - Replace stale specialist-mode reference with implement-runner agent
 - Complete v2 terminology cleanup and documentation update
+# Changelog
+
+All notable changes to the **claude-workflow** plugin are recorded here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/).
+
+GitHub Releases (with auto-generated notes and source tarballs) remain the canonical artifact: <https://github.com/misiekhardcore/claude-workflow/releases>. This file mirrors them in repo so changes are visible without leaving the source tree.
+
 ## [1.6.2] - 2026-05-15
 ### Added
 
