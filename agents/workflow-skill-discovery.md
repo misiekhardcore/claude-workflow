@@ -8,8 +8,8 @@ disallowedTools: Agent Write Edit AskUserQuestion
 permission:
   task:
     "*": "deny"
-  question: "deny"
-  edit: "deny"
+  question: deny
+  edit: deny
 background: true
 mode: all
 ---

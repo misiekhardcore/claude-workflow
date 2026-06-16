@@ -6,8 +6,8 @@ user-invocable: false
 hidden: true
 disallowedTools: AskUserQuestion Edit Write
 permission:
-  question: "deny"
-  edit: "deny"
+  question: deny
+  edit: deny
 background: true
 mode: primary
 maxTurns: 30
