@@ -4,9 +4,7 @@ description: Turn a problem statement into precise, testable acceptance criteria
 when_to_use: Use after /describe. Invoked by /discover; can run standalone.
 model: sonnet
 user-invocable: true
-metadata:
-  compatibility: claude-code, opencode
-  model: sonnet
+compatibility: claude-code opencode
 ---
 <!-- Stays inline: interactive — requires back-and-forth with user. -->
 

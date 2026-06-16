@@ -9,10 +9,7 @@ user-invocable: true
 allowed-tools: Agent Bash Read TaskCreate TaskUpdate
 context: fork
 agent: general-purpose
-metadata:
-  compatibility: claude-code, opencode
-  model: haiku
-  effort: low
+compatibility: claude-code opencode
 ---
 Lead verification phase. Goal: Verify every AC from the issue is met with evidence. Report pass/fail per criterion.
 

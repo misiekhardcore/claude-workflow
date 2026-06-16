@@ -2,8 +2,7 @@
 name: orchestrator-rules
 description: Standard directives for pipeline orchestrators coordinating specialist sub-skills.
 user-invocable: false
-metadata:
-  compatibility: claude-code, opencode
+compatibility: claude-code opencode
 ---
 Rules that apply to all pipeline orchestrators.
 

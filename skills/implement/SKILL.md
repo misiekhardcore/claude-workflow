@@ -6,10 +6,7 @@ argument-hint: "[issue#]"
 model: sonnet
 effort: high
 allowed-tools: Agent Bash Read TaskCreate TaskUpdate
-metadata:
-  compatibility: claude-code, opencode
-  model: sonnet
-  effort: high
+compatibility: claude-code opencode
 ---
 Orchestrate build → review → verify → fix cycles to produce a ready-to-merge PR. Delegates all phase work to sub-skills and worker agents — never codes, reviews, or runs tests inline.
 

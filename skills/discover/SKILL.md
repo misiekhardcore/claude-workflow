@@ -6,10 +6,7 @@ argument-hint: "[issue# | description]"
 model: opus
 effort: high
 allowed-tools: Agent Bash Read
-metadata:
-  compatibility: claude-code, opencode
-  model: opus
-  effort: high
+compatibility: claude-code opencode
 ---
 Lead discovery phase. Transform vague ideas into well-specified GitHub issues ready for architecture and implementation. Pure orchestrator — delegates all domain work to sub-skills.
 

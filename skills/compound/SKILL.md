@@ -8,10 +8,7 @@ allowed-tools: Agent Bash Read
 user-invocable: true
 context: fork
 agent: general-purpose
-metadata:
-  compatibility: claude-code, opencode
-  model: sonnet
-  effort: low
+compatibility: claude-code opencode
 ---
 Lead knowledge compounding. Goal: Extract fixes, insights, or patterns into reusable artifacts. Captures learnings from the completed phase into durable wiki notes. Delegates to `/save` when claude-obsidian is available. Degrades gracefully when `/save` is unavailable — outputs wiki content to terminal instead.
 

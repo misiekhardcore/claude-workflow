@@ -5,9 +5,7 @@ when_to_use: PR has review comments or given thread URL.
 argument-hint: "[thread-URL|PR-URL|none]"
 model: sonnet
 allowed-tools: Agent Bash Read
-metadata:
-  compatibility: claude-code, opencode
-  model: sonnet
+compatibility: claude-code opencode
 ---
 Process PR feedback end-to-end: Triage → Fix (parallel) → Reply → Compound.
 

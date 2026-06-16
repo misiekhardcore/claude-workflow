@@ -7,10 +7,7 @@ model: sonnet
 effort: high
 user-invocable: true
 allowed-tools: Agent Bash Read
-metadata:
-  compatibility: claude-code, opencode
-  model: sonnet
-  effort: high
+compatibility: claude-code opencode
 ---
 Lead review phase. Goal: Thoroughly review implementation against requirements and produce actionable findings. Produce inline GitHub review comments.
 
