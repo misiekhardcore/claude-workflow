@@ -7,8 +7,8 @@ disallowedTools: Agent AskUserQuestion Write Edit
 permission:
   task:
     "*": "deny"
-  question: "deny"
-  edit: "deny"
+  question: deny
+  edit: deny
 model: sonnet
 background: true
 mode: subagent

@@ -6,7 +6,7 @@ user-invocable: false
 hidden: true
 disallowedTools: AskUserQuestion
 permission:
-  question: "deny"
+  question: deny
 background: true
 mode: primary
 maxTurns: 30

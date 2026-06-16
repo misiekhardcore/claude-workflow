@@ -8,7 +8,7 @@ disallowedTools: Agent AskUserQuestion
 permission:
   task:
     "*": "deny"
-  question: "deny"
+  question: deny
 background: true
 mode: all
 ---

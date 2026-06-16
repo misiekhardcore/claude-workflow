@@ -6,8 +6,8 @@ disallowedTools: Agent AskUserQuestion Write Edit
 permission:
   task:
     "*": "deny"
-  question: "deny"
-  edit: "deny"
+  question: deny
+  edit: deny
 user-invocable: false
 hidden: true
 background: true
