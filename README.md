@@ -56,7 +56,7 @@ flowchart TB
         GrillMe -.-> Df_Design
         GrillMe -.-> NewSkill
 
-        subgraph Obsidian["claude-obsidian (optional)"]
+        subgraph Obsidian["agents-memo (optional)"]
             direction LR
             Save["/save"]
             WikiQuery["wiki-query"]
@@ -81,7 +81,7 @@ flowchart TB
     class Obsidian ext
 ```
 
-**Legend**: phase orchestrators (gray subgraphs) spawn specialists (light nodes) that do the bounded work. Plugin-level tools run outside the phase lifecycle. The claude-obsidian subgraph shows integrations that activate only when installed.
+**Legend**: phase orchestrators (gray subgraphs) spawn specialists (light nodes) that do the bounded work. Plugin-level tools run outside the phase lifecycle. The agents-memo subgraph shows integrations that activate only when installed.
 
 ## Install
 
@@ -128,7 +128,7 @@ Add to your `opencode.jsonc`:
 |`/resolve-pr-feedback`|Process PR review feedback in bulk|
 |`/new-skill`|Scaffold a new skill conforming to this authoring standard|
 
-## Optional: claude-obsidian integration
+## Optional: agents-memo integration
 
 When installed and bootstrapped, several skills light up vault-aware paths:
 
@@ -136,7 +136,7 @@ When installed and bootstrapped, several skills light up vault-aware paths:
 - `/prune` delegates vault audit to `wiki-lint`.
 - `/architecture` and `/define` query the vault for prior patterns/decisions.
 
-Without `claude-obsidian`, every skill still runs; vault operations are skipped with a note, and `/compound` emits a structured Markdown block for manual capture. No hard dependency.
+Without `agents-memo`, every skill still runs; vault operations are skipped with a note, and `/compound` emits a structured Markdown block for manual capture. No hard dependency.
 
 ## Workflow paths
 
@@ -154,7 +154,7 @@ Per-artifact and per-phase token budgets, context-rot threshold, instruction fil
 
 ## Ecosystem
 
-Multi-plugin coordination: MCP scope, inter-plugin dependencies, optional `claude-obsidian` integration via runtime detection: [`docs/cross-plugin.md`](docs/cross-plugin.md).
+Multi-plugin coordination: MCP scope, inter-plugin dependencies, optional `agents-memo` integration via runtime detection: [`docs/cross-plugin.md`](docs/cross-plugin.md).
 
 ## Authoring standard
 

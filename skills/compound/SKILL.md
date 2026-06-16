@@ -1,6 +1,6 @@
 ---
 name: compound
-description: Capture learnings from completed work into durable wiki notes. Delegates to /save when claude-obsidian is available.
+description: Capture learnings from completed work into durable wiki notes. Delegates to /save when agents-memo is available.
 when_to_use: Use after a feature is merged to capture learnings into durable wiki notes.
 model: sonnet
 effort: low
@@ -10,7 +10,7 @@ context: fork
 agent: general-purpose
 compatibility: claude-code opencode
 ---
-Lead knowledge compounding. Goal: Extract fixes, insights, or patterns into reusable artifacts. Captures learnings from the completed phase into durable wiki notes. Delegates to `/save` when claude-obsidian is available. Degrades gracefully when `/save` is unavailable — outputs wiki content to terminal instead.
+Lead knowledge compounding. Goal: Extract fixes, insights, or patterns into reusable artifacts. Captures learnings from the completed phase into durable wiki notes. Delegates to `/save` when agents-memo is available. Degrades gracefully when `/save` is unavailable — outputs wiki content to terminal instead.
 
 ## Assessment
 Before selecting a mode, evaluate the session against these value buckets:
@@ -36,10 +36,10 @@ Invoke `Skill("notes-md")` — adopt NOTES.md lifecycle protocol.
 
 ### Lightweight
 1. **Extraction**: Identify problem/solution from history.
-2. **Overlap Check**: If `claude-obsidian:wiki-query` available → search for overlapping notes on module/symptoms/root cause.
+2. **Overlap Check**: If `agents-memo:wiki-query` available → search for overlapping notes on module/symptoms/root cause.
 3. **Draft**: Use appropriate Knowledge Track.
 4. **Filing**:
-   - `claude-obsidian:save` available → invoke `/save` with drafted content. Make sure that all the steps are executed.
+   - `agents-memo:save` available → invoke `/save` with drafted content. Make sure that all the steps are executed.
    - Otherwise → emit inline fenced Markdown + install prompt.
 5. **Staleness**: Flag contradictions with existing notes for user consolidation.
 

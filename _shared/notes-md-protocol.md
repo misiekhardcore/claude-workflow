@@ -11,9 +11,9 @@ Four layers:
 |`TodoWrite`|In-context|This session|Throwaway scratchpad|
 |`.claude/NOTES.md`|Worktree-local, gitignored|This phase, across sessions|In-flight decisions, task progress, current task, open questions|
 |GitHub issue|Remote|Cross-phase|Acceptance criteria, prior-phase decisions, handoff state|
-|Durable vault|claude-obsidian vault (git-tracked)|Durable, cross-feature|Patterns, bug-fix history, architectural insights|
+|Durable vault|agents-memo vault (git-tracked)|Durable, cross-feature|Patterns, bug-fix history, architectural insights|
 
-Do not mirror `TodoWrite` and `.claude/NOTES.md` — they serve different roles. The vault layer materializes when `claude-obsidian` is installed; without it, skills that would write degrade gracefully.
+Do not mirror `TodoWrite` and `.claude/NOTES.md` — they serve different roles. The vault layer materializes when `agents-memo` is installed; without it, skills that would write degrade gracefully.
 
 ## NOTES.md vs the vault's recency channels
 

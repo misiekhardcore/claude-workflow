@@ -1,6 +1,6 @@
 # Knowledge Tracks — Output Templates
 
-Choose the track that fits what was learned. Both produce a structured Markdown note — `claude-obsidian`'s `/save` will slot it into the correct vault location (concept/entity/source) and attach frontmatter based on content.
+Choose the track that fits what was learned. Both produce a structured Markdown note — `agents-memo`'s `/save` will slot it into the correct vault location (concept/entity/source) and attach frontmatter based on content.
 
 ## Bug Track
 
@@ -49,7 +49,7 @@ Use when the learning is a pattern, technique, or architectural insight. Tag wit
 
 ## Note Shape — Inline Fallback
 
-When `claude-obsidian` is not available and the note is emitted inline, include a minimal frontmatter block so the user can drop it straight into any vault:
+When `agents-memo` is not available and the note is emitted inline, include a minimal frontmatter block so the user can drop it straight into any vault:
 
 ```markdown
 ---
@@ -63,4 +63,4 @@ created: <YYYY-MM-DD>
 <!-- Bug Track or Knowledge Track body -->
 ```
 
-When `claude-obsidian` is active, pass only the body + a suggested title to `/save`; the plugin owns the frontmatter schema.
+When `agents-memo` is active, pass only the body + a suggested title to `/save`; the plugin owns the frontmatter schema.

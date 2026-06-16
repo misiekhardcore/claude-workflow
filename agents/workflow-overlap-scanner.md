@@ -22,7 +22,7 @@ Wiki overlap scanner for the `/compound` phase. Search the wiki for existing not
 
 ## Process
 
-1. If `claude-obsidian:wiki-query` is available: query for notes matching `topic` and `root_cause` terms.
+1. If `agents-memo:wiki-query` is available: query for notes matching `topic` and `root_cause` terms.
 2. Classify overlap level:
    - **High overlap** (>70% topic match): recommend Update — pass the target note identifier.
    - **Partial overlap** (30–70%): recommend New with a cross-link to the related note.
