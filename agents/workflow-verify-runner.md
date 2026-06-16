@@ -7,6 +7,7 @@ hidden: true
 disallowedTools: AskUserQuestion Write Edit
 permission:
   question: "deny"
+  edit: "deny"
 background: true
 mode: subagent
 ---

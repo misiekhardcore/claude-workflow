@@ -10,6 +10,7 @@ permission:
   task:
     "*": "deny"
   question: "deny"
+  edit: "deny"
 background: true
 mode: subagent
 ---

@@ -8,6 +8,7 @@ permission:
   task:
     "*": "deny"
   question: "deny"
+  edit: "deny"
 model: sonnet
 background: true
 mode: subagent

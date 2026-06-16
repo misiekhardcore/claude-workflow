@@ -7,6 +7,7 @@ permission:
   task:
     "*": "deny"
   question: "deny"
+  edit: "deny"
 user-invocable: false
 hidden: true
 background: true
