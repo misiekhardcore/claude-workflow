@@ -161,7 +161,7 @@ Shared protocols at `_shared/`:
 |`interviewing-rules.md`|One-question-at-a-time interview protocol|
 |`notes-md-protocol.md`|In-phase NOTES.md memory layer|
 |`orchestrator-rules.md`|Shared rules for pipeline orchestrators: CWD verification, delegation, no-autonomous-merge, seed-brief contract|
-|`seed-brief.md`|Spawn-time context packaging (YAML-in-XML) for orchestrator→specialist handoff; payload types defined in `specialist-mode`|
+|`seed-brief.md`|Spawn-time context packaging (YAML-in-XML) for orchestrator→specialist handoff|
 
 ## Releasing
 
