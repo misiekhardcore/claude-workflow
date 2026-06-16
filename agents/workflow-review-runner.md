@@ -9,7 +9,7 @@ permission:
   question: "deny"
   edit: "deny"
 background: true
-mode: subagent
+mode: primary
 maxTurns: 30
 ---
 Autonomous review orchestrator. Evaluate activation gates, spawn reviewer agents in parallel, merge and deduplicate findings, and emit the review report. All context is in the spawn prompt.

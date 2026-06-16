@@ -11,7 +11,7 @@ permission:
   question: "deny"
   edit: "deny"
 background: true
-mode: subagent
+mode: primary
 ---
 Autonomous cleanup agent. Remove the feature worktree, delete the branch, and clear NOTES.md. Called only after the PR is in a terminal state (merged or closed). No user interaction.
 

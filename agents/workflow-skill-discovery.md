@@ -11,7 +11,7 @@ permission:
   question: "deny"
   edit: "deny"
 background: true
-mode: subagent
+mode: all
 ---
 Skill discovery agent. Search the skills marketplace and return ranked candidates for the user to choose from. The orchestrator handles confirmation and installation.
 

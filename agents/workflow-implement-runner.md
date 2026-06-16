@@ -8,7 +8,7 @@ disallowedTools: AskUserQuestion
 permission:
   question: "deny"
 background: true
-mode: subagent
+mode: primary
 maxTurns: 30
 ---
 Autonomous implementation cycle runner. Drives build → review → verify up to 3 times and opens a draft PR. All context is in the spawn prompt — no user interaction at any point.

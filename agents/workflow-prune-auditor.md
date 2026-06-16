@@ -12,7 +12,7 @@ permission:
   question: "deny"
   edit: "deny"
 background: true
-mode: subagent
+mode: all
 ---
 You are a single-lane audit worker spawned by `/prune`. Your job: run exactly one audit lane and return a structured findings report. The main `/prune` session aggregates reports from all lane workers.
 

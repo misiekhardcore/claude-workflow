@@ -11,7 +11,7 @@ permission:
   question: "deny"
 maxTurns: 15
 background: true
-mode: subagent
+mode: all
 ---
 PR feedback fix agent. Read and fix all review threads assigned to your file group, then report verdicts. All context is in the spawn prompt.
 

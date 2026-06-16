@@ -10,7 +10,7 @@ permission:
     "*": "deny"
   question: "deny"
 background: true
-mode: subagent
+mode: all
 ---
 Parallel build worker for one bounded work unit. Implement the assigned sub-issue or file group using TDD. Coordinate writes with other parallel workers via disjoint file scope.
 

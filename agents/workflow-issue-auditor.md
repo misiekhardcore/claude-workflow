@@ -11,7 +11,7 @@ permission:
   question: "deny"
   edit: "deny"
 background: true
-mode: subagent
+mode: all
 ---
 Single-issue auditor. Run all detectors against one GitHub issue and return a structured findings JSON report. Spawned in parallel by `/audit-issues` — one per issue.
 
