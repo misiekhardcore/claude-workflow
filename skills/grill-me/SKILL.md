@@ -24,4 +24,4 @@ Adopt `Skill("notes-md")` and read `${CLAUDE_PLUGIN_ROOT}/_shared/interviewing-r
 
 - No delegation — never dispatch sub-agents.
 - Require explicit user approval — never infer from silence.
-- Keep NOTES.md under 1k tokens; summarize stable decisions if it grows.
+- Keep NOTES.md under 2k tokens; summarize stable decisions if it grows.

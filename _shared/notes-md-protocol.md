@@ -45,7 +45,7 @@ The phase-ending skill is the harvest point: at PR creation it reads NOTES.md, f
 
 ## Required sections
 
-`.claude/NOTES.md` is a bullet list, not prose. Keep the whole file readable in one screen — it should cost <1k tokens to re-read.
+`.claude/NOTES.md` is more a bullet list than prose. Keep the file content concise and information dense — it should cost <2k tokens to re-read.
 
 ```markdown
 # NOTES — feat/<feature-slug>

@@ -16,7 +16,7 @@ The lifecycle moves state between three artifact tiers. Each has a hard cap:
 
 |Artifact|Cap|Why|
 |-|-|-|
-|`.claude/NOTES.md` (per session)|**<1k tokens**|Re-read on every resume and before every `/compact`; must fit on one screen|
+|`.claude/NOTES.md` (per session)|**<2k tokens**|Re-read on every resume and before every `/compact`|
 |GitHub issue body (handoff)|**<2k tokens**|Loaded fully at phase start; the five-field shape in `Read ${CLAUDE_PLUGIN_ROOT}/_shared/handoff-artifact.md` targets this|
 |Seed brief to sub-agent|**<500 tokens**|Brief is objective + constraint + report contract — not session history|
 |Sub-agent report to lead|1–2k tokens|Anthropic's reference figure for the isolation pattern|

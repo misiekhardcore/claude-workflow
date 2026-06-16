@@ -78,4 +78,4 @@ Slice rules:
 
 - **Checkpoint before every `Skill()` or `Agent()` call.** If the session dies mid-spawn, NOTES.md is the sole resume source.
 - **No issue body updates for intra-orchestrator state.** Phase boundaries use the handoff-artifact; everything else stays in NOTES.md.
-- **Keep under 1k tokens.** If the decision log grows, promote stable decisions to the issue body and trim NOTES.md.
+- **Keep under 2k tokens.** - ummarize stable decisions if it grows.
