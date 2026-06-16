@@ -7,6 +7,10 @@ model: sonnet
 effort: high
 user-invocable: true
 allowed-tools: Agent Bash Read TaskCreate TaskUpdate
+metadata:
+  compatibility: claude-code, opencode
+  model: sonnet
+  effort: high
 ---
 Lead build phase. Goal: Take a fully specified GitHub issue and produce working code. Builds a feature using TDD. Produces implementation code in a worktree. Hands off via the worktree for review.
 

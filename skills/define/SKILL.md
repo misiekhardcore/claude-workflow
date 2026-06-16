@@ -6,6 +6,10 @@ argument-hint: "[issue#]"
 model: opus
 effort: high
 allowed-tools: Agent Bash Read
+metadata:
+  compatibility: claude-code, opencode
+  model: opus
+  effort: high
 ---
 Lead definition phase. Transform an approved issue into a concrete implementation plan (architecture + design).
 

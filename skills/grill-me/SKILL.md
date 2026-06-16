@@ -4,6 +4,9 @@ description: Interview the user relentlessly about a plan or design until reachi
 when_to_use: Use when the user wants to stress-test a plan, get grilled on a design, or mentions "grill me".
 model: sonnet
 allowed-tools: AskUserQuestion Read Write Bash
+metadata:
+  compatibility: claude-code, opencode
+  model: sonnet
 ---
 <!-- Interactive primitive — requires back-and-forth with user. -->
 

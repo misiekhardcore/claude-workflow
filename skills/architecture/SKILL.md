@@ -6,6 +6,10 @@ model: opus
 effort: high
 allowed-tools: Agent Bash Read WebSearch WebFetch
 user-invocable: true
+metadata:
+  compatibility: claude-code, opencode
+  model: opus
+  effort: high
 ---
 Lead architecture decisions. Produce architectural decisions (components, data flow, APIs, dependencies). Hands off via GitHub issue body under `## Implementation plan`.
 

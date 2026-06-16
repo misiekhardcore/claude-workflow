@@ -5,6 +5,9 @@ model: haiku
 user-invocable: false
 context: fork
 agent: Explore
+metadata:
+  compatibility: claude-code, opencode
+  model: haiku
 ---
 ## Input
 

@@ -6,6 +6,10 @@ model: haiku
 effort: low
 allowed-tools: Agent Bash WebFetch WebSearch
 user-invocable: true
+metadata:
+  compatibility: claude-code, opencode
+  model: haiku
+  effort: low
 ---
 Lead skill discovery and installation. Goal: Find and install agent skills from the open ecosystem when the user wants to extend capabilities. Discovery sub-agent (haiku) handles search + leaderboard fetch; main thread handles confirmation + install.
 

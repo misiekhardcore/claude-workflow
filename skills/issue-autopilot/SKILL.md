@@ -6,6 +6,10 @@ argument-hint: <issue#>
 model: opus
 effort: high
 allowed-tools: Agent Bash Read TaskCreate TaskUpdate
+metadata:
+  compatibility: claude-code, opencode
+  model: opus
+  effort: high
 ---
 Orchestrate the single-issue ship pipeline. Take a GitHub issue number and drive it to a merged PR with clean local state — pausing only where human action is required (review, merge).
 

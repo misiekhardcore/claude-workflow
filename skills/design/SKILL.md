@@ -5,6 +5,9 @@ when_to_use: Use to produce UI/UX design decisions. Invoked by /define; can run 
 model: sonnet
 allowed-tools: Agent Bash Read
 user-invocable: true
+metadata:
+  compatibility: claude-code, opencode
+  model: sonnet
 ---
 Lead UI/UX design decisions. Produce visual and interaction design that fits existing systems. Hands off via GitHub issue body under `## Implementation plan`.
 
