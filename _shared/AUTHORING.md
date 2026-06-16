@@ -4,7 +4,7 @@ This document defines the structural and behavioral conventions for building ski
 
 ## Role Taxonomy
 
-Skills are classified by execution context and responsibility. See `${CLAUDE_PLUGIN_ROOT}/docs/dispatch-primitives.md` for the canonical taxonomy and `${CLAUDE_PLUGIN_ROOT}/_shared/dispatch-decision.md` for the condensed runtime reference.
+Skills are classified by execution context and responsibility. See `docs/dispatch-primitives.md` for the canonical taxonomy and `_shared/dispatch-decision.md` for the condensed runtime reference.
 
 ### Skill vs. Reference File
 
@@ -14,7 +14,7 @@ Skills and reference files serve different purposes and require different access
 |-|-|-|
 |Protocol or Worker skill|Runtime behavior agents must adopt or execute|`Invoke \`Skill("<name>")\``|
 |Per-skill reference doc|Static tables, checklists, or context scoped to one skill|`Read \`references/<file>.md\``|
-|Shared reference doc|Static tables, checklists, or context shared across skills|`Read \`${CLAUDE_PLUGIN_ROOT}/_shared/<file>.md\``|
+|Shared reference doc|Static tables, checklists, or context shared across skills|`Read \`_shared/<file>.md\``|
 
 **Decision rule**: If the file encodes a behavioral constraint agents must actively operate under → Protocol skill. If the file contains format tables, field lists, CLI command references, or read-only lookup context → `_shared/` doc. The instruction "agents must do X" is a Protocol skill; "here is the YAML format for field Z" is a shared reference doc.
 
@@ -68,16 +68,20 @@ To prevent race conditions and "last-write-wins" conflicts:
 - **Isolation Escape Hatch**: If disjoint scope cannot be guaranteed, use `isolation: "worktree"` to provide each agent with its own git worktree.
 
 ### 3. Defensive Frontmatter
-Worker agents should include `disallowedTools: Agent` in their frontmatter to prevent recursive agent spawning.
+Worker agents should include both Claude Code and opencode guardrails:
+
+- **Claude Code**: `disallowedTools: Agent AskUserQuestion` — prevents recursive agent spawning and user interaction.
+- **OpenCode**: `permission: { task: {"*": "deny"}, question: "deny" }` — equivalent for opencode's permission system.
+- **Read-only workers** (reviewers, scanners): Add `Write Edit` to `disallowedTools` and `edit: "deny"` to `permission`.
 
 ## Custom Agent Authoring
 
 ### When to use a Custom Agent File
 Use a dedicated file in the `agents/` directory when:
-- Specific tool restrictions are required.
+- Specific tool restrictions are required (`disallowedTools` for Claude Code, `permission` for opencode).
 - A specific model override is needed.
-- `disallowedTools` guardrails must be enforced.
-- A `maxTurns` cap is required.
+- `mode` classification must be set (`primary` for orchestrators, `all` for sub-orchestrators, `subagent` for workers).
+- A `maxTurns` (`steps` in opencode) cap is required.
 
 ### Body Bug Workaround (GitHub #13627)
 Due to a bug where agent file bodies are occasionally ignored:
@@ -110,7 +114,7 @@ See `_shared/notes-md-protocol.md` for the full protocol.
 
 The `/discovery` skill has been renamed to `/discover`.
 
-- **Breaking Change**: Existing `CLAUDE.md` references to `/discovery` will break.
+- **Breaking Change**: Existing `AGENTS.md` references to `/discovery` will break.
 - **Action**: Users must manually update their references. No compatibility shim is provided to avoid technical debt.
 
 ## Body Assembly by Role/Tier
@@ -172,12 +176,17 @@ Sequential step numbering. Orchestrators always include Init NOTES.md, Sign-off,
 
 ### Default Frontmatter by Role
 
-|Field|Orchestrator|Specialist|Utility|Primitive|Protocol|
-|-|-|-|-|-|-|
-|`model`|`sonnet`|`sonnet`|`sonnet`|`sonnet`|`sonnet`|
-|`effort`|omit|omit|omit|omit|omit|
-|`allowed-tools`|omit|omit|omit|omit|omit|
-|`user-invocable`|omit (defaults true)|omit|omit|omit|`false`|
+Per-role frontmatter defaults are documented in `_shared/frontmatter-reference.md` (§ Default Values by Role). That file also serves as the canonical field registry for both tools and both file types (SKILL.md + agent `.md`).
+
+### Dual-Compat Frontmatter
+
+All skills in `agents-flow` carry frontmatter for both Claude Code and opencode:
+
+- **SKILL.md files**: Include `compatibility: claude-code opencode` as the last field before `---`. All existing Claude Code fields remain in place — opencode ignores unrecognized fields.
+- **Agent `.md` files**: Carry both Claude Code fields and opencode fields (`mode`, `permission`, `hidden`). Each tool reads its own frontmatter; unknown fields are silently ignored.
+- **New skills**: `/new-skill` automatically adds `compatibility: claude-code opencode` to every generated SKILL.md.
+
+See `_shared/frontmatter-reference.md` for the complete field registry, per-role defaults, and Claude Code → OpenCode field mapping.
 
 ## Orchestrator Decomposition
 
@@ -191,9 +200,10 @@ Document the orchestrator's specific definition of "work unit" (what counts as a
 
 ## `_shared/` File Catalogue
 
-Reference on-demand via `Read \`${CLAUDE_PLUGIN_ROOT}/_shared/<file>.md\``:
+Reference on-demand via `Read \`_shared/<file>.md\``:
 
 - `composition.md` — team/sub-agent cost and shape
+- `frontmatter-reference.md` — canonical field registry for SKILL.md and agent `.md` files (both tools)
 - `dispatch-decision.md` — condensed role taxonomy and `context: fork` decision table
 - `handoff-artifact.md` — five-field issue-body structure for phase handoffs
 - `interviewing-rules.md` — one-question-at-a-time interviewing protocol for user-interactive discovery
@@ -203,15 +213,29 @@ Reference on-demand via `Read \`${CLAUDE_PLUGIN_ROOT}/_shared/<file>.md\``:
 
 ## Agent File Template
 
-Agent files live in `agents/<agent-name>.md`. Use this template:
+Agent files live in `agents/<agent-name>.md`. Use this dual-compat template:
 
 ```yaml
 ---
+# --- Shared fields (both tools) ---
 name: <agent-name>
 description: <one sentence — what it does and when it's spawned>
 model: <sonnet|haiku|opus>
+
+# --- Claude Code fields ---
 user-invocable: false
-disallowedTools: Agent AskUserQuestion
+disallowedTools: Agent AskUserQuestion  # + Write Edit for read-only agents
+# maxTurns: 15
+# background: true  # for parallel workers
+
+# --- OpenCode fields ---
+mode: subagent  # primary | all | subagent
+# hidden: true  # hide from @ menu (subagent only)
+# permission:
+#   task:
+#     "*": "deny"
+#   question: "deny"
+#   edit: "deny"  # for read-only agents
 ---
 <Role sentence. Input source. No user interaction.>
 
