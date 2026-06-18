@@ -20,9 +20,7 @@ For each component, propose 2-3 visual/interaction approaches:
 
 ### 3. Evaluate
 
-Spawn `workflow-reviewer` via Task tool — pass `focus: a11y`, `payload.component` and `payload.proposals` (list of approach names and descriptions).
-
-Present a11y findings alongside proposals. Load the "grill-me" skill for deliberation. User selects approach.
+Present proposals to the user. Load the "grill-me" skill for deliberation. User selects approach. Accessibility is reviewed against the actual diff during `/implement` (the reviewer's `a11y` focus), not inferred from proposal prose here.
 
 ### 4. Output
 
@@ -36,4 +34,4 @@ Load the "preflight" skill. Read `@_shared/handoff-artifact.md`. Write design de
 
 - **Consistency**: Follow existing design system/component patterns unless diverging.
 - **Recommend an answer**: For each component, recommend a preferred approach before asking the user to choose.
-- **Stay interactive**: Never skip user-facing deliberation — proposals and a11y review are discussion points, not automations.
+- **Stay interactive**: Never skip user-facing deliberation — proposals are discussion points, not automations.
