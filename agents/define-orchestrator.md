@@ -60,7 +60,7 @@ Collect final decisions into a cohesive implementation plan.
 
 ### 8. Handoff
 
-Load the preflight skill. Read `_shared/handoff-artifact.md`.
+Load the preflight skill. Read `@_shared/handoff-artifact.md`.
 
 Update issue body with `## Implementation plan` section:
 - Acceptance criteria (unchanged), Constraints, Prior decisions, Evidence, Open questions.
@@ -73,10 +73,12 @@ Require explicit user approval.
 
 ### 10. Compound on exit
 
-Read `_shared/compound-on-exit.md`. Load the compound skill exactly once on clean completion. Then instruct the user: "Start `/implement` in a fresh session."
+Read `@_shared/compound-on-exit.md`. Load the compound skill exactly once on clean completion. Then instruct the user: "Start `/implement` in a fresh session."
 
 ## Rules
 
-- **Delegate, don't duplicate**: Sub-skills own their domain work. Do not produce architecture/design output yourself.
-- **Explicit approval**: Silence does not equal approval. Require direct confirmation.
-- **Exploration**: Time-box codebase reading to 3-5 tool calls, then ask a focused question.
+<rules>
+<constraint>Delegate, don't duplicate: Sub-skills own their domain work. Do not produce architecture/design output yourself.</constraint>
+<constraint>Explicit approval: Silence does not equal approval. Require direct confirmation.</constraint>
+<guideline>Exploration: Time-box codebase reading to 3-5 tool calls, then ask a focused question.</guideline>
+</rules>

@@ -50,7 +50,7 @@ Load the worktree skill to create or verify the implementation worktree.
 
 ### 5. Handoff
 
-Read `_shared/handoff-artifact.md` at this point. Ensure issue body has the five-field structure (AC, Constraints, Prior decisions, Evidence, Open questions).
+Read `@_shared/handoff-artifact.md` at this point. Ensure issue body has the five-field structure (AC, Constraints, Prior decisions, Evidence, Open questions).
 
 ### 6. Implementation loop
 
@@ -70,7 +70,7 @@ Maintain an evolving hidden checklist: a lean PASS/FAIL per AC. Track cycle coun
 <evaluation>
 - **Clean pass** (all ACs pass, zero findings) -> proceed to PR creation (step 7).
 - **Findings present and cycles < max_cycles** -> write fix brief to `.claude/NOTES.md` (failing ACs, file:line findings). Resume next cycle: build -> review -> verify.
-- **Cycles = max_cycles** -> emit final report ("report incomplete"), surface remaining findings in PR body.
+- **Cycles = max_cycles** -> emit final report ("report incomplete"), proceed to PR creation (step 7) with remaining findings surfaced in the PR body.
 </evaluation>
 
 </loop>
@@ -87,7 +87,7 @@ Run from worktree root:
 
 ### 8. Compound
 
-Read `_shared/compound-on-exit.md`. On clean completion, load the compound skill exactly once. No invocation on abort or early exit.
+Read `@_shared/compound-on-exit.md`. On clean completion, load the compound skill exactly once. No invocation on abort or early exit.
 
 ### 9. Finalize
 
@@ -101,12 +101,12 @@ PR: <url>
 Findings: <summary of remaining findings or "none">
 ```
 
-## Rules
-
-- **No user interaction during loop** except terminal gate at max_cycles.
-- **Run all cycles back-to-back** without pausing.
-- **Each cycle must address ALL findings** from the previous cycle.
-- **Verify worktree exists** before any build spawn.
-- **Emit one status line per cycle**: `Cycle N/<max_cycles> — build <state>, review <N findings>, verify <N failures>`.
-- **Delegate, don't duplicate**: Sub-agents own their domain work. You own the loop and the checklist, not the code.
-- **No autonomous merge**: Exit at awaiting-merge stage. Never trigger a merge.
+<rules>
+<constraint>No user interaction during loop except terminal gate at max_cycles.</constraint>
+<constraint>Each cycle must address ALL findings from the previous cycle.</constraint>
+<constraint>Verify worktree exists before any build spawn.</constraint>
+<constraint>No autonomous merge: Exit at awaiting-merge stage. Never trigger a merge.</constraint>
+<guideline>Run all cycles back-to-back without pausing.</guideline>
+<guideline>Emit one status line per cycle: `Cycle N/<max_cycles> — build <state>, review <N findings>, verify <N failures>`.</guideline>
+<guideline>Delegate, don't duplicate: Sub-agents own their domain work. You own the loop and the checklist, not the code.</guideline>
+</rules>

@@ -26,7 +26,7 @@ Load the orchestrator-rules skill — adopt CWD verification, delegation, seed-b
 
 Read issue (problem statement + AC) if an issue number was provided. If no issue exists or arguments were vague, elicit a one-sentence problem summary from the user using the question tool.
 
-Read `_shared/interviewing-rules.md` — adopt atomic questions, rigor, visual-first, explicit approval.
+Read `@_shared/interviewing-rules.md` — adopt atomic questions, rigor, visual-first, explicit approval.
 
 ### 2. Init NOTES.md
 
@@ -54,7 +54,7 @@ Combine output into a cohesive GitHub issue body:
 
 Load the preflight skill with `suppress branch line: true`.
 
-Read `_shared/handoff-artifact.md` at this point (point-of-need) — do not preload.
+Read `@_shared/handoff-artifact.md` at this point (point-of-need) — do not preload.
 
 If issue exists, update the body. Otherwise create via `gh issue`.
 
@@ -64,11 +64,11 @@ Require explicit user approval.
 
 ### 9. Compound on exit
 
-Read `_shared/compound-on-exit.md`. Load the compound skill exactly once on clean completion. Then instruct the user: "Start `/define` in a fresh session."
+Read `@_shared/compound-on-exit.md`. Load the compound skill exactly once on clean completion. Then instruct the user: "Start `/define` in a fresh session."
 
-## Rules
-
-- **Delegate, don't duplicate**: Sub-skills own their domain. Do not do their work yourself.
-- **Explicit approval**: Partial feedback does not equal approval. Require direct "Yes/Approved".
-- **Persistence**: Prior-art findings persisted in Prior decisions / Evidence fields.
-- **Traceability**: Every feature gets one issue; sub-issues use proper GitHub relationships.
+<rules>
+<constraint>Delegate, don't duplicate: Sub-skills own their domain. Do not do their work yourself.</constraint>
+<constraint>Explicit approval: Partial feedback does not equal approval. Require direct "Yes/Approved".</constraint>
+<guideline>Persistence: Prior-art findings persisted in Prior decisions / Evidence fields.</guideline>
+<guideline>Traceability: Every feature gets one issue; sub-issues use proper GitHub relationships.</guideline>
+</rules>
