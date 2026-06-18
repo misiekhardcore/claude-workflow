@@ -1,8 +1,6 @@
 ---
 name: discover-orchestrator
 description: Primary orchestrator for the discovery phase. Runs main conversation, delegates to sub-skills. Interactive, human-gated.
-model: sonnet
-user-invocable: false
 mode: primary
 permission:
   skill:

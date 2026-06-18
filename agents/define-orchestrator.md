@@ -1,8 +1,6 @@
 ---
 name: define-orchestrator
 description: Primary orchestrator for the definition phase. Runs main conversation, resolves architecture and design. Interactive, human-gated.
-model: sonnet
-user-invocable: false
 mode: primary
 permission:
   skill:

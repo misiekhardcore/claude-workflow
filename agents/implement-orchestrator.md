@@ -1,8 +1,6 @@
 ---
 name: implement-orchestrator
 description: Primary orchestrator for the implementation phase. Drives build-to-review-to-verify loop in main conversation, opens draft PR.
-model: sonnet
-user-invocable: false
 mode: primary
 permission:
   skill:
