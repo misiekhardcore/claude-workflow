@@ -2,7 +2,6 @@
 name: discover
 description: Full discovery phase — explore a problem and produce a GitHub issue with AC.
 agent: discover-orchestrator
-compatibility: claude-code opencode
 ---
 <command kind="discover" type="interactive">
 <arguments raw="$ARGUMENTS" />

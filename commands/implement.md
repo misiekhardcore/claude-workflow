@@ -2,7 +2,6 @@
 name: implement
 description: Full implementation cycle — build, review, and verify, then open a PR.
 agent: implement-orchestrator
-compatibility: claude-code opencode
 ---
 <command kind="implement" type="autonomous">
 <arguments raw="$ARGUMENTS" />

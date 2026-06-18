@@ -2,7 +2,6 @@
 name: define
 description: Lead definition phase — resolve architecture and design technical decisions.
 agent: define-orchestrator
-compatibility: claude-code opencode
 ---
 <command kind="define" type="interactive">
 <arguments raw="$ARGUMENTS" />

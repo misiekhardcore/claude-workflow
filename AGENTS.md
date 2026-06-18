@@ -16,6 +16,9 @@ Symlinks `commands/`, `agents/`, `skills/` into `~/.config/opencode/` (or `$XDG_
 
 |Command|What it does|
 |-|-|
+|`/discover`|Full discovery phase — explore a problem and produce a GitHub issue with AC.|
+|`/define`|Lead definition phase — resolve architecture and design technical decisions.|
+|`/implement`|Full implementation cycle — build, review, and verify, then open a PR.|
 |`npm run format`|Minifies all `.md` files via `bin/minify-md -i -r .`|
 |`npm run prepare`|Installs husky git hooks|
 |`./bin/install`|Symlinks `commands/`, `agents/`, `skills/` into opencode config dir|
@@ -24,7 +27,7 @@ Symlinks `commands/`, `agents/`, `skills/` into `~/.config/opencode/` (or `$XDG_
 
 Pre-commit runs `npx lint-staged` which runs `bin/minify-md -i -r` on staged `.md` files — do not fight the minifier.
 
-Smoke tests at `tests/install-smoke.sh`. CI runs format check + install smoke on PRs to `main`.
+Smoke tests at `tests/install-smoke.sh`. CI runs format check + install smoke on PRs to `main`. The lifecycle commands (`/discover`, `/define`, `/implement`) are auto-discovered by opencode from `commands/` — no config registration needed.
 
 ## Feature workflow
 
@@ -44,7 +47,7 @@ During `/define` or `/discover` exploration: time-box codebase reading to 3–5 
 
 - **Skills**: 26 skill dirs under `skills/`. Each has a `SKILL.md` (the actual skill body). Some also have `references/` (per-skill static docs).
 - **Commands**: `commands/` at repo root — opencode command files.
-- **Agent files**: `agents/` at repo root — 30 worker agent files, one per single-responsibility role.
+- **Agent files**: `agents/` at repo root — 33 agent files (3 `mode: primary` orchestrators + 30 worker subagents), one per single-responsibility role.
 - **Shared protocols**: `_shared/*.md` — reference docs, not skills. Use `Read` not `Skill()` to access them.
 - **Templates**: `_templates/` — scaffolding skeletons for new skills (`AUTHORING.md` is the canonical authoring guide).
 - **Bin tools**: `bin/minify-md` (markdown minifier), `bin/list-prune-files` (used by `/prune` skill), `bin/install` (opencode symlink installer).
@@ -81,7 +84,7 @@ Shared docs at `_shared/` are accessible via `@_shared/<file.md>` (configured in
 
 - `.gitignore` entries: `.claude/NOTES.md`, `.worktrees/`, `node_modules/` — do not commit these.
 - Skills specify their own `model:` and `effort:` in frontmatter — trust them.
-- Orchestrator SKILL.md must be ≤ 150 lines. No inline domain work — delegate.
+- Orchestrator agents (`mode: primary`) drive the process and own the loop. They delegate domain work to sub-skills and subagents. Orchestrator SKILL.md files must be ≤ 150 lines.
 - Worker agents should include `permission: { task: {"*": "deny"}, question: "deny" }` to prevent recursive spawning and user interaction.
 - **Persist lessons to AGENTS.md**: When you discover a project-level convention, gotcha, or architecture rule that future agents would benefit from, add it to this file under the relevant section. NOTES.md is ephemeral session scratch — durable knowledge lives here.
 - **Update docs with code**: Any change to a skill, agent, or command must update all related docs (README.md, docs/*.md, AGENTS.md, other skills referencing it) in the same commit. Stale docs rot faster than dead code.
