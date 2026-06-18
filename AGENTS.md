@@ -6,14 +6,11 @@ This is a skill/agent collection for AI coding agents. Skills live at `skills/<n
 
 ## Install
 
-Add `./skills` to `skills.paths` in your `opencode.jsonc`:
-```jsonc
-{
-  "skills": {
-    "paths": ["./skills"]
-  }
-}
+```bash
+bin/install
 ```
+
+Symlinks `commands/`, `agents/`, `skills/` into `~/.config/opencode/` (or `$XDG_CONFIG_HOME/opencode`). Idempotent — re-run safely. Use `bin/install --uninstall` to remove only symlinks pointing back into this repo.
 
 ## Commands
 
