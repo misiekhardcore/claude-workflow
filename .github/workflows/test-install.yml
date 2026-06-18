@@ -2,7 +2,7 @@ name: Test install
 
 on:
   pull_request:
-    branches: [main, claude/opencode-native-rebuild]
+    branches: [main, epic/opencode-native-rebuild]
 
 jobs:
   smoke-test:
