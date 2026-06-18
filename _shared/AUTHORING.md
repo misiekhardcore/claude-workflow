@@ -197,7 +197,7 @@ Reference on-demand via `Read \`_shared/<file>.md\``:
 
 - `composition.md` — team/sub-agent cost and shape
 - `frontmatter-reference.md` — canonical field registry for SKILL.md and agent `.md` files (both tools)
-- `dispatch-decision.md` — condensed role taxonomy and `context: fork` decision table
+- `dispatch-decision.md` — condensed role taxonomy and dispatch decision table
 - `handoff-artifact.md` — five-field issue-body structure for phase handoffs
 - `interviewing-rules.md` — one-question-at-a-time interviewing protocol for user-interactive discovery
 - `notes-md-protocol.md` — `.claude/NOTES.md` lifecycle, shape, and update cadence

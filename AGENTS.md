@@ -52,7 +52,7 @@ During `/define` or `/discover` exploration: time-box codebase reading to 3–5 
 ## Key conventions
 
 - **Single-agent by default.** Parallel agents only for 2+ independent file groups, sub-issues, or tasks.
-- **Worker SKILLs** (not agent files) get `context: fork` and explicit `agent:` type (`Explore` for read-only, `general-purpose` for writes/gh).
+- **Worker SKILLs** run autonomously in isolation — the SKILL.md body becomes the task prompt.
 - **Preflight before gh/git push.** Invoke `Skill("preflight")` — verifies repo, branch, CWD. Spawned workers skip preflight.
 - **NOTES.md** at `.claude/NOTES.md` is the in-phase progress ledger (gitignored). Create on entry, checkpoint before spawn, update on return, leave for the phase-ending skill.
 - **Seed-brief** (`_shared/seed-brief.md`) packages spawn-time context as YAML in XML. Used by orchestrators when spawning agents. NOT for mid-cycle state (use NOTES.md) or phase-to-phase handoff (use issue body).
