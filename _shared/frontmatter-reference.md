@@ -100,7 +100,7 @@ Default frontmatter values for each skill role. `/new-skill` uses these when gen
 |`allowed-tools`|omit|omit|omit|omit|omit|
 |`user-invocable`|omit (defaults true)|omit|omit|omit|`false`|
 
-See `_shared/AUTHORING.md` § Body Assembly by Role/Tier for the full role-to-template mapping.
+See `_shared/AUTHORING.md` § Body Assembly by Role/Tier for the full role-to-template mapping. See `_shared/opencode-config-reference.md` for how these opencode frontmatter fields map to workflow conventions.
 
 ## Field Mapping: Claude Code → OpenCode
 
