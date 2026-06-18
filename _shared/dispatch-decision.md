@@ -6,9 +6,9 @@ Condensed tables for dispatch decisions at authoring time and runtime. Full fram
 
 |Role|Runs in|User interaction|Dispatches|
 |-|-|-|-|
-|**Orchestrator**|Main context|Yes|Optionally: other Orchestrators and/or Workers|
+|**Orchestrator**|Main context|Yes|In-context skills + leaf Workers — single background tier, no background sub-orchestrators|
 |**Interaction**|Main context|Yes — only|Never|
-|**Worker**|Background/isolated|Task confirmations only|Optionally: other Workers|
+|**Worker**|Background/isolated|Task confirmations only|Never — leaf; carries `permission.task: {"*":"deny"}`|
 |**Protocol**|Caller's context|N/A|Never|
 
 ## Worker Agent vs Worker Skill
@@ -20,4 +20,4 @@ Condensed tables for dispatch decisions at authoring time and runtime. Full fram
 
 ## `isolation: worktree`
 
-Add to `Agent()` calls when spawning 2+ parallel agents with overlapping file scope. Skip when `/scope-assessment` guarantees disjoint scope.
+Add to task-tool dispatches when spawning 2+ parallel agents with overlapping file scope. Skip when `/scope-assessment` guarantees disjoint scope.

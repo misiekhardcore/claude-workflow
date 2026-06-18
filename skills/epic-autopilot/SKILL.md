@@ -20,32 +20,32 @@ Always multi-layer fan-out — dispatches one sub-agent per topological layer of
 
 ## Process
 
-Invoke `Skill("orchestrator-rules")` for CWD, delegation, and seed-brief contract.
-Invoke `Skill("notes-md")` for NOTES.md lifecycle (create → checkpoint → update → leave).
+Invoke the "orchestrator-rules" skill for CWD, delegation, and seed-brief contract.
+Invoke the "notes-md" skill for NOTES.md lifecycle (create → checkpoint → update → leave).
 
 ### 1. Detection (Stage 0)
 
-Invoke `Skill("preflight")`. Echo resolved `owner/repo`. Read `references/detection.md` at point of need to detect prior state and determine entry stage. Create `.claude/NOTES.md` with task list and next action.
+Invoke the "preflight" skill. Echo resolved `owner/repo`. Read `references/detection.md` at point of need to detect prior state and determine entry stage. Create `.claude/NOTES.md` with task list and next action.
 
 ### 2. Discovery gate (Stage 1)
 
-Read `references/gates.md` § Stage 1 at point of need. If epic has ≥3 AC, skip to Stage 2. Otherwise invoke `Skill("discover")` with seed-brief handoff. Require explicit user approval.
+Read `references/gates.md` § Stage 1 at point of need. If epic has ≥3 AC, skip to Stage 2. Otherwise invoke the "discover" skill with seed-brief handoff. Require explicit user approval.
 
 ### 3. Epic-level define gate (Stage 2)
 
-Read `references/gates.md` § Stage 2 at point of need. If `## Implementation plan` exists in epic issue body, skip to Stage 3. Otherwise invoke `Skill("define")` with seed-brief handoff. Require explicit user approval. If ≤1 sub-issue, invoke `Skill("implement")` directly and exit.
+Read `references/gates.md` § Stage 2 at point of need. If `## Implementation plan` exists in epic issue body, skip to Stage 3. Otherwise invoke the "define" skill with seed-brief handoff. Require explicit user approval. If ≤1 sub-issue, invoke the "implement" skill directly and exit.
 
 ### 4. Per-sub-issue define gate (Stage 3)
 
-Read `references/gates.md` § Stage 3 at point of need. For each sub-issue without `## Implementation plan`, invoke `Skill("define")` with seed-brief handoff. Require explicit user approval per sub-issue.
+Read `references/gates.md` § Stage 3 at point of need. For each sub-issue without `## Implementation plan`, invoke the "define" skill with seed-brief handoff. Require explicit user approval per sub-issue.
 
 ### 5. Autonomous phase (Stage 4)
 
-Read `references/autonomous-phase.md` at point of need. Checkpoint NOTES.md. Create epic branch, compute dependency tiers (Kahn's algorithm, cycle breaking), dispatch per tier. For each sub-issue M, checkpoint NOTES.md then spawn `Agent("agents/workflow-implement-runner.md")` with seed-brief per `references/autonomous-phase.md` § seed brief. Wait for tier settlement. After all tiers settle, create epic PR.
+Read `references/autonomous-phase.md` at point of need. Checkpoint NOTES.md. Create epic branch, compute dependency tiers (Kahn's algorithm, cycle breaking), dispatch per tier. For each sub-issue M, checkpoint NOTES.md then dispatch `workflow-implement-runner` via the task tool with seed-brief per `references/autonomous-phase.md` § seed brief. Wait for tier settlement. After all tiers settle, create epic PR.
 
 ### 6. Exit (Stage 5)
 
-Print summary table to stdout. Invoke `Skill("compound")` for epic-level learnings (compound-on-exit). Merging is left to humans.
+Print summary table to stdout. Invoke the "compound" skill for epic-level learnings (compound-on-exit). Merging is left to humans.
 
 ## Key behaviors
 - Skip /discover if epic has ≥3 acceptance criteria
@@ -67,5 +67,5 @@ Print summary table to stdout. Invoke `Skill("compound")` for epic-level learnin
 - User must not modify epic/sub-issue bodies during Stage 4
 - Branch names follow `feat/epic-<N>-sub-<M>` exactly
 - `autonomous: true` reserved for sub-task spawns from this skill only
-- Seed-brief every `Agent()` spawn — spawned session has zero context inheritance
+- Seed-brief every agent spawn (via the task tool) — spawned session has zero context inheritance
 - Read reference files at point of need, not unconditionally at SKILL.md top

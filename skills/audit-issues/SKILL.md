@@ -8,7 +8,7 @@ allowed-tools: Agent Bash Read
 ---
 Audit open issues for drift against repo state. Product: updated issues themselves (mutate on confirm). Read-only by default — mutate only after explicit per-issue confirmation.
 
-Adopt `Skill("orchestrator-rules")` for seed-brief contract, CWD verification, and NOTES.md conventions.
+Adopt the "orchestrator-rules" skill for seed-brief contract, CWD verification, and NOTES.md conventions.
 
 ## Process
 
@@ -24,7 +24,7 @@ Find local clone at `~/Projects/<repo>`. If missing → abort. Fetch latest defa
 
 ### 2. Init NOTES.md
 
-Create `.claude/NOTES.md` with task list, decisions log, next-action per `Skill("orchestrator-rules")`.
+Create `.claude/NOTES.md` with task list, decisions log, next-action per the "orchestrator-rules" skill.
 
 ### 3. Fetch
 
@@ -35,9 +35,9 @@ Create `.claude/NOTES.md` with task list, decisions log, next-action per `Skill(
 
 Read `references/detectors.md` for detector logic, verdict ranking, and JSON schema — pass pertinent rules into each spawn prompt so workers do not re-read.
 
-Spawn one `Agent("agents/workflow-issue-auditor.md")` per issue with a `<seed-brief>` YAML block containing `repo`, `issue_number`, `cwd`, and `default_branch_ref`. Fan-out in parallel for ≥3 issues; run inline for 1–2.
+Dispatch one `workflow-issue-auditor` via the task tool per issue with a `<seed-brief>` YAML block containing `repo`, `issue_number`, `cwd`, and `default_branch_ref`. Fan-out in parallel for ≥3 issues; run inline for 1–2.
 
-Each `Agent()` spawn includes a `<seed-brief>` YAML block per `_shared/seed-brief.md`.
+Each agent spawn (via the task tool) includes a `<seed-brief>` YAML block per `_shared/seed-brief.md`.
 
 See `@_shared/composition.md` for spawn cost models.
 
@@ -65,7 +65,7 @@ Require explicit user approval before applying mutations. No unconfirmed mutatio
 
 ### 8. Compound on exit
 
-Read `@_shared/compound-on-exit.md`. Invoke `Skill("compound")` exactly once on clean completion.
+Read `@_shared/compound-on-exit.md`. Invoke the "compound" skill exactly once on clean completion.
 
 ## Rules
 
@@ -73,4 +73,4 @@ Read `@_shared/compound-on-exit.md`. Invoke `Skill("compound")` exactly once on 
 - **No Invention**: No counter → `unverifiable`.
 - **Surgical**: One LLM extraction pass per issue max.
 - **Point-of-need reads**: Read `references/detectors.md` before step 4 only.
-- **NOTES.md**: Checkpoint before every spawn. See `Skill("orchestrator-rules")` § Progress tracking.
+- **NOTES.md**: Checkpoint before every spawn. See the "orchestrator-rules" skill § Progress tracking.

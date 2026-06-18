@@ -10,16 +10,16 @@ Maintenance orchestrator that interviews the author to produce a conformant SKIL
 
 ## Protocol skills
 
-Adopt `Skill("orchestrator-rules")`.
-Adopt `Skill("interviewing-rules")`.
+Adopt the "orchestrator-rules" skill.
+Adopt the "interviewing-rules" skill.
 
 ## Process
 
 1. **Init NOTES.md** — Create `.claude/NOTES.md` with initial state: skill name, role, tier.
 
-2. **Read AUTHORING.md** — Read `@_shared/AUTHORING.md` for body-pattern composition, tier mapping, frontmatter defaults, and protocol-skill catalog. Skip `_shared/interviewing-rules.md` at this point (point-of-need — invoked implicitly by `Skill("interviewing-rules")`).
+2. **Read AUTHORING.md** — Read `@_shared/AUTHORING.md` for body-pattern composition, tier mapping, frontmatter defaults, and protocol-skill catalog. Skip `_shared/interviewing-rules.md` at this point (point-of-need — invoked implicitly by the "interviewing-rules" skill).
 
-3. **Interview author** — Follow `references/interview-steps.md` sequence. Ask one question at a time per `Skill("interviewing-rules")`. Use `AskUserQuestion` for bounded option sets; plain prompt for free-text. Checkpoint NOTES.md before each question with current state and next step.
+3. **Interview author** — Follow `references/interview-steps.md` sequence. Ask one question at a time per the "interviewing-rules" skill. Use `AskUserQuestion` for bounded option sets; plain prompt for free-text. Checkpoint NOTES.md before each question with current state and next step.
 
    Derive tier from role after step (d). Present derived tier with criteria. Ask author to confirm or override.
 
@@ -31,7 +31,7 @@ Adopt `Skill("interviewing-rules")`.
 
 7. **On no** — Ask which step to revise. Loop back from that step. Regenerate.
 
-8. **Compound** — Invoke `Skill("compound")` to capture learnings.
+8. **Compound** — Invoke the "compound" skill to capture learnings.
 
 ## Rules
 
@@ -39,5 +39,5 @@ Adopt `Skill("interviewing-rules")`.
 - Do not invent domain content — locks in guesses.
 - Point-of-need reads only; nothing loaded at skill entry except protocol skills.
 - Defaults (if skipped): `model: sonnet`; `effort`, `argument-hint`, `allowed-tools`, `user-invocable`: omit; target: personal.
-- Generated `Agent()` calls must include a seed-brief per `@_shared/seed-brief.md`.
+- Generated agent spawns (via the task tool) must include a seed-brief per `@_shared/seed-brief.md`.
 - If target `SKILL.md` exists, ask before overwriting.

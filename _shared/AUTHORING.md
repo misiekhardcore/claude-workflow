@@ -12,7 +12,7 @@ Skills and reference files serve different purposes and require different access
 
 |What you're accessing|When to use|How to access|
 |-|-|-|
-|Protocol or Worker skill|Runtime behavior agents must adopt or execute|`Invoke \`Skill("<name>")\``|
+|Protocol or Worker skill|Runtime behavior agents must adopt or execute|Invoke the `<name>` skill|
 |Per-skill reference doc|Static tables, checklists, or context scoped to one skill|`Read \`references/<file>.md\``|
 |Shared reference doc|Static tables, checklists, or context shared across skills|`Read \`_shared/<file>.md\``|
 
@@ -53,7 +53,7 @@ Orchestrators must remain "thin" to avoid context bloat and logic drift.
 
 - **SKILL.md Limit**: Must be ≤ 150 lines.
 - **No Inline Domain Work**: Orchestrators should not perform the actual task (e.g., writing code, auditing files).
-- **Delegation**: All domain work must be delegated via `Skill()` (for Worker or Protocol skills) or `Agent()` (for Worker Agents).
+- **Delegation**: All domain work must be delegated via the skill tool (for Worker or Protocol skills) or the task tool (for Worker Agents).
 
 ## Worker-Agent Dispatch Pattern
 
@@ -84,7 +84,7 @@ Use a dedicated file in the `agents/` directory when:
 
 ### Body Bug Workaround (GitHub #13627)
 Due to a bug where agent file bodies are occasionally ignored:
-- **Constraint**: All critical rules and personas must be embedded directly in the `prompt` argument of the `Agent()` call, not just in the agent file.
+- **Constraint**: All critical rules and personas must be embedded directly in the spawn prompt when dispatching via the task tool, not just in the agent file.
 - `TODO: remove this workaround when GitHub #13627 is resolved`.
 
 ## Orchestrator Loop Pattern
@@ -99,7 +99,7 @@ For tasks requiring iterative refinement (e.g., Build → Review → Verify):
 Orchestrators (and standalone L2 skills) use `.claude/NOTES.md` as their in-phase progress tracker:
 
 - **Create on entry**: Write `## Current task` and initial state when the phase starts.
-- **Checkpoint before spawn**: Before every `Skill()` or `Agent()` call, write the current task, next action, and any open questions. This provides crash recovery if the session dies mid-spawn.
+- **Checkpoint before spawn**: Before every skill invocation or agent spawn, write the current task, next action, and any open questions. This provides crash recovery if the session dies mid-spawn.
 - **Update on return**: After sub-agent completes, append findings, decisions, and updated task state.
 - **Slice in seed-brief**: Include a `progress` field in the seed-brief payload carrying the relevant NOTES.md slice (task list subset + decisions).
 
@@ -146,7 +146,7 @@ Each skill maps to a role and tier. `/new-skill` derives the tier from the role,
 
 **`## Protocol skills`** (Orchestrator, Specialist, Utility):
 ```
-Adopt `Skill("<protocol-name>")`.
+Adopt the "<protocol-name>" skill.
 ```
 One line per protocol. Usually `orchestrator-rules` for orchestrators, `interviewing-rules` for interactive skills.
 
@@ -246,7 +246,6 @@ structured output block
 
 ## Agent Catalogue
 
-All agent files live under `agents/`. See each skill's `## Worker Agent Inventory` section for spawned agents. Common patterns:
-- `agents/<skill>-runner.md` — autonomous core (Tier 2 shell + runner split)
-- `agents/<role>-agent.md` — parallel worker (spawned by runner)
-- `agents/reviewer-<domain>.md` — domain reviewer (spawned by review-runner)
+All agent files live under `agents/`. See each skill's `## Worker Agent Inventory` section for spawned agents. Dispatch is a single tier — the primary orchestrator (or a lifecycle skill) dispatches leaf workers directly; no intermediate runner agents. Common patterns:
+- `agents/<role>-agent.md` / `agents/workflow-<role>.md` — parallel leaf worker (spawned directly by the orchestrator)
+- `agents/workflow-reviewer.md` — parameterized reviewer, one dispatch per `focus:` (replaces the old per-domain reviewer agents)
