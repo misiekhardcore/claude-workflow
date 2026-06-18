@@ -86,14 +86,11 @@ flowchart TB
 ## Install
 
 ### OpenCode
-Add to your `opencode.jsonc`:
-```jsonc
-{
-  "skills": {
-    "paths": ["./skills"]
-  }
-}
+```bash
+./bin/install
 ```
+Symlinks `commands/`, `agents/`, `skills/` into `~/.config/opencode/`. Idempotent — re-run safely.
+Use `./bin/install --uninstall` to remove only this repo's symlinks.
 
 ## Skills
 
