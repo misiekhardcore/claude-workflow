@@ -47,8 +47,8 @@ During `/define` or `/discover` exploration: time-box codebase reading to 3–5 
 
 - **Skills**: 26 skill dirs under `skills/`. Each has a `SKILL.md` (the actual skill body). Some also have `references/` (per-skill static docs).
 - **Commands**: `commands/` at repo root — opencode command files.
-- **Agent files**: `agents/` at repo root — 19 agent files: the discover/define/implement orchestrators (`mode: primary`) plus 16 leaf worker agents, one per single-responsibility role. Dispatch is a single tier — orchestrators spawn leaf workers directly; no intermediate runner agents.
-- **Shared protocols**: `_shared/*.md` — reference docs, not skills. Use `Read` not `Skill()` to access them.
+- **Agent files**: `agents/` at repo root — 18 agent files: the discover/define/implement orchestrators (`mode: primary`) plus 15 leaf worker agents, one per single-responsibility role. Dispatch is a single tier — orchestrators spawn leaf workers directly; no intermediate runner agents.
+- **Shared protocols**: `_shared/*.md` — reference docs, not skills. Use `Read` to access them.
 - **Templates**: `_templates/` — scaffolding skeletons for new skills (`AUTHORING.md` is the canonical authoring guide).
 - **Bin tools**: `bin/minify-md` (markdown minifier), `bin/list-prune-files` (used by `/prune` skill), `bin/install` (opencode symlink installer).
 - **Git worktrees**: `.worktrees/` dir, managed via `wt` CLI. Always create before writing code, remove after PR is open.
@@ -57,7 +57,7 @@ During `/define` or `/discover` exploration: time-box codebase reading to 3–5 
 
 - **Single-agent by default.** Parallel agents only for 2+ independent file groups, sub-issues, or tasks.
 - **Worker SKILLs** run autonomously in isolation — the SKILL.md body becomes the task prompt.
-- **Preflight before gh/git push.** Invoke `Skill("preflight")` — verifies repo, branch, CWD. Spawned workers skip preflight.
+- **Preflight before gh/git push.** Invoke the "preflight" skill — verifies repo, branch, CWD. Spawned workers skip preflight.
 - **NOTES.md** at `.claude/NOTES.md` is the in-phase progress ledger (gitignored). Create on entry, checkpoint before spawn, update on return, leave for the phase-ending skill.
 - **Seed-brief** (`_shared/seed-brief.md`) packages spawn-time context as YAML in XML. Used by orchestrators when spawning agents. NOT for mid-cycle state (use NOTES.md) or phase-to-phase handoff (use issue body).
 - **SKILL.md vs agent files**: SKILL.md owns process flow and spawn instructions. Agent files own the seed-brief I/O contract (input fields, output format). Never inline the contract in SKILL.md — reference the agent file. Agent file headings use `## Input (from spawn prompt)`. SKILL.md uses `## Worker Agent Inventory` with per-agent subsections.

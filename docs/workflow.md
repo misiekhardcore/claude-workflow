@@ -37,7 +37,7 @@ Lifecycle walkthrough from discovery to closure.
 - **Cycle** (per group): Autonomous build → review → verify → fix loop (max 5 cycles). The orchestrator dispatches leaf workers directly — single tier, no runner agents.
    - Build via task tool (`workflow-build-worker`): TDD implementation.
    - Review: orchestrator evaluates focus gates, dispatches one `workflow-reviewer` per activated focus, then merges/dedups findings.
-   - Verify: orchestrator groups AC by domain, dispatches one `workflow-qa-agent` per group, then merges the pass/fail report.
+   - Verify: orchestrator groups AC by domain, dispatches one `workflow-reviewer` with `focus: correctness` per group, then merges the pass/fail report (any P0 → FAIL).
 - **Integration**: Merge parallel group branches, then a final review + verify pass on the merged tree before the PR.
 - **Output**: Draft PR.
   - **Body**: `## Summary` → `## Testing notes` → `## Notes` (from NOTES.md harvest).

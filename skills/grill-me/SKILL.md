@@ -9,7 +9,7 @@ allowed-tools: AskUserQuestion Read Write Bash
 
 Interview me relentlessly about every aspect of this plan until we reach a shared understanding, and there is no ambiguity. For each question, provide your recommended answer.
 
-Adopt `Skill("notes-md")` and read `@_shared/interviewing-rules.md` at point of need.
+Adopt the "notes-md" skill and read `@_shared/interviewing-rules.md` at point of need.
 
 ## Process
 

@@ -18,39 +18,33 @@ An orchestrator's main loop typically looks like this:
 2. **Loop**:
     - Increment `cycle`.
     - Check `cycle > max_cycles` → hard stop.
-    - **Delegate**: Call `Skill("layer-2-skill")` or `Agent(general-purpose)` with a **Seed-Brief**.
+    - **Delegate**: Invoke the "layer-2-skill" skill or dispatch a general-purpose agent via the task tool with a **Seed-Brief**.
     - **Synthesize**: Aggregate the report from the worker.
     - **Update State**: Record progress in `NOTES.md`.
     - **Verify**: Determine if the cycle is complete or if another iteration is needed.
 
 ## Example Delegation (Seed-Brief)
 
-Instead of "Fix the bug in X," a Layer 1 orchestrator provides a structured brief:
+Instead of "Fix the bug in X," a Layer 1 orchestrator dispatches a worker agent via the task tool, passing a seed-brief with the relevant context. For example, a brief to fix a race condition in the request handler would carry:
 
-```typescript
-Agent({
-  description: "Implement fix for #123",
-  prompt: `
-    # Task: Fix Race Condition in Request Handler
+```
+# Task: Fix Race Condition in Request Handler
 
-    ## Context
-    - Issue: #123
-    - Target Files: src/handler.ts, src/queue.ts
-    - Prior Findings: [Reference to previous cycle report]
+## Context
+- Issue: #123
+- Target Files: src/handler.ts, src/queue.ts
+- Prior Findings: [Reference to previous cycle report]
 
-    ## Requirements
-    - Implement locking mechanism in queue.ts.
-    - Ensure handler.ts releases lock in finally block.
+## Requirements
+- Implement locking mechanism in queue.ts.
+- Ensure handler.ts releases lock in finally block.
 
-    ## Constraints
-    - Do not modify the public API.
-    - Must pass the provided test case in tests/race.test.ts.
+## Constraints
+- Do not modify the public API.
+- Must pass the provided test case in tests/race.test.ts.
 
-    ## Output
-    - Report implementation details and verification results to the main thread.
-  `,
-  isolation: "worktree"
-})
+## Output
+- Report implementation details and verification results to the main thread.
 ```
 
 ## Anti-Patterns to Avoid

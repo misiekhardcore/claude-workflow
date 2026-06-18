@@ -20,4 +20,4 @@ Condensed tables for dispatch decisions at authoring time and runtime. Full fram
 
 ## `isolation: worktree`
 
-Add to `Agent()` calls when spawning 2+ parallel agents with overlapping file scope. Skip when `/scope-assessment` guarantees disjoint scope.
+Add to task-tool dispatches when spawning 2+ parallel agents with overlapping file scope. Skip when `/scope-assessment` guarantees disjoint scope.

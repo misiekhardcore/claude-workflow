@@ -8,7 +8,7 @@ allowed-tools: Agent Bash Read
 ---
 Process PR feedback end-to-end: Triage → Fix (parallel) → Reply → Compound.
 
-Adopt `Skill("orchestrator-rules")` — use NOTES.md as progress ledger, checkpoint before every spawn, seed-brief every agent, and no autonomous merge. Read `@_shared/seed-brief.md` for seed-brief format and `@_shared/composition.md` for parallel-dispatch cost model.
+Adopt the "orchestrator-rules" skill — use NOTES.md as progress ledger, checkpoint before every spawn, seed-brief every agent, and no autonomous merge. Read `@_shared/seed-brief.md` for seed-brief format and `@_shared/composition.md` for parallel-dispatch cost model.
 
 ## Input
 
@@ -33,7 +33,7 @@ Adopt `Skill("orchestrator-rules")` — use NOTES.md as progress ledger, checkpo
 1. Group affected files into non-overlapping sets.
 2. Build seed-brief per file group from triage mapping.
 3. Checkpoint NOTES.md.
-4. Spawn one `Agent("agents/workflow-fix-agent.md")` per file group with seed-brief (see Worker Agent I/O contract above).
+4. Dispatch one `workflow-fix-agent` via the task tool per file group with seed-brief (see Worker Agent I/O contract above).
 5. After all return: run full test suite for regression check.
 6. Collect verdicts; update NOTES.md.
 
@@ -48,7 +48,7 @@ Adopt `Skill("orchestrator-rules")` — use NOTES.md as progress ledger, checkpo
 5. Verify: `gh pr view <N> --json reviewThreads` — confirm all resolved.
 
 ### Phase 5 — Compound
-After all phases complete cleanly: invoke `Skill("compound")` to capture session learnings. See `@_shared/compound-on-exit.md` — exactly once, clean completion only.
+After all phases complete cleanly: invoke the "compound" skill to capture session learnings. See `@_shared/compound-on-exit.md` — exactly once, clean completion only.
 
 ## Output
 Summary: total threads → counts per verdict → commits created → threads needing human attention.

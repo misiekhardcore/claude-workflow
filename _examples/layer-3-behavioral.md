@@ -6,7 +6,7 @@ Layer 3 skills are non-user-invocable (`user-invocable: false`). They do not per
 
 ### SKILL.md (The Behavioral Guardrail)
 - **Role**: Defines *how* an agent must think, communicate, or operate.
-- **Mechanism**: Activated via `Skill("behavioral-skill")` at the start of a phase.
+- **Mechanism**: Activated by invoking the "behavioral-skill" skill at the start of a phase.
 - **Content**:
     - Strict formatting requirements (e.g., "Always use the following table for reports").
     - Negative constraints (e.g., "Never use `git add .`; always name files explicitly").

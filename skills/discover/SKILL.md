@@ -9,7 +9,7 @@ allowed-tools: Agent Bash Read
 ---
 Lead discovery phase. Transform vague ideas into well-specified GitHub issues ready for architecture and implementation. Pure orchestrator — delegates all domain work to sub-skills.
 
-Invoke `Skill("orchestrator-rules")` — adopt CWD verification, delegation, seed-brief contract, NOTES.md progress tracking.
+Invoke the "orchestrator-rules" skill — adopt CWD verification, delegation, seed-brief contract, NOTES.md progress tracking.
 
 ## Process
 
@@ -21,15 +21,15 @@ Read `@_shared/interviewing-rules.md` — adopt atomic questions, rigor, visual-
 
 ### 2. Init NOTES.md
 
-Create `.claude/NOTES.md` with task list, and next-action per `Skill("orchestrator-rules")`.
+Create `.claude/NOTES.md` with task list, and next-action per the "orchestrator-rules" skill.
 
 ### 3. Problem exploration
 
-Invoke `Skill("describe")` with seed-brief containing the problem statement. Describe owns the full user conversation — research, PPT grilling, visualization, problem statement. Returns structured understanding (What, Why, Who, Boundaries, Prior art).
+Invoke the "describe" skill with seed-brief containing the problem statement. Describe owns the full user conversation — research, PPT grilling, visualization, problem statement. Returns structured understanding (What, Why, Who, Boundaries, Prior art).
 
 ### 4. Acceptance criteria
 
-Invoke `Skill("specify")` with seed-brief containing the problem statement and prior-art findings from describe. Specify derives testable AC via grill-me passes. Returns GIVEN/WHEN/THEN scenarios.
+Invoke the "specify" skill with seed-brief containing the problem statement and prior-art findings from describe. Specify derives testable AC via grill-me passes. Returns GIVEN/WHEN/THEN scenarios.
 
 ### 5. Review
 
@@ -43,7 +43,7 @@ Combine output into a cohesive GitHub issue body:
 
 ### 7. Handoff
 
-Invoke `Skill("preflight")`. Suppress branch line: true.
+Invoke the "preflight" skill. Suppress branch line: true.
 
 Read `@_shared/handoff-artifact.md` at this point (point-of-need) — do not preload.
 
@@ -55,7 +55,7 @@ Require explicit user approval.
 
 ### 9. Compound on exit
 
-Read `@_shared/compound-on-exit.md`. Invoke `Skill("compound")` exactly once on clean completion. Then instruct user: "Start `/implement` in a fresh session."
+Read `@_shared/compound-on-exit.md`. Invoke the "compound" skill exactly once on clean completion. Then instruct user: "Start `/implement` in a fresh session."
 
 <rules>
 <constraint>MUST delegate, not duplicate: sub-skills own their domain.</constraint>

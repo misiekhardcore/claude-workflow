@@ -9,7 +9,7 @@ Audit skill authoring quality and prune dead state from `~/.claude/`. Archive ap
 
 ## Pre-flight
 
-Invoke `Skill("preflight")` at entry for repo verification.
+Invoke the "preflight" skill at entry for repo verification.
 
 ## Lanes
 
@@ -34,7 +34,7 @@ Run `./bin/list-prune-files --<lane>` from the project root for each selected la
 
 Read `@_shared/dispatch-decision.md` § Role taxonomy and `isolation: worktree`.
 
-Spawn one `Agent("agents/workflow-prune-auditor.md")` per selected lane in parallel. Each spawn must include a seed-brief:
+Dispatch one `workflow-prune-auditor` via the task tool per selected lane in parallel. Each spawn must include a seed-brief:
 
 ```
 <seed-brief>
@@ -51,7 +51,7 @@ payload:
 
 See `@_shared/seed-brief.md` for the YAML packaging convention.
 
-Files per lane are disjoint, so parallel dispatch is safe. Each must start with `cd <cwd> && pwd`. Checkpoint NOTES.md before each spawn per `Skill("orchestrator-rules")` § Progress tracking.
+Files per lane are disjoint, so parallel dispatch is safe. Each must start with `cd <cwd> && pwd`. Checkpoint NOTES.md before each spawn per the "orchestrator-rules" skill § Progress tracking.
 
 ### 4. Aggregate
 
@@ -75,5 +75,5 @@ Print manifest per item.
 - **Aggregate Only**: Main thread synthesizes sub-agent output; no re-reading files.
 - **Surgical**: Only list findings; do not rewrite files.
 - **Vault**: Out of scope. Direct users to run `/lint` separately.
-- **Seed-brief required**: Every `Agent()` spawn must include a seed-brief with repo, branch, and payload (see § Dispatch).
-- **NOTES.md**: Follow `Skill("orchestrator-rules")` § Progress tracking via NOTES.md — checkpoint before every spawn, update on return.
+- **Seed-brief required**: Every agent spawn (via the task tool) must include a seed-brief with repo, branch, and payload (see § Dispatch).
+- **NOTES.md**: Follow the "orchestrator-rules" skill § Progress tracking via NOTES.md — checkpoint before every spawn, update on return.

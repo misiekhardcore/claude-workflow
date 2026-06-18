@@ -4,7 +4,7 @@
 
 ### Step 0 — Pre-flight
 
-Invoke `Skill("preflight")`.
+Invoke the "preflight" skill.
 Confirmation prompt: "Does this match the repo and branch you intend to work on?"
 
 ### Step 1 — Issue Review
@@ -47,7 +47,7 @@ Keep context focused. Trigger on **concept shifts**, not percentages:
 - Stale tool results after work has moved on → clear with context editing.
 - About to read a large file or grep wide → delegate to sub-agent that returns focused report.
 - About to start a new sub-issue or just spawned a sub-agent → natural reset.
-- Invoke `Skill("compaction-protocol")`. Context editing first, sub-agents second, `/compact` last.
+- Invoke the "compaction-protocol" skill. Context editing first, sub-agents second, `/compact` last.
 
 ### Step 8 — Incremental Commits & Notes
 
