@@ -92,13 +92,20 @@ flowchart TB
 Symlinks `commands/`, `agents/`, `skills/` into `~/.config/opencode/`. Idempotent — re-run safely.
 Use `./bin/install --uninstall` to remove only this repo's symlinks.
 
+## Commands
+
+|Command|Description|
+|-|-|
+|`/discover`|Full discovery phase — explore a problem and produce a GitHub issue with AC|
+|`/define`|Lead definition phase — resolve architecture and design technical decisions|
+|`/implement`|Full implementation cycle — build, review, verify, then open a PR|
+
+Auto-discovered by opencode from `commands/`.
+
 ## Skills
 
 |Skill|Description|
 |-|-|
-|`/discover`|Explore a problem and produce a GitHub issue with acceptance criteria|
-|`/define`|Plan architecture and design; produces the implementation handoff|
-|`/implement`|Full build→review→verify cycle, ends with a draft PR|
 |`/epic-autopilot`|Autonomous epic→PR pipeline; chains `/discover → /define → /implement` per sub-issue|
 |`/issue-autopilot`|Single-issue end-to-end pipeline: `/define` → `/implement` → `/resolve-pr-feedback` → `/compound` → `/wrap-up`|
 |`/build`|Code against an issue's acceptance criteria using TDD|
