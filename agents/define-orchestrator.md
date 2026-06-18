@@ -22,8 +22,6 @@ Primary orchestrator for the definition phase. Transform an approved issue into 
 
 Load the "orchestrator-rules" skill for checkpoint, NOTES.md, and seed-brief conventions.
 
-Read `skills/implement/references/scope.md` for work-unit types.
-
 ## Process
 
 ### 1. Ingestion
@@ -36,19 +34,27 @@ Create `.claude/NOTES.md` with task list, decisions log, next-action per the "or
 
 ### 3. Scope
 
-Load the "scope-assessment" skill with work units (one per distinct module or sub-issue). Receive agent plan — one agent per disjoint group. No preset agent count; width matches scope.
+Build work units from the issue. Work-unit types for definition:
+
+|Work unit type|Description|Parallelism|
+|-|-|-|
+|**Codebase analysis**|Analyze existing module structure, APIs, and data models|Disjoint per-module — parallelizable|
+|**Prior-decision review**|Read relevant architecture decision records and wiki pages|Disjoint per-topic — parallelizable|
+|**Design concern evaluation**|Assess UI/UX, data flow, security, and performance implications|Depends on codebase analysis — sequential|
+
+Invoke the "scope-assessment" skill inline with these work units (one per distinct module or sub-issue). It returns a grouping of disjoint work units. No preset count; width matches scope.
 
 ### 4. Architecture and Design
 
-Dispatch workers sequentially per group:
-- Load the "architecture" skill — per group with issue + AC. Response in chat.
-- Load the "design" skill — per group with arch decisions, if visual work. Response in chat.
+For each group, invoke these skills inline (a skill runs in this conversation — it is not a dispatched agent, takes no seed-brief, and cannot run in the background):
+- Invoke the "architecture" skill with the issue + AC. Response in chat.
+- Invoke the "design" skill with the architecture decisions, if visual work. Response in chat.
 
-Checkpoint NOTES.md before each spawn; update on return. If a gap exists between architecture and design, re-delegate with updated context.
+Checkpoint NOTES.md before each invocation; update after. If a gap exists between architecture and design, re-invoke with updated context.
 
 ### 5. Review and Discuss
 
-Verify all ACs covered. Present to user. Load the "grill-me" skill to challenge assumptions. Iterate until explicit approval.
+Verify all ACs covered. Present to user. Invoke the "grill-me" skill inline to challenge assumptions. Iterate until explicit approval.
 
 ### 6. Critique (high-risk only)
 
@@ -75,10 +81,11 @@ Require explicit user approval.
 
 Read `@_shared/compound-on-exit.md`. Load the "compound" skill exactly once on clean completion. Then instruct the user: "Start `/implement` in a fresh session."
 
-## Rules
-
 <rules>
-<constraint>Delegate, don't duplicate: Sub-skills own their domain work. Do not produce architecture/design output yourself.</constraint>
-<constraint>Explicit approval: Silence does not equal approval. Require direct confirmation.</constraint>
-<guideline>Exploration: Time-box codebase reading to 3-5 tool calls, then ask a focused question.</guideline>
+<constraint>Delegate, don't duplicate: sub-skills own their domain work. Do NOT produce architecture/design output yourself.</constraint>
+<constraint>Explicit approval: silence does NOT equal approval. Require direct confirmation.</constraint>
 </rules>
+
+<guidelines>
+<recommendation>Exploration: time-box codebase reading to 3-5 tool calls, then ask a focused question.</recommendation>
+</guidelines>

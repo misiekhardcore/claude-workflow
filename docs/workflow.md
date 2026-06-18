@@ -33,10 +33,12 @@ Lifecycle walkthrough from discovery to closure.
 ### 3. `/implement`
 **Goal**: Defined issue → ready-to-merge PR.
 - **Design Gate**: Verify `## Implementation plan` exists. If absent → prompt for `/define` or trivial downgrade.
-- **Cycle**: Autonomous build → review → verify → fix loop (max 5 cycles).
+- **Scope**: Partition work units by the plan's dependency graph — independent groups run in parallel (one worktree each); dependent groups run in topological order; non-independent work falls back to sequential.
+- **Cycle** (per group): Autonomous build → review → verify → fix loop (max 5 cycles).
    - Build via task tool (`workflow-build-worker`): TDD implementation.
    - Review via task tool (`workflow-review-runner`): isolated specialist review.
    - Verify via task tool (`workflow-verify-runner`): QA verification of AC with evidence.
+- **Integration**: Merge parallel group branches, then a final review + verify pass on the merged tree before the PR.
 - **Output**: Draft PR.
   - **Body**: `## Summary` → `## Testing notes` → `## Notes` (from NOTES.md harvest).
 - **Closure**: `/compound` runs automatically → file learnings to wiki.

@@ -20,9 +20,6 @@ Primary orchestrator for the implementation phase. Drive build-to-review-to-veri
 
 Load the "orchestrator-rules" skill for checkpoint, NOTES.md, and seed-brief conventions.
 
-Read `skills/implement/references/scope.md` for work-unit types.
-Read `skills/implement/references/scope-cycles.md` for the cycle contract.
-
 ## Input
 
 The command passes arguments via `<arguments raw="$ARGUMENTS" />`. If empty or vague, use the question tool to ask which issue to implement.
@@ -39,14 +36,20 @@ Read issue body (`## Requirements`, `## Implementation plan`). If plan absent an
 
 ### 3. Scope
 
-Build work units from sub-issues and file groups. Load the "scope-assessment" skill with work units (each with `id` and `resources`) -> receive agent plan of disjoint groups.
+Build work units from sub-issues and file groups. Work-unit types:
+- **Code change unit**: one sub-issue or distinct file group from the implementation plan. Disjoint per file group — parallelizable.
+- **Single-unit**: the plan fits one session with no disjoint file groups.
 
-Single-unit (no sub-issues, no disjoint file groups) -> one runner directly.
-Multi-unit -> one implementation group per disjoint group, run sequentially.
+Invoke the "scope-assessment" skill inline (it runs in this conversation, not as a dispatched agent) with the work units (each with `id` and `resources`). It returns disjoint groups.
 
-### 4. Worktree
+Then read the **dependency graph** from the issue's `## Implementation plan` and partition the groups:
+- **Independent** (no dependency edge between them, disjoint file scope) -> eligible to run in parallel.
+- **Dependent** -> ordered by the dependency graph (topological).
+- **Single-unit** (no sub-issues, no disjoint file groups) -> one group, run directly.
 
-Load the "worktree" skill to create or verify the implementation worktree.
+### 4. Worktrees
+
+Invoke the "worktree" skill to create or verify a worktree. For parallel groups, create one worktree + branch per independent group; dependent or single-unit work shares one worktree.
 
 ### 5. Handoff
 
@@ -54,7 +57,9 @@ Read `@_shared/handoff-artifact.md` at this point. Ensure issue body has the fiv
 
 ### 6. Implementation loop
 
-For each implementation group:
+Run **independent** groups' loops in parallel, each in its own worktree; run **dependent** groups in dependency-graph (topological) order. Fall back to sequential in one shared worktree when groups are not cleanly independent (shared files, or any dependency edge). Do not resolve cross-group merge conflicts unattended — keep groups isolated and surface conflicts at integration.
+
+Each group runs this cycle:
 
 <loop max_cycles="5" type="bounded-autonomous">
 <state>
@@ -62,20 +67,24 @@ Maintain an evolving hidden checklist: a lean PASS/FAIL per AC. Track cycle coun
 </state>
 
 <per_cycle>
-1. **Build**: Spawn a build worker via the task tool (use the `workflow-build-worker` subagent type) with seed-brief (`repo`, `branch`, `active_issue`, `scope`, `payload.resources`, `payload.progress`). The build agent implements the work unit in the shared worktree. Pass `session_id` for resumption across cycles.
+1. **Build**: Spawn a build worker via the task tool (use the `workflow-build-worker` subagent type) with seed-brief (`repo`, `branch`, `active_issue`, `scope`, `payload.resources`, `payload.progress`). The build agent implements the work unit in the group's worktree. Pass `session_id` for resumption across cycles.
 2. **Review**: Spawn a review runner via the task tool (`workflow-review-runner` subagent type) with seed-brief containing `diff` (git diff main...HEAD), `acceptance_criteria`, and `dispatch_mode: fix-brief`. Collect findings.
 3. **Verify**: Spawn a verify runner via the task tool (`workflow-verify-runner` subagent type) with seed-brief containing `diff` and `acceptance_criteria`. Collect pass/fail per AC.
 </per_cycle>
 
 <evaluation>
-- **Clean pass** (all ACs pass, zero findings) -> proceed to PR creation (step 7).
+- **Clean pass** (all ACs pass, zero findings) -> proceed to integration (step 7).
 - **Findings present and cycles < max_cycles** -> write fix brief to `.claude/NOTES.md` (failing ACs, file:line findings). Resume next cycle: build -> review -> verify.
-- **Cycles = max_cycles** -> emit final report ("report incomplete"), proceed to PR creation (step 7) with remaining findings surfaced in the PR body.
+- **Cycles = max_cycles** -> emit final report ("report incomplete"), proceed to integration (step 7) with remaining findings surfaced in the PR body.
 </evaluation>
 
 </loop>
 
-### 7. PR creation
+### 7. Integration
+
+After all groups complete: if work ran in parallel worktrees, merge each group's branch into the single PR branch. Then run one final review + verify cycle on the merged tree (dispatch `workflow-review-runner` + `workflow-verify-runner` over the full `git diff`). Disjoint file scope prevents textual conflicts, but only this merged pass catches cross-group integration breaks (e.g. one group changing an interface another calls). If a merge conflict or integration failure cannot be resolved trivially, stop and surface it rather than resolving conflicts unattended.
+
+### 8. PR creation
 
 Run from worktree root:
 1. Harvest `## Decisions made this session` and `## Open questions` from `.claude/NOTES.md`.
@@ -85,28 +94,31 @@ Run from worktree root:
    Body: `## Summary`, `## Testing notes`, `## Notes` (from NOTES.md or exhausted findings).
 5. Delete `.claude/NOTES*.md` files.
 
-### 8. Compound
+### 9. Compound
 
-Read `@_shared/compound-on-exit.md`. On clean completion, load the "compound" skill exactly once. No invocation on abort or early exit.
+Read `@_shared/compound-on-exit.md`. On clean completion, invoke the "compound" skill inline exactly once. No invocation on abort or early exit.
 
-### 9. Finalize
+### 10. Finalize
 
 Emit: `PR: <url>`. If findings remain after max_cycles -> binary: "Continue loop, or accept and close?" On continue -> one more cycle -> log escalation in PR body.
 
-## Output
-
+<output>
 On completion, emit:
-```
+<format>
 PR: <url>
 Findings: <summary of remaining findings or "none">
-```
+</format>
+</output>
 
 <rules>
-<constraint>No user interaction during loop except terminal gate at max_cycles.</constraint>
-<constraint>Each cycle must address ALL findings from the previous cycle.</constraint>
-<constraint>Verify worktree exists before any build spawn.</constraint>
-<constraint>No autonomous merge: Exit at awaiting-merge stage. Never trigger a merge.</constraint>
-<guideline>Run all cycles back-to-back without pausing.</guideline>
-<guideline>Emit one status line per cycle: `Cycle N/<max_cycles> — build <state>, review <N findings>, verify <N failures>`.</guideline>
-<guideline>Delegate, don't duplicate: Sub-agents own their domain work. You own the loop and the checklist, not the code.</guideline>
+<constraint>No user interaction during the loop except the terminal gate at max_cycles.</constraint>
+<constraint>Each cycle MUST address ALL findings from the previous cycle.</constraint>
+<constraint>A worktree MUST exist before any build spawn.</constraint>
+<constraint>No autonomous merge: exit at the awaiting-merge stage. NEVER trigger a merge.</constraint>
 </rules>
+
+<guidelines>
+<recommendation>Run all cycles back-to-back without pausing.</recommendation>
+<recommendation>Emit one status line per cycle: `Cycle N/<max_cycles> — build <state>, review <N findings>, verify <N failures>`.</recommendation>
+<recommendation>Delegate, don't duplicate: sub-agents own their domain work; you own the loop and the checklist, not the code.</recommendation>
+</guidelines>

@@ -34,15 +34,15 @@ Create `.claude/NOTES.md` with task list and next-action per the "orchestrator-r
 
 ### 3. Problem exploration
 
-Load the "describe" skill with a seed-brief containing the problem statement. It owns the full user conversation — research, grilling, visualization, problem statement. Returns structured understanding (What, Why, Who, Boundaries, Prior art).
+Invoke the "describe" skill — it runs inline in this conversation (a skill is not a dispatched agent: no seed-brief, no background). Give it the problem statement. It owns the full user conversation — research, grilling, visualization, problem statement. Returns structured understanding (What, Why, Who, Boundaries, Prior art).
 
 ### 4. Acceptance criteria
 
-Load the "specify" skill with a seed-brief containing the problem statement and prior-art findings from describe. It derives testable AC via grill-me passes. Returns GIVEN/WHEN/THEN scenarios.
+Invoke the "specify" skill inline with the problem statement and describe's prior-art findings. It derives testable AC via grill-me passes. Returns GIVEN/WHEN/THEN scenarios.
 
 ### 5. Review
 
-Verify describe and specify covered all AC. If gaps found, re-delegate. Iterate until explicit user approval.
+Verify describe and specify covered all AC. If gaps found, re-invoke the relevant skill. Iterate until explicit user approval.
 
 ### 6. Synthesize
 
@@ -67,8 +67,11 @@ Require explicit user approval.
 Read `@_shared/compound-on-exit.md`. Load the "compound" skill exactly once on clean completion. Then instruct the user: "Start `/define` in a fresh session."
 
 <rules>
-<constraint>Delegate, don't duplicate: Sub-skills own their domain. Do not do their work yourself.</constraint>
-<constraint>Explicit approval: Partial feedback does not equal approval. Require direct "Yes/Approved".</constraint>
-<guideline>Persistence: Prior-art findings persisted in Prior decisions / Evidence fields.</guideline>
-<guideline>Traceability: Every feature gets one issue; sub-issues use proper GitHub relationships.</guideline>
+<constraint>Delegate, don't duplicate: sub-skills own their domain. Do NOT do their work yourself.</constraint>
+<constraint>Explicit approval: partial feedback does NOT equal approval. Require a direct "Yes/Approved".</constraint>
 </rules>
+
+<guidelines>
+<recommendation>Persistence: persist prior-art findings in the Prior decisions / Evidence fields.</recommendation>
+<recommendation>Traceability: every feature gets one issue; sub-issues use proper GitHub relationships.</recommendation>
+</guidelines>
