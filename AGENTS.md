@@ -16,10 +16,12 @@ This is a skill/agent collection for AI coding agents (compatible with Claude Co
 |`npm run format`|Minifies all `.md` files via `bin/minify-md -i -r .`|
 |`npm run prepare`|Installs husky git hooks|
 |`./bin/install`|Symlinks `commands/`, `agents/`, `skills/` into opencode config dir|
+|`make test-install-smoke`|Runs install smoke test against throwaway XDG_CONFIG_HOME|
+|`make test-install-docker`|Runs install smoke test in a fresh Ubuntu container|
 
 Pre-commit runs `npx lint-staged` which runs `bin/minify-md -i -r` on staged `.md` files — do not fight the minifier.
 
-No tests exist. No test framework. CI only runs `npm run format` on PRs to `main`.
+Smoke tests at `tests/install-smoke.sh`. CI runs format check + install smoke on PRs to `main`.
 
 ## Release (Claude Code — manual workflow_dispatch)
 
