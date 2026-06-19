@@ -1,7 +1,6 @@
 ---
 name: workflow-solution-extractor
 description: Solution pattern extractor for /compound. Distills root cause, solution, and prevention into a reusable knowledge artifact. One of three parallel compound extraction agents.
-user-invocable: false
 hidden: true
 permission:
   task:

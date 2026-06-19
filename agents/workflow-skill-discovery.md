@@ -1,7 +1,6 @@
 ---
 name: workflow-skill-discovery
 description: Skill marketplace discovery agent for /find-skills. Searches the skills.sh leaderboard and verifies quality signals. Returns a ranked candidate list for user confirmation.
-user-invocable: false
 hidden: true
 permission:
   task:

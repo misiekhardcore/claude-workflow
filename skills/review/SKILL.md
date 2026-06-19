@@ -4,7 +4,6 @@ description: Review implementation against requirements or PR. Posts inline GitH
 argument-hint: "[PR# or URL]"
 when_to_use: Use after /build to review implementation quality. Invoked by /implement; can run standalone against a PR.
 effort: high
-user-invocable: true
 allowed-tools: Agent Bash Read
 ---
 Lead review phase. Goal: Thoroughly review implementation against requirements and produce actionable findings. Produce inline GitHub review comments.

@@ -4,7 +4,6 @@ description: QA verification of implementation against AC. Reports pass/fail per
 argument-hint: "[issue#]"
 when_to_use: Use after /build to verify all acceptance criteria are met. Invoked by /implement; can run standalone.
 effort: low
-user-invocable: true
 allowed-tools: Agent Bash Read TaskCreate TaskUpdate
 ---
 Lead verification phase. Goal: Verify every AC from the issue is met with evidence. Report pass/fail per criterion.

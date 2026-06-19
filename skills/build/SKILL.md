@@ -4,7 +4,6 @@ description: Build a feature from a GitHub issue. Creates a git worktree and cod
 when_to_use: Use to implement approved architecture decisions/implementation plans.
 argument-hint: "[issue#]"
 effort: high
-user-invocable: true
 allowed-tools: Agent Bash Read TaskCreate TaskUpdate
 ---
 Lead build phase. Goal: Take a fully specified GitHub issue and produce working code. Builds a feature using TDD. Produces implementation code in a worktree. Hands off via the worktree for review.
