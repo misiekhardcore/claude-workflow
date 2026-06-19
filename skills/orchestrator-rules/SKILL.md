@@ -1,7 +1,6 @@
 ---
 name: orchestrator-rules
 description: Standard directives for pipeline orchestrators coordinating specialist sub-skills.
-user-invocable: false
 ---
 Rules that apply to all pipeline orchestrators.
 

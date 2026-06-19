@@ -1,9 +1,6 @@
 ---
 name: audit-issues
 description: Audit open GitHub issues for drift against repo state. Flags broken refs, stale claims, and contradictions.
-when_to_use: Use when auditing a GitHub repo's open issues for drift, broken refs, or stale claims.
-argument-hint: "[owner/repo | #NN | owner/repo#NN]"
-allowed-tools: Agent Bash Read
 ---
 Audit open issues for drift against repo state. Product: updated issues themselves (mutate on confirm). Read-only by default — mutate only after explicit per-issue confirmation.
 
