@@ -33,9 +33,9 @@ Read `references/detectors.md` for detector logic, verdict ranking, and JSON sch
 
 Dispatch one `workflow-issue-auditor` via the task tool per issue with a `<seed-brief>` YAML block containing `repo`, `issue_number`, `cwd`, and `default_branch_ref`. Fan-out in parallel for ≥3 issues; run inline for 1–2.
 
-Each agent spawn (via the task tool) includes a `<seed-brief>` YAML block per `_shared/seed-brief.md`.
+Each agent spawn (via the task tool) includes a `<seed-brief>` YAML block per AGENTS.md § Key Conventions — Seed-brief.
 
-See `@_shared/composition.md` for spawn cost models.
+See `skills/compound/references/composition.md` for spawn cost models.
 
 ### 5. Aggregate
 
@@ -61,7 +61,7 @@ Require explicit user approval before applying mutations. No unconfirmed mutatio
 
 ### 8. Compound on exit
 
-Read `@_shared/compound-on-exit.md`. Invoke the "compound" skill exactly once on clean completion.
+Invoke the "compound" skill exactly once on clean completion (per the "orchestrator-rules" skill § Compound on exit).
 
 ## Rules
 

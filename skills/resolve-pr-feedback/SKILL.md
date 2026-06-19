@@ -4,7 +4,7 @@ description: Process PR review feedback in bulk — triage, fix in parallel, and
 ---
 Process PR feedback end-to-end: Triage → Fix (parallel) → Reply → Compound.
 
-Adopt the "orchestrator-rules" skill — use NOTES.md as progress ledger, checkpoint before every spawn, seed-brief every agent, and no autonomous merge. Read `@_shared/seed-brief.md` for seed-brief format and `@_shared/composition.md` for parallel-dispatch cost model.
+Adopt the "orchestrator-rules" skill — use NOTES.md as progress ledger, checkpoint before every spawn, seed-brief every agent, and no autonomous merge. See AGENTS.md § Key Conventions — Seed-brief for seed-brief format and `skills/compound/references/composition.md` for parallel-dispatch cost model.
 
 ## Input
 
@@ -44,7 +44,7 @@ Adopt the "orchestrator-rules" skill — use NOTES.md as progress ledger, checkp
 5. Verify: `gh pr view <N> --json reviewThreads` — confirm all resolved.
 
 ### Phase 5 — Compound
-After all phases complete cleanly: invoke the "compound" skill to capture session learnings. See `@_shared/compound-on-exit.md` — exactly once, clean completion only.
+After all phases complete cleanly: invoke the "compound" skill to capture session learnings. Per the "orchestrator-rules" skill § Compound on exit — exactly once, clean completion only.
 
 ## Output
 Summary: total threads → counts per verdict → commits created → threads needing human attention.
