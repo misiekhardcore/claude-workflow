@@ -3,7 +3,6 @@ name: define
 description: Lead definition phase. Resolves architecture and design technical decisions.
 when_to_use: Use after /discover produces an approved issue with AC. Precedes /implement.
 argument-hint: "[issue#]"
-model: opus
 effort: high
 allowed-tools: Agent Bash Read
 ---

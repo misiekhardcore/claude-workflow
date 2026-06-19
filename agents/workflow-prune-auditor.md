@@ -1,8 +1,6 @@
 ---
 name: workflow-prune-auditor
 description: Single-lane audit worker for /prune. Runs one of the two audit lanes (authoring or dead-state) and returns a structured findings report. Spawned by /prune; not for direct user invocation.
-model: haiku
-user-invocable: false
 hidden: true
 maxTurns: 15
 permission:

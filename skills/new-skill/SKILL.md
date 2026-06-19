@@ -2,7 +2,6 @@
 name: new-skill
 description: Scaffold a conformant SKILL.md. Interviews the author, generates the file, writes it.
 when_to_use: Creating or extending a skill in any context — plugin, project, or personal config.
-model: sonnet
 effort: low
 allowed-tools: Read Write Bash
 ---

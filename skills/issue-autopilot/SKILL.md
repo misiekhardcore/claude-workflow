@@ -3,7 +3,6 @@ name: issue-autopilot
 description: Single-issue equivalent of /epic-autopilot. Chains /define → /implement → /resolve-pr-feedback → /compound → /wrap-up for one issue.
 when_to_use: Use when you have a single GitHub issue and want the full lifecycle automated end-to-end with natural pause points for human review and merge.
 argument-hint: <issue#>
-model: opus
 effort: high
 allowed-tools: Agent Bash Read TaskCreate TaskUpdate
 ---

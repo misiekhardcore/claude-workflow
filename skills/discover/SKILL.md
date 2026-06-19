@@ -3,7 +3,6 @@ name: discover
 description: Full discovery phase — explore a problem and produce a GitHub issue with AC.
 when_to_use: Start of any new feature or vague problem. Precedes /define.
 argument-hint: "[issue# | description]"
-model: opus
 effort: high
 allowed-tools: Agent Bash Read
 ---

@@ -1,8 +1,6 @@
 ---
 name: workflow-issue-auditor
 description: Single-issue auditor for /audit-issues. Runs detectors against one GitHub issue and returns a structured findings report. Spawned in parallel — one per issue.
-model: sonnet
-user-invocable: false
 hidden: true
 permission:
   task:
@@ -64,8 +62,8 @@ default_branch_ref: abc123def
 </output>
 
 <rules>
-<critical>You MUST be read-only — make no edits.</critical>
-<critical>No counter = `unverifiable`, NOT `stale`. You MUST NEVER invent evidence.</critical>
-<constraint>You MUST make one LLM extraction pass per issue — NEVER re-read files for additional checks.</constraint>
-<constraint>You MUST return findings even if the verdict is `valid` (empty `findings` array).</constraint>
+<critical>Read only — NEVER write to files.</critical>
+<critical>No counter = `unverifiable`, NOT `stale`. NEVER invent evidence.</critical>
+<constraint>Make one LLM extraction pass per issue — NEVER re-read files for additional checks.</constraint>
+<constraint>Return findings even if the verdict is `valid` (empty `findings` array).</constraint>
 </rules>
