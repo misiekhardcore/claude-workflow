@@ -1,7 +1,6 @@
 ---
 name: workflow-fix-agent
 description: PR feedback fix agent. Reads one review thread, applies the fix, verifies it, and returns a verdict. Spawned in parallel by /resolve-pr-feedback — one per file group.
-model: sonnet
 hidden: true
 permission:
   task:

@@ -2,7 +2,6 @@
 name: find-skills
 description: Discover and install agent skills when the user asks if Claude can do something or wants to extend capabilities.
 when_to_use: Use when the user asks whether Claude can do something or wants to install new skills.
-model: haiku
 effort: low
 allowed-tools: Agent Bash WebFetch WebSearch
 user-invocable: true

@@ -7,7 +7,6 @@ permission:
     "*": "deny"
   question: deny
   edit: deny
-model: sonnet
 mode: subagent
 ---
 Independent critique agent. Review the architecture decisions, design decisions, and implementation plan produced by the phase. Identify gaps, risks, trade-offs, and inconsistencies. Spawned for high-risk plans (security, payments, arch-changing scope).

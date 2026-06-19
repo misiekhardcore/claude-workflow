@@ -3,7 +3,6 @@ name: resolve-pr-feedback
 description: Process PR review feedback in bulk — triage, fix in parallel, and reply with verdicts.
 when_to_use: PR has review comments or given thread URL.
 argument-hint: "[thread-URL|PR-URL|none]"
-model: sonnet
 allowed-tools: Agent Bash Read
 ---
 Process PR feedback end-to-end: Triage → Fix (parallel) → Reply → Compound.
