@@ -4,7 +4,6 @@ description: Build a feature from a GitHub issue. Creates a git worktree and cod
 when_to_use: Use to implement approved architecture decisions/implementation plans.
 argument-hint: "[issue#]"
 effort: high
-user-invocable: true
 allowed-tools: Agent Bash Read TaskCreate TaskUpdate
 ---
 Lead build phase. Goal: Take a fully specified GitHub issue and produce working code. Builds a feature using TDD. Produces implementation code in a worktree. Hands off via the worktree for review.
@@ -39,7 +38,7 @@ Status: All AC implemented, tests passing
 </output>
 
 <rules>
-<critical>MUST create a worktree with `wt switch --create <branch>` before writing any code. MUST NEVER code in the main repo directory.</critical>
-<constraint>MUST write tests before implementation code (TDD).</constraint>
-<constraint>MUST keep NOTES.md updated with progress; MUST use compaction when context limits are reached.</constraint>
+- MUST create a worktree with `wt switch --create <branch>` before writing any code. MUST NEVER code in the main repo directory.
+- MUST write tests before implementation code (TDD).
+- MUST keep NOTES.md updated with progress; MUST use compaction when context limits are reached.
 </rules>

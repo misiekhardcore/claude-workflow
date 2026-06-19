@@ -43,6 +43,6 @@ Failure modes:
 </output>
 
 <rules>
-<critical>You MUST be read-only — make no edits.</critical>
-<constraint>You MUST flag missing error handlers explicitly.</constraint>
+- You MUST be read-only — make no edits.
+- You MUST flag missing error handlers explicitly.
 </rules>

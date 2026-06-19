@@ -58,6 +58,6 @@ threads:
 </output>
 
 <rules>
-<critical>Touch ONLY files in the assigned thread list — no collateral changes.</critical>
-<constraint>Each logical fix as a separate commit referencing the thread.</constraint>
+- Touch ONLY files in the assigned thread list — no collateral changes.
+- Each logical fix as a separate commit referencing the thread.
 </rules>

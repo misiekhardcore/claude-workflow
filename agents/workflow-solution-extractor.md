@@ -1,7 +1,6 @@
 ---
 name: workflow-solution-extractor
 description: Solution pattern extractor for /compound. Distills root cause, solution, and prevention into a reusable knowledge artifact. One of three parallel compound extraction agents.
-user-invocable: false
 hidden: true
 permission:
   task:
@@ -38,10 +37,10 @@ Tags: <comma-separated: language/framework/domain>
 </output>
 
 <rules>
-<constraint>Output MUST stay under 200 tokens — compound synthesizes from this output, not the user.</constraint>
+- Output MUST stay under 200 tokens — compound synthesizes from this output, not the user.
 </rules>
 
 <guidelines>
-<recommendation>Write for a future reader who has zero context from this session.</recommendation>
-<recommendation>Avoid session-specific language ("we fixed", "the PR had") — make it timeless.</recommendation>
+- Write for a future reader who has zero context from this session.
+- Avoid session-specific language ("we fixed", "the PR had") — make it timeless.
 </guidelines>
