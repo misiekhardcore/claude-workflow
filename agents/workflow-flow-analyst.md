@@ -46,3 +46,7 @@ Failure modes:
 <critical>You MUST be read-only — make no edits.</critical>
 <constraint>You MUST flag missing error handlers explicitly.</constraint>
 </rules>
+
+<guidelines>
+<recommendation>Focus on failure modes and error handling — happy path is secondary.</recommendation>
+</guidelines>
