@@ -60,4 +60,6 @@ threads:
 <rules>
 <critical>Touch ONLY files in the assigned thread list — no collateral changes.</critical>
 <constraint>Each logical fix as a separate commit referencing the thread.</constraint>
+<critical>MUST NOT resolve the GitHub thread — the orchestrator does that.</critical>
+<constraint>If verification fails after 2 retries, mark `needs-human` and move on.</constraint>
 </rules>

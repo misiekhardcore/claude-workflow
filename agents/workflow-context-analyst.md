@@ -36,7 +36,7 @@ Root cause: <concise root cause statement>
 </output>
 
 <rules>
-<critical>Read only — NEVER write to files.</constraint>
+<critical>Read only — NEVER write to files.</critical>
 <constraint>Stick to facts from the session — NEVER infer or extrapolate.</constraint>
 <constraint>If the session was routine (no novel debugging), output: `Routine — no novel diagnosis path.`</constraint>
 </rules>

@@ -62,6 +62,8 @@ default_branch_ref: abc123def
 </output>
 
 <rules>
-<constraint>Read only — NEVER write to files.</constraint>
-<constraint>No counter = `unverifiable`, not `stale`. NEVER invent evidence.</constraint>
+<critical>Read only — NEVER write to files.</critical>
+<critical>No counter = `unverifiable`, NOT `stale`. NEVER invent evidence.</critical>
+<constraint>Make one LLM extraction pass per issue — NEVER re-read files for additional checks.</constraint>
+<constraint>Return findings even if the verdict is `valid` (empty `findings` array).</constraint>
 </rules>
